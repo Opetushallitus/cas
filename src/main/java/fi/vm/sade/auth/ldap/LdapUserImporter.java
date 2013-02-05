@@ -1,5 +1,7 @@
 package fi.vm.sade.auth.ldap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ldap.core.DirContextOperations;
 import org.springframework.ldap.core.DistinguishedName;
 import org.springframework.ldap.core.LdapTemplate;
@@ -79,26 +81,10 @@ public class LdapUserImporter {
 
     private LdapContextSource contextSource;
     private LdapTemplate ldapTemplate;
+    protected Logger log = LoggerFactory.getLogger(this.getClass());
 
     public void init() {
-        System.out.println("LdapUserImporter.init, contextSource: " + contextSource + ", ldapTemplate: " + ldapTemplate);
-        /*
-        User user = new User();
-        String asd = "asd2";
-        user.setUserName(asd);
-        user.setFirstName(asd);
-        user.setLastName(asd);
-        user.setEmail(asd+"@oph.fi");
-        user.setPassword(asd);
-//        user.setDepartment("Engineering");
-        user.setGroups(new String[]{"TestRole", "HudsonAdmin", "WikiAdmin"});
-//        user.setRoles(new String[]{"role1", "role2"});
-        try {
-            save(user);
-        } catch (Exception e) {
-            e.printStackTrace(); // TODO:
-        }
-        */
+        log.info("LdapUserImporter.init, contextSource: " + contextSource + ", ldapTemplate: " + ldapTemplate);
     }
 
     public void setContextSource(LdapContextSource contextSource) {
@@ -109,8 +95,8 @@ public class LdapUserImporter {
         this.ldapTemplate = ldapTemplate;
     }
 
-    public User save(final User user) {
-        save("people", user.getDepartment(), user.getUserName(), buildAttributes(user), "uid");
+    public LdapUser save(final LdapUser user) {
+        save("people", user.getDepartment(), user.getUid(), buildAttributes(user), "uid");
 
         // Update Groups
         for (String group : user.getGroups()) {
@@ -128,18 +114,18 @@ public class LdapUserImporter {
             // TODO: jäsenyys pitää lisätä jo tässä ettei hajoo group/role luomiseen koska uniquemember attribuutti puuttuu
             // TODO: salliiko enää monta jäsentä näin?
             BasicAttribute uniqueMember = new BasicAttribute("uniqueMember");
-            //uniqueMember.add("uid="+user.getUserName());
-            uniqueMember.add("uid="+user.getUserName()+",ou=people,dc=example,dc=com"); // TODO: temp
+            //uniqueMember.add("uid="+user.getUid());
+            uniqueMember.add("uid="+user.getUid()+",ou=people,dc=example,dc=com"); // TODO: temp
             roleAttrs.put(uniqueMember);
 
             Name groupDn = save("groups", null, group, roleAttrs, "cn");
             //Name groupDn = buildDn("groups", null, group, "cn"); // TODO: roles olisi parempi kuin groups?
 
             DirContextOperations context = ldapTemplate.lookupContext(groupDn);
-//            context.addAttributeValue("memberUid", user.getUserName()); posixgroup
-//            context.addAttributeValue("roleOccupant", "uid="+user.getUserName()); // organizationalrole
-            //context.addAttributeValue("uniqueMember", "uid="+user.getUserName()); // organizationalrole
-//            context.addAttributeValue("uniqueMember", "uid="+buildDn("people", user.getDepartment(), user.getUserName(), "uid"));
+//            context.addAttributeValue("memberUid", user.getUid()); posixgroup
+//            context.addAttributeValue("roleOccupant", "uid="+user.getUid()); // organizationalrole
+            //context.addAttributeValue("uniqueMember", "uid="+user.getUid()); // organizationalrole
+//            context.addAttributeValue("uniqueMember", "uid="+buildDn("people", user.getDepartment(), user.getUid(), "uid"));
 
             ldapTemplate.modifyAttributes(context);
         }
@@ -151,7 +137,7 @@ public class LdapUserImporter {
             groupDn.add("ou", "OphRoles");
             groupDn.add("cn", role);
             DirContextOperations context = ldapTemplate.lookupContext(groupDn);
-            context.addAttributeValue("memberUid", user.getUserName());
+            context.addAttributeValue("memberUid", user.getUid());
             ldapTemplate.modifyAttributes(context);
         }
         */
@@ -160,19 +146,19 @@ public class LdapUserImporter {
     }
 
     private Name save(String ou, String department, String id, Attributes attributes, String idAttribute) {
-        // # replace tarvitaan facebook profiileja varten, koska niistä tulee uid: FacebookProfile#123456789
+        // '#' replace tarvitaan facebook profiileja varten, koska niistä tulee uid: FacebookProfile#123456789, '#' ei kelpaa dn:ään
         Name dn = buildDn(ou, department, id.replaceAll("#", "_"), idAttribute);
         try {
             ldapTemplate.bind(dn, null, attributes);
         } catch (Exception e) {
-            if (e.toString().contains("ENTRY_ALREADY_EXISTS")) { // todo: poc
-                System.out.println("LdapUserImporter.save, alredy exists: " + id);
+            if (e.toString().contains("ENTRY_ALREADY_EXISTS")) { // todo: poc update ldap entry
+                log.info("LdapUserImporter.save, alredy exists: " + id);
                 ldapTemplate.rebind(dn, null, attributes);
             } else {
                 e.printStackTrace();
             }
         }
-        System.out.println("LdapUserImporter.save, saved to ldap: " + id+" ("+dn+")");
+        log.info("LdapUserImporter.save, saved to ldap: " + id + " (" + dn + ")");
         return dn;
     }
 
@@ -191,7 +177,7 @@ public class LdapUserImporter {
         return dn;
     }
 
-    private Attributes buildAttributes(final User user) {
+    private Attributes buildAttributes(final LdapUser user) {
         Attributes attrs = new BasicAttributes();
         BasicAttribute ocattr = new BasicAttribute("objectclass");
         ocattr.add("person");

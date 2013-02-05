@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Map;
 
 /**
- * "Extend" final OAuthAuthenticationHandler to do custom things pre/post authentication
+ * "Extend" final OAuthAuthenticationHandler to do custom things (import user to ldap) after authentication
  *
  * @author Antti Salonen
  */
@@ -27,30 +27,28 @@ public class CustomOAuthAuthenticationHandler extends AbstractPreAndPostProcessi
 
     @Override
     protected boolean postAuthenticate(Credentials credentials, boolean authenticated) {
-        System.out.println("CustomOAuthAuthenticationHandler.postAuthenticate, cred: "+credentials);
+        log.info("CustomOAuthAuthenticationHandler.postAuthenticate, cred: "+credentials);
 
         OAuthCredentials cred = (OAuthCredentials) credentials;
         Map<String,Object> attrs = cred.getUserProfile().getAttributes();
 
-        System.out.println("CustomOAuthAuthenticationHandler.postAuthenticate, token : "+cred.getUserProfile().getAccessToken());
-        System.out.println("CustomOAuthAuthenticationHandler.postAuthenticate, id    : "+cred.getUserProfile().getId());
-        System.out.println("CustomOAuthAuthenticationHandler.postAuthenticate, typeid: "+cred.getUserProfile().getTypedId());
-        System.out.println("CustomOAuthAuthenticationHandler.postAuthenticate, attrs : "+ attrs);
+        log.info("CustomOAuthAuthenticationHandler.postAuthenticate, token : "+cred.getUserProfile().getAccessToken());
+        log.info("CustomOAuthAuthenticationHandler.postAuthenticate, id    : "+cred.getUserProfile().getId());
+        log.info("CustomOAuthAuthenticationHandler.postAuthenticate, typeid: "+cred.getUserProfile().getTypedId());
+        log.info("CustomOAuthAuthenticationHandler.postAuthenticate, attrs : "+ attrs);
 
         // add user to ldap
-        User user = new User();
-//        user.setUserName(attrs.get("username").toString()+"@facebook.com");
-        user.setUserName(cred.getUserProfile().getTypedId());
+        LdapUser user = new LdapUser();
+//        user.setUid(attrs.get("username").toString()+"@facebook.com");
+        user.setUid(cred.getUserProfile().getTypedId());
         user.setFirstName(attrs.get("first_name").toString());
         user.setLastName(attrs.get("last_name").toString());
         user.setEmail(attrs.get("username").toString()+"@facebook.com");
 //        user.setPassword();
 
-        System.out.println("CustomOAuthAuthenticationHandler.postAuthenticate, save user, uid: "+user.getUserName());
+        log.info("CustomOAuthAuthenticationHandler.postAuthenticate, save user, uid: "+user.getUid());
 
         ldapUserImporter.save(user);
-
-        ((OAuthCredentials) credentials).getUserProfile().set
 
         return true;
     }

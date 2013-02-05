@@ -2,11 +2,11 @@ package fi.vm.sade.auth.ldap;
 
 import java.util.Arrays;
 
-public class User {
+public class LdapUser {
 
     private static final long serialVersionUID = 7487133273442955818L;
 
-    private String userName;
+    private String uid;
     private String firstName;
     private String lastName;
     private String email;
@@ -15,12 +15,12 @@ public class User {
     private String groups[] = new String[0];
 //    private String roles[] = new String[0];
 
-    public String getUserName() {
-        return userName;
+    public String getUid() {
+        return uid;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getFirstName() {
@@ -81,9 +81,9 @@ public class User {
 
     public String toString() {
         StringBuffer buffer = new StringBuffer();
-        buffer.append("UserImpl[");
+        buffer.append("LdapUser[");
 //        buffer.append("id = ").append(id);
-        buffer.append(" userName = ").append(userName);
+        buffer.append(" uid = ").append(uid);
         buffer.append(" email = ").append(email);
         buffer.append(" firstName = ").append(firstName);
         buffer.append(" lastName = ").append(lastName);

@@ -121,7 +121,6 @@
         <appender-ref ref="cas" />
     </logger>
 
-    <!-- todo: -->
     <logger name="org.jasig.cas.adaptors.ldap" additivity="true">
         <level value="DEBUG" />
     </logger>
