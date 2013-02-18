@@ -12,8 +12,7 @@ import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
 
 import javax.xml.namespace.QName;
 import java.net.URL;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Extend BindLdapAuthenticationHandler to try to import user data from custom authenticationservice to ldap before
@@ -89,6 +88,17 @@ public class CustomBindLdapAuthenticationHandler extends org.jasig.cas.adaptors.
             user.setGroups(roleStrings.toArray(new String[roleStrings.size()]));
 
             ldapUserImporter.save(user);
+
+            /*
+            log.info("CustomBindLdapAuthenticationHandler.preAuthenticate, roleStrings prefixed with 'ROLE_': ");
+            List<String> temp = new ArrayList<String>(roleStrings);
+            Collections.sort(temp);
+            for (String roleString : temp) {
+                System.out.print("ROLE_"+roleString+", ");
+            }
+            System.out.println();
+            */
+
         } catch (Throwable e) {
             //throw new RuntimeException("failed to import user from backend to ldap, user: "+cred.getUsername()+", error: "+e, e);
             log.warn("failed to import user from backend to ldap, falling back to ldap, user: "+cred.getUsername(), e);
