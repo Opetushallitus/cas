@@ -29,8 +29,9 @@
 	</description>
 	
 	<bean id="warnCookieGenerator" class="org.jasig.cas.web.support.CookieRetrievingCookieGenerator"
-		p:cookieSecure="true"
+		p:cookieSecure="false"
 		p:cookieMaxAge="-1"
 		p:cookieName="CASPRIVACY"
 		p:cookiePath="/cas" />
+    <!-- TODO: temp tukee http:tä ettei vielä tarvitse certtejä säätää SSO:ta varten, alkuperäinen cookieSecure arvo oli true - toimiiko? -->
 </beans>

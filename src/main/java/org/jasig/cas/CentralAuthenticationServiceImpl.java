@@ -298,7 +298,7 @@ public final class CentralAuthenticationServiceImpl implements CentralAuthentica
 //                .authenticate(credentials);
 //        String principal = "TEMP_ALLOW_HTTP_INSTEAD_HTTPS";
         String principal = this.serviceTicketRegistry.getTicket(serviceTicketId).getGrantingTicket().getAuthentication().getPrincipal().getId();
-        final Authentication authentication = new ImmutableAuthentication(new SimplePrincipal(principal)); // TODO: erittäin temp ettei vielä tarvitse certtejä säätää
+        final Authentication authentication = new ImmutableAuthentication(new SimplePrincipal(principal)); // TODO: temp tukee http:tä ettei vielä tarvitse certtejä säätää
 
             final ServiceTicket serviceTicket;
             serviceTicket = (ServiceTicket) this.serviceTicketRegistry.getTicket(serviceTicketId, ServiceTicket.class);

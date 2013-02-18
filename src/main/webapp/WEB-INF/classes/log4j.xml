@@ -121,7 +121,12 @@
         <appender-ref ref="cas" />
     </logger>
 
+    <!-- oph custom -->
+
     <logger name="org.jasig.cas.adaptors.ldap" additivity="true">
+        <level value="DEBUG" />
+    </logger>
+    <logger name="fi.vm.sade" additivity="true">
         <level value="DEBUG" />
     </logger>
 

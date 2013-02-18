@@ -270,7 +270,7 @@
     </bean>
 
     <!-- antti -->
-    <!-- TODO: ldap poolaus? -->
+    <!-- TODO: optimointi, ldap poolaus? -->
     <bean id="contextSource" class="org.springframework.ldap.core.support.LdapContextSource">
         <!-- DO NOT enable JNDI pooling for context sources that perform LDAP bind operations. -->
         <property name="pooled" value="false"/>
@@ -315,19 +315,16 @@
     </bean>
 
     <!-- antti: facebook/oauth -->
+    <!-- lisää providereja mm twitter: https://wiki.jasig.org/display/CASUM/OAuth+client+support+for+CAS+server+version+%3E%3D+3.5.1 -->
+    <!-- TODO: fb:tä ei vielä oikeesti tarvita -->
     <bean id="facebook" class="org.scribe.up.provider.impl.FacebookProvider" >
-        <!-- TODO: facebook key+secret -->
         <property name="key" value="170316963092491" />
         <property name="secret" value="0be9e359d6989bf4cd28e40266535e2e" />
         <!-- xTODO: callbackUrl hack?  -->
         <!--<property name="callbackUrl" value="http://localhost:8080/cas/login?oauth_provider=FacebookProvider"/>-->
     </bean>
-    <!-- TODO: lisää providereja mm twitter: https://wiki.jasig.org/display/CASUM/OAuth+client+support+for+CAS+server+version+%3E%3D+3.5.1 -->
     <bean id="oauthConfig" class="org.jasig.cas.support.oauth.OAuthConfiguration">
-        <!-- xTODO: urli pois täältä! -->
-        <!--<property name="loginUrl" value="http://localhost:5050/cas/login" />-->
         <property name="loginUrl" value="${server.prefix}/login" />
-        <!--<property name="loginUrl" value="https://localhost:8443/cas/login" />-->
         <property name="providers">
             <list>
                 <ref bean="facebook" />

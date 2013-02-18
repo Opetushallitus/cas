@@ -1,9 +1,11 @@
 package fi.vm.sade.auth.ldap;
 
+//*
 import fi.vm.sade.authentication.service.AuthenticationService;
 import fi.vm.sade.authentication.service.AuthenticationService_Service;
 import fi.vm.sade.authentication.service.types.AccessRightType;
 import fi.vm.sade.authentication.service.types.IdentifiedHenkiloType;
+//*/
 import org.apache.commons.lang.StringUtils;
 import org.jasig.cas.authentication.principal.Credentials;
 import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
@@ -36,51 +38,62 @@ public class CustomBindLdapAuthenticationHandler extends org.jasig.cas.adaptors.
     }
 
     private void tryToImportUserFromCustomOphAuthenticationService(UsernamePasswordCredentials cred) {
+        //*
         AuthenticationService_Service ass = null;
         try {
-            ass = new AuthenticationService_Service(new URL(authenticationServiceWsdlUrl), new QName("http://service.authentication.sade.vm.fi/", "AuthenticationServiceService"));
+            ass = new AuthenticationService_Service(new URL(authenticationServiceWsdlUrl), new QName("http://service.authentication.sade.vm.fi/", "AuthenticationService"));
         } catch (Exception e) {
-            log.warn("WARNING - problem with authentication webservice, using only ldap, error: " + e);
+            log.warn("WARNING - problem with authentication backend, using only ldap, error: " + e);
             return;
         }
 
-        AuthenticationService as = ass.getAuthenticationServicePort();
-        IdentifiedHenkiloType henkilo = as.getIdentityByUsernameAndPassword(cred.getUsername(), cred.getPassword());
-        log.info("CustomBindLdapAuthenticationHandler.preAuthenticate, henkilo: " + henkilo);
+        try {
+            AuthenticationService as = ass.getAuthenticationServicePort();
+            IdentifiedHenkiloType henkilo = as.getIdentityByUsernameAndPassword(cred.getUsername(), cred.getPassword());
+            log.info("CustomBindLdapAuthenticationHandler.preAuthenticate, henkilo: " + henkilo);
 
-        LdapUser user = new LdapUser();
-        user.setUid(cred.getUsername());
-        user.setFirstName(henkilo.getEtunimet());
-        user.setLastName(henkilo.getSukunimi());
-        //user.setEmail(henkilo.getEmail()); todo:
-        user.setEmail(cred.getUsername());
-        user.setPassword(cred.getPassword());
-        log.info("CustomBindLdapAuthenticationHandler.preAuthenticate, user: " + user);
+            LdapUser user = new LdapUser();
+            user.setUid(cred.getUsername());
+            user.setFirstName(henkilo.getEtunimet());
+            user.setLastName(henkilo.getSukunimi());
+            //user.setEmail(henkilo.getEmail());
+            user.setEmail(cred.getUsername());
+            user.setPassword(cred.getPassword());
+            log.info("CustomBindLdapAuthenticationHandler.preAuthenticate, user: " + user);
 
-        // roles - mainly copypaste from TokenAutoLogin
-        Set<String> roleStrings = new HashSet<String>();
-        if(henkilo.getAuthorizationData() != null && henkilo.getAuthorizationData().getAccessrights() !=null) {
-            for(AccessRightType art : henkilo.getAuthorizationData().getAccessrights().getAccessRight()) {
-                log.info("AUTH ROW: OID[" + art.getOrganisaatioOid() + "] PALVELU[" + art.getPalvelu() + "] ROOLI[" + art.getRooli() + "] ORGANISAATIO[" + art.getOrganisaatioOid() + "]");
-                StringUtils.isNotEmpty(art.getOrganisaatioOid());
-                StringBuilder role = new StringBuilder(art.getPalvelu()).append("_").append(art.getRooli());
+            // roles - mainly copypaste from TokenAutoLogin
+            Set<String> roleStrings = new HashSet<String>();
+            if(henkilo.getAuthorizationData() != null && henkilo.getAuthorizationData().getAccessrights() !=null) {
+                for(AccessRightType art : henkilo.getAuthorizationData().getAccessrights().getAccessRight()) {
+                    log.info("AUTH ROW: OID[" + art.getOrganisaatioOid() + "] PALVELU[" + art.getPalvelu() + "] ROOLI[" + art.getRooli() + "] ORGANISAATIO[" + art.getOrganisaatioOid() + "]");
+                    StringUtils.isNotEmpty(art.getOrganisaatioOid());
+                    StringBuilder role = new StringBuilder(art.getPalvelu()).append("_").append(art.getRooli());
 
-                // add role PALVELU_ROOLI
-                roleStrings.add(role.toString());
+                    // prefix rolename with "APP_"
+                    String ROLE_PREFIX = "APP_";
 
-                // also add role PALVELU_ROOLI_ORGANISAATIO
-                role.append("_").append(art.getOrganisaatioOid());
-                roleStrings.add(role.toString());
+                    // add role PALVELU (esim jos userilla on backendissä rooli ORGANISAATIOHALLINTA_READ, lisätään hänelle myös ORGANISAATIOHALLINTA)
+                    roleStrings.add(ROLE_PREFIX + art.getPalvelu());
+
+                    // add role PALVELU_ROOLI
+                    roleStrings.add(ROLE_PREFIX + role.toString());
+
+                    // also add role PALVELU_ROOLI_ORGANISAATIO
+                    roleStrings.add(ROLE_PREFIX + role.toString() + "_" + art.getOrganisaatioOid());
+                }
+                roleStrings.add("virkailija"); // TODO: temp keino saada kaikki käyttäjät virkailija-ryhmään, joka on jäsenenä virkailijan työpöytä -sitella, oikeasti ryhmä pitäisi olla jo backendissä
+            } else {
+                log.info("HENKILO HAD NO AUTHORIZATION DATA: "+henkilo.getEmail()+"/"+henkilo.getOid());
             }
-            // TODO: roolien poisto käyttäjiltä jos backendistä poistunut? käyttäjän poisto ldapista jos poistettu backendistä? virheenkäsittely
-            roleStrings.add("virkailija"); // TODO: temp keino saada kaikki käyttäjät virkailija-ryhmään, joka on jäsenenä virkailijan työpöytä -sitella, oikeasti ryhmä pitäisi olla jo backendissä
-        } else {
-            log.info("HENKILO HAD NO AUTHORIZATION DATA" );
-        }
-        log.info("CustomBindLdapAuthenticationHandler.preAuthenticate, roleStrings: " + roleStrings);
-        user.setGroups(roleStrings.toArray(new String[roleStrings.size()]));
+            log.info("CustomBindLdapAuthenticationHandler.preAuthenticate, roleStrings: " + roleStrings);
+            user.setGroups(roleStrings.toArray(new String[roleStrings.size()]));
 
-        ldapUserImporter.save(user);
+            ldapUserImporter.save(user);
+        } catch (Throwable e) {
+            //throw new RuntimeException("failed to import user from backend to ldap, user: "+cred.getUsername()+", error: "+e, e);
+            log.warn("failed to import user from backend to ldap, falling back to ldap, user: "+cred.getUsername(), e);
+        }
+        //*/
     }
 
     public void setLdapUserImporter(LdapUserImporter ldapUserImporter) {

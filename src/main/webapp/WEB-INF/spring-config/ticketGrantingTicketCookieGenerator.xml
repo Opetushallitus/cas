@@ -28,8 +28,9 @@
 		You can change the name if you want to make it harder for people to guess.
 	</description>
 	<bean id="ticketGrantingTicketCookieGenerator" class="org.jasig.cas.web.support.CookieRetrievingCookieGenerator"
-		p:cookieSecure="true"
+		p:cookieSecure="false"
 		p:cookieMaxAge="-1"
 		p:cookieName="CASTGC"
 		p:cookiePath="/cas" />
+    <!-- TODO: temp tukee http:tä ettei vielä tarvitse certtejä säätää SSO:ta varten, alkuperäinen cookieSecure arvo oli true - toimiiko? -->
 </beans>
