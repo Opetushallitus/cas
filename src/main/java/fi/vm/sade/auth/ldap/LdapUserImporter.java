@@ -64,18 +64,22 @@ public class LdapUserImporter {
         return user;
     }
 
-    private Name save(String ou, String department, String id, Attributes attributes, String idAttribute, boolean failIfAlreadyExists) {
+    public Name save(String ou, String department, String id, Attributes attributes, String idAttribute, boolean failIfAlreadyExists) {
         // '#' replace tarvitaan facebook profiileja varten, koska niistä tulee uid: FacebookProfile#123456789, ja '#' ei kelpaa dn:ään
         Name dn = buildDn(ou, department, id.replaceAll("#", "_"), idAttribute);
+        return save(dn, attributes, failIfAlreadyExists);
+    }
+
+    public Name save(Name dn, Attributes attributes, boolean failIfAlreadyExists) {
         try {
-            log.info("LdapUserImporter.save, bind to ldap: " + id + " (" + dn + ")");
+            log.info("LdapUserImporter.save, bind to ldap: " + dn);
             ldapTemplate.bind(dn, null, attributes);
         } catch (Exception e) {
             if (e instanceof NameAlreadyBoundException) {
                 if (failIfAlreadyExists) {
                     throw (NameAlreadyBoundException)e;
                 }
-                log.info("LdapUserImporter.save, rebind to ldap: " + id + " (" + dn + ")");
+                log.info("LdapUserImporter.save, rebind to ldap: " + dn);
                 ldapTemplate.rebind(dn, null, attributes);
             } else {
                 throw new RuntimeException(e);
@@ -84,25 +88,31 @@ public class LdapUserImporter {
         return dn;
     }
 
-    public static Name buildDn(String ou, String department, String uid, String nameAttribute) {
+    public static Name buildDn(String ou, String extraDepartment, String uid, String nameAttribute) {
         DistinguishedName dn = new DistinguishedName();
         dn.add("dc", "com");
         dn.add("dc", "example");
         dn.add("ou", ou);
-        if (department != null) {
-            dn.add("ou", department);
+        if (extraDepartment != null) {
+            dn.add("ou", extraDepartment);
+        }
+        dn.add(nameAttribute, uid);
+        return dn;
+    }
+
+    public static Name buildDn(String nameAttribute, String uid, String... ous) {
+        DistinguishedName dn = new DistinguishedName();
+        dn.add("dc", "com");
+        dn.add("dc", "example");
+        for (String ou : ous) {
+            dn.add("ou", ou);
         }
         dn.add(nameAttribute, uid);
         return dn;
     }
 
     private Attributes buildAttributes(final LdapUser user) {
-        Attributes attrs = new BasicAttributes();
-        BasicAttribute ocattr = new BasicAttribute("objectclass");
-        ocattr.add("person");
-        ocattr.add("inetOrgPerson");
-        //ocattr.add("organizationalPerson"); // inetorgperson perii tämän joten ei tarvetta
-        attrs.put(ocattr);
+        Attributes attrs = buildAttributes(new String[]{"person", "inetOrgPerson"});
         attrs.put("cn", user.getFirstName());
         attrs.put("sn", user.getLastName());
         attrs.put("givenName", user.getFirstName());
@@ -110,6 +120,17 @@ public class LdapUserImporter {
             attrs.put("userPassword", "{SHA}" + this.encrypt(user.getPassword()));
         }
         attrs.put("mail", user.getEmail());
+        return attrs;
+    }
+
+    public Attributes buildAttributes(String... objectClasses) {
+        Attributes attrs = new BasicAttributes();
+        BasicAttribute ocattr = new BasicAttribute("objectclass");
+        for (String objectClass : objectClasses) {
+            ocattr.add(objectClass);
+        }
+        //ocattr.add("organizationalPerson"); // inetorgperson perii tämän joten ei tarvetta
+        attrs.put(ocattr);
         return attrs;
     }
 

@@ -6,13 +6,20 @@ import fi.vm.sade.authentication.service.AuthenticationService_Service;
 import fi.vm.sade.authentication.service.types.AccessRightType;
 import fi.vm.sade.authentication.service.types.IdentifiedHenkiloType;
 //*/
-import org.apache.commons.lang.StringUtils;
+import fi.vm.sade.organisaatio.api.TechnicalOrganisaatioService;
+import fi.vm.sade.organisaatio.api.model.OrganisaatioService;
+import fi.vm.sade.organisaatio.api.model.types.OrganisaatioDTO;
+import fi.vm.sade.organisaatio.api.model.types.OrganisaatioOidListType;
+import fi.vm.sade.organisaatio.api.model.types.OrganisaatioOidType;
+import fi.vm.sade.organisaatio.api.model.types.OrganisaatioSearchOidType;
 import org.jasig.cas.authentication.principal.Credentials;
 import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
 
-import javax.xml.namespace.QName;
-import java.net.URL;
-import java.util.*;
+import javax.naming.Name;
+import javax.naming.directory.Attributes;
+import javax.naming.directory.BasicAttributes;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Extend BindLdapAuthenticationHandler to try to import user data from custom authenticationservice to ldap before
@@ -24,6 +31,9 @@ public class CustomBindLdapAuthenticationHandler extends org.jasig.cas.adaptors.
 
     private LdapUserImporter ldapUserImporter;
     private String authenticationServiceWsdlUrl;
+    private TechnicalOrganisaatioService technicalOrganisaatioService;
+    private OrganisaatioService organisaatioService;
+    private String rootOrganisaatioOid;
 
     @Override
     protected boolean preAuthenticate(Credentials credentials) {
@@ -31,13 +41,54 @@ public class CustomBindLdapAuthenticationHandler extends org.jasig.cas.adaptors.
         UsernamePasswordCredentials cred = (UsernamePasswordCredentials) credentials;
         log.info("CustomBindLdapAuthenticationHandler.preAuthenticate, user: " + cred.getUsername() + ", pass: " + cred.getPassword());
 
+        tryToImportOrganisaatios();
+
         tryToImportUserFromCustomOphAuthenticationService(cred);
 
         return true;
     }
 
+    private void tryToImportOrganisaatios() {
+/*
+        System.out.println("CustomBindLdapAuthenticationHandler.tryToImportOrganisaatios, rootOrganisaatioOid: "+rootOrganisaatioOid);
+        try {
+            OrganisaatioDTO root = organisaatioService.findByOid(rootOrganisaatioOid);
+            importOrganisaatioRecursive(root, new ArrayList<OrganisaatioDTO>());
+            // TODO: hae organisaation perustiedot ja importtaa ldappiin
+        } catch (Throwable e) {
+            log.warn("failed to import organisaatios from backend to ldap", e);
+        }
+//*/
+    }
+
+    private void importOrganisaatioRecursive(OrganisaatioDTO organisaatio, List<OrganisaatioDTO> parents) {
+        /*
+        System.out.println("CustomBindLdapAuthenticationHandler.importOrganisaatioRecursive: "+organisaatio);
+
+        // build parent oids
+        List<String> path = new ArrayList<String>();
+        path.add("organisaatios");
+        for (OrganisaatioDTO parent : parents) {
+            path.add(parent.getOid());
+        }
+        // import organisaatio to ldap
+        Name dn = LdapUserImporter.buildDn("ou", organisaatio.getOid(), path.toArray(new String[path.size()]));
+        Attributes attribs = ldapUserImporter.buildAttributes("top", "organizationalUnit");
+        // TODO: other org attribs? what are needed?
+        ldapUserImporter.save(dn, attribs, false);
+
+        // process organisaatio's children
+        parents = new ArrayList<OrganisaatioDTO>(parents); // remake new parents list for children
+        parents.add(organisaatio);
+        List<OrganisaatioDTO> children = organisaatioService.findChildrenTo(organisaatio.getOid());
+        for (OrganisaatioDTO child : children) {
+            importOrganisaatioRecursive(child, parents);
+        }
+        */
+    }
+
     private void tryToImportUserFromCustomOphAuthenticationService(UsernamePasswordCredentials cred) {
-        //*
+//*
         AuthenticationService_Service ass = null;
         try {
             ass = new AuthenticationService_Service(new URL(authenticationServiceWsdlUrl), new QName("http://service.authentication.sade.vm.fi/", "AuthenticationService"));
@@ -89,7 +140,7 @@ public class CustomBindLdapAuthenticationHandler extends org.jasig.cas.adaptors.
 
             ldapUserImporter.save(user);
 
-            /*
+            /* jos tarvitsee saada lista rooleista esim mock contextia varten
             log.info("CustomBindLdapAuthenticationHandler.preAuthenticate, roleStrings prefixed with 'ROLE_': ");
             List<String> temp = new ArrayList<String>(roleStrings);
             Collections.sort(temp);
@@ -103,15 +154,26 @@ public class CustomBindLdapAuthenticationHandler extends org.jasig.cas.adaptors.
             //throw new RuntimeException("failed to import user from backend to ldap, user: "+cred.getUsername()+", error: "+e, e);
             log.warn("failed to import user from backend to ldap, falling back to ldap, user: "+cred.getUsername(), e);
         }
-        //*/
+//*/
     }
 
     public void setLdapUserImporter(LdapUserImporter ldapUserImporter) {
         this.ldapUserImporter = ldapUserImporter;
     }
 
+    public void setTechnicalOrganisaatioService(TechnicalOrganisaatioService technicalOrganisaatioService) {
+        this.technicalOrganisaatioService = technicalOrganisaatioService;
+    }
+
+    public void setOrganisaatioService(OrganisaatioService organisaatioService) {
+        this.organisaatioService = organisaatioService;
+    }
+
     public void setAuthenticationServiceWsdlUrl(String authenticationServiceWsdlUrl) {
         this.authenticationServiceWsdlUrl = authenticationServiceWsdlUrl;
     }
 
+    public void setRootOrganisaatioOid(String rootOrganisaatioOid) {
+        this.rootOrganisaatioOid = rootOrganisaatioOid;
+    }
 }

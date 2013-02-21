@@ -33,6 +33,7 @@
     <bean id="propertyPlaceholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations">
             <list>
+                <value>file:///${user.home:''}/oph-configuration/common.properties</value>
                 <value>/WEB-INF/cas.properties</value>
                 <value>file:///${user.home:''}/oph-configuration/cas.properties</value>
             </list>

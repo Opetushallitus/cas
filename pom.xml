@@ -40,10 +40,16 @@
     </build>
 
 	<dependencies>
+
         <!-- custom -->
         <dependency>
             <groupId>fi.vm.sade.auth</groupId>
             <artifactId>authentication-api</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>fi.vm.sade.organisaatio</groupId>
+            <artifactId>organisaatio-api</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
@@ -56,8 +62,26 @@
         </dependency>
         <dependency>
             <groupId>org.jasig.cas</groupId>
+            <artifactId>cas-server-integration-restlet</artifactId>
+            <version>3.5.1</version>
+            <!-- will throw stackoverflow, replaced with cglib:cglib:2.2.2 -->
+            <exclusions>
+                <exclusion>
+                    <groupId>cglib</groupId>
+                    <artifactId>cglib-nodep</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.jasig.cas</groupId>
             <artifactId>cas-server-support-ldap</artifactId>
             <version>3.5.1-RC1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.webflow</groupId>
+                    <artifactId>spring-webflow</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.jasig.cas</groupId>
@@ -86,7 +110,23 @@
             <artifactId>log4j</artifactId>
             <version>${log4j.version}</version>
         </dependency>
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>2.2.2</version>
+        </dependency>
 
+        <!-- todo: jaxws web services for organisaatio import, vähennä depsejä, ei tartte koko cxf nyt rt, asm ilm hajottaa restletin -->
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-jaxws</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>asm</groupId>
+                    <artifactId>asm</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
     </dependencies>
 

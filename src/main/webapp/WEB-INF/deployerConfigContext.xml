@@ -37,8 +37,12 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:p="http://www.springframework.org/schema/p"
        xmlns:sec="http://www.springframework.org/schema/security"
+       xmlns:jaxws="http://cxf.apache.org/jaxws"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
-       http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+       http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd
+       http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+       ">
+    <!-- TODO: jaxws added by oph/antti -->
     <!--
          | This bean declares our AuthenticationManager.  The CentralAuthenticationService service bean
          | declared in applicationContext.xml picks up this AuthenticationManager by reference to its id,
@@ -142,10 +146,14 @@
                       p:filter="${ldap.filter.people}"
                       p:searchBase="${ldap.search.base.people}"
                       p:contextSource-ref="contextSource"
+                      init-method="tryToImportOrganisaatios"
                        >
         <!--p:searchBase="ou=system"-->
                     <property name="ldapUserImporter" ref="ldapUserImporter"/>
                     <property name="authenticationServiceWsdlUrl" value="${authentication.service.wsdl.url}"/>
+                    <property name="rootOrganisaatioOid" value="${root.organisaatio.oid}"/>
+                    <property name="technicalOrganisaatioService" ref="technicalOrganisaatioService"/>
+                    <property name="organisaatioService" ref="organisaatioService"/>
                 </bean>
                 <!--p:filter="uid=%u,ou=system"-->
                 <!--p:searchBase=""-->
@@ -166,6 +174,14 @@
         </property>
     </bean>
 
+    <!-- todo: technicalorganisaatioservice for importing organisaatios, move outside of cas -->
+    <bean id="technicalOrganisaatioService" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+        <property name="serviceUrl" value="${organisaatioService.service.url}" />
+        <property name="serviceInterface" value="fi.vm.sade.organisaatio.api.TechnicalOrganisaatioService" />
+    </bean>
+    <jaxws:client id="organisaatioService"
+                  serviceClass="fi.vm.sade.organisaatio.api.model.OrganisaatioService"
+                  address="${organisaatio.webservice.url.backend}"/>
 
     <!--
      This bean defines the security roles for the Services Management application.  Simple deployments can use the in-memory version.
@@ -270,7 +286,7 @@
     </bean>
 
     <!-- antti -->
-    <!-- TODO: optimointi, ldap poolaus? -->
+    <!-- TODO: optimointi, ldap poolaus? ei bind operaatioille.. -->
     <bean id="contextSource" class="org.springframework.ldap.core.support.LdapContextSource">
         <!-- DO NOT enable JNDI pooling for context sources that perform LDAP bind operations. -->
         <property name="pooled" value="false"/>

@@ -23,6 +23,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
          version="2.4">
+
     <display-name>Central Authentication System (CAS) 3.5.1-RC1</display-name>
 
     <context-param>
@@ -108,6 +109,17 @@
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
+
+    <!-- oph enable cas rest api - https://wiki.jasig.org/display/CASUM/RESTful+API -->
+    <servlet>
+        <servlet-name>restlet</servlet-name>
+        <servlet-class>com.noelios.restlet.ext.spring.RestletFrameworkServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>restlet</servlet-name>
+        <url-pattern>/v1/*</url-pattern>
+    </servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>cas</servlet-name>
