@@ -116,6 +116,7 @@ public class LdapUserImporter {
         attrs.put("cn", user.getFirstName());
         attrs.put("sn", user.getLastName());
         attrs.put("givenName", user.getFirstName());
+        attrs.put("employeeNumber", user.getOid());
         if (user.getPassword() != null) {
             attrs.put("userPassword", "{SHA}" + this.encrypt(user.getPassword()));
         }

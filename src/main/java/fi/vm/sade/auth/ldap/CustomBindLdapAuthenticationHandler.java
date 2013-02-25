@@ -104,6 +104,7 @@ public class CustomBindLdapAuthenticationHandler extends org.jasig.cas.adaptors.
 
             LdapUser user = new LdapUser();
             user.setUid(cred.getUsername());
+            user.setOid(henkilo.getOid());
             user.setFirstName(henkilo.getEtunimet());
             user.setLastName(henkilo.getSukunimi());
             //user.setEmail(henkilo.getEmail());

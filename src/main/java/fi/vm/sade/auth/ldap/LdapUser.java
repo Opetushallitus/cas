@@ -7,6 +7,7 @@ public class LdapUser {
     private static final long serialVersionUID = 7487133273442955818L;
 
     private String uid;
+    private String oid;
     private String firstName;
     private String lastName;
     private String email;
@@ -84,6 +85,7 @@ public class LdapUser {
         buffer.append("LdapUser[");
 //        buffer.append("id = ").append(id);
         buffer.append(" uid = ").append(uid);
+        buffer.append(" oid = ").append(oid);
         buffer.append(" email = ").append(email);
         buffer.append(" firstName = ").append(firstName);
         buffer.append(" lastName = ").append(lastName);
@@ -91,5 +93,13 @@ public class LdapUser {
         buffer.append(" roles = ").append(Arrays.toString(groups));
         buffer.append("]");
         return buffer.toString();
+    }
+
+    public String getOid() {
+        return oid;
+    }
+
+    public void setOid(String oid) {
+        this.oid = oid;
     }
 }
