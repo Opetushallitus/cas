@@ -8,7 +8,7 @@
 	</parent>
     <groupId>fi.vm.sade.auth</groupId>
 	<artifactId>cas</artifactId>
-	<name>${artifactId}</name>
+	<name>${project.artifactId}</name>
 	<packaging>war</packaging>
 
     <properties>
