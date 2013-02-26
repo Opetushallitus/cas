@@ -104,7 +104,7 @@ public class CustomBindLdapAuthenticationHandler extends org.jasig.cas.adaptors.
 
             LdapUser user = new LdapUser();
             user.setUid(cred.getUsername());
-            user.setOid(henkilo.getOid());
+            user.setOid(henkilo.getOidHenkilo());
             user.setFirstName(henkilo.getEtunimet());
             user.setLastName(henkilo.getSukunimi());
             //user.setEmail(henkilo.getEmail());
@@ -134,7 +134,7 @@ public class CustomBindLdapAuthenticationHandler extends org.jasig.cas.adaptors.
                 }
                 roleStrings.add("virkailija"); // TODO: temp keino saada kaikki käyttäjät virkailija-ryhmään, joka on jäsenenä virkailijan työpöytä -sitella, oikeasti ryhmä pitäisi olla jo backendissä
             } else {
-                log.info("HENKILO HAD NO AUTHORIZATION DATA: "+henkilo.getEmail()+"/"+henkilo.getOid());
+                log.info("HENKILO HAD NO AUTHORIZATION DATA: "+henkilo.getEmail()+"/"+henkilo.getOidHenkilo());
             }
             log.info("CustomBindLdapAuthenticationHandler.preAuthenticate, roleStrings: " + roleStrings);
             user.setGroups(roleStrings.toArray(new String[roleStrings.size()]));
