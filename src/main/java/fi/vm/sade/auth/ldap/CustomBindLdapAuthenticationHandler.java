@@ -6,7 +6,6 @@ import fi.vm.sade.authentication.service.AuthenticationService;
 import fi.vm.sade.authentication.service.AuthenticationService_Service;
 import fi.vm.sade.authentication.service.types.AccessRightType;
 import fi.vm.sade.authentication.service.types.IdentifiedHenkiloType;
-import fi.vm.sade.organisaatio.api.TechnicalOrganisaatioService;
 import fi.vm.sade.organisaatio.api.model.OrganisaatioService;
 import fi.vm.sade.organisaatio.api.model.types.OrganisaatioDTO;
 import org.apache.commons.lang.StringUtils;
@@ -31,7 +30,6 @@ public class CustomBindLdapAuthenticationHandler extends org.jasig.cas.adaptors.
 
     private LdapUserImporter ldapUserImporter;
     private String authenticationServiceWsdlUrl;
-    private TechnicalOrganisaatioService technicalOrganisaatioService;
     private OrganisaatioService organisaatioService;
     private String rootOrganisaatioOid;
 
@@ -160,10 +158,6 @@ public class CustomBindLdapAuthenticationHandler extends org.jasig.cas.adaptors.
 
     public void setLdapUserImporter(LdapUserImporter ldapUserImporter) {
         this.ldapUserImporter = ldapUserImporter;
-    }
-
-    public void setTechnicalOrganisaatioService(TechnicalOrganisaatioService technicalOrganisaatioService) {
-        this.technicalOrganisaatioService = technicalOrganisaatioService;
     }
 
     public void setOrganisaatioService(OrganisaatioService organisaatioService) {
