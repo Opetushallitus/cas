@@ -152,7 +152,6 @@
                     <property name="ldapUserImporter" ref="ldapUserImporter"/>
                     <property name="authenticationServiceWsdlUrl" value="${authentication.service.wsdl.url}"/>
                     <property name="rootOrganisaatioOid" value="${root.organisaatio.oid}"/>
-                    <property name="technicalOrganisaatioService" ref="technicalOrganisaatioService"/>
                     <property name="organisaatioService" ref="organisaatioService"/>
                 </bean>
                 <!--p:filter="uid=%u,ou=system"-->
@@ -174,11 +173,6 @@
         </property>
     </bean>
 
-    <!-- todo: technicalorganisaatioservice for importing organisaatios, move outside of cas -->
-    <bean id="technicalOrganisaatioService" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
-        <property name="serviceUrl" value="${organisaatioService.service.url}" />
-        <property name="serviceInterface" value="fi.vm.sade.organisaatio.api.TechnicalOrganisaatioService" />
-    </bean>
     <jaxws:client id="organisaatioService"
                   serviceClass="fi.vm.sade.organisaatio.api.model.OrganisaatioService"
                   address="${organisaatio.webservice.url.backend}"/>
