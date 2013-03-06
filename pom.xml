@@ -14,31 +14,8 @@
     <properties>
         <!--<slf4j.version>1.5.10</slf4j.version>-->
         <slf4j.version>1.6.6</slf4j.version>
-        <tomcat.port>5050</tomcat.port>
+        <webapp.port>5050</webapp.port>
     </properties>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.mortbay.jetty</groupId>
-                <artifactId>maven-jetty-plugin</artifactId>
-                <version>${jetty.version}</version>
-                <configuration>
-                    <connectors>
-                        <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
-                            <port>6060</port>
-                        </connector>
-                    </connectors>
-                    <!--<webApp>${jetty.webApp}</webApp>-->
-                    <!--<contextPath>/${jetty.module}</contextPath>-->
-                    <!-- false if we want to keep jetty running -->
-                    <daemon>false</daemon>
-                    <stopKey>stop</stopKey>
-                    <stopPort>6666</stopPort>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
 	<dependencies>
 
