@@ -41,7 +41,14 @@ public class LdapUserImporter {
     }
 
     public LdapUser save(final LdapUser user) {
+
+        // if roles changed in backend, they must change in ldap also - easiest way to achieve this is to unbind user - TODO: kaikkien pollicyjen takia ei tod hyvä
+        ldapTemplate.unbind(buildDn("people", user.getDepartment(), user.getUid(), "uid"));
+
+        // save
         save("people", user.getDepartment(), user.getUid(), buildAttributes(user), "uid", false);
+
+        // todo: parempi import-logiikka + ryhmien/käyttäjien poistaminen kun ei ole enää backendissä, import irti casista? alhainen prioriteetti koska ei haittaa muuta kuin roskaa ldappia
 
         // Update Groups
         for (String group : user.getGroups()) {
@@ -53,7 +60,6 @@ public class LdapUserImporter {
                 Attributes roleAttrs = buildRoleAttributes(group, member);
                 ldapTemplate.bind(groupDn, null, roleAttrs);
             } catch (NameAlreadyBoundException nabe) {
-                // todo: parempi import-logiikka + ryhmien/käyttäjien poistaminen kun ei ole enää backendissä, import irti casista?
                 // if group exists, just add new member - note if member already exits, this will fail silently
                 DirContextOperations context = ldapTemplate.lookupContext(groupDn);
                 context.addAttributeValue("uniqueMember", member);
