@@ -91,7 +91,7 @@ public class CustomBindLdapAuthenticationHandler extends org.jasig.cas.adaptors.
         try {
             ass = new AuthenticationService_Service(new URL(authenticationServiceWsdlUrl), new QName("http://service.authentication.sade.vm.fi/", "AuthenticationService"));
         } catch (Exception e) {
-            log.warn("WARNING - problem with authentication backend, using only ldap, error: " + e);
+            log.warn("WARNING - problem with authentication backend, using only ldap, error: " + e, e);
             return;
         }
 
