@@ -1,21 +1,25 @@
 package fi.vm.sade.auth.ldap;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ldap.NameAlreadyBoundException;
+import org.springframework.ldap.core.ContextMapper;
 import org.springframework.ldap.core.DirContextOperations;
 import org.springframework.ldap.core.DistinguishedName;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.LdapContextSource;
+import org.springframework.ldap.filter.EqualsFilter;
 import sun.misc.BASE64Encoder;
 
+import javax.naming.Context;
 import javax.naming.Name;
-import javax.naming.directory.Attributes;
-import javax.naming.directory.BasicAttribute;
-import javax.naming.directory.BasicAttributes;
+import javax.naming.NamingException;
+import javax.naming.directory.*;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.*;
 
 /**
  * Imports users to ldap, check save-method which takes LdapUser as parameter.
@@ -42,18 +46,29 @@ public class LdapUserImporter {
 
     public LdapUser save(final LdapUser user) {
 
-        // if roles changed in backend, they must change in ldap also - easiest way to achieve this is to unbind user - TODO: kaikkien pollicyjen takia ei tod hyvä
-        ldapTemplate.unbind(buildDn("people", user.getDepartment(), user.getUid(), "uid"));
-
-        // save
+        // save user
         save("people", user.getDepartment(), user.getUid(), buildAttributes(user), "uid", false);
 
-        // todo: parempi import-logiikka + ryhmien/käyttäjien poistaminen kun ei ole enää backendissä, import irti casista? alhainen prioriteetti koska ei haittaa muuta kuin roskaa ldappia
+        // save groups...
 
-        // Update Groups
+        String member = "uid=" + user.getUid() + ",ou=people,dc=example,dc=com";
+
+        // Update Groups to remove user's old memberships
+        List<DirContextOperations> allgroups = ldapTemplate.search(buildDn("groups", null, null, null), new EqualsFilter("objectclass", "groupOfUniqueNames").encode(), new ContextMapper() {
+            @Override
+            public Object mapFromContext(Object o) {
+                return o;
+            }
+        });
+        for (DirContextOperations group : allgroups) {
+            removeUniqueMember(group, member, "mail="+user.getEmail()); // todo: tuo maili memberinä deprecated, käytetäänkö jossain muka vielä?
+        }
+
+        // todo: parempi import-logiikka + ryhmien/käyttäjien poistaminen kun ei ole enää backendissä, ei rebindia koskaan, import irti casista? alhainen prioriteetti koska ei haittaa muuta kuin roskaa ldappia
+
+        // Update Groups to add current memberships
         for (String group : user.getGroups()) {
             Name groupDn = buildDn("groups", null, group, "cn");
-            String member = "uid=" + user.getUid() + ",ou=people,dc=example,dc=com";
             try {
                 // if group doesn't exist, bind it and add first uniqueMember
                 //Name groupDn = save("groups", null, group, roleAttrs, "cn", true);
@@ -68,6 +83,23 @@ public class LdapUserImporter {
         }
 
         return user;
+    }
+
+    private void removeUniqueMember(DirContextOperations group, String... membersToRemove) {
+        List<String> uniqueMembers = Arrays.asList(group.getStringAttributes("uniqueMember"));
+        List<String> membersToRemoveList = Arrays.asList(membersToRemove);
+        if (CollectionUtils.containsAny(uniqueMembers, membersToRemoveList)) {
+            Collection newUniqueMembers = CollectionUtils.subtract(uniqueMembers, membersToRemoveList);
+            if (newUniqueMembers.size() == 0) { // mikäli membereitä jäisi nolla, pitää poista koko group
+                System.out.println("    remove uniquemember, delete empty group, group: "+group.getDn()+", membersToRemove: "+membersToRemoveList+", uniqueMembers: "+uniqueMembers);
+                ldapTemplate.unbind(group.getDn());
+            } else {
+                group.setAttributeValues("uniqueMember", newUniqueMembers.toArray());
+                //group.removeAttributeValue("uniqueMember", member);
+                System.out.println("    remove uniqueMember, group: " + group.getDn() + ", membersToRemove: " + membersToRemoveList + ", uniqueMembers: " + uniqueMembers + ", modification: " + Arrays.asList(group.getModificationItems()));
+                ldapTemplate.modifyAttributes(group);
+            }
+        }
     }
 
     public Name save(String ou, String department, String id, Attributes attributes, String idAttribute, boolean failIfAlreadyExists) {
@@ -102,7 +134,9 @@ public class LdapUserImporter {
         if (extraDepartment != null) {
             dn.add("ou", extraDepartment);
         }
-        dn.add(nameAttribute, uid);
+        if (nameAttribute != null) {
+            dn.add(nameAttribute, uid);
+        }
         return dn;
     }
 

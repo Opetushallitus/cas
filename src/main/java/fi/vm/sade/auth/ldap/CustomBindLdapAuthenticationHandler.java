@@ -152,6 +152,11 @@ public class CustomBindLdapAuthenticationHandler extends org.jasig.cas.adaptors.
         } catch (Throwable e) {
             //throw new RuntimeException("failed to import user from backend to ldap, user: "+cred.getUsername()+", error: "+e, e);
             log.warn("failed to import user from backend to ldap, falling back to ldap, user: "+cred.getUsername(), e);
+//            if (e instanceof RuntimeException) {
+//                throw (RuntimeException) e;
+//            } else {
+//                throw new RuntimeException(e);
+//            }
         }
 //*/
     }
