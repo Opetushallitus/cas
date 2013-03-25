@@ -25,10 +25,10 @@
         <img src="<c:url value='/img/opintopolkufi.png' /> "/>
     </div>
     <div class="language-selection grid16-8">
-        <div class="float-right display-table-cell vertical-align-middle">
-            <a class="bold display-table-cell vertical-align-middle" href="#">Suomeksi</a>
-            <span class="padding-horizontal-2 display-table-cell vertical-align-middle">|</span>
-            <a class="display-table-cell vertical-align-middle" href="#">På svenska</a>
+        <div class="float-right">
+            <a class="bold" href="#">Suomeksi</a>
+            <span class="padding-horizontal-2">|</span>
+            <a href="#">På svenska</a>
         </div>
     </div>
 

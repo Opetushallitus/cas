@@ -1557,9 +1557,14 @@ hr {
         text-decoration: underline; }
   #siteheader .language-selection {
     height: 37px; }
-    #siteheader .language-selection div a, #siteheader .language-selection div span {
-      color: #fff;
-      height: 32px; }
+    #siteheader .language-selection div {
+      vertical-align: middle;
+      display: table-cell; }
+      #siteheader .language-selection div a, #siteheader .language-selection div span {
+        color: #fff;
+        height: 32px;
+        display: table-cell;
+        vertical-align: middle; }
 
 /*** Footer
 ************************************************/
@@ -1579,7 +1584,6 @@ hr {
   border: 1px solid #dddddd; }
   #logobox address {
     font-style: normal; }
-  #logobox img,
   #logobox address {
     height: 100px;
     vertical-align: middle;
