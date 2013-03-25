@@ -50,7 +50,7 @@
                 </div>
                 <div class="grid16-3">
                     <address id="address">
-                        Opetus- ja kulttuuriministeriö <br />
+                        Opetus- ja kulttuuriministeri&ouml; <br />
                         PL 29, 00023 valtioneuvosto <br />
                         puhelin 0295 3 30004
                     </address>
