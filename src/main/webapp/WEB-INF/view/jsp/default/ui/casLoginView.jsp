@@ -51,14 +51,16 @@
 <div class="offset-left-16-2 grid16-6">
     <h1 class="margin-bottom-3 margin-top-0">Opintopolku - Ylläpidon työpöytä</h1>
     <p class="margin-bottom-3">
-        Ylläpidon sähköisellä työpöydällä voit hallinnoida Opintopolku.fi:ssä näytettäviä koulutuksia ja organisaatiosi tietoja sekä käsitellä hakemuksia ja paikan vastaanottajia. Julkinen, kaikille tarkoitettu palvelu löytyy syyskuusta 2013 alkaen osoitteesta <a href="www.opintopolku.fi">www.opintopolku.fi</a>
+        Yll&auml;pidon s&auml;hk&ouml;isell&auml; ty&ouml;p&ouml;yd&auml;ll&auml; voit hallinnoida Opintopolku.fi:ss&auml; n&auml;ytett&auml;vi&auml; koulutuksia ja organisaatiosi tietoja sek&auml; k&auml;sitell&auml; hakemuksia ja paikan vastaanottajia. Julkinen, kaikille tarkoitettu palvelu l&ouml;ytyy syyskuusta 2013 alkaen osoitteesta
+        <a href="www.opintopolku.fi">www.opintopolku.fi</a>
     </p>
     <p class="margin-bottom-3">
-        Tunnukset ylläpidon työpöydälle saat tarvittaessa organisaatiosi pääkäyttäjältä. Eri oppilaitosten ylläpitäjät näkevät työpöydällä osin eri palveluita käyttöoikeuksiensa mukaan.
+        Tunnukset yll&auml;pidon ty&ouml;p&ouml;yd&auml;lle saat tarvittaessa organisaatiosi p&auml;&auml;k&auml;ytt&auml;j&auml;lt&auml;. Eri oppilaitosten     yll&auml;pit&auml;j&auml;t n&auml;kev&auml;t ty&ouml;p&ouml;yd&auml;ll&auml; osin eri palveluita k&auml;ytt&ouml;oikeuksiensa mukaan.
     </p>
     <p>
-        Ylläpidon työpöytä on kehittyvä palvelu. Ensimmäisessä vaiheessa työpöydältä löytyvät opiskelijaksi ottamisen kannalta välttämättömät palvelut ja ohjeet koulutustarjonnan syöttämisestä hakemusten käsittelyyn. Myöhemmin työpöydälle saadaan myös opetussuunnitelmien ja tutkintojen perusteet sähköisessä muodossa, ryhmätyötiloja sekä tiedonlähteitä.
+        Yll&auml;pidon ty&ouml;p&ouml;yt&auml; on kehittyv&auml; palvelu. Ensimm&auml;isess&auml; vaiheessa ty&ouml;p&ouml;yd&auml;lt&auml; l&ouml;ytyv&auml;t opiskelijaksi ottamisen kannalta v&auml;ltt&auml;m&auml;tt&ouml;m&auml;t palvelut ja ohjeet koulutustarjonnan sy&ouml;tt&auml;misest&auml; hakemusten k&auml;sittelyyn. My&ouml;hemmin ty&ouml;p&ouml;yd&auml;lle saadaan my&ouml;s opetussuunnitelmien ja tutkintojen perusteet s&auml;hk&ouml;isess&auml; muodossa, ryhm&auml;ty&ouml;tiloja sek&auml; tiedonl&auml;hteit&auml;.
     </p>
+
 
 </div>
 <div class="offset-left-16-2 grid16-4" id="login">
