@@ -50,7 +50,9 @@
 <div class="clear margin-bottom-3"></div>
 
 <div class="offset-left-16-2 grid16-6">
-    <h1 class="margin-bottom-3 margin-top-0">Opintopolku - Yll&Atilde;&#x00a4;pidon ty&Atilde;&#x00b6;p&Atilde;&#x00b6;yt&Atilde;&#x00a4;</h1>
+    <h1 class="margin-bottom-3 margin-top-0">
+        Opintopolku - Yll&auml;pidon ty&ouml;p&ouml;yt&auml;
+    </h1>
     <p class="margin-bottom-3">
         Yll&auml;pidon s&auml;hk&ouml;isell&auml; ty&ouml;p&ouml;yd&auml;ll&auml; voit hallinnoida Opintopolku.fi:ss&auml; n&auml;ytett&auml;vi&auml; koulutuksia ja organisaatiosi tietoja sek&auml; k&auml;sitell&auml; hakemuksia ja paikan vastaanottajia. Julkinen, kaikille tarkoitettu palvelu l&ouml;ytyy syyskuusta 2013 alkaen osoitteesta
         <a href="www.opintopolku.fi">www.opintopolku.fi</a>
