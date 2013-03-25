@@ -20,20 +20,49 @@
 --%>
 <jsp:directive.include file="includes/top.jsp" />
 
-<c:if test="${not pageContext.request.secure}">
-    <div id="msg" class="errors">
-        <h2>Non-secure Connection</h2>
-        <p>You are currently accessing CAS over a non-secure connection.  Single Sign On WILL NOT WORK.  In order to have single sign on work, you MUST log in over HTTPS.</p>
+<header id="siteheader" class="width-100">
+    <div class="grid16-8">
+        <img src="<c:url value='/img/opintopolkufi.png' /> "/>
     </div>
-</c:if>
+    <div class="language-selection grid16-8">
+        <div class="float-right display-table-cell vertical-align-middle">
+            <a class="bold display-table-cell vertical-align-middle" href="#">Suomeksi</a>
+            <span class="padding-horizontal-2 display-table-cell vertical-align-middle">|</span>
+            <a class="display-table-cell vertical-align-middle" href="#">På svenska</a>
+        </div>
+    </div>
 
-<div class="box fl-panel" id="login">
-    <form:form method="post" id="fm1" cssClass="fm-v clearfix" commandName="${commandName}" htmlEscape="true">
-        <form:errors path="*" id="msg" cssClass="errors" element="div" />
+</header>
+<div class="clear"></div>
+
+<div class="grid16-11 offset-left-16-2 margin-vertical-5">
+    <c:if test="${not pageContext.request.secure}">
+        <div class="notification warning">
+            <h2>Non-secure Connection</h2>
+            <p>You are currently accessing CAS over a non-secure connection.  Single Sign On WILL NOT WORK.  In order to have single sign on work, you MUST log in over HTTPS.</p>
+        </div>
+    </c:if>
+</div>
+<div class="clear"></div>
+
+<div class="offset-left-16-2 grid16-6">
+    <h1 class="margin-bottom-3 margin-top-0">Opintopolku - Ylläpidon työpöytä</h1>
+    <p class="margin-bottom-3">Ylläpidon sähköisellä työpöydällä voit hallinnoida Opintopolku.fi:ssä näytettäviä koulutuksia ja organisaatiosi tietoja sekä käsitellä hakemuksia ja paikan vastaanottajia. Julkinen, kaikille tarkoitettu palvelu löytyy syyskuusta 2013 alkaen osoitteesta <a href="www.opintopolku.fi">www.opintopolku.fi</a>
+    </p>
+    <p class="margin-bottom-3">Tunnukset ylläpidon työpöydälle saat tarvittaessa organisaatiosi pääkäyttäjältä. Eri oppilaitosten ylläpitäjät näkevät työpöydällä osin eri palveluita käyttöoikeuksiensa mukaan.</p>
+    <p>Ylläpidon työpöytä on kehittyvä palvelu. Ensimmäisessä vaiheessa työpöydältä löytyvät opiskelijaksi ottamisen kannalta välttämättömät palvelut ja ohjeet koulutustarjonnan syöttämisestä hakemusten käsittelyyn. Myöhemmin työpöydälle saadaan myös opetussuunnitelmien ja tutkintojen perusteet sähköisessä muodossa, ryhmätyötiloja sekä tiedonlähteitä.</p>
+
+</div>
+
+<div class="offset-left-16-2 grid16-4" id="login">
+    <form:form method="post" cssClass="fm-v clearfix" commandName="${commandName}" htmlEscape="true">
+        <form:errors path="*" id="msg" cssClass="notification warning" element="div" />
         <!-- <spring:message code="screen.welcome.welcome" /> -->
+        <!--
         <h2><spring:message code="screen.welcome.instructions" /></h2>
-        <div class="row fl-controls-left">
-            <label for="username" class="fl-label"><spring:message code="screen.welcome.label.netid" /></label>
+        -->
+        <div class="form-item">
+            <label for="username" class="form-label"><spring:message code="screen.welcome.label.netid" /></label>
             <c:if test="${not empty sessionScope.openIdLocalId}">
                 <strong>${sessionScope.openIdLocalId}</strong>
                 <input type="hidden" id="username" name="username" value="${sessionScope.openIdLocalId}" />
@@ -41,11 +70,14 @@
 
             <c:if test="${empty sessionScope.openIdLocalId}">
                 <spring:message code="screen.welcome.label.netid.accesskey" var="userNameAccessKey" />
-                <form:input cssClass="required" cssErrorClass="error" id="username" size="25" tabindex="1" accesskey="${userNameAccessKey}" path="username" autocomplete="false" htmlEscape="true" />
+                <div class="form-item-content">
+                    <form:input cssClass="required" cssErrorClass="error" id="username" size="25" tabindex="1" accesskey="${userNameAccessKey}" path="username" autocomplete="false" htmlEscape="true" />
+                </div>
             </c:if>
         </div>
-        <div class="row fl-controls-left">
-            <label for="password" class="fl-label"><spring:message code="screen.welcome.label.password" /></label>
+        
+        <div class="form-item">
+            <label for="password" class="form-label"><spring:message code="screen.welcome.label.password" /></label>
             <%--
                            NOTE: Certain browsers will offer the option of caching passwords for a user.  There is a non-standard attribute,
                            "autocomplete" that when set to "off" will tell certain browsers not to prompt to cache credentials.  For more
@@ -53,20 +85,32 @@
                            http://www.geocities.com/technofundo/tech/web/ie_autocomplete.html
                            --%>
             <spring:message code="screen.welcome.label.password.accesskey" var="passwordAccessKey" />
-            <form:password cssClass="required" cssErrorClass="error" id="password" size="25" tabindex="2" path="password"  accesskey="${passwordAccessKey}" htmlEscape="true"  />
+                <div class="form-item-content">
+                    <form:password cssClass="required" cssErrorClass="error" id="password" size="25" tabindex="2" path="password"  accesskey="${passwordAccessKey}" htmlEscape="true"  />
+                </div>
             <%--autocomplete="off"--%>
         </div>
+        <!--
         <div class="row check">
             <input id="warn" name="warn" value="true" tabindex="3" accesskey="<spring:message code="screen.welcome.label.warn.accesskey" />" type="checkbox" />
             <label for="warn"><spring:message code="screen.welcome.label.warn" /></label>
         </div>
+    -->
         <div class="row btn-row">
             <input type="hidden" name="lt" value="${loginTicket}" />
             <input type="hidden" name="execution" value="${flowExecutionKey}" />
             <input type="hidden" name="_eventId" value="submit" />
 
-            <input class="btn-submit" name="submit" accesskey="l" value="<spring:message code="screen.welcome.button.login" />" tabindex="4" type="submit" />
-            <input class="btn-reset" name="reset" accesskey="c" value="<spring:message code="screen.welcome.button.clear" />" tabindex="5" type="reset" />
+            <input class="button small primary" name="submit" accesskey="l" value="<spring:message code="screen.welcome.button.login" />" tabindex="4" type="submit" />
+            <!--
+            <input class="button small" name="reset" accesskey="c" value="<spring:message code="screen.welcome.button.clear" />" tabindex="5" type="reset" />
+            -->
+        </div>
+
+        <div class="margin-top-2" id="haka">
+            <a href="#">
+                <img src="<c:url value='/img/haka_landscape_large.gif' /> "/>
+            </a>
         </div>
     </form:form>
 
@@ -76,8 +120,10 @@
     <%--asd2: ${facebookProviderUrl}--%>
     <%--<br/>--%>
     <%--<br/>--%>
+    <!--
     <a href="${FacebookProviderUrl}">Authenticate with Facebook</a> <br />
     <hr/>
+-->
     <%--<a href="/haku">Opintopolku</a> <br />--%>
     <%--<a href="/haku/castest.html">Opintopolku castest</a> <br />--%>
     <%--<a href="/">Portaali etusivu</a> <br />--%>
@@ -85,6 +131,9 @@
     <%--<br />--%>
 
 </div>
+
+<div class="clear margin-bottom-4"></div>
+<%--
 <div id="sidebar">
     <div class="sidebar-content">
         <p class="fl-panel fl-note fl-bevel-white fl-font-size-80"><spring:message code="screen.welcome.security" /></p>
@@ -154,4 +203,7 @@
         </div>
     </div>
 </div>
+--%>
+
 <jsp:directive.include file="includes/bottom.jsp" />
+

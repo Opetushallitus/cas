@@ -23,7 +23,7 @@
 <div id="msg" class="success">
     <h2><spring:message code="screen.logout.header" /></h2>
 
-    <p><spring:message code="screen.logout.success" /></p>
+    <div class="notification info"><spring:message code="screen.logout.success" /></div>
     <p><spring:message code="screen.logout.security" /></p>
 </div>
 
