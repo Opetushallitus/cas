@@ -35,6 +35,7 @@
 </header>
 <div class="clear"></div>
 
+<%--
 <div class="grid16-11 offset-left-16-2 margin-vertical-5">
     <c:if test="${not pageContext.request.secure}">
         <div class="notification warning">
@@ -43,17 +44,23 @@
         </div>
     </c:if>
 </div>
+--%>
+
 <div class="clear"></div>
 
 <div class="offset-left-16-2 grid16-6">
     <h1 class="margin-bottom-3 margin-top-0">Opintopolku - Ylläpidon työpöytä</h1>
-    <p class="margin-bottom-3">Ylläpidon sähköisellä työpöydällä voit hallinnoida Opintopolku.fi:ssä näytettäviä koulutuksia ja organisaatiosi tietoja sekä käsitellä hakemuksia ja paikan vastaanottajia. Julkinen, kaikille tarkoitettu palvelu löytyy syyskuusta 2013 alkaen osoitteesta <a href="www.opintopolku.fi">www.opintopolku.fi</a>
+    <p class="margin-bottom-3">
+        Ylläpidon sähköisellä työpöydällä voit hallinnoida Opintopolku.fi:ssä näytettäviä koulutuksia ja organisaatiosi tietoja sekä käsitellä hakemuksia ja paikan vastaanottajia. Julkinen, kaikille tarkoitettu palvelu löytyy syyskuusta 2013 alkaen osoitteesta <a href="www.opintopolku.fi">www.opintopolku.fi</a>
     </p>
-    <p class="margin-bottom-3">Tunnukset ylläpidon työpöydälle saat tarvittaessa organisaatiosi pääkäyttäjältä. Eri oppilaitosten ylläpitäjät näkevät työpöydällä osin eri palveluita käyttöoikeuksiensa mukaan.</p>
-    <p>Ylläpidon työpöytä on kehittyvä palvelu. Ensimmäisessä vaiheessa työpöydältä löytyvät opiskelijaksi ottamisen kannalta välttämättömät palvelut ja ohjeet koulutustarjonnan syöttämisestä hakemusten käsittelyyn. Myöhemmin työpöydälle saadaan myös opetussuunnitelmien ja tutkintojen perusteet sähköisessä muodossa, ryhmätyötiloja sekä tiedonlähteitä.</p>
+    <p class="margin-bottom-3">
+        Tunnukset ylläpidon työpöydälle saat tarvittaessa organisaatiosi pääkäyttäjältä. Eri oppilaitosten ylläpitäjät näkevät työpöydällä osin eri palveluita käyttöoikeuksiensa mukaan.
+    </p>
+    <p>
+        Ylläpidon työpöytä on kehittyvä palvelu. Ensimmäisessä vaiheessa työpöydältä löytyvät opiskelijaksi ottamisen kannalta välttämättömät palvelut ja ohjeet koulutustarjonnan syöttämisestä hakemusten käsittelyyn. Myöhemmin työpöydälle saadaan myös opetussuunnitelmien ja tutkintojen perusteet sähköisessä muodossa, ryhmätyötiloja sekä tiedonlähteitä.
+    </p>
 
 </div>
-
 <div class="offset-left-16-2 grid16-4" id="login">
     <form:form method="post" cssClass="fm-v clearfix" commandName="${commandName}" htmlEscape="true">
         <form:errors path="*" id="msg" cssClass="notification warning" element="div" />
