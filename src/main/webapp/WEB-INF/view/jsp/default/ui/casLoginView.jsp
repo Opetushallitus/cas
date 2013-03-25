@@ -34,16 +34,18 @@
 
 </header>
 
-<%--
+
 <div class="grid16-11 offset-left-16-2 margin-vertical-5">
+<%--
     <c:if test="${not pageContext.request.secure}">
         <div class="notification warning">
             <h2>Non-secure Connection</h2>
             <p>You are currently accessing CAS over a non-secure connection.  Single Sign On WILL NOT WORK.  In order to have single sign on work, you MUST log in over HTTPS.</p>
         </div>
     </c:if>
-</div>
 --%>
+</div>
+
 
 <div class="clear"></div>
 
