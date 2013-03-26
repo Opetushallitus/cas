@@ -110,6 +110,7 @@
 
                 <!-- antti: facebook/oauth -->
                 <bean class="org.jasig.cas.support.oauth.authentication.principal.OAuthCredentialsToPrincipalResolver" />
+                <bean class="fi.vm.sade.saml.action.SAMLCredentialsToPrincipalResolver" />
 
             </list>
         </property>

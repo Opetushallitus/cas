@@ -47,7 +47,8 @@ public class AuthenticationUtil {
     public void tryToImportUserFromCustomOphAuthenticationService(SAMLCredentials cred) {
         try {
             IdentifiedHenkiloType henkiloType = authenticationService.getIdentityByAuthToken(cred.getToken());
-            tryToImport(henkiloType, henkiloType.getEmail(), null);
+            cred.setUserDetails(henkiloType);
+            tryToImport(henkiloType, henkiloType.getEmail(), cred.getToken());
         } catch (Exception e) {
             log.warn("WARNING - problem with authentication backend, using only ldap, error: " + e, e);
             return;
