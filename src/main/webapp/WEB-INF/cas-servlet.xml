@@ -284,5 +284,9 @@
     <!--<bean id="oauth10loginController" class="org.jasig.cas.support.oauth.web.OAuth10LoginController">-->
         <!--<property name="configuration" ref="oauthConfig" />-->
     <!--</bean>-->
+    <bean id="samlAction" class="fi.vm.sade.saml.action.SAMLAction">
+        <property name="centralAuthenticationService" ref="centralAuthenticationService" />
+        <property name="authenticationService" ref="authenticationService" />
+    </bean>
 
 </beans>

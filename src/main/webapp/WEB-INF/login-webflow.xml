@@ -29,12 +29,20 @@
         <evaluate expression="initialFlowSetupAction" />
     </on-start>
 
+
+    <action-state id="samlAction">
+        <evaluate expression="samlAction" />
+        <transition on="success" to="sendTicketGrantingTicket" />
+        <transition on="error" to="ticketGrantingTicketExistsCheck" />
+    </action-state>
+
     <!-- antti: facebook/oauth -->
     <action-state id="oauthAction">
         <evaluate expression="oauthAction" />
         <transition on="success" to="sendTicketGrantingTicket" />
         <transition on="error" to="ticketGrantingTicketExistsCheck" />
     </action-state>
+
 
     <decision-state id="ticketGrantingTicketExistsCheck">
         <if test="flowScope.ticketGrantingTicketId != null" then="hasServiceCheck" else="gatewayRequestCheck" />
