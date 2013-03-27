@@ -33,23 +33,23 @@
                 </div>
             -->
             </div>
-            <div id="logobox" class="offset-left-16-1 grid16-13 padding-5">
-                <div class="offset-left-16-2 grid16-3">
+            <footer id="footer" class="offset-left-16-1 grid16-14">
+                <div class="offset-left-16-2 grid16-3 padding-vertical-5">
                     <img src="<c:url value='/img/OPH_logo.png' />" />
                 </div>
-                <div class="grid16-3">
-                    <address id="address">
+                <div class="grid16-3 padding-vertical-5">
+                    <address class="address">
                         Opetushallitus <br />
                         Hakaniemenranta 6 <br />
                         PL 380, 00531 Helsinki <br />
                         puhelin 029 533 1000 
                     </address>
                 </div>
-                <div class="grid16-3">
+                <div class="grid16-3 padding-vertical-5">
                     <img src="<c:url value='/img/OKM_logo.png' />" />
                 </div>
-                <div class="grid16-3">
-                    <address id="address">
+                <div class="grid16-3 padding-vertical-5">
+                    <address class="address">
                         Opetus- ja kulttuuriministeri&ouml; <br />
                         PL 29, 00023 valtioneuvosto <br />
                         puhelin 0295 3 30004
@@ -57,13 +57,14 @@
                 </div>
                 
 
-            </div>
+            </footer>
             <div class="clear"></div>
 
         </div>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js"></script>
         <script type="text/javascript" src="<c:url value="/js/cas.js" />"></script>
+        <script type="text/javascript" src="http://eu1.snoobi.com/snoop.php?tili=opintopolku_fi"></script>
     </body>
 </html>
 

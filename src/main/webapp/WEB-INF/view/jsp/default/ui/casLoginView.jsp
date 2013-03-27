@@ -21,17 +21,14 @@
 <jsp:directive.include file="includes/top.jsp" />
 
 <header id="siteheader" class="width-100">
-    <div class="grid16-8">
-        <img src="<c:url value='/img/opintopolkufi.png' /> "/>
+    <div class="header-content">
+        <img class="margin-left-2" src="<c:url value='/img/opintopolkufi.png' /> "/>
+        
+        <a class="float-right margin-right-2" href="#">P&aring; svenska</a>
+        <span class="float-right margin-right-1">|</span>
+        <a class="bold float-right margin-right-1" href="#">Suomeksi</a>
+    
     </div>
-    <div class="language-selection grid16-8">
-        <div class="float-right">
-            <a class="bold" href="#">Suomeksi</a>
-            <span class="padding-horizontal-2">|</span>
-            <a href="#">P&aring; svenska</a>
-        </div>
-    </div>
-
 </header>
 
 
@@ -118,9 +115,12 @@
             <input class="button small" name="reset" accesskey="c" value="<spring:message code="screen.welcome.button.clear" />" tabindex="5" type="reset" />
             -->
         </div>
+        
+        <h2 class="margin-top-4 align-center">TAI</h2>
+        <hr style="background-color: #000" />
 
         <div class="margin-top-2" id="haka">
-            <a href="#">
+            <a class="block align-center" href="#">
                 <img src="<c:url value='/img/haka_landscape_large.gif' /> "/>
             </a>
         </div>
