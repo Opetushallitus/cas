@@ -48,7 +48,7 @@ public class AuthenticationUtil {
         try {
             IdentifiedHenkiloType henkiloType = authenticationService.getIdentityByAuthToken(cred.getToken());
             cred.setUserDetails(henkiloType);
-            tryToImport(henkiloType, henkiloType.getEmail(), cred.getToken());
+            tryToImport(henkiloType, henkiloType.getKayttajatunnus(), cred.getToken());
         } catch (Exception e) {
             log.warn("WARNING - problem with authentication backend, using only ldap, error: " + e, e);
             return;
