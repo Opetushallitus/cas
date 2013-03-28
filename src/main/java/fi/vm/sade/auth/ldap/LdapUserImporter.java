@@ -91,12 +91,12 @@ public class LdapUserImporter {
         if (CollectionUtils.containsAny(uniqueMembers, membersToRemoveList)) {
             Collection newUniqueMembers = CollectionUtils.subtract(uniqueMembers, membersToRemoveList);
             if (newUniqueMembers.size() == 0) { // mikäli membereitä jäisi nolla, pitää poista koko group
-                System.out.println("    remove uniquemember, delete empty group, group: "+group.getDn()+", membersToRemove: "+membersToRemoveList+", uniqueMembers: "+uniqueMembers);
+//                System.out.println("    remove uniquemember, delete empty group, group: "+group.getDn()+", membersToRemove: "+membersToRemoveList+", uniqueMembers: "+uniqueMembers);
                 ldapTemplate.unbind(group.getDn());
             } else {
                 group.setAttributeValues("uniqueMember", newUniqueMembers.toArray());
                 //group.removeAttributeValue("uniqueMember", member);
-                System.out.println("    remove uniqueMember, group: " + group.getDn() + ", membersToRemove: " + membersToRemoveList + ", uniqueMembers: " + uniqueMembers + ", modification: " + Arrays.asList(group.getModificationItems()));
+//                System.out.println("    remove uniqueMember, group: " + group.getDn() + ", membersToRemove: " + membersToRemoveList + ", uniqueMembers: " + uniqueMembers + ", modification: " + Arrays.asList(group.getModificationItems()));
                 ldapTemplate.modifyAttributes(group);
             }
         }
