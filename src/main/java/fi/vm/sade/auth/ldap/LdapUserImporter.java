@@ -51,10 +51,49 @@ public class LdapUserImporter {
 
         // save groups...
 
+        List<String> userBackendGroups = Arrays.asList(user.getGroups());
         String member = "uid=" + user.getUid() + ",ou=people,dc=example,dc=com";
+        Name groupdDn = buildDn("groups", null, null, null);
+
+        // get current ldap groups
+        List<String> userLdapGroups = ldapTemplate.search(groupdDn, new EqualsFilter("uniqueMember", member).encode(), new ContextMapper() {
+            @Override
+            public Object mapFromContext(Object o) {
+                return ((DirContextOperations)o).getStringAttribute("cn");
+            }
+        });
+        Collection<String> deletedMemberships = CollectionUtils.subtract(userLdapGroups, userBackendGroups);
+        Collection<String> addedMemberships = CollectionUtils.subtract(userBackendGroups, userLdapGroups);
+        System.out.println("user: "+user.getEmail()+", backendGroups: "+userBackendGroups.size()+", ldapGroups: "+userLdapGroups.size());
+        System.out.println("user: "+user.getEmail()+", deletedMemberships: "+deletedMemberships);
+        System.out.println("user: "+user.getEmail()+", addedMemberships: "+addedMemberships);
+        // remove deleted membership (membership deleted in backend groups but exists in ldap groups)
+        for (String deletedMembership : deletedMemberships) {
+            Name groupDn = buildDn("groups", null, deletedMembership, "cn");
+            System.out.println("user: "+user.getEmail()+", ...remove membership to: "+deletedMembership);
+            DirContextOperations group = ldapTemplate.lookupContext(groupDn);
+            removeUniqueMember(group, member, "mail="+user.getEmail()); // todo: tuo maili memberinä deprecated, käytetäänkö jossain muka vielä?
+        }
+        // add new membership (membership exists in backend groups but not in ldap groups)
+        for (String group : addedMemberships) {
+            Name groupDn = buildDn("groups", null, group, "cn");
+            System.out.println("user: "+user.getEmail()+", ...add membership to: "+group);
+            try {
+                // if group doesn't exist, bind it and add first uniqueMember
+                //Name groupDn = save("groups", null, group, roleAttrs, "cn", true);
+                Attributes roleAttrs = buildRoleAttributes(group, member);
+                ldapTemplate.bind(groupDn, null, roleAttrs);
+            } catch (NameAlreadyBoundException nabe) {
+                // if group exists, just add new member - note if member already exits, this will fail silently
+                DirContextOperations context = ldapTemplate.lookupContext(groupDn);
+                context.addAttributeValue("uniqueMember", member);
+                ldapTemplate.modifyAttributes(context);
+            }
+        }
 
         // Update Groups to remove user's old memberships
-        List<DirContextOperations> allgroups = ldapTemplate.search(buildDn("groups", null, null, null), new EqualsFilter("objectclass", "groupOfUniqueNames").encode(), new ContextMapper() {
+        /* old way
+        List<DirContextOperations> allgroups = ldapTemplate.search(groupdDn, new EqualsFilter("objectclass", "groupOfUniqueNames").encode(), new ContextMapper() {
             @Override
             public Object mapFromContext(Object o) {
                 return o;
@@ -81,6 +120,7 @@ public class LdapUserImporter {
                 ldapTemplate.modifyAttributes(context);
             }
         }
+        */
 
         return user;
     }
