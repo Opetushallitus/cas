@@ -120,7 +120,7 @@
         <hr style="background-color: #000" />
 
         <div class="margin-top-2" id="haka">
-            <a class="block align-center" href="#">
+            <a class="block align-center" href="${hakaUrl}">
                 <img src="<c:url value='/img/haka_landscape_large.gif' /> "/>
             </a>
         </div>
