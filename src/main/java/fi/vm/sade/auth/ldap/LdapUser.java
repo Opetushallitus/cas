@@ -13,6 +13,7 @@ public class LdapUser {
     private String email;
     private String password;
     private String department;
+    private String disabled;
     private String groups[] = new String[0];
 //    private String roles[] = new String[0];
 
@@ -62,6 +63,14 @@ public class LdapUser {
 
     public void setDepartment(String department) {
         this.department = department;
+    }
+
+    public String getDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(String disabled) {
+        this.disabled = disabled;
     }
 
     public String[] getGroups() {

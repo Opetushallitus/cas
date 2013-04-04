@@ -2,6 +2,7 @@ package fi.vm.sade;
 
 import fi.vm.sade.auth.ldap.LdapUser;
 import fi.vm.sade.auth.ldap.LdapUserImporter;
+import fi.vm.sade.auth.ldap.exception.UserDisabledException;
 import fi.vm.sade.authentication.service.AuthenticationService;
 import fi.vm.sade.authentication.service.AuthenticationService_Service;
 import fi.vm.sade.authentication.service.types.AccessRightType;
@@ -67,6 +68,7 @@ public class AuthenticationUtil {
             //user.setEmail(henkilo.getEmail());
             user.setEmail(username);
             user.setPassword(password);
+            user.setDisabled(henkilo.isPassivoitu() ? "true" : "false");
             log.info("CustomBindLdapAuthenticationHandler.preAuthenticate, user: " + user);
 
             // roles - mainly copypaste from TokenAutoLogin
@@ -97,6 +99,8 @@ public class AuthenticationUtil {
             user.setGroups(roleStrings.toArray(new String[roleStrings.size()]));
 
             ldapUserImporter.save(user);
+        } catch (UserDisabledException e) {
+            throw e;
         } catch (Throwable e) {
             log.warn("failed to import user from backend to ldap, falling back to ldap, user: "+username, e);
         }

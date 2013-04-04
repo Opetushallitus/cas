@@ -203,6 +203,7 @@ public class LdapUserImporter {
             attrs.put("userPassword", "{SHA}" + this.encrypt(user.getPassword()));
         }
         attrs.put("mail", user.getEmail());
+        attrs.put("disabled", user.getDisabled());
         return attrs;
     }
 
