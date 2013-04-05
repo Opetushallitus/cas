@@ -166,6 +166,15 @@ public class LdapUserImporter {
         return dn;
     }
 
+    public void remove(LdapUser user) {
+        Name name = buildDn("people", user.getDepartment(), user.getUid(), "uid");
+        remove(name);
+    }
+
+    public void remove(Name dn) {
+        ldapTemplate.unbind(dn);
+    }
+
     public static Name buildDn(String ou, String extraDepartment, String uid, String nameAttribute) {
         DistinguishedName dn = new DistinguishedName();
         dn.add("dc", "com");
@@ -203,7 +212,6 @@ public class LdapUserImporter {
             attrs.put("userPassword", "{SHA}" + this.encrypt(user.getPassword()));
         }
         attrs.put("mail", user.getEmail());
-        attrs.put("disabled", user.getDisabled());
         return attrs;
     }
 

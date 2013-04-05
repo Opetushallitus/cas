@@ -57,18 +57,22 @@ public class AuthenticationUtil {
     }
 
     protected void tryToImport(IdentifiedHenkiloType henkilo, String username, String password) {
-        try {
-            log.info("CustomBindLdapAuthenticationHandler.preAuthenticate, henkilo: " + henkilo);
+        log.info("CustomBindLdapAuthenticationHandler.preAuthenticate, henkilo: " + henkilo);
+        LdapUser user = new LdapUser();
+        user.setUid(username);
+        user.setOid(henkilo.getOidHenkilo());
+        user.setFirstName(henkilo.getEtunimet());
+        user.setLastName(henkilo.getSukunimi());
+        //user.setEmail(henkilo.getEmail());
+        user.setEmail(username);
+        user.setPassword(password);
 
-            LdapUser user = new LdapUser();
-            user.setUid(username);
-            user.setOid(henkilo.getOidHenkilo());
-            user.setFirstName(henkilo.getEtunimet());
-            user.setLastName(henkilo.getSukunimi());
-            //user.setEmail(henkilo.getEmail());
-            user.setEmail(username);
-            user.setPassword(password);
-            user.setDisabled(henkilo.isPassivoitu() ? "true" : "false");
+        if(henkilo.isPassivoitu()) {
+            ldapUserImporter.remove(user);
+            throw new UserDisabledException("User " + username + " is disabled.");
+        }
+
+        try {
             log.info("CustomBindLdapAuthenticationHandler.preAuthenticate, user: " + user);
 
             // roles - mainly copypaste from TokenAutoLogin
