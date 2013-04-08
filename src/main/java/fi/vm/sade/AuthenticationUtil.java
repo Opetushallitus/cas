@@ -77,6 +77,7 @@ public class AuthenticationUtil {
 
             // roles - mainly copypaste from TokenAutoLogin
             Set<String> roleStrings = new HashSet<String>();
+            roleStrings.add("virkailija"); // TODO: temp keino saada kaikki käyttäjät virkailija-ryhmään, joka on jäsenenä virkailijan työpöytä -sitella, oikeasti ryhmä pitäisi olla jo backendissä
             if(henkilo.getAuthorizationData() != null && henkilo.getAuthorizationData().getAccessrights() !=null) {
                 for(AccessRightType art : henkilo.getAuthorizationData().getAccessrights().getAccessRight()) {
                     log.info("AUTH ROW: OID[" + art.getOrganisaatioOid() + "] PALVELU[" + art.getPalvelu() + "] ROOLI[" + art.getRooli() + "] ORGANISAATIO[" + art.getOrganisaatioOid() + "]");
@@ -95,7 +96,6 @@ public class AuthenticationUtil {
                     // also add role PALVELU_ROOLI_ORGANISAATIO
                     roleStrings.add(ROLE_PREFIX + role.toString() + "_" + art.getOrganisaatioOid());
                 }
-                roleStrings.add("virkailija"); // TODO: temp keino saada kaikki käyttäjät virkailija-ryhmään, joka on jäsenenä virkailijan työpöytä -sitella, oikeasti ryhmä pitäisi olla jo backendissä
             } else {
                 log.info("HENKILO HAD NO AUTHORIZATION DATA: "+henkilo.getEmail()+"/"+henkilo.getOidHenkilo());
             }
