@@ -64,7 +64,7 @@ public class AuthenticationUtil {
         user.setFirstName(henkilo.getEtunimet());
         user.setLastName(henkilo.getSukunimi());
         //user.setEmail(henkilo.getEmail());
-        user.setEmail(username);
+        user.setEmail(henkilo.getEmail());
         user.setPassword(password);
 
         if(henkilo.isPassivoitu()) {
