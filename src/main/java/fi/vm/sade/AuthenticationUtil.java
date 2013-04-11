@@ -63,6 +63,13 @@ public class AuthenticationUtil {
         user.setOid(henkilo.getOidHenkilo());
         user.setFirstName(henkilo.getEtunimet());
         user.setLastName(henkilo.getSukunimi());
+
+        // TODO: Quick fix: LDAP vaatii, että mail-fieldissä on jotain.
+        if(henkilo.getEmail() == null || StringUtils.isBlank(henkilo.getEmail())) {
+            log.warn("User " + username + " does not have email address at all");
+            user.setEmail(username + "@oph.local");
+        }
+
         user.setEmail(henkilo.getEmail());
         user.setPassword(password);
 
