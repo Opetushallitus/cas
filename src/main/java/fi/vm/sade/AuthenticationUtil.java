@@ -40,7 +40,7 @@ public class AuthenticationUtil {
             IdentifiedHenkiloType henkilo = authenticationService.getIdentityByUsernameAndPassword(cred.getUsername(), cred.getPassword());
             tryToImport(henkilo, cred.getUsername(), cred.getPassword());
         } catch (Exception e) {
-            log.warn("WARNING - problem with authentication backend, using only ldap, error: " + e, e);
+            log.warn("WARNING - problem with authentication backend, using only ldap.", e);
             return;
         }
     }
@@ -51,7 +51,7 @@ public class AuthenticationUtil {
             cred.setUserDetails(henkiloType);
             tryToImport(henkiloType, henkiloType.getKayttajatunnus(), cred.getToken());
         } catch (Exception e) {
-            log.warn("WARNING - problem with authentication backend, using only ldap, error: " + e, e);
+            log.warn("WARNING - problem with authentication backend, using only ldap.", e);
             return;
         }
     }
@@ -63,7 +63,6 @@ public class AuthenticationUtil {
         user.setOid(henkilo.getOidHenkilo());
         user.setFirstName(henkilo.getEtunimet());
         user.setLastName(henkilo.getSukunimi());
-        //user.setEmail(henkilo.getEmail());
         user.setEmail(henkilo.getEmail());
         user.setPassword(password);
 
