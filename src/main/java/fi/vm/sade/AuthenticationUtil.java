@@ -68,9 +68,9 @@ public class AuthenticationUtil {
         if(henkilo.getEmail() == null || StringUtils.isBlank(henkilo.getEmail())) {
             log.warn("User " + username + " does not have email address at all");
             user.setEmail(username + "@oph.local");
+        } else {
+            user.setEmail(henkilo.getEmail());
         }
-
-        user.setEmail(henkilo.getEmail());
         user.setPassword(password);
 
         if(henkilo.isPassivoitu()) {
