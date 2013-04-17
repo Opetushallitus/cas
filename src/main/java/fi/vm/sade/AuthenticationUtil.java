@@ -5,8 +5,10 @@ import fi.vm.sade.auth.ldap.LdapUserImporter;
 import fi.vm.sade.auth.ldap.exception.UserDisabledException;
 import fi.vm.sade.authentication.service.AuthenticationService;
 import fi.vm.sade.authentication.service.AuthenticationService_Service;
+import fi.vm.sade.authentication.service.CustomAttributeService;
 import fi.vm.sade.authentication.service.types.AccessRightType;
 import fi.vm.sade.authentication.service.types.IdentifiedHenkiloType;
+import fi.vm.sade.authentication.service.types.dto.CustomUserRoleType;
 import fi.vm.sade.organisaatio.api.model.OrganisaatioService;
 import fi.vm.sade.saml.action.SAMLCredentials;
 import org.apache.commons.lang.StringUtils;
@@ -17,7 +19,9 @@ import org.slf4j.LoggerFactory;
 
 import javax.xml.namespace.QName;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -32,6 +36,7 @@ public class AuthenticationUtil {
     private OrganisaatioService organisaatioService;
     private String rootOrganisaatioOid;
     private AuthenticationService authenticationService;
+    private CustomAttributeService customAttributeService;
 
     protected Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -78,12 +83,25 @@ public class AuthenticationUtil {
             throw new UserDisabledException("User " + username + " is disabled.");
         }
 
+        List<CustomUserRoleType> roleTypes = new ArrayList<CustomUserRoleType>();
+
+        try {
+           roleTypes.addAll(customAttributeService.listCustomUserRole(henkilo.getOidHenkilo()));
+        } catch (Exception e) {
+            log.warn("Could not get user custom attributes.", e);
+        }
+
         try {
             log.info("CustomBindLdapAuthenticationHandler.preAuthenticate, user: " + user);
 
             // roles - mainly copypaste from TokenAutoLogin
             Set<String> roleStrings = new HashSet<String>();
-            roleStrings.add("virkailija"); // TODO: temp keino saada kaikki käyttäjät virkailija-ryhmään, joka on jäsenenä virkailijan työpöytä -sitella, oikeasti ryhmä pitäisi olla jo backendissä
+            // Lisätään kaikki custom roolit, kuten VIRKAILIJA, STRONG_AUTHENTICATED...
+            for(CustomUserRoleType role : roleTypes) {
+                log.info("Adding role " + role.getRooli() + " to user " + username);
+                roleStrings.add(role.getRooli());
+            }
+
             if(henkilo.getAuthorizationData() != null && henkilo.getAuthorizationData().getAccessrights() !=null) {
                 for(AccessRightType art : henkilo.getAuthorizationData().getAccessrights().getAccessRight()) {
                     log.info("AUTH ROW: OID[" + art.getOrganisaatioOid() + "] PALVELU[" + art.getPalvelu() + "] ROOLI[" + art.getRooli() + "] ORGANISAATIO[" + art.getOrganisaatioOid() + "]");
@@ -155,4 +173,13 @@ public class AuthenticationUtil {
     public void setAuthenticationService(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
     }
+
+    public CustomAttributeService getCustomAttributeService() {
+        return customAttributeService;
+    }
+
+    public void setCustomAttributeService(CustomAttributeService customAttributeService) {
+        this.customAttributeService = customAttributeService;
+    }
+
 }
