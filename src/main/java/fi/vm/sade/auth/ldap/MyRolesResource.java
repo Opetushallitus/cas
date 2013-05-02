@@ -19,7 +19,6 @@ import java.util.Map;
  */
 public class MyRolesResource extends AbstractController {
 
-    public static final String CAS_OPH_ROLES = "CAS_OPH_ROLES";
     private TicketRegistry ticketRegistry;
     private CookieRetrievingCookieGenerator ticketGrantingTicketCookieGenerator;
     private AuthenticationUtil authenticationUtil;
@@ -31,8 +30,6 @@ public class MyRolesResource extends AbstractController {
         String uid = ticketGrantingTicket.getAuthentication().getPrincipal().getId();
         final List<String> roles = authenticationUtil.getRoles(uid);
 
-//        response.setContentType("text/json");
-//        response.getWriter().print(roles);
         return new ModelAndView(new View() {
             @Override
             public String getContentType() {
