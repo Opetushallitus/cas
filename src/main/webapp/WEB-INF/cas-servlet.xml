@@ -96,6 +96,8 @@
                 <prop key="/status">healthCheckController</prop>
                 <!-- antti: facebook/oauth -->
                 <!--<prop key="/oauth10login">oauth10loginController</prop>-->
+                <!-- oph rest resource to get list of user's roles -->
+                <prop key="/myroles">myrolesController</prop>
             </props>
         </property>
         <property
@@ -291,6 +293,14 @@
 
     <bean id="configuration" class="fi.vm.sade.Configuration">
         <property name="hakaUrl" value="${haka.url}" />
+    </bean>
+
+    <!-- oph rest resource to get list of user's roles -->
+
+    <bean id="myrolesController" class="fi.vm.sade.auth.ldap.MyRolesResource">
+        <property name="ticketGrantingTicketCookieGenerator" ref="ticketGrantingTicketCookieGenerator"/>
+        <property name="ticketRegistry" ref="ticketRegistry"/>
+        <property name="authenticationUtil" ref="authenticationUtil"/>
     </bean>
 
 </beans>

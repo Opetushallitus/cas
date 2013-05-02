@@ -12,9 +12,7 @@ import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.ldap.filter.EqualsFilter;
 import sun.misc.BASE64Encoder;
 
-import javax.naming.Context;
 import javax.naming.Name;
-import javax.naming.NamingException;
 import javax.naming.directory.*;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -52,16 +50,10 @@ public class LdapUserImporter {
         // save groups...
 
         List<String> userBackendGroups = Arrays.asList(user.getGroups());
-        String member = "uid=" + user.getUid() + ",ou=people,dc=example,dc=com";
-        Name groupdDn = buildDn("groups", null, null, null);
+        String member = getMemberString(user.getUid());
 
         // get current ldap groups
-        List<String> userLdapGroups = ldapTemplate.search(groupdDn, new EqualsFilter("uniqueMember", member).encode(), new ContextMapper() {
-            @Override
-            public Object mapFromContext(Object o) {
-                return ((DirContextOperations)o).getStringAttribute("cn");
-            }
-        });
+        List<String> userLdapGroups = getUserLdapGroups(member);
         Collection<String> deletedMemberships = CollectionUtils.subtract(userLdapGroups, userBackendGroups);
         Collection<String> addedMemberships = CollectionUtils.subtract(userBackendGroups, userLdapGroups);
         System.out.println("user: "+user.getEmail()+", backendGroups: "+userBackendGroups.size()+", ldapGroups: "+userLdapGroups.size());
@@ -123,6 +115,20 @@ public class LdapUserImporter {
         */
 
         return user;
+    }
+
+    public String getMemberString(String uid) {
+        return "uid=" + uid + ",ou=people,dc=example,dc=com";
+    }
+
+    public List<String> getUserLdapGroups(String member) {
+        Name groupdDn = buildDn("groups", null, null, null);
+        return ldapTemplate.search(groupdDn, new EqualsFilter("uniqueMember", member).encode(), new ContextMapper() {
+            @Override
+            public Object mapFromContext(Object o) {
+                return ((DirContextOperations)o).getStringAttribute("cn");
+            }
+        });
     }
 
     private void removeUniqueMember(DirContextOperations group, String... membersToRemove) {

@@ -4,7 +4,6 @@ import fi.vm.sade.auth.ldap.LdapUser;
 import fi.vm.sade.auth.ldap.LdapUserImporter;
 import fi.vm.sade.auth.ldap.exception.UserDisabledException;
 import fi.vm.sade.authentication.service.AuthenticationService;
-import fi.vm.sade.authentication.service.AuthenticationService_Service;
 import fi.vm.sade.authentication.service.CustomAttributeService;
 import fi.vm.sade.authentication.service.types.AccessRightType;
 import fi.vm.sade.authentication.service.types.IdentifiedHenkiloType;
@@ -12,13 +11,11 @@ import fi.vm.sade.authentication.service.types.dto.CustomUserRoleType;
 import fi.vm.sade.organisaatio.api.model.OrganisaatioService;
 import fi.vm.sade.saml.action.SAMLCredentials;
 import org.apache.commons.lang.StringUtils;
-import org.jasig.cas.authentication.handler.support.AbstractPreAndPostProcessingAuthenticationHandler;
 import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.namespace.QName;
-import java.net.URL;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -182,4 +179,8 @@ public class AuthenticationUtil {
         this.customAttributeService = customAttributeService;
     }
 
+    public List<String> getRoles(String uid) {
+        String member = ldapUserImporter.getMemberString(uid);
+        return ldapUserImporter.getUserLdapGroups(member);
+    }
 }
