@@ -3,21 +3,11 @@ package fi.vm.sade.auth.ldap;
 //*
 
 import fi.vm.sade.AuthenticationUtil;
-import fi.vm.sade.authentication.service.AuthenticationService;
-import fi.vm.sade.authentication.service.AuthenticationService_Service;
-import fi.vm.sade.authentication.service.types.AccessRightType;
-import fi.vm.sade.authentication.service.types.IdentifiedHenkiloType;
-import fi.vm.sade.organisaatio.api.model.OrganisaatioService;
 import fi.vm.sade.organisaatio.api.model.types.OrganisaatioDTO;
-import org.apache.commons.lang.StringUtils;
 import org.jasig.cas.authentication.principal.Credentials;
 import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
 
-import javax.xml.namespace.QName;
-import java.net.URL;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 //*/
 
@@ -39,9 +29,9 @@ public class CustomBindLdapAuthenticationHandler extends org.jasig.cas.adaptors.
 
         tryToImportOrganisaatios();
 
-        authenticationUtil.tryToImportUserFromCustomOphAuthenticationService(cred);
 
-        return true;
+        return authenticationUtil.tryToImportUserFromCustomOphAuthenticationService(cred);
+
     }
 
     private void tryToImportOrganisaatios() {
