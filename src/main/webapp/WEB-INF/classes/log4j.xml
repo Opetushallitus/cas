@@ -33,7 +33,7 @@
     </appender>
 
     <appender name="cas" class="org.apache.log4j.RollingFileAppender">
-        <param name="File" value="${catalina.home}/logs/cas.log" />
+        <param name="File" value="${catalina.base}/logs/cas.log" />
         <param name="MaxFileSize" value="512KB" />
         <param name="MaxBackupIndex" value="3" />
         <layout class="org.apache.log4j.PatternLayout">
