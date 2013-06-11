@@ -115,7 +115,7 @@
             <input class="button small" name="reset" accesskey="c" value="<spring:message code="screen.welcome.button.clear" />" tabindex="5" type="reset" />
             -->
         </div>
-        
+       <!-- VST-34
         <h2 class="margin-top-4 align-center">TAI</h2>
         <hr style="background-color: #000" />
 
@@ -124,6 +124,7 @@
                 <img src="<c:url value='/img/haka_landscape_large.gif' /> "/>
             </a>
         </div>
+        -->
     </form:form>
 
     <!-- antti: facebook/oauth -->
