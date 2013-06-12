@@ -56,20 +56,22 @@ public class LdapUserImporter {
         List<String> userLdapGroups = getUserLdapGroups(member);
         Collection<String> deletedMemberships = CollectionUtils.subtract(userLdapGroups, userBackendGroups);
         Collection<String> addedMemberships = CollectionUtils.subtract(userBackendGroups, userLdapGroups);
-        System.out.println("user: "+user.getEmail()+", backendGroups: "+userBackendGroups.size()+", ldapGroups: "+userLdapGroups.size());
-        System.out.println("user: "+user.getEmail()+", deletedMemberships: "+deletedMemberships);
-        System.out.println("user: "+user.getEmail()+", addedMemberships: "+addedMemberships);
+        if(log.isDebugEnabled()) {
+            log.debug("user: {}, backendGroups: {}, ldapGroups: {}", new Object[]{user.getEmail(), userBackendGroups.size(), userLdapGroups.size()});
+            log.debug("user: {}, deletedMemberships: {}", user.getEmail(), deletedMemberships);
+            log.debug("user: {}, addedMemberships: {}", user.getEmail(), addedMemberships);
+        }
         // remove deleted membership (membership deleted in backend groups but exists in ldap groups)
         for (String deletedMembership : deletedMemberships) {
             Name groupDn = buildDn("groups", null, deletedMembership, "cn");
-            System.out.println("user: "+user.getEmail()+", ...remove membership to: "+deletedMembership);
+            log.debug("user: {}, ...remove membership to: {}", user.getEmail(), deletedMembership);
             DirContextOperations group = ldapTemplate.lookupContext(groupDn);
             removeUniqueMember(group, member, "mail="+user.getEmail()); // todo: tuo maili memberinä deprecated, käytetäänkö jossain muka vielä?
         }
         // add new membership (membership exists in backend groups but not in ldap groups)
         for (String group : addedMemberships) {
             Name groupDn = buildDn("groups", null, group, "cn");
-            System.out.println("user: "+user.getEmail()+", ...add membership to: "+group);
+            log.debug("user: {}, ...add membership to: {}", user.getEmail(), group);
             try {
                 // if group doesn't exist, bind it and add first uniqueMember
                 //Name groupDn = save("groups", null, group, roleAttrs, "cn", true);
@@ -82,37 +84,6 @@ public class LdapUserImporter {
                 ldapTemplate.modifyAttributes(context);
             }
         }
-
-        // Update Groups to remove user's old memberships
-        /* old way
-        List<DirContextOperations> allgroups = ldapTemplate.search(groupdDn, new EqualsFilter("objectclass", "groupOfUniqueNames").encode(), new ContextMapper() {
-            @Override
-            public Object mapFromContext(Object o) {
-                return o;
-            }
-        });
-        for (DirContextOperations group : allgroups) {
-            removeUniqueMember(group, member, "mail="+user.getEmail()); // todo: tuo maili memberinä deprecated, käytetäänkö jossain muka vielä?
-        }
-
-        // todo: parempi import-logiikka + ryhmien/käyttäjien poistaminen kun ei ole enää backendissä, ei rebindia koskaan, import irti casista? alhainen prioriteetti koska ei haittaa muuta kuin roskaa ldappia
-
-        // Update Groups to add current memberships
-        for (String group : user.getGroups()) {
-            Name groupDn = buildDn("groups", null, group, "cn");
-            try {
-                // if group doesn't exist, bind it and add first uniqueMember
-                //Name groupDn = save("groups", null, group, roleAttrs, "cn", true);
-                Attributes roleAttrs = buildRoleAttributes(group, member);
-                ldapTemplate.bind(groupDn, null, roleAttrs);
-            } catch (NameAlreadyBoundException nabe) {
-                // if group exists, just add new member - note if member already exits, this will fail silently
-                DirContextOperations context = ldapTemplate.lookupContext(groupDn);
-                context.addAttributeValue("uniqueMember", member);
-                ldapTemplate.modifyAttributes(context);
-            }
-        }
-        */
 
         return user;
     }
