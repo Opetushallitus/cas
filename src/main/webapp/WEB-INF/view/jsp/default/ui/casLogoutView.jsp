@@ -18,19 +18,6 @@
     under the License.
 
 --%>
-<jsp:directive.include file="includes/top.jsp" />
-
-<div id="msg" class="success">
-    <h2><spring:message code="screen.logout.header" /></h2>
-
-    <div class="notification info"><spring:message code="screen.logout.success" /></div>
-    <p><spring:message code="screen.logout.security" /></p>
-</div>
-
-<!-- antti: facebook/oauth -->
-<%--<a href="/haku">Opintopolku</a> <br />--%>
-<%--<a href="/haku/castest.html">Opintopolku castest</a> <br />--%>
-<%--<a href="/">Portaali etusivu</a> <br />--%>
-<%--<a href="/group/virkailijan-tyopoyta">Virkailijan tyopoyta</a> <br />--%>
-
-<jsp:directive.include file="includes/bottom.jsp" />
+<jsp:include page="casLoginView.jsp">
+    <jsp:param name="logout" value="true"/>
+</jsp:include>
