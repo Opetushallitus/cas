@@ -33,7 +33,7 @@
 
 
 <div class="grid16-11 offset-left-16-2 margin-vertical-5">
-    <c:if test="${not empty requestScope.logout_msg}">
+    <c:if test="${not empty param.logout_msg}">
         <div class="notification info">Olet kirjautunut ulos j&auml;rjestelm&auml;st&auml;</div>
     </c:if>
     a
