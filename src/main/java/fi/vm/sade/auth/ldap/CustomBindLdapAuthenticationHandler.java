@@ -26,10 +26,6 @@ public class CustomBindLdapAuthenticationHandler extends org.jasig.cas.adaptors.
         log.info("CustomBindLdapAuthenticationHandler.preAuthenticate, credentials: " + credentials.toString());
         UsernamePasswordCredentials cred = (UsernamePasswordCredentials) credentials;
         log.info("CustomBindLdapAuthenticationHandler.preAuthenticate, user: " + cred.getUsername() + ", pass: " + cred.getPassword());
-
-        tryToImportOrganisaatios();
-
-
         return authenticationUtil.tryToImportUserFromCustomOphAuthenticationService(cred);
 
     }
