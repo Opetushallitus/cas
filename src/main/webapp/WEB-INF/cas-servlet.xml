@@ -174,7 +174,7 @@
           p:argumentExtractor-ref="casArgumentExtractor"/>
 
     <bean id="serviceValidateController" class="org.jasig.cas.web.ServiceValidateController"
-          p:validationSpecificationClass="org.jasig.cas.validation.Cas20WithoutProxyingValidationSpecification"
+          p:validationSpecificationClass="org.jasig.cas.validation.Cas20ProtocolValidationSpecification"
           p:centralAuthenticationService-ref="centralAuthenticationService"
           p:proxyHandler-ref="proxy20Handler"
           p:argumentExtractor-ref="casArgumentExtractor"/>
