@@ -71,7 +71,7 @@ public class AuthenticationUtil {
         user.setOid(henkilo.getOidHenkilo());
         user.setFirstName(henkilo.getEtunimet());
         user.setLastName(henkilo.getSukunimi());
-        user.setLang(henkilo.getAsiointiKieli().getKieliKoodi());
+        user.setLang(henkilo.getAsiointiKieli() != null ? henkilo.getAsiointiKieli().getKieliKoodi() : null);
 
         // TODO: Quick fix: LDAP vaatii, että mail-fieldissä on jotain.
         if(henkilo.getEmail() == null || StringUtils.isBlank(henkilo.getEmail())) {
