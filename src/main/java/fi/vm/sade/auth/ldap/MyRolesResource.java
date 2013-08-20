@@ -27,7 +27,7 @@ public class MyRolesResource extends AbstractController {
     protected ModelAndView handleRequestInternal(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String ticketGrantingTicketId = ticketGrantingTicketCookieGenerator.retrieveCookieValue(request);
         TicketGrantingTicket ticketGrantingTicket = (TicketGrantingTicket) this.ticketRegistry.getTicket(ticketGrantingTicketId, TicketGrantingTicket.class);
-        String uid = ticketGrantingTicket.getAuthentication().getPrincipal().getId();
+        final String uid = ticketGrantingTicket.getAuthentication().getPrincipal().getId();
         final List<String> roles = authenticationUtil.getRoles(uid);
 
         return new ModelAndView(new View() {
@@ -39,12 +39,12 @@ public class MyRolesResource extends AbstractController {
             public void render(Map<String, ?> stringMap, HttpServletRequest request, HttpServletResponse response) throws Exception {
                 // render roles string list as javascript/json array
                 PrintWriter writer = response.getWriter();
-                writer.print("[");
+                writer.print("[\"USER_");
+                writer.print(uid);
+                writer.print("\"");
                 for (int i = 0; i < roles.size(); i++) {
                     String role = roles.get(i);
-                    if (i > 0) {
-                        writer.print(", ");
-                    }
+                    writer.print(", ");
                     writer.print("\"");
                     writer.print(role);
                     writer.print("\"");
