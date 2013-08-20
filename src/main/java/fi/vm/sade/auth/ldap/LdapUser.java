@@ -15,6 +15,7 @@ public class LdapUser {
     private String department;
     private String groups[] = new String[0];
 //    private String roles[] = new String[0];
+    private String lang;
 
     public String getUid() {
         return uid;
@@ -86,6 +87,7 @@ public class LdapUser {
 //        buffer.append("id = ").append(id);
         buffer.append(" uid = ").append(uid);
         buffer.append(" oid = ").append(oid);
+        buffer.append(" lang = ").append(lang);
         buffer.append(" email = ").append(email);
         buffer.append(" firstName = ").append(firstName);
         buffer.append(" lastName = ").append(lastName);
@@ -101,5 +103,13 @@ public class LdapUser {
 
     public void setOid(String oid) {
         this.oid = oid;
+    }
+
+    public String getLang() {
+        return lang;
+    }
+
+    public void setLang(String lang) {
+        this.lang = lang;
     }
 }
