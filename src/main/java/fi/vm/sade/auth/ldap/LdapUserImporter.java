@@ -182,7 +182,9 @@ public class LdapUserImporter {
         attrs.put("cn", user.getFirstName());
         attrs.put("sn", user.getLastName());
         attrs.put("givenName", user.getFirstName());
-        attrs.put("preferredLanguage", user.getLang());
+        if (user.getLang() != null) {
+            attrs.put("preferredLanguage", user.getLang());
+        }
         if (user.getOid() != null) {
             attrs.put("employeeNumber", user.getOid());
         }
