@@ -64,6 +64,41 @@
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js"></script>
         <script type="text/javascript" src="<c:url value="/js/cas.js" />"></script>
+		
+		<!-- Piwik -->
+        <script type="text/javascript">
+
+			var siteDomain = document.domain;
+			var piwikSiteId = 2;
+			if(siteDomain=='opintopolku.fi'){
+			   piwikSiteId = 4;
+			}else if(siteDomain=='virkailija.opintopolku.fi'){
+			   piwikSiteId = 3;
+			}else if(siteDomain=='testi.opintopolku.fi'){
+			   piwikSiteId = 1;
+			}else if(siteDomain=='testi.virkailija.opintopolku.fi'){
+			   piwikSiteId = 5;
+			}else{
+			   piwikSiteId = 2;
+			}
+
+			//console.log("siteDomain:"+siteDomain+", piwikSiteId:"+piwikSiteId);
+
+			var _paq = _paq || [];
+			_paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
+			_paq.push(["trackPageView"]);
+			_paq.push(["enableLinkTracking"]);
+
+			(function() {
+				var u=(("https:" == document.location.protocol) ? "https" : "http") + "://nat-piwik-poc.oph.ware.fi/analytics/";
+				_paq.push(["setTrackerUrl", u+"piwik.php"]);
+				_paq.push(["setSiteId", piwikSiteId]);
+				var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
+				g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
+			})();
+        </script>
+        <!-- End Piwik Code -->
+	
     </body>
 </html>
 
