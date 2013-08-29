@@ -3,11 +3,8 @@ package fi.vm.sade.auth.ldap;
 //*
 
 import fi.vm.sade.AuthenticationUtil;
-import fi.vm.sade.organisaatio.api.model.types.OrganisaatioDTO;
 import org.jasig.cas.authentication.principal.Credentials;
 import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
-
-import java.util.List;
 
 //*/
 
@@ -25,48 +22,7 @@ public class CustomBindLdapAuthenticationHandler extends org.jasig.cas.adaptors.
     protected boolean preAuthenticate(Credentials credentials) {
         log.info("CustomBindLdapAuthenticationHandler.preAuthenticate, credentials: " + credentials.toString());
         UsernamePasswordCredentials cred = (UsernamePasswordCredentials) credentials;
-        log.info("CustomBindLdapAuthenticationHandler.preAuthenticate, user: " + cred.getUsername() + ", pass: " + cred.getPassword());
         return authenticationUtil.tryToImportUserFromCustomOphAuthenticationService(cred);
-
-    }
-
-    private void tryToImportOrganisaatios() {
-/*
-        System.out.println("CustomBindLdapAuthenticationHandler.tryToImportOrganisaatios, rootOrganisaatioOid: "+rootOrganisaatioOid);
-        try {
-            OrganisaatioDTO root = organisaatioService.findByOid(rootOrganisaatioOid);
-            importOrganisaatioRecursive(root, new ArrayList<OrganisaatioDTO>());
-            // TODO: hae organisaation perustiedot ja importtaa ldappiin
-        } catch (Throwable e) {
-            log.warn("failed to import organisaatios from backend to ldap", e);
-        }
-//*/
-    }
-
-    private void importOrganisaatioRecursive(OrganisaatioDTO organisaatio, List<OrganisaatioDTO> parents) {
-        /*
-        System.out.println("CustomBindLdapAuthenticationHandler.importOrganisaatioRecursive: "+organisaatio);
-
-        // build parent oids
-        List<String> path = new ArrayList<String>();
-        path.add("organisaatios");
-        for (OrganisaatioDTO parent : parents) {
-            path.add(parent.getOid());
-        }
-        // import organisaatio to ldap
-        Name dn = LdapUserImporter.buildDn("ou", organisaatio.getOid(), path.toArray(new String[path.size()]));
-        Attributes attribs = ldapUserImporter.buildAttributes("top", "organizationalUnit");
-        // TODO: other org attribs? what are needed?
-        ldapUserImporter.save(dn, attribs, false);
-
-        // process organisaatio's children
-        parents = new ArrayList<OrganisaatioDTO>(parents); // remake new parents list for children
-        parents.add(organisaatio);
-        List<OrganisaatioDTO> children = organisaatioService.findChildrenTo(organisaatio.getOid());
-        for (OrganisaatioDTO child : children) {
-            importOrganisaatioRecursive(child, parents);
-        }
-        */
     }
 
     public AuthenticationUtil getAuthenticationUtil() {
