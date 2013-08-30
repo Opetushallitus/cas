@@ -147,8 +147,8 @@
                       p:filter="${ldap.filter.people}"
                       p:searchBase="${ldap.search.base.people}"
                       p:contextSource-ref="contextSource"
-                      init-method="tryToImportOrganisaatios"
                        >
+                    <!--init-method="tryToImportOrganisaatios"-->
         <!--p:searchBase="ou=system"-->
                     <property name="authenticationUtil" ref="authenticationUtil"/>
                 </bean>
