@@ -106,6 +106,12 @@ public class AuthenticationUtil {
                 roleStrings.add(role.getRooli());
             }
 
+            // add also user's language as LANG_[lang] -role
+            if (henkilo.getAsiointiKieli() != null) {
+                roleStrings.add("LANG_"+henkilo.getAsiointiKieli().getKieliKoodi());
+            }
+
+            // roles
             if(henkilo.getAuthorizationData() != null && henkilo.getAuthorizationData().getAccessrights() !=null) {
                 for(AccessRightType art : henkilo.getAuthorizationData().getAccessrights().getAccessRight()) {
                     log.info("AUTH ROW: OID[" + art.getOrganisaatioOid() + "] PALVELU[" + art.getPalvelu() + "] ROOLI[" + art.getRooli() + "] ORGANISAATIO[" + art.getOrganisaatioOid() + "]");
