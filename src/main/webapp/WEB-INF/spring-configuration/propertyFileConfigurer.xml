@@ -38,5 +38,12 @@
                 <value>file:///${user.home:''}/oph-configuration/cas.properties</value>
             </list>
         </property>
+        <!-- clustering.. host.name must unique in cluster -->
+        <property name="properties">
+            <props>
+                <prop key="host.name">cas.${HOSTNAME:oph.fi}</prop>
+            </props>
+        </property>
     </bean>
+
 </beans>
