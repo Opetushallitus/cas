@@ -66,6 +66,11 @@
             <artifactId>cas-server-support-oauth</artifactId>
             <version>3.5.1-RC1</version>
         </dependency>
+        <dependency>
+            <groupId>org.jasig.cas</groupId>
+            <artifactId>cas-server-integration-ehcache</artifactId>
+            <version>3.5.1</version>
+        </dependency>
 
         <!-- logging.. -->
         <dependency>
