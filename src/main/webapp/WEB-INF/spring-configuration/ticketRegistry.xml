@@ -84,8 +84,7 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
         <property name="timeToLive" value="300" />
     </bean>
 
-    <bean id="ticketGrantingTicketsCacheBean" class="org.springframework.cache.ehcache.EhCacheFactoryBean"
-          parent="abstractTicketCache">
+    <bean id="ticketGrantingTicketsCacheBean" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
         <description>
             Ticket Granting Tickets (TGT) are valid for the lifetime of the SSO Session. They become invalid either
             by expiration policy (default 2 hours idle, 8 hours max) or by explicit user sign off via
