@@ -28,18 +28,18 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
         them out as specified intervals.
     </description>
 
-    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+    <bean id="ticketRegistryCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
         <property name="configLocation" value="classpath:ehcache-replicated.xml" />
         <property name="shared" value="false" />
         <property name="cacheManagerName" value="ticketRegistryCacheManager" />
     </bean>
 
     <bean id="ticketRegistry" class="org.jasig.cas.ticket.registry.EhCacheTicketRegistry"
-          p:serviceTicketsCache-ref="serviceTicketsCache" p:ticketGrantingTicketsCache-ref="ticketGrantingTicketsCache" />
+          p:serviceTicketsCache-ref="serviceTicketsCacheBean" p:ticketGrantingTicketsCache-ref="ticketGrantingTicketsCacheBean" />
 
     <bean id="abstractTicketCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean"
           abstract="true">
-        <property name="cacheManager" ref="cacheManager" />
+        <property name="cacheManager" ref="ticketRegistryCacheManager" />
         <property name="diskExpiryThreadIntervalSeconds" value="0" />
         <property name="diskPersistent" value="false" />
         <property name="eternal" value="false" />
@@ -52,7 +52,7 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
         </property>
     </bean>
 
-    <bean id="serviceTicketsCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean"
+    <bean id="serviceTicketsCacheBean" class="org.springframework.cache.ehcache.EhCacheFactoryBean"
           parent="abstractTicketCache">
         <description>
             Service Tickets (ST) and Proxy Tickets are only valid for short amount of time (default is 10 seconds),
@@ -65,11 +65,13 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
             aware of
             user session affinity. Synchronous mode is used to ensure all CAS nodes can validate the ST.
         </description>
-        <property name="cacheName" value="org.jasig.cas.ticket.ServiceTicket" />
+        <property name="cacheName" value="serviceTicketsCache" />
 
-        <property name="cacheEventListeners">
+        <property name="cacheEventListeners" ref="ticketRMISynchronousCacheReplicator"/>
+        <!--
             <ref local="ticketRMISynchronousCacheReplicator" />
         </property>
+        -->
 
         <!-- The maximum number of seconds an element can exist in the cache without being accessed. The
     element expires at this limit and will no longer be returned from the cache. The default value is 0,
@@ -82,7 +84,7 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
         <property name="timeToLive" value="300" />
     </bean>
 
-    <bean id="ticketGrantingTicketsCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+    <bean id="ticketGrantingTicketsCacheBean" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
         <description>
             Ticket Granting Tickets (TGT) are valid for the lifetime of the SSO Session. They become invalid either
             by expiration policy (default 2 hours idle, 8 hours max) or by explicit user sign off via
@@ -92,7 +94,7 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
             (mostly grant service ticket) and thus benefit of web session affinity.
         </description>
 
-        <property name="cacheName" value="org.jasig.cas.ticket.TicketGrantingTicket" />
+        <property name="cacheName" value="ticketGrantingTicketsCache" />
 
         <property name="cacheEventListeners">
             <ref local="ticketRMIAsynchronousCacheReplicator" />
@@ -112,11 +114,11 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
     </bean>
 
     <bean id="ticketRMISynchronousCacheReplicator" class="net.sf.ehcache.distribution.RMISynchronousCacheReplicator">
-        <constructor-arg name="replicatePuts" value="true" />
-        <constructor-arg name="replicatePutsViaCopy" value="true" />
-        <constructor-arg name="replicateUpdates" value="true" />
-        <constructor-arg name="replicateUpdatesViaCopy" value="true" />
-        <constructor-arg name="replicateRemovals" value="true" />
+        <constructor-arg name="replicatePuts" value="true" type="boolean" />
+        <constructor-arg name="replicatePutsViaCopy" value="true" type="boolean" />
+        <constructor-arg name="replicateUpdates" value="true" type="boolean" />
+        <constructor-arg name="replicateUpdatesViaCopy" value="true" type="boolean" />
+        <constructor-arg name="replicateRemovals" value="true" type="boolean" />
     </bean>
 
     <bean id="ticketRMIAsynchronousCacheReplicator" class="net.sf.ehcache.distribution.RMIAsynchronousCacheReplicator"
