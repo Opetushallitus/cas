@@ -29,7 +29,7 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
     </description>
 
     <bean id="ticketRegistryCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
-        <property name="configLocation" value="classpath:ehcache-replicated.xml" />
+        <property name="configLocation" value="classpath:${cas.ehcache.config.file:ehcache-replicated.xml}" />
         <property name="shared" value="false" />
         <property name="cacheManagerName" value="ticketRegistryCacheManager" />
     </bean>
@@ -43,10 +43,10 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
         <property name="diskExpiryThreadIntervalSeconds" value="0" />
         <property name="diskPersistent" value="false" />
         <property name="eternal" value="false" />
-        <property name="maxElementsInMemory" value="10000" />
+        <property name="maxElementsInMemory" value="100000" />
         <property name="maxElementsOnDisk" value="0" />
         <property name="memoryStoreEvictionPolicy" value="LRU" />
-        <property name="overflowToDisk" value="false" />
+        <property name="overflowToDisk" value="true" />
         <property name="bootstrapCacheLoader">
             <ref local="ticketCacheBootstrapCacheLoader" />
         </property>
@@ -84,7 +84,10 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
         <property name="timeToLive" value="300" />
     </bean>
 
-    <bean id="ticketGrantingTicketsCacheBean" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+    <!-- HUOM! poiketen alkuperäisestä, myös TGT cachen pitää olla synchronous ja periä abstractTicketCache, muuten ruvetaa saamaan
+    java.lang.NullPointerException at net.sf.ehcache.distribution.RMISynchronousCacheReplicator.listRemoteCachePeers(RMISynchronousCacheReplicator.java:335) -->
+    <bean id="ticketGrantingTicketsCacheBean" class="org.springframework.cache.ehcache.EhCacheFactoryBean"
+          parent="abstractTicketCache">
         <description>
             Ticket Granting Tickets (TGT) are valid for the lifetime of the SSO Session. They become invalid either
             by expiration policy (default 2 hours idle, 8 hours max) or by explicit user sign off via
@@ -97,7 +100,7 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
         <property name="cacheName" value="ticketGrantingTicketsCache" />
 
         <property name="cacheEventListeners">
-            <ref local="ticketRMIAsynchronousCacheReplicator" />
+            <ref local="ticketRMISynchronousCacheReplicator" />
         </property>
 
         <!-- The maximum number of seconds an element can exist in the cache regardless of use. The element
