@@ -23,7 +23,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd">
 
-    <diskStore path="java.io.tmpdir/cas"/>
+    <!--<diskStore path="java.io.tmpdir/cas2"/>-->
 
     <!-- Automatic Peer Discovery -->
     <cacheManagerPeerProviderFactory
@@ -41,6 +41,6 @@
     <!-- this is needed always -->
     <cacheManagerPeerListenerFactory
             class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory"
-            properties="port=41001" />
+            properties="port=41002" />
 
 </ehcache>
