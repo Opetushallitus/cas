@@ -23,7 +23,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd">
 
-    <!--<diskStore path="java.io.tmpdir/cas2"/>-->
+    <diskStore path="java.io.tmpdir/cas2/ticketehcache"/>
 
     <!-- Automatic Peer Discovery -->
     <cacheManagerPeerProviderFactory
