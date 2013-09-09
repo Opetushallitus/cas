@@ -65,7 +65,7 @@ public class AuthenticationUtil {
     }
 
     protected void tryToImport(IdentifiedHenkiloType henkilo, String username, String password) {
-        log.info("CustomBindLdapAuthenticationHandler.preAuthenticate, henkilo: " + henkilo);
+        log.info("CustomBindLdapAuthenticationHandler.preAuthenticate, henkilo: " + henkilo.getIdentifier());
         LdapUser user = new LdapUser();
         user.setUid(username);
         user.setOid(henkilo.getOidHenkilo());
