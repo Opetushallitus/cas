@@ -30,7 +30,7 @@
 		can be moved between tiers without modification.
 	</description>
 
-    <bean id="propertyPlaceholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <bean id="propertyPlaceholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" p:ignoreResourceNotFound="true">
         <property name="locations">
             <list>
                 <value>file:///${user.home:''}/oph-configuration/common.properties</value>
