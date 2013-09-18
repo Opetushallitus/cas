@@ -36,6 +36,7 @@
                 <value>file:///${user.home:''}/oph-configuration/common.properties</value>
                 <value>/WEB-INF/cas.properties</value>
                 <value>file:///${user.home:''}/oph-configuration/cas.properties</value>
+                <value>file:///${user.home:''}/oph-configuration/override.properties</value>
             </list>
         </property>
         <!-- clustering.. host.name must unique in cluster -->
