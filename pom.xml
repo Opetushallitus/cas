@@ -134,6 +134,20 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- tests -->
+        <dependency>
+            <groupId>fi.vm.sade.auth</groupId>
+            <artifactId>ldap</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.version}</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
 </project>

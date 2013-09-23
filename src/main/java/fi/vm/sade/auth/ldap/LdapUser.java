@@ -17,6 +17,21 @@ public class LdapUser {
 //    private String roles[] = new String[0];
     private String lang;
 
+    public LdapUser() {
+    }
+
+    public LdapUser(String uid, String oid, String firstName, String lastName, String email, String password, String department, String[] groups, String lang) {
+        this.uid = uid;
+        this.oid = oid;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.department = department;
+        this.groups = groups;
+        this.lang = lang;
+    }
+
     public String getUid() {
         return uid;
     }
