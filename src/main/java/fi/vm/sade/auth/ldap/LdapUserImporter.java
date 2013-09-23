@@ -43,49 +43,53 @@ public class LdapUserImporter {
     }
 
     public LdapUser save(final LdapUser user) {
+        synchronized (user.getUid().intern()) {
 
-        // save user
-        save("people", user.getDepartment(), user.getUid(), buildAttributes(user), "uid", false);
+            // save user
+            save("people", user.getDepartment(), user.getUid(), buildAttributes(user), "uid", false);
 
-        // save groups...
+            // save groups...
 
-        List<String> userBackendGroups = Arrays.asList(user.getGroups());
-        String member = getMemberString(user.getUid());
+            List<String> userBackendGroups = Arrays.asList(user.getGroups());
+            String member = getMemberString(user.getUid());
 
-        // get current ldap groups
-        List<String> userLdapGroups = getUserLdapGroups(member);
-        Collection<String> deletedMemberships = CollectionUtils.subtract(userLdapGroups, userBackendGroups);
-        Collection<String> addedMemberships = CollectionUtils.subtract(userBackendGroups, userLdapGroups);
-        if(log.isDebugEnabled()) {
-            log.debug("user: {}, backendGroups: {}, ldapGroups: {}", new Object[]{user.getEmail(), userBackendGroups.size(), userLdapGroups.size()});
-            log.debug("user: {}, deletedMemberships: {}", user.getEmail(), deletedMemberships);
-            log.debug("user: {}, addedMemberships: {}", user.getEmail(), addedMemberships);
-        }
-        // remove deleted membership (membership deleted in backend groups but exists in ldap groups)
-        for (String deletedMembership : deletedMemberships) {
-            Name groupDn = buildDn("groups", null, deletedMembership, "cn");
-            log.debug("user: {}, ...remove membership to: {}", user.getEmail(), deletedMembership);
-            DirContextOperations group = ldapTemplate.lookupContext(groupDn);
-            removeUniqueMember(group, member, "mail="+user.getEmail()); // todo: tuo maili memberinä deprecated, käytetäänkö jossain muka vielä?
-        }
-        // add new membership (membership exists in backend groups but not in ldap groups)
-        for (String group : addedMemberships) {
-            Name groupDn = buildDn("groups", null, group, "cn");
-            log.debug("user: {}, ...add membership to: {}", user.getEmail(), group);
-            try {
-                // if group doesn't exist, bind it and add first uniqueMember
-                //Name groupDn = save("groups", null, group, roleAttrs, "cn", true);
-                Attributes roleAttrs = buildRoleAttributes(group, member);
-                ldapTemplate.bind(groupDn, null, roleAttrs);
-            } catch (NameAlreadyBoundException nabe) {
-                // if group exists, just add new member - note if member already exits, this will fail silently
-                DirContextOperations context = ldapTemplate.lookupContext(groupDn);
-                context.addAttributeValue("uniqueMember", member);
-                ldapTemplate.modifyAttributes(context);
+            // get current ldap groups
+            List<String> userLdapGroups = getUserLdapGroups(member);
+            Collection<String> deletedMemberships = CollectionUtils.subtract(userLdapGroups, userBackendGroups);
+            Collection<String> addedMemberships = CollectionUtils.subtract(userBackendGroups, userLdapGroups);
+            if(log.isDebugEnabled()) {
+                log.debug("user: {}, backendGroups: {}, ldapGroups: {}", new Object[]{user.getEmail(), userBackendGroups.size(), userLdapGroups.size()});
+                log.debug("user: {}, deletedMemberships: {}", user.getEmail(), deletedMemberships);
+                log.debug("user: {}, addedMemberships: {}", user.getEmail(), addedMemberships);
             }
-        }
+            // remove deleted membership (membership deleted in backend groups but exists in ldap groups)
+            for (String deletedMembership : deletedMemberships) {
+                Name groupDn = buildDn("groups", null, deletedMembership, "cn");
+                log.debug("user: {}, ...remove membership to: {}", user.getEmail(), deletedMembership);
+                DirContextOperations group = ldapTemplate.lookupContext(groupDn);
+                removeUniqueMember(group, member, "mail="+user.getEmail()); // todo: tuo maili memberinä deprecated, käytetäänkö jossain muka vielä?
+            }
+            // add new membership (membership exists in backend groups but not in ldap groups)
+            for (String group : addedMemberships) {
+                Name groupDn = buildDn("groups", null, group, "cn");
+                log.debug("user: {}, ...add membership to: {}", user.getEmail(), group);
+                try {
+                    // if group doesn't exist, bind it and add first uniqueMember
+                    //Name groupDn = save("groups", null, group, roleAttrs, "cn", true);
+                    Attributes roleAttrs = buildRoleAttributes(group, member);
+                    ldapTemplate.bind(groupDn, null, roleAttrs);
+                } catch (NameAlreadyBoundException nabe) {
+                    // if group exists, just add new member - note if member already exits, this will fail silently
+                    DirContextOperations context = ldapTemplate.lookupContext(groupDn);
+                    context.addAttributeValue("uniqueMember", member);
+                    ldapTemplate.modifyAttributes(context);
+                }
+            }
 
-        return user;
+            log.info("save done, user: "+user);
+
+            return user;
+        }
     }
 
     public String getMemberString(String uid) {
@@ -119,13 +123,13 @@ public class LdapUserImporter {
         }
     }
 
-    public Name save(String ou, String department, String id, Attributes attributes, String idAttribute, boolean failIfAlreadyExists) {
+    private Name save(String ou, String department, String id, Attributes attributes, String idAttribute, boolean failIfAlreadyExists) {
         // '#' replace tarvitaan facebook profiileja varten, koska niistä tulee uid: FacebookProfile#123456789, ja '#' ei kelpaa dn:ään
         Name dn = buildDn(ou, department, id.replaceAll("#", "_"), idAttribute);
         return save(dn, attributes, failIfAlreadyExists);
     }
 
-    public Name save(Name dn, Attributes attributes, boolean failIfAlreadyExists) {
+    private Name save(Name dn, Attributes attributes, boolean failIfAlreadyExists) {
         try {
             log.info("LdapUserImporter.save, bind to ldap: " + dn);
             ldapTemplate.bind(dn, null, attributes);
