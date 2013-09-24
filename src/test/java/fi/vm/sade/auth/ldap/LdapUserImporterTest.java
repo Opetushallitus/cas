@@ -29,6 +29,7 @@ public class LdapUserImporterTest {
     int doneCount = 0;
     List<Exception> errors = new ArrayList<Exception>();
     int threads = 10;
+    LdapUser user = new LdapUser("test", "test", "test", "test", "test" + "@oph.fi", "test", null, new String[]{"test"}, "fi");
 
     @Before
     public void start() throws Exception {
@@ -42,19 +43,22 @@ public class LdapUserImporterTest {
     }
 
     @Test
-    public void testConcurrentSaveAndBind() throws Exception {
-        String name = "test";
-        final LdapUser user = new LdapUser(name, name, name, name, name + "@oph.fi", name, null, new String[]{name}, "fi");
+    public void testEncryptionAndBind() throws Exception {
+        ldapUserImporter.save(user);
+        String dn = LdapUserImporter.buildDn("people", user.getDepartment(), user.getUid(), "uid").toString();
+        String pwEncoded = new PlainTextPasswordEncoder().encode(user.getPassword());
+        DirContext ctx = contextSource.getContext(dn, pwEncoded);
+        ctx.close();
+    }
+
+    @Test
+    public void testConcurrentLdapImportSave() throws Exception {
         for (int i = 0; i < threads; i++) {
             new Thread() {
                 @Override
                 public void run() {
                     try {
                         ldapUserImporter.save(user);
-                        String dn = LdapUserImporter.buildDn("people", user.getDepartment(), user.getUid(), "uid").toString();
-                        String pwEncoded = new PlainTextPasswordEncoder().encode(user.getPassword());
-                        DirContext ctx = contextSource.getContext(dn, pwEncoded);
-                        ctx.close();
                     } catch (Exception e) {
                         //e.printStackTrace();
                         errors.add(e);
