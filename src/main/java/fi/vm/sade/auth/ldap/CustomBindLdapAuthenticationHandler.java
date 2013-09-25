@@ -20,7 +20,7 @@ public class CustomBindLdapAuthenticationHandler extends org.jasig.cas.adaptors.
 
     @Override
     protected boolean preAuthenticate(Credentials credentials) {
-        log.info("CustomBindLdapAuthenticationHandler.preAuthenticate, credentials: " + credentials.toString());
+        //log.debug("CustomBindLdapAuthenticationHandler.preAuthenticate, credentials: " + credentials.toString());
         UsernamePasswordCredentials cred = (UsernamePasswordCredentials) credentials;
         return authenticationUtil.tryToImportUserFromCustomOphAuthenticationService(cred);
     }

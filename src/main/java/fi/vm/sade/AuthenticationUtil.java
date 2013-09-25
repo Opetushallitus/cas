@@ -1,5 +1,15 @@
 package fi.vm.sade;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.commons.lang.StringUtils;
+import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import fi.vm.sade.auth.ldap.LdapUser;
 import fi.vm.sade.auth.ldap.LdapUserImporter;
 import fi.vm.sade.auth.ldap.exception.UserDisabledException;
@@ -10,20 +20,9 @@ import fi.vm.sade.authentication.service.types.IdentifiedHenkiloType;
 import fi.vm.sade.authentication.service.types.dto.CustomUserRoleType;
 import fi.vm.sade.organisaatio.api.model.OrganisaatioService;
 import fi.vm.sade.saml.action.SAMLCredentials;
-import org.apache.commons.lang.StringUtils;
-import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
- * User: tommiha
- * Date: 3/26/13
- * Time: 2:47 PM
+ * User: tommiha Date: 3/26/13 Time: 2:47 PM
  */
 public class AuthenticationUtil {
 
@@ -38,10 +37,11 @@ public class AuthenticationUtil {
 
     public boolean tryToImportUserFromCustomOphAuthenticationService(UsernamePasswordCredentials cred) {
         try {
-            IdentifiedHenkiloType henkilo = authenticationService.getIdentityByUsernameAndPassword(cred.getUsername(), cred.getPassword());
+            IdentifiedHenkiloType henkilo = authenticationService.getIdentityByUsernameAndPassword(cred.getUsername(),
+                    cred.getPassword());
 
             // service vastasi, mutta käyttäjää ei löytynyt.
-            if(henkilo == null) {
+            if (henkilo == null) {
                 log.info("User not found.");
                 return false;
             }
@@ -65,7 +65,7 @@ public class AuthenticationUtil {
     }
 
     protected void tryToImport(IdentifiedHenkiloType henkilo, String username, String password) {
-        log.info("CustomBindLdapAuthenticationHandler.preAuthenticate, henkilo: " + henkilo.getIdentifier());
+        log.info("CustomBindLdapAuthenticationHandler.preAuthenticate, henkilo: {}", henkilo.getIdentifier());
         LdapUser user = new LdapUser();
         user.setUid(username);
         user.setOid(henkilo.getOidHenkilo());
@@ -74,15 +74,15 @@ public class AuthenticationUtil {
         user.setLang(henkilo.getAsiointiKieli() != null ? henkilo.getAsiointiKieli().getKieliKoodi() : null);
 
         // TODO: Quick fix: LDAP vaatii, että mail-fieldissä on jotain.
-        if(henkilo.getEmail() == null || StringUtils.isBlank(henkilo.getEmail())) {
-            log.warn("User " + username + " does not have email address at all");
+        if (henkilo.getEmail() == null || StringUtils.isBlank(henkilo.getEmail())) {
+            log.warn("User {} does not have email address at all", username);
             user.setEmail(username + "@oph.local");
         } else {
             user.setEmail(henkilo.getEmail());
         }
         user.setPassword(password);
 
-        if(henkilo.isPassivoitu()) {
+        if (henkilo.isPassivoitu()) {
             ldapUserImporter.remove(user);
             throw new UserDisabledException("User " + username + " is disabled.");
         }
@@ -90,38 +90,42 @@ public class AuthenticationUtil {
         List<CustomUserRoleType> roleTypes = new ArrayList<CustomUserRoleType>();
 
         try {
-           roleTypes.addAll(customAttributeService.listCustomUserRole(henkilo.getOidHenkilo()));
+            roleTypes.addAll(customAttributeService.listCustomUserRole(henkilo.getOidHenkilo()));
         } catch (Exception e) {
             log.warn("Could not get user custom attributes.", e);
         }
 
         try {
-            log.info("CustomBindLdapAuthenticationHandler.preAuthenticate, user: " + user);
+            log.debug("CustomBindLdapAuthenticationHandler.preAuthenticate, user: {}", username);
 
             // roles - mainly copypaste from TokenAutoLogin
             Set<String> roleStrings = new HashSet<String>();
-            // Lisätään kaikki custom roolit, kuten VIRKAILIJA, STRONG_AUTHENTICATED...
-            for(CustomUserRoleType role : roleTypes) {
+            // Lisätään kaikki custom roolit, kuten VIRKAILIJA,
+            // STRONG_AUTHENTICATED...
+            for (CustomUserRoleType role : roleTypes) {
                 log.info("Adding role " + role.getRooli() + " to user " + username);
                 roleStrings.add(role.getRooli());
             }
 
             // add also user's language as LANG_[lang] -role
             if (henkilo.getAsiointiKieli() != null) {
-                roleStrings.add("LANG_"+henkilo.getAsiointiKieli().getKieliKoodi());
+                roleStrings.add("LANG_" + henkilo.getAsiointiKieli().getKieliKoodi());
             }
 
             // roles
-            if(henkilo.getAuthorizationData() != null && henkilo.getAuthorizationData().getAccessrights() !=null) {
-                for(AccessRightType art : henkilo.getAuthorizationData().getAccessrights().getAccessRight()) {
-                    log.info("AUTH ROW: OID[" + art.getOrganisaatioOid() + "] PALVELU[" + art.getPalvelu() + "] ROOLI[" + art.getRooli() + "] ORGANISAATIO[" + art.getOrganisaatioOid() + "]");
+            if (henkilo.getAuthorizationData() != null && henkilo.getAuthorizationData().getAccessrights() != null) {
+                for (AccessRightType art : henkilo.getAuthorizationData().getAccessrights().getAccessRight()) {
+                    log.info("AUTH ROW: OID[" + art.getOrganisaatioOid() + "] PALVELU[" + art.getPalvelu() + "] ROOLI["
+                            + art.getRooli() + "] ORGANISAATIO[" + art.getOrganisaatioOid() + "]");
                     StringUtils.isNotEmpty(art.getOrganisaatioOid());
                     StringBuilder role = new StringBuilder(art.getPalvelu()).append("_").append(art.getRooli());
 
                     // prefix rolename with "APP_"
                     String ROLE_PREFIX = "APP_";
 
-                    // add role PALVELU (esim jos userilla on backendissä rooli ORGANISAATIOHALLINTA_READ, lisätään hänelle myös ORGANISAATIOHALLINTA)
+                    // add role PALVELU (esim jos userilla on backendissä rooli
+                    // ORGANISAATIOHALLINTA_READ, lisätään hänelle myös
+                    // ORGANISAATIOHALLINTA)
                     roleStrings.add(ROLE_PREFIX + art.getPalvelu());
 
                     // add role PALVELU_ROOLI
@@ -131,7 +135,8 @@ public class AuthenticationUtil {
                     roleStrings.add(ROLE_PREFIX + role.toString() + "_" + art.getOrganisaatioOid());
                 }
             } else {
-                log.info("HENKILO HAD NO AUTHORIZATION DATA: "+henkilo.getEmail()+"/"+henkilo.getOidHenkilo());
+                log.info("HENKILO HAD NO AUTHORIZATION DATA: {}/{}",
+                        new Object[] { henkilo.getEmail(), henkilo.getOidHenkilo() });
             }
             log.info("CustomBindLdapAuthenticationHandler.preAuthenticate, roleStrings: " + roleStrings);
             user.setGroups(roleStrings.toArray(new String[roleStrings.size()]));
@@ -140,7 +145,8 @@ public class AuthenticationUtil {
         } catch (UserDisabledException e) {
             throw e;
         } catch (Throwable e) {
-            log.warn("failed to import user from backend to ldap, falling back to ldap, user: "+username, e);
+            log.warn("failed to import user from backend to ldap, falling back to ldap, user: {} {}", new Object[] {
+                    username, e });
         }
     }
 
