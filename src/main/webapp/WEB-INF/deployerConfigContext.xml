@@ -52,7 +52,7 @@
          | need to change in context.
          +-->
     <bean id="authenticationManager"
-          class="org.jasig.cas.authentication.AuthenticationManagerImpl">
+          class="fi.vm.sade.auth.ldap.SynchronizedAuthenticationManager">
 
         <!-- Uncomment the metadata populator to allow clearpass to capture and cache the password
                This switch effectively will turn on clearpass. -->
