@@ -29,11 +29,15 @@ public class CustomBindLdapAuthenticationHandler extends org.jasig.cas.adaptors.
         Long prevImport = userImportedTimestamps.get(cred.getUsername());
         boolean needsImport = prevImport == null || System.currentTimeMillis() - prevImport > MIN_MS_BETWEEN_USER_IMPORTS;
         log.info("CustomBindLdapAuthenticationHandler.preAuthenticate, user: " + cred.getUsername()+", prevImport: "+prevImport+", needsImport: "+needsImport);
-        boolean imported = authenticationUtil.tryToImportUserFromCustomOphAuthenticationService(cred);
-        if (imported) { // set previously imported timestamp
-            userImportedTimestamps.put(((UsernamePasswordCredentials) credentials).getUsername(), System.currentTimeMillis());
+        if (needsImport) {
+            boolean imported = authenticationUtil.tryToImportUserFromCustomOphAuthenticationService(cred);
+            if (imported) { // set previously imported timestamp
+                userImportedTimestamps.put(((UsernamePasswordCredentials) credentials).getUsername(), System.currentTimeMillis());
+            }
+            return imported;
+        } else {
+            return true;
         }
-        return imported;
     }
 
     public AuthenticationUtil getAuthenticationUtil() {
