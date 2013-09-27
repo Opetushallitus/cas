@@ -10,14 +10,16 @@ import org.springframework.ldap.core.DistinguishedName;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.ldap.filter.EqualsFilter;
-import sun.misc.BASE64Encoder;
+import org.springframework.security.authentication.encoding.LdapShaPasswordEncoder;
 
 import javax.naming.Name;
-import javax.naming.directory.*;
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import javax.naming.directory.Attributes;
+import javax.naming.directory.BasicAttribute;
+import javax.naming.directory.BasicAttributes;
+import java.security.SecureRandom;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Imports users to ldap, check save-method which takes LdapUser as parameter.
@@ -28,7 +30,7 @@ public class LdapUserImporter {
 
     private LdapContextSource contextSource;
     private LdapTemplate ldapTemplate;
-    protected Logger log = LoggerFactory.getLogger(this.getClass());
+    private static final Logger log = LoggerFactory.getLogger(LdapUserImporter.class);
 
     public void init() {
         log.info("LdapUserImporter.init, contextSource: " + contextSource + ", ldapTemplate: " + ldapTemplate);
@@ -193,7 +195,7 @@ public class LdapUserImporter {
             attrs.put("employeeNumber", user.getOid());
         }
         if (user.getPassword() != null) {
-            attrs.put("userPassword", "{SHA}" + this.encrypt(user.getPassword()));
+            attrs.put("userPassword", this.encrypt(user.getPassword()));
         }
         attrs.put("mail", user.getEmail());
         return attrs;
@@ -221,20 +223,13 @@ public class LdapUserImporter {
     }
 
     public static String encrypt(final String plaintext) {
-        MessageDigest md = null;
-        try {
-            md = MessageDigest.getInstance("SHA");
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e.getMessage());
-        }
-        try {
-            md.update(plaintext.getBytes("UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e.getMessage());
-        }
-        byte raw[] = md.digest();
-        String hash = (new BASE64Encoder()).encode(raw);
-        return hash;
+        // create random 4 byte salt
+        byte[] salt = new byte[4];
+        new SecureRandom().nextBytes(salt);
+        // create digest
+        LdapShaPasswordEncoder encoder = new LdapShaPasswordEncoder();
+        String digest = encoder.encodePassword(plaintext, salt);
+        return digest;
     }
 
     public LdapTemplate getLdapTemplate() {

@@ -14,13 +14,14 @@ public class LdapUser {
     private String password;
     private String department;
     private String groups[] = new String[0];
-//    private String roles[] = new String[0];
+    // private String roles[] = new String[0];
     private String lang;
 
     public LdapUser() {
     }
 
-    public LdapUser(String uid, String oid, String firstName, String lastName, String email, String password, String department, String[] groups, String lang) {
+    public LdapUser(String uid, String oid, String firstName, String lastName, String email, String password,
+                    String department, String[] groups, String lang) {
         this.uid = uid;
         this.oid = oid;
         this.firstName = firstName;
@@ -88,25 +89,25 @@ public class LdapUser {
         this.groups = groups;
     }
 
-//    public String[] getRoles() {
-//        return roles;
-//    }
+    // public String[] getRoles() {
+    // return roles;
+    // }
 
-//    public void setRoles(String[] roles) {
-//        this.roles = roles;
-//    }
+    // public void setRoles(String[] roles) {
+    // this.roles = roles;
+    // }
 
     public String toString() {
         StringBuffer buffer = new StringBuffer();
         buffer.append("LdapUser[");
-//        buffer.append("id = ").append(id);
+        // buffer.append("id = ").append(id);
         buffer.append(" uid = ").append(uid);
         buffer.append(" oid = ").append(oid);
         buffer.append(" lang = ").append(lang);
         buffer.append(" email = ").append(email);
         buffer.append(" firstName = ").append(firstName);
         buffer.append(" lastName = ").append(lastName);
-        buffer.append(" password = ").append(password);
+        buffer.append(" password = ").append("******************"); // password
         buffer.append(" roles = ").append(Arrays.toString(groups));
         buffer.append("]");
         return buffer.toString();

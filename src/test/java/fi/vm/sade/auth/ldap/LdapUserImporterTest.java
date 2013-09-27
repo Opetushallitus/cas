@@ -1,13 +1,16 @@
 package fi.vm.sade.auth.ldap;
 
+import org.jasig.cas.authentication.handler.PlainTextPasswordEncoder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.naming.directory.DirContext;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,11 +22,14 @@ import java.util.List;
 public class LdapUserImporterTest {
 
     @Autowired
+    private LdapContextSource contextSource;
+    @Autowired
     LdapUserImporter ldapUserImporter;
     LdapServerMain ldap;
     int doneCount = 0;
     List<Exception> errors = new ArrayList<Exception>();
     int threads = 10;
+    LdapUser user = new LdapUser("test", "test", "test", "test", "test" + "@oph.fi", "test", null, new String[]{"test"}, "fi");
 
     @Before
     public void start() throws Exception {
@@ -37,9 +43,16 @@ public class LdapUserImporterTest {
     }
 
     @Test
-    public void testConcurrentSave() throws Exception {
-        String name = "test";
-        final LdapUser user = new LdapUser(name, name, name, name, name + "@oph.fi", name, null, new String[]{name}, "fi");
+    public void testEncryptionAndBind() throws Exception {
+        ldapUserImporter.save(user);
+        String dn = LdapUserImporter.buildDn("people", user.getDepartment(), user.getUid(), "uid").toString();
+        String pwEncoded = new PlainTextPasswordEncoder().encode(user.getPassword());
+        DirContext ctx = contextSource.getContext(dn, pwEncoded);
+        ctx.close();
+    }
+
+    @Test
+    public void testConcurrentLdapImportSave() throws Exception {
         for (int i = 0; i < threads; i++) {
             new Thread() {
                 @Override
@@ -61,6 +74,13 @@ public class LdapUserImporterTest {
         if (errors.size() > 0) {
             throw errors.get(0);
         }
+    }
+
+    @Test
+    public void testAdminPass() throws Exception {
+        String pwEncoded = new PlainTextPasswordEncoder().encode("secret");
+        DirContext ctx = contextSource.getContext("uid=admin,ou=system", pwEncoded);
+        ctx.close();
     }
 
 }

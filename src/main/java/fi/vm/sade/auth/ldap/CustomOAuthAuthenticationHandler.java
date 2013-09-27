@@ -1,5 +1,9 @@
 package fi.vm.sade.auth.ldap;
 
+import java.util.Map;
+
+import javax.validation.constraints.NotNull;
+
 import org.apache.commons.lang.StringUtils;
 import org.jasig.cas.authentication.handler.AuthenticationException;
 import org.jasig.cas.authentication.handler.support.AbstractPreAndPostProcessingAuthenticationHandler;
@@ -13,12 +17,10 @@ import org.scribe.up.provider.OAuthProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.validation.constraints.NotNull;
-import java.util.Map;
-
 /**
- * "Extend" final OAuthAuthenticationHandler to do custom things (import user to ldap) after authentication
- *
+ * "Extend" final OAuthAuthenticationHandler to do custom things (import user to
+ * ldap) after authentication
+ * 
  * @author Antti Salonen
  */
 public class CustomOAuthAuthenticationHandler extends AbstractPreAndPostProcessingAuthenticationHandler {
@@ -27,26 +29,27 @@ public class CustomOAuthAuthenticationHandler extends AbstractPreAndPostProcessi
 
     @Override
     protected boolean postAuthenticate(Credentials credentials, boolean authenticated) {
-        log.info("CustomOAuthAuthenticationHandler.postAuthenticate, cred: "+credentials);
+        // WARN! credentialssin tulostaminen paljastaa salasanan!!!
+        // log.debug("CustomOAuthAuthenticationHandler.postAuthenticate, cred: "+credentials);
 
         OAuthCredentials cred = (OAuthCredentials) credentials;
-        Map<String,Object> attrs = cred.getUserProfile().getAttributes();
+        Map<String, Object> attrs = cred.getUserProfile().getAttributes();
 
-        log.info("CustomOAuthAuthenticationHandler.postAuthenticate, token : "+cred.getUserProfile().getAccessToken());
-        log.info("CustomOAuthAuthenticationHandler.postAuthenticate, id    : "+cred.getUserProfile().getId());
-        log.info("CustomOAuthAuthenticationHandler.postAuthenticate, typeid: "+cred.getUserProfile().getTypedId());
-        log.info("CustomOAuthAuthenticationHandler.postAuthenticate, attrs : "+ attrs);
+        log.info("CustomOAuthAuthenticationHandler.postAuthenticate, token : " + cred.getUserProfile().getAccessToken());
+        log.info("CustomOAuthAuthenticationHandler.postAuthenticate, id    : " + cred.getUserProfile().getId());
+        log.info("CustomOAuthAuthenticationHandler.postAuthenticate, typeid: " + cred.getUserProfile().getTypedId());
+        log.info("CustomOAuthAuthenticationHandler.postAuthenticate, attrs : " + attrs);
 
         // add user to ldap
         LdapUser user = new LdapUser();
-//        user.setUid(attrs.get("username").toString()+"@facebook.com");
+        // user.setUid(attrs.get("username").toString()+"@facebook.com");
         user.setUid(cred.getUserProfile().getTypedId());
         user.setFirstName(attrs.get("first_name").toString());
         user.setLastName(attrs.get("last_name").toString());
-        user.setEmail(attrs.get("username").toString()+"@facebook.com");
-//        user.setPassword();
+        user.setEmail(attrs.get("username").toString() + "@facebook.com");
+        // user.setPassword();
 
-        log.info("CustomOAuthAuthenticationHandler.postAuthenticate, save user, uid: "+user.getUid());
+        log.info("CustomOAuthAuthenticationHandler.postAuthenticate, save user, uid: " + user.getUid());
 
         ldapUserImporter.save(user);
 

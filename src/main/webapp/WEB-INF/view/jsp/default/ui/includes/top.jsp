@@ -29,7 +29,7 @@
 <spring:theme code="mobile.custom.css.file" var="mobileCss" text="" />
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 	<head>
-	    <title>CAS &#8211; Central Authentication Service</title>
+	    <title>Oppijan verkkopalvelu - Virkailijan palvelut - Sis&auml;&auml;nkirjautuminen</title>
         <c:if test="${not empty requestScope['isMobile'] and not empty mobileCss}">
              <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
              <meta name="apple-mobile-web-app-capable" content="yes" />
