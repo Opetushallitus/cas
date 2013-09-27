@@ -16,10 +16,10 @@ import javax.naming.Name;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.BasicAttribute;
 import javax.naming.directory.BasicAttributes;
+import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Imports users to ldap, check save-method which takes LdapUser as parameter.
@@ -30,8 +30,7 @@ public class LdapUserImporter {
 
     private LdapContextSource contextSource;
     private LdapTemplate ldapTemplate;
-    protected Logger log = LoggerFactory.getLogger(this.getClass());
-    private static Random rand = new Random();
+    private static final Logger log = LoggerFactory.getLogger(LdapUserImporter.class);
 
     public void init() {
         log.info("LdapUserImporter.init, contextSource: " + contextSource + ", ldapTemplate: " + ldapTemplate);
@@ -226,7 +225,7 @@ public class LdapUserImporter {
     public static String encrypt(final String plaintext) {
         // create random 4 byte salt
         byte[] salt = new byte[4];
-        rand.nextBytes(salt);
+        new SecureRandom().nextBytes(salt);
         // create digest
         LdapShaPasswordEncoder encoder = new LdapShaPasswordEncoder();
         String digest = encoder.encodePassword(plaintext, salt);
