@@ -33,7 +33,7 @@ public class LdapUserImporterTest {
 
     @Before
     public void start() throws Exception {
-        ldap = new LdapServerMain("target/data/ldap_test_" + System.currentTimeMillis(), 10399, "secret", "dev");
+        ldap = new LdapServerMain("target/data/ldap_test_" + System.currentTimeMillis(), 10399, "secret", "dev", 1000, 1000);
         ldap.startServer();
     }
 
