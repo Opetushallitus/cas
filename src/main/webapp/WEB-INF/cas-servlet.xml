@@ -98,6 +98,8 @@
                 <!--<prop key="/oauth10login">oauth10loginController</prop>-->
                 <!-- oph rest resource to get list of user's roles -->
                 <prop key="/myroles">myrolesController</prop>
+                <!--  oph rest resource to get information about logged in user -->
+                <prop key="/me">userinfoController</prop>
             </props>
         </property>
         <property
@@ -302,5 +304,13 @@
         <property name="ticketRegistry" ref="ticketRegistry"/>
         <property name="authenticationUtil" ref="authenticationUtil"/>
     </bean>
+
+    <!--  oph rest resource to get information about logged in user -->
+    <bean id="userinfoController" class="fi.vm.sade.auth.ldap.UserInfoResource">
+        <property name="ticketGrantingTicketCookieGenerator" ref="ticketGrantingTicketCookieGenerator"/>
+        <property name="ticketRegistry" ref="ticketRegistry"/>
+        <property name="authenticationUtil" ref="authenticationUtil"/>
+    </bean>
+
 
 </beans>

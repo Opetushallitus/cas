@@ -25,20 +25,28 @@ public class MyRolesResource extends AbstractController {
 
     @Override
     protected ModelAndView handleRequestInternal(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String ticketGrantingTicketId = ticketGrantingTicketCookieGenerator.retrieveCookieValue(request);
-        TicketGrantingTicket ticketGrantingTicket = (TicketGrantingTicket) this.ticketRegistry.getTicket(ticketGrantingTicketId, TicketGrantingTicket.class);
-        final String uid = ticketGrantingTicket.getAuthentication().getPrincipal().getId();
-        final List<String> roles = authenticationUtil.getRoles(uid);
+        final String ticketGrantingTicketId = ticketGrantingTicketCookieGenerator.retrieveCookieValue(request);
+        final TicketGrantingTicket ticketGrantingTicket = (TicketGrantingTicket) this.ticketRegistry.getTicket(ticketGrantingTicketId, TicketGrantingTicket.class);
+
+        final String uid = ticketGrantingTicket!=null && ticketGrantingTicket.getAuthentication() != null ? ticketGrantingTicket
+                .getAuthentication().getPrincipal().getId(): null;
 
         return new ModelAndView(new View() {
+            
             @Override
             public String getContentType() {
                 return "text/json";
             }
+            
             @Override
             public void render(Map<String, ?> stringMap, HttpServletRequest request, HttpServletResponse response) throws Exception {
+                if(uid==null) {
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+                    return;
+                }
                 // render roles string list as javascript/json array
-                PrintWriter writer = response.getWriter();
+                final List<String> roles = authenticationUtil.getRoles(uid);
+                final PrintWriter writer = response.getWriter();
                 writer.print("[\"USER_");
                 writer.print(uid);
                 writer.print("\"");

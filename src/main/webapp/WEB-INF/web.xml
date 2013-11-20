@@ -238,6 +238,12 @@
         <url-pattern>/myroles</url-pattern>
     </servlet-mapping>
 
+    <!-- oph rest resource to get list of user's roles -->
+    <servlet-mapping>
+        <servlet-name>cas</servlet-name>
+        <url-pattern>/me</url-pattern>
+    </servlet-mapping>
+
     <session-config>
         <!-- Default to 5 minute session timeouts -->
         <session-timeout>5</session-timeout>
