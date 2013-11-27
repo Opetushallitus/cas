@@ -78,8 +78,6 @@
 			   piwikSiteId = 1;
 			}else if(siteDomain=='testi.virkailija.opintopolku.fi'){
 			   piwikSiteId = 5;
-			}else{
-			   piwikSiteId = 2;
 			}
 
 			//console.log("siteDomain:"+siteDomain+", piwikSiteId:"+piwikSiteId);
@@ -89,13 +87,15 @@
 			_paq.push(["trackPageView"]);
 			_paq.push(["enableLinkTracking"]);
 
-			(function() {
-				var u=(("https:" == document.location.protocol) ? "https" : "http") + "://nat-piwik-poc.oph.ware.fi/analytics/";
-				_paq.push(["setTrackerUrl", u+"piwik.php"]);
-				_paq.push(["setSiteId", piwikSiteId]);
-				var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
-				g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
-			})();
+            if (piwikSiteId != 2) {
+                (function() {
+                    var u=(("https:" == document.location.protocol) ? "https" : "http") + "://analytiikka.opintopolku.fi/piwik/";
+                    _paq.push(["setTrackerUrl", u+"piwik.php"]);
+                    _paq.push(["setSiteId", piwikSiteId]);
+                    var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
+                    g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
+                })();
+            }
         </script>
         <!-- End Piwik Code -->
 	
