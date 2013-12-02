@@ -4,8 +4,6 @@ import java.util.Arrays;
 
 public class LdapUser {
 
-    private static final long serialVersionUID = 7487133273442955818L;
-
     private String uid;
     private String oid;
     private String firstName;

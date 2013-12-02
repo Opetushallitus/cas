@@ -107,6 +107,18 @@ public class LdapUserImporter {
             }
         });
     }
+    
+    public List<String> getUserLdapAttributes() {
+        ldapTemplate.lookup((Name)null);
+        return null;
+    }
+
+    private final LdapUserAttributeMapper mapper = new LdapUserAttributeMapper();
+    
+    public LdapUser getLdapUser(String uid) {
+        final Name name = buildDn("uid", uid, "people");
+        return (LdapUser) ldapTemplate.lookup(name, new LdapUserAttributeMapper());
+    }
 
     private void removeUniqueMember(DirContextOperations group, String... membersToRemove) {
         List<String> uniqueMembers = Arrays.asList(group.getStringAttributes("uniqueMember"));
@@ -195,12 +207,12 @@ public class LdapUserImporter {
             attrs.put("employeeNumber", user.getOid());
         }
         if (user.getPassword() != null) {
-            attrs.put("userPassword", this.encrypt(user.getPassword()));
+            attrs.put("userPassword", encrypt(user.getPassword()));
         }
         attrs.put("mail", user.getEmail());
         return attrs;
     }
-
+    
     public Attributes buildAttributes(String... objectClasses) {
         Attributes attrs = new BasicAttributes();
         BasicAttribute ocattr = new BasicAttribute("objectclass");
