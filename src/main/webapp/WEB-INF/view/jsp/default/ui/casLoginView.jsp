@@ -44,8 +44,7 @@
         Opintopolku - Yll&auml;pidon ty&ouml;p&ouml;yt&auml;
     </h1>
     <p class="margin-bottom-3">
-        Yll&auml;pidon s&auml;hk&ouml;isell&auml; ty&ouml;p&ouml;yd&auml;ll&auml; voit hallinnoida Opintopolku.fi:ss&auml; n&auml;ytett&auml;vi&auml; koulutuksia ja organisaatiosi tietoja sek&auml; k&auml;sitell&auml; hakemuksia ja paikan vastaanottajia. Julkinen, kaikille tarkoitettu palvelu l&ouml;ytyy syyskuusta 2013 alkaen osoitteesta
-        <a href="http://www.opintopolku.fi">www.opintopolku.fi</a>
+        Yll&auml;pidon s&auml;hk&ouml;isell&auml; ty&ouml;p&ouml;yd&auml;ll&auml; voit hallinnoida Opintopolku.fi:ss&auml; n&auml;ytett&auml;vi&auml; koulutuksia ja organisaatiosi tietoja sek&auml; k&auml;sitell&auml; hakemuksia ja paikan vastaanottajia.
     </p>
     <p class="margin-bottom-3">
         Tunnukset yll&auml;pidon ty&ouml;p&ouml;yd&auml;lle saat tarvittaessa organisaatiosi p&auml;&auml;k&auml;ytt&auml;j&auml;lt&auml;. Eri oppilaitosten     yll&auml;pit&auml;j&auml;t n&auml;kev&auml;t ty&ouml;p&ouml;yd&auml;ll&auml; osin eri palveluita k&auml;ytt&ouml;oikeuksiensa mukaan.
