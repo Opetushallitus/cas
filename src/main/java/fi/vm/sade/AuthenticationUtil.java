@@ -112,11 +112,6 @@ public class AuthenticationUtil {
                 roleStrings.add("LANG_" + henkilo.getAsiointiKieli().getKieliKoodi());
             }
 
-            // add also user's oid as OID_[oid] -role
-            if (henkilo.getAsiointiKieli() != null) {
-                roleStrings.add("LANG_" + henkilo.getAsiointiKieli().getKieliKoodi());
-            }
-
             // roles
             if (henkilo.getAuthorizationData() != null && henkilo.getAuthorizationData().getAccessrights() != null) {
                 for (AccessRightType art : henkilo.getAuthorizationData().getAccessrights().getAccessRight()) {
