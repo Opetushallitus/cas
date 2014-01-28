@@ -139,7 +139,22 @@
             <version>2.5</version>
             <scope>provided</scope>
         </dependency>
-		
+
+        <!-- CAS ticket cache replication -->
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache-core</artifactId>
+            <version>2.4.8</version> <!-- cas/ticketRegistry.xml/ticketRMIAsynchronousCacheReplicator seems to want this -->
+        </dependency>
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache-jgroupsreplication</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jgroups</groupId>
+            <artifactId>jgroups</artifactId>
+        </dependency>
+
         <!-- tests -->
         <dependency>
             <groupId>fi.vm.sade.auth</groupId>
