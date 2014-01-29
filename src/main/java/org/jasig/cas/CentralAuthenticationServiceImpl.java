@@ -293,41 +293,39 @@ public final class CentralAuthenticationServiceImpl implements CentralAuthentica
         Assert.notNull(serviceTicketId, "serviceTicketId cannot be null");
         Assert.notNull(credentials, "credentials cannot be null");
 
-//        try {
-//            final Authentication authentication = this.authenticationManager
-//                .authenticate(credentials);
-//        String principal = "TEMP_ALLOW_HTTP_INSTEAD_HTTPS";
-        String principal = this.serviceTicketRegistry.getTicket(serviceTicketId).getGrantingTicket().getAuthentication().getPrincipal().getId();
-        final Authentication authentication = new ImmutableAuthentication(new SimplePrincipal(principal)); // TODO: temp tukee http:tä ettei vielä tarvitse certtejä säätää
+        final ServiceTicket serviceTicket;
+        serviceTicket = (ServiceTicket) this.serviceTicketRegistry.getTicket(serviceTicketId, ServiceTicket.class);
 
-            final ServiceTicket serviceTicket;
-            serviceTicket = (ServiceTicket) this.serviceTicketRegistry.getTicket(serviceTicketId, ServiceTicket.class);
+        if (serviceTicket == null || serviceTicket.isExpired()) {
+            throw new InvalidTicketException();
+        }
 
-            if (serviceTicket == null || serviceTicket.isExpired()) {
-                throw new InvalidTicketException();
-            }
 
-            final RegisteredService registeredService = this.servicesManager
-                .findServiceBy(serviceTicket.getService());
+        String principal = serviceTicket.getGrantingTicket().getAuthentication().getPrincipal().getId();
 
-            if (registeredService == null || !registeredService.isEnabled()
-                || !registeredService.isAllowedToProxy()) {
-                log.warn("ServiceManagement: Service Attempted to Proxy, but is not allowed.  Service: [" + serviceTicket.getService().getId() + "]");
-                throw new UnauthorizedProxyingException();
-            }
+        // Tukee http
+        //FIXME: korvaa alkuperäisellä cas toteutuksella. vaatii pgt:n toimittamisen https:llä.
+        final Authentication authentication = new ImmutableAuthentication(new SimplePrincipal(principal));
 
-            final TicketGrantingTicket ticketGrantingTicket = serviceTicket
-                .grantTicketGrantingTicket(
-                    this.ticketGrantingTicketUniqueTicketIdGenerator
-                        .getNewTicketId(TicketGrantingTicket.PREFIX),
-                    authentication, this.ticketGrantingTicketExpirationPolicy);
 
-            this.ticketRegistry.addTicket(ticketGrantingTicket);
+        final RegisteredService registeredService = this.servicesManager
+            .findServiceBy(serviceTicket.getService());
 
-            return ticketGrantingTicket.getId();
-//        } catch (final AuthenticationException e) {
-//            throw new TicketCreationException(e);
-//        }
+        if (registeredService == null || !registeredService.isEnabled()
+            || !registeredService.isAllowedToProxy()) {
+            log.warn("ServiceManagement: Service Attempted to Proxy, but is not allowed.  Service: [" + serviceTicket.getService().getId() + "]");
+            throw new UnauthorizedProxyingException();
+        }
+
+        final TicketGrantingTicket ticketGrantingTicket = serviceTicket
+            .grantTicketGrantingTicket(
+                this.ticketGrantingTicketUniqueTicketIdGenerator
+                    .getNewTicketId(TicketGrantingTicket.PREFIX),
+                authentication, this.ticketGrantingTicketExpirationPolicy);
+
+        this.ticketRegistry.addTicket(ticketGrantingTicket);
+
+        return ticketGrantingTicket.getId();
     }
 
     /**
