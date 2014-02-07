@@ -48,7 +48,7 @@ public class LdapUserImporter {
         synchronized (user.getUid().intern()) {
 
             // save user
-            save("People", user.getDepartment(), user.getUid(), buildAttributes(user), "uid", false);
+            save("people", user.getDepartment(), user.getUid(), buildAttributes(user), "uid", false);
 
             // save groups...
 
@@ -95,7 +95,7 @@ public class LdapUserImporter {
     }
 
     public String getMemberString(String uid) {
-        return "uid=" + uid + ",ou=People,dc=opintopolku,dc=fi";
+        return "uid=" + uid + ",ou=people,dc=example,dc=com";
     }
 
     public List<String> getUserLdapGroups(String member) {
@@ -107,16 +107,16 @@ public class LdapUserImporter {
             }
         });
     }
-    
+
     public List<String> getUserLdapAttributes() {
         ldapTemplate.lookup((Name)null);
         return null;
     }
 
     private final LdapUserAttributeMapper mapper = new LdapUserAttributeMapper();
-    
+
     public LdapUser getLdapUser(String uid) {
-        final Name name = buildDn("uid", uid, "People");
+        final Name name = buildDn("uid", uid, "people");
         return (LdapUser) ldapTemplate.lookup(name, new LdapUserAttributeMapper());
     }
 
@@ -162,7 +162,7 @@ public class LdapUserImporter {
     }
 
     public void remove(LdapUser user) {
-        Name name = buildDn("People", user.getDepartment(), user.getUid(), "uid");
+        Name name = buildDn("people", user.getDepartment(), user.getUid(), "uid");
         remove(name);
     }
 
@@ -172,8 +172,8 @@ public class LdapUserImporter {
 
     public static Name buildDn(String ou, String extraDepartment, String uid, String nameAttribute) {
         DistinguishedName dn = new DistinguishedName();
-        dn.add("dc", "fi");
-        dn.add("dc", "opintopolku");
+        dn.add("dc", "com");
+        dn.add("dc", "example");
         dn.add("ou", ou);
         if (extraDepartment != null) {
             dn.add("ou", extraDepartment);
@@ -186,8 +186,8 @@ public class LdapUserImporter {
 
     public static Name buildDn(String nameAttribute, String uid, String... ous) {
         DistinguishedName dn = new DistinguishedName();
-        dn.add("dc", "fi");
-        dn.add("dc", "opintopolku");
+        dn.add("dc", "com");
+        dn.add("dc", "example");
         for (String ou : ous) {
             dn.add("ou", ou);
         }
@@ -212,7 +212,7 @@ public class LdapUserImporter {
         attrs.put("mail", user.getEmail());
         return attrs;
     }
-    
+
     public Attributes buildAttributes(String... objectClasses) {
         Attributes attrs = new BasicAttributes();
         BasicAttribute ocattr = new BasicAttribute("objectclass");
