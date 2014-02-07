@@ -45,7 +45,7 @@ public class LdapUserImporterTest {
     @Test
     public void testEncryptionAndBind() throws Exception {
         ldapUserImporter.save(user);
-        String dn = LdapUserImporter.buildDn("people", user.getDepartment(), user.getUid(), "uid").toString();
+        String dn = LdapUserImporter.buildDn("People", user.getDepartment(), user.getUid(), "uid").toString();
         String pwEncoded = new PlainTextPasswordEncoder().encode(user.getPassword());
         DirContext ctx = contextSource.getContext(dn, pwEncoded);
         ctx.close();
