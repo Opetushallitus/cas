@@ -11,7 +11,7 @@ import org.jasig.cas.authentication.principal.Credentials;
 public class SAMLCredentialsToPrincipalResolver extends AbstractPersonDirectoryCredentialsToPrincipalResolver {
     @Override
     protected String extractPrincipalId(Credentials credentials) {
-        return ((SAMLCredentials)credentials).getUserDetails().getKayttajatunnus();
+        return ((SAMLCredentials)credentials).getUserDetails().getKayttajatiedot().getUsername();
     }
 
     @Override
