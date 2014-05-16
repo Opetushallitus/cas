@@ -36,20 +36,20 @@ public class AuthenticationUtil {
     protected Logger log = LoggerFactory.getLogger(this.getClass());
 
     public boolean tryToImportUserFromCustomOphAuthenticationService(UsernamePasswordCredentials cred) {
-//        try {
-//            IdentifiedHenkiloType henkilo = authenticationService.getIdentityByUsernameAndPassword(cred.getUsername(),
-//                    cred.getPassword());
-//
-//            // service vastasi, mutta käyttäjää ei löytynyt.
-//            if (henkilo == null) {
-//                log.info("User not found.");
-//                return false;
-//            }
-//
-//            tryToImport(henkilo, cred.getUsername(), cred.getPassword());
-//        } catch (Exception e) {
+        try {
+            IdentifiedHenkiloType henkilo = authenticationService.getIdentityByUsernameAndPassword(cred.getUsername(),
+                    cred.getPassword());
+
+            // service vastasi, mutta käyttäjää ei löytynyt.
+            if (henkilo == null) {
+                log.info("User not found.");
+                return false;
+            }
+
+            tryToImport(henkilo, cred.getUsername(), cred.getPassword());
+        } catch (Exception e) {
             log.warn("WARNING - problem with authentication backend, using only ldap.");//, e);
-//        }
+        }
         return true;
     }
 
