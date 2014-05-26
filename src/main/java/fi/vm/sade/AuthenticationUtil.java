@@ -32,23 +32,27 @@ public class AuthenticationUtil {
     private String rootOrganisaatioOid;
     private AuthenticationService authenticationService;
     private CustomAttributeService customAttributeService;
+    private boolean useAuthenticationService;
 
     protected Logger log = LoggerFactory.getLogger(this.getClass());
 
     public boolean tryToImportUserFromCustomOphAuthenticationService(UsernamePasswordCredentials cred) {
-        try {
-            IdentifiedHenkiloType henkilo = authenticationService.getIdentityByUsernameAndPassword(cred.getUsername(),
-                    cred.getPassword());
+        
+        if (useAuthenticationService) {
+            try {
+                IdentifiedHenkiloType henkilo = authenticationService.getIdentityByUsernameAndPassword(cred.getUsername(),
+                        cred.getPassword());
 
-            // service vastasi, mutta käyttäjää ei löytynyt.
-            if (henkilo == null) {
-                log.info("User not found.");
-                return false;
+                // service vastasi, mutta käyttäjää ei löytynyt.
+                if (henkilo == null) {
+                    log.info("User not found.");
+                    return false;
+                }
+
+                tryToImport(henkilo, cred.getUsername(), cred.getPassword());
+            } catch (Exception e) {
+                log.warn("WARNING - problem with authentication backend, using only ldap.");//, e);
             }
-
-            tryToImport(henkilo, cred.getUsername(), cred.getPassword());
-        } catch (Exception e) {
-            log.warn("WARNING - problem with authentication backend, using only ldap.");//, e);
         }
         return true;
     }
@@ -206,6 +210,13 @@ public class AuthenticationUtil {
     public LdapUser getUser(String uid) {
         return ldapUserImporter.getLdapUser(uid);
     }
-}
 
+    public boolean isUseAuthenticationService() {
+        return useAuthenticationService;
+    }
+
+    public void setUseAuthenticationService(boolean useAuthenticationService) {
+        this.useAuthenticationService = useAuthenticationService;
+    }
+}
 
