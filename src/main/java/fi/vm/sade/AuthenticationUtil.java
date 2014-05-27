@@ -39,6 +39,7 @@ public class AuthenticationUtil {
     public boolean tryToImportUserFromCustomOphAuthenticationService(UsernamePasswordCredentials cred) {
         
         if (useAuthenticationService) {
+            log.error("DEBUG::Using Authentication Service!");
             try {
                 IdentifiedHenkiloType henkilo = authenticationService.getIdentityByUsernameAndPassword(cred.getUsername(),
                         cred.getPassword());
