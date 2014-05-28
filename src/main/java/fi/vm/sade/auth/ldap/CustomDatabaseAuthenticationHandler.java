@@ -1,4 +1,4 @@
-package cas.src.main.java.fi.vm.sade.auth.ldap;
+package fi.vm.sade.auth.ldap;
 
 import fi.vm.sade.AuthenticationUtil;
 import org.jasig.cas.authentication.principal.Credentials;
