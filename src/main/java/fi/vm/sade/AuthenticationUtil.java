@@ -36,10 +36,12 @@ public class AuthenticationUtil {
 
     protected Logger log = LoggerFactory.getLogger(this.getClass());
 
-    public boolean tryAuthenticationWithCustomOphAuthenticationService(UsernamePasswordCredentials cred) {
+    public boolean tryAuthenticationWithCustomOphAuthenticationService(
+            UsernamePasswordCredentials cred) {
         try {
-            IdentifiedHenkiloType henkilo = authenticationService.getIdentityByUsernameAndPassword(cred.getUsername(),
-                    cred.getPassword());
+            IdentifiedHenkiloType henkilo = authenticationService
+                    .getIdentityByUsernameAndPassword(cred.getUsername(),
+                            cred.getPassword());
 
             // service vastasi, mutta käyttäjää ei löytynyt.
             if (henkilo == null) {
@@ -47,13 +49,15 @@ public class AuthenticationUtil {
                 return false;
             }
         } catch (Exception e) {
-            log.warn("WARNING - problem with authentication backend, using only ldap.");//, e);
+            log.warn("WARNING - problem with authentication backend, using only ldap.");// ,
+                                                                                        // e);
         }
         return true;
     }
-    
-    public boolean tryToImportUserFromCustomOphAuthenticationService(UsernamePasswordCredentials cred) {
-        
+
+    public boolean tryToImportUserFromCustomOphAuthenticationService(
+            UsernamePasswordCredentials cred) {
+
         if (useAuthenticationService) {
             log.error("DEBUG::Using Authentication Service!");
             try {
