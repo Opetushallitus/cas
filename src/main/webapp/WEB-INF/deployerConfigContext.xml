@@ -143,6 +143,13 @@
                         class="org.jasig.cas.authentication.handler.support.SimpleTestUsernamePasswordAuthenticationHandler" />
                         -->
                 <!-- antti -->
+                
+                <bean class="org.jasig.cas.adaptors.ldap.BindLdapAuthenticationHandler"
+                      p:filter="${ldap.filter.people}"
+                      p:searchBase="${ldap.search.base.people}"
+                      p:contextSource-ref="contextSource">
+                </bean>
+                
                 <bean class="fi.vm.sade.auth.ldap.CustomBindLdapAuthenticationHandler"
                       p:filter="${ldap.filter.people}"
                       p:searchBase="${ldap.search.base.people}"
