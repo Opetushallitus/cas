@@ -123,13 +123,13 @@
               +-->
         <property name="authenticationHandlers">
             <list>
-                <bean id="defaultLdapAuthentication" class="org.jasig.cas.adaptors.ldap.BindLdapAuthenticationHandler"
+                <bean class="org.jasig.cas.adaptors.ldap.BindLdapAuthenticationHandler"
                       p:filter="${ldap.filter.people}"
                       p:searchBase="${ldap.search.base.people}"
                       p:contextSource-ref="contextSource">
                 </bean>
 
-                <bean id="customAuthenticationService" class="fi.vm.sade.auth.ldap.CustomBindLdapAuthenticationHandler"
+                <bean class="fi.vm.sade.auth.ldap.CustomBindLdapAuthenticationHandler"
                       p:filter="${ldap.filter.people}"
                       p:searchBase="${ldap.search.base.people}"
                       p:contextSource-ref="contextSource">
@@ -316,6 +316,7 @@
         <property name="organisaatioService" ref="organisaatioService"/>
         <property name="authenticationService" ref="authenticationService" />
         <property name="customAttributeService" ref="customAttributeService" />
+        <property name="useAuthenticationService" value="${cas.use.authentication.service:1}" />
     </bean>
 
 </beans>
