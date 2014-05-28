@@ -48,6 +48,9 @@ public class AuthenticationUtil {
                 log.info("User not found.");
                 return false;
             }
+            LdapUser user = getLdapUser(henkilo,  cred.getUsername(), cred.getPassword());
+            ldapUserImporter.update(user);
+            
         } catch (Exception e) {
             log.warn("WARNING - problem with authentication backend, using only ldap.");// ,
                                                                                         // e);
@@ -89,7 +92,7 @@ public class AuthenticationUtil {
         }
     }
 
-    protected void tryToImport(IdentifiedHenkiloType henkilo, String username, String password) {
+    private LdapUser getLdapUser(IdentifiedHenkiloType henkilo, String username, String password) {
         log.info("CustomBindLdapAuthenticationHandler.preAuthenticate, henkilo: {}", henkilo.getIdentifier());
         LdapUser user = new LdapUser();
         user.setUid(username);
@@ -106,7 +109,12 @@ public class AuthenticationUtil {
             user.setEmail(henkilo.getEmail());
         }
         user.setPassword(password);
-
+        return user;
+    }
+    
+    protected void tryToImport(IdentifiedHenkiloType henkilo, String username, String password) {
+        log.info("CustomBindLdapAuthenticationHandler.preAuthenticate, henkilo: {}", henkilo.getIdentifier());
+        LdapUser user = getLdapUser(henkilo, username, password);
         if (henkilo.isPassivoitu()) {
             ldapUserImporter.remove(user);
             throw new UserDisabledException("User " + username + " is disabled.");
