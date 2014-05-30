@@ -29,7 +29,6 @@
         <evaluate expression="initialFlowSetupAction" />
     </on-start>
 
-
     <action-state id="samlAction">
         <evaluate expression="samlAction" />
         <transition on="success" to="sendTicketGrantingTicket" />
