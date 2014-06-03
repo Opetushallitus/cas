@@ -41,7 +41,7 @@ public class AuthenticationUtil {
         try {
             IdentifiedHenkiloType henkilo = authenticationService
                     .getIdentityByUsernameAndPassword(cred.getUsername(),
-                            cred.getPassword());
+                            cred.getPassword(), true);
 
             // service vastasi, mutta käyttäjää ei löytynyt.
             if (henkilo == null) {
@@ -64,8 +64,7 @@ public class AuthenticationUtil {
         if (useAuthenticationService) {
             log.error("DEBUG::Using Authentication Service!");
             try {
-                IdentifiedHenkiloType henkilo = authenticationService.getIdentityByUsernameAndPassword(cred.getUsername(),
-                        cred.getPassword());
+                IdentifiedHenkiloType henkilo = authenticationService.getIdentityByUsernameAndPassword(cred.getUsername(), cred.getPassword(), false);
 
                 // service vastasi, mutta käyttäjää ei löytynyt.
                 if (henkilo == null) {
