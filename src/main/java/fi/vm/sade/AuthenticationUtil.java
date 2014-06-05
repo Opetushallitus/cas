@@ -122,11 +122,7 @@ public class AuthenticationUtil {
         List<CustomUserRoleType> roleTypes = new ArrayList<CustomUserRoleType>();
 
         try {
-            long start = System.currentTimeMillis();
-            System.out.println("Roles START--");
             roleTypes.addAll(customAttributeService.listCustomUserRole(henkilo.getOidHenkilo()));
-            long took = System.currentTimeMillis() - start;
-            System.out.println("Roles DONE in " +took);
         } catch (Exception e) {
             log.warn("Could not get user custom attributes.", e);
         }
