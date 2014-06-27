@@ -129,13 +129,6 @@
                       p:contextSource-ref="contextSource">
                 </bean>
 
-                <bean class="fi.vm.sade.auth.ldap.CustomBindLdapAuthenticationHandler"
-                      p:filter="${ldap.filter.people}"
-                      p:searchBase="${ldap.search.base.people}"
-                      p:contextSource-ref="contextSource">
-                    <property name="authenticationUtil" ref="authenticationUtil"/>
-                </bean>
-
                 <bean class="fi.vm.sade.auth.ldap.CustomOAuthAuthenticationHandler">
                     <property name="configuration" ref="oauthConfig" />
                     <property name="ldapUserImporter" ref="ldapUserImporter"/>
