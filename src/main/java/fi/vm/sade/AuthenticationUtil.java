@@ -36,6 +36,7 @@ public class AuthenticationUtil {
 
     protected Logger log = LoggerFactory.getLogger(this.getClass());
 
+    @Deprecated
     public boolean tryAuthenticationWithCustomOphAuthenticationService(
             UsernamePasswordCredentials cred) {
         try {
@@ -58,6 +59,7 @@ public class AuthenticationUtil {
         return true;
     }
 
+    @Deprecated
     public boolean tryToImportUserFromCustomOphAuthenticationService(
             UsernamePasswordCredentials cred) {
 

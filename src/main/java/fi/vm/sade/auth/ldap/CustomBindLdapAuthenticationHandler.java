@@ -25,19 +25,22 @@ public class CustomBindLdapAuthenticationHandler extends org.jasig.cas.adaptors.
 
     @Override
     protected boolean preAuthenticate(Credentials credentials) {
-        UsernamePasswordCredentials cred = (UsernamePasswordCredentials) credentials;
-        Long prevImport = userImportedTimestamps.get(cred.getUsername());
-        boolean needsImport = prevImport == null || System.currentTimeMillis() - prevImport > MIN_MS_BETWEEN_USER_IMPORTS;
-        log.info("CustomBindLdapAuthenticationHandler.preAuthenticate, user: " + cred.getUsername()+", prevImport: "+prevImport+", needsImport: "+needsImport);
-        if (needsImport) {
-            boolean imported = authenticationUtil.tryToImportUserFromCustomOphAuthenticationService(cred);
-            if (imported) { // set previously imported timestamp
-                userImportedTimestamps.put(((UsernamePasswordCredentials) credentials).getUsername(), System.currentTimeMillis());
-            }
-            return imported;
-        } else {
-            return true;
-        }
+        log.error("DEPRECATED!! CustomBindLdapAuthenticationHandler.preAuthenticate, returning false by default!!");
+        return false;
+        // FIXME!! POISTA KOKO LUOKKA, KUN TOIMINNALLISUUS ON VARMISTETTU!!
+//        UsernamePasswordCredentials cred = (UsernamePasswordCredentials) credentials;
+//        Long prevImport = userImportedTimestamps.get(cred.getUsername());
+//        boolean needsImport = prevImport == null || System.currentTimeMillis() - prevImport > MIN_MS_BETWEEN_USER_IMPORTS;
+//        log.info("CustomBindLdapAuthenticationHandler.preAuthenticate, user: " + cred.getUsername()+", prevImport: "+prevImport+", needsImport: "+needsImport);
+//        if (needsImport) {
+//            boolean imported = authenticationUtil.tryToImportUserFromCustomOphAuthenticationService(cred);
+//            if (imported) { // set previously imported timestamp
+//                userImportedTimestamps.put(((UsernamePasswordCredentials) credentials).getUsername(), System.currentTimeMillis());
+//            }
+//            return imported;
+//        } else {
+//            return true;
+//        }
     }
 
     public AuthenticationUtil getAuthenticationUtil() {

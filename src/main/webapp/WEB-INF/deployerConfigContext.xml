@@ -123,6 +123,12 @@
               +-->
         <property name="authenticationHandlers">
             <list>
+                <!--
+                HUOM!! CASin beaneja CustomDatabaseAuthenticationHandler ja
+                CustomBindLdapAuthenticationHandler ei pidä lisätä tähän listaan
+                enää koskaan, koska LDAPin ylläpito vastuu on siirretty
+                Henkilöhallinnan puolelle!! 
+                 -->
                 <bean class="org.jasig.cas.adaptors.ldap.BindLdapAuthenticationHandler"
                       p:filter="${ldap.filter.people}"
                       p:searchBase="${ldap.search.base.people}"

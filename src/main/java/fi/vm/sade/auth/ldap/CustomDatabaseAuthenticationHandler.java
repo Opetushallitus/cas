@@ -11,8 +11,10 @@ public class CustomDatabaseAuthenticationHandler extends org.jasig.cas.adaptors.
     @Override
     protected boolean preAuthenticate(Credentials credentials) {
         UsernamePasswordCredentials cred = (UsernamePasswordCredentials) credentials;
-        log.info("CustomDatabaseAuthenticationHandler.preAuthenticate, user: " + cred.getUsername());
-        return authenticationUtil.tryAuthenticationWithCustomOphAuthenticationService(cred);
+        log.error("DEPRECATED!! CustomDatabaseAuthenticationHandler.preAuthenticate, returning false by default!!");
+        return false;
+        // FIXME!! POISTA KOKO LUOKKA, KUN TOIMINNALLISUUS ON VARMISTETTU!!
+//        return authenticationUtil.tryAuthenticationWithCustomOphAuthenticationService(cred);
     }  
     
     
