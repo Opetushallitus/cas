@@ -36,12 +36,13 @@ public class AuthenticationUtil {
 
     protected Logger log = LoggerFactory.getLogger(this.getClass());
 
+    @Deprecated
     public boolean tryAuthenticationWithCustomOphAuthenticationService(
             UsernamePasswordCredentials cred) {
         try {
             IdentifiedHenkiloType henkilo = authenticationService
                     .getIdentityByUsernameAndPassword(cred.getUsername(),
-                            cred.getPassword());
+                            cred.getPassword(), true);
 
             // service vastasi, mutta käyttäjää ei löytynyt.
             if (henkilo == null) {
@@ -58,14 +59,14 @@ public class AuthenticationUtil {
         return true;
     }
 
+    @Deprecated
     public boolean tryToImportUserFromCustomOphAuthenticationService(
             UsernamePasswordCredentials cred) {
 
         if (useAuthenticationService) {
             log.error("DEBUG::Using Authentication Service!");
             try {
-                IdentifiedHenkiloType henkilo = authenticationService.getIdentityByUsernameAndPassword(cred.getUsername(),
-                        cred.getPassword());
+                IdentifiedHenkiloType henkilo = authenticationService.getIdentityByUsernameAndPassword(cred.getUsername(), cred.getPassword(), false);
 
                 // service vastasi, mutta käyttäjää ei löytynyt.
                 if (henkilo == null) {
@@ -123,11 +124,7 @@ public class AuthenticationUtil {
         List<CustomUserRoleType> roleTypes = new ArrayList<CustomUserRoleType>();
 
         try {
-            long start = System.currentTimeMillis();
-            System.out.println("Roles START--");
             roleTypes.addAll(customAttributeService.listCustomUserRole(henkilo.getOidHenkilo()));
-            long took = System.currentTimeMillis() - start;
-            System.out.println("Roles DONE in " +took);
         } catch (Exception e) {
             log.warn("Could not get user custom attributes.", e);
         }
@@ -235,6 +232,10 @@ public class AuthenticationUtil {
         this.customAttributeService = customAttributeService;
     }
 
+    public String getUserRoles(String uid) {
+        return ldapUserImporter.getUserRolesAndGroups(uid);
+    }
+    
     public List<String> getRoles(String uid) {
         String member = ldapUserImporter.getMemberString(uid);
         return ldapUserImporter.getUserLdapGroups(member);

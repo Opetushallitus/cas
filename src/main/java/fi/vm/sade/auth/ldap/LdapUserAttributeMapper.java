@@ -15,6 +15,7 @@ public class LdapUserAttributeMapper implements AttributesMapper {
     private static final String PREFERRED_LANGUAGE = "preferredLanguage";
     private static final String SN = "sn";
     private static final String CN = "cn";
+    private static final String DESCRIPTION = "description";
 
     private static final Logger LOG = LoggerFactory.getLogger(LdapUserImporter.class);
 
@@ -22,11 +23,11 @@ public class LdapUserAttributeMapper implements AttributesMapper {
     public Object mapFromAttributes(Attributes attrs) throws NamingException {
 
         LdapUser user = new LdapUser();
-
         user.setFirstName(getAttributeValueAsString(attrs, CN, null));
         user.setLastName(getAttributeValueAsString(attrs, SN, null));
         user.setLang(getAttributeValueAsString(attrs, PREFERRED_LANGUAGE, "fi"));
         user.setOid(getAttributeValueAsString(attrs, EMPLOYEE_NUMBER, null));
+        user.setRoles(getAttributeValueAsString(attrs, DESCRIPTION, null));
         return user;
 
     }

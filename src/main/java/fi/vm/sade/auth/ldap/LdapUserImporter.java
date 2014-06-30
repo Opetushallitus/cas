@@ -112,6 +112,10 @@ public class LdapUserImporter {
             }
         });
     }
+    
+    public String getUserRolesAndGroups(String uid) {
+        return getLdapUser(uid).getRoles();
+    }
 
     public List<String> getUserLdapAttributes() {
         ldapTemplate.lookup((Name)null);
