@@ -232,6 +232,10 @@ public class AuthenticationUtil {
         this.customAttributeService = customAttributeService;
     }
 
+    public String getUserRoles(String uid) {
+        return ldapUserImporter.getUserRolesAndGroups(uid);
+    }
+    
     public List<String> getRoles(String uid) {
         String member = ldapUserImporter.getMemberString(uid);
         return ldapUserImporter.getUserLdapGroups(member);

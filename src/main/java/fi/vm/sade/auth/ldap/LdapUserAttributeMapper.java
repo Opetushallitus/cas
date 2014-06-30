@@ -19,6 +19,7 @@ public class LdapUserAttributeMapper implements AttributesMapper {
         user.setLastName(getAttributeValueAsString(attrs, "sn", null));
         user.setLang(getAttributeValueAsString(attrs, "preferredLanguage", "fi"));
         user.setOid(getAttributeValueAsString(attrs, "employeeNumber", null));
+        user.setRoles(getAttributeValueAsString(attrs, "description", null));
         return user;
     }
 
