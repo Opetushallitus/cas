@@ -32,6 +32,12 @@
             <version>${organisaatio.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>fi.vm.sade.log</groupId>
+            <artifactId>log-client</artifactId>
+            <version>6.1-SNAPSHOT</version>
+        </dependency>
+
         <!-- cas -->
         <dependency>
             <groupId>org.jasig.cas</groupId>
