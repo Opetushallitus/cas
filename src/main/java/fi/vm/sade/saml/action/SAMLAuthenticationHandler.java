@@ -1,10 +1,10 @@
 package fi.vm.sade.saml.action;
 
-import fi.vm.sade.AuthenticationUtil;
 import org.jasig.cas.authentication.handler.AuthenticationException;
-import org.jasig.cas.authentication.handler.AuthenticationHandler;
 import org.jasig.cas.authentication.handler.support.AbstractPreAndPostProcessingAuthenticationHandler;
 import org.jasig.cas.authentication.principal.Credentials;
+
+import fi.vm.sade.AuthenticationUtil;
 
 /**
  * User: tommiha
@@ -27,9 +27,6 @@ public class SAMLAuthenticationHandler extends AbstractPreAndPostProcessingAuthe
 
     @Override
     protected boolean preAuthenticate(Credentials credentials) {
-
-        authenticationUtil.tryToImportUserFromCustomOphAuthenticationService((SAMLCredentials) credentials);
-
         return true;
     }
 
