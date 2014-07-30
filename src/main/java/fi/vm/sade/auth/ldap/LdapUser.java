@@ -12,7 +12,7 @@ public class LdapUser {
     private String password;
     private String department;
     private String groups[] = new String[0];
-    // private String roles[] = new String[0];
+    private String roles;
     private String lang;
 
     public LdapUser() {
@@ -87,13 +87,13 @@ public class LdapUser {
         this.groups = groups;
     }
 
-    // public String[] getRoles() {
-    // return roles;
-    // }
+    public String getRoles() {
+        return roles;
+    }
 
-    // public void setRoles(String[] roles) {
-    // this.roles = roles;
-    // }
+    public void setRoles(String roles) {
+        this.roles = roles;
+    }
 
     public String toString() {
         StringBuffer buffer = new StringBuffer();
@@ -106,7 +106,8 @@ public class LdapUser {
         buffer.append(" firstName = ").append(firstName);
         buffer.append(" lastName = ").append(lastName);
         buffer.append(" password = ").append("******************"); // password
-        buffer.append(" roles = ").append(Arrays.toString(groups));
+        buffer.append(" roles = ").append(roles);
+        buffer.append(" groups = ").append(Arrays.toString(groups));
         buffer.append("]");
         return buffer.toString();
     }

@@ -32,23 +32,52 @@ public class AuthenticationUtil {
     private String rootOrganisaatioOid;
     private AuthenticationService authenticationService;
     private CustomAttributeService customAttributeService;
+    private boolean useAuthenticationService;
 
     protected Logger log = LoggerFactory.getLogger(this.getClass());
 
-    public boolean tryToImportUserFromCustomOphAuthenticationService(UsernamePasswordCredentials cred) {
+    @Deprecated
+    public boolean tryAuthenticationWithCustomOphAuthenticationService(
+            UsernamePasswordCredentials cred) {
         try {
-            IdentifiedHenkiloType henkilo = authenticationService.getIdentityByUsernameAndPassword(cred.getUsername(),
-                    cred.getPassword());
+            IdentifiedHenkiloType henkilo = authenticationService
+                    .getIdentityByUsernameAndPassword(cred.getUsername(),
+                            cred.getPassword(), true);
 
             // service vastasi, mutta käyttäjää ei löytynyt.
             if (henkilo == null) {
                 log.info("User not found.");
                 return false;
             }
-
-            tryToImport(henkilo, cred.getUsername(), cred.getPassword());
+            LdapUser user = getLdapUser(henkilo,  cred.getUsername(), cred.getPassword());
+            ldapUserImporter.update(user);
+            
         } catch (Exception e) {
-            log.warn("WARNING - problem with authentication backend, using only ldap.", e);
+            log.warn("WARNING - problem with authentication backend, using only ldap.");// ,
+                                                                                        // e);
+        }
+        return true;
+    }
+
+    @Deprecated
+    public boolean tryToImportUserFromCustomOphAuthenticationService(
+            UsernamePasswordCredentials cred) {
+
+        if (useAuthenticationService) {
+            log.error("DEBUG::Using Authentication Service!");
+            try {
+                IdentifiedHenkiloType henkilo = authenticationService.getIdentityByUsernameAndPassword(cred.getUsername(), cred.getPassword(), false);
+
+                // service vastasi, mutta käyttäjää ei löytynyt.
+                if (henkilo == null) {
+                    log.info("User not found.");
+                    return false;
+                }
+
+                tryToImport(henkilo, cred.getUsername(), cred.getPassword());
+            } catch (Exception e) {
+                log.warn("WARNING - problem with authentication backend, using only ldap.");//, e);
+            }
         }
         return true;
     }
@@ -64,7 +93,7 @@ public class AuthenticationUtil {
         }
     }
 
-    protected void tryToImport(IdentifiedHenkiloType henkilo, String username, String password) {
+    private LdapUser getLdapUser(IdentifiedHenkiloType henkilo, String username, String password) {
         log.info("CustomBindLdapAuthenticationHandler.preAuthenticate, henkilo: {}", henkilo.getIdentifier());
         LdapUser user = new LdapUser();
         user.setUid(username);
@@ -81,7 +110,12 @@ public class AuthenticationUtil {
             user.setEmail(henkilo.getEmail());
         }
         user.setPassword(password);
-
+        return user;
+    }
+    
+    protected void tryToImport(IdentifiedHenkiloType henkilo, String username, String password) {
+        log.info("CustomBindLdapAuthenticationHandler.preAuthenticate, henkilo: {}", henkilo.getIdentifier());
+        LdapUser user = getLdapUser(henkilo, username, password);
         if (henkilo.isPassivoitu()) {
             ldapUserImporter.remove(user);
             throw new UserDisabledException("User " + username + " is disabled.");
@@ -198,6 +232,10 @@ public class AuthenticationUtil {
         this.customAttributeService = customAttributeService;
     }
 
+    public String getUserRoles(String uid) {
+        return ldapUserImporter.getUserRolesAndGroups(uid);
+    }
+    
     public List<String> getRoles(String uid) {
         String member = ldapUserImporter.getMemberString(uid);
         return ldapUserImporter.getUserLdapGroups(member);
@@ -206,6 +244,13 @@ public class AuthenticationUtil {
     public LdapUser getUser(String uid) {
         return ldapUserImporter.getLdapUser(uid);
     }
-}
 
+    public boolean isUseAuthenticationService() {
+        return useAuthenticationService;
+    }
+
+    public void setUseAuthenticationService(boolean useAuthenticationService) {
+        this.useAuthenticationService = useAuthenticationService;
+    }
+}
 

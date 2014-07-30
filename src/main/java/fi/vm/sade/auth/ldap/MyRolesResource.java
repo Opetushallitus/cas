@@ -44,9 +44,12 @@ public class MyRolesResource extends AbstractController {
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
                     return;
                 }
-                // render roles string list as javascript/json array
-                final List<String> roles = authenticationUtil.getRoles(uid);
                 final PrintWriter writer = response.getWriter();
+                writer.print(authenticationUtil.getUserRoles(uid));
+                // render roles string list as javascript/json array
+                /* FIXME!! TÄMÄ KOODI PITÄÄ POISTAA SITTEN, KUN KAIKKIEN HENKILÖIDEN
+                 * RYHMÄTIEDOT ON SAATU GENEROITUA HENKILÖN ATTRIBUUTTEIHIN!!!
+                final List<String> roles = authenticationUtil.getRoles(uid);
                 writer.print("[\"USER_");
                 writer.print(uid);
                 writer.print("\"");
@@ -58,6 +61,7 @@ public class MyRolesResource extends AbstractController {
                     writer.print("\"");
                 }
                 writer.print("]");
+                */
             }
         });
     }

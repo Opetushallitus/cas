@@ -44,6 +44,11 @@ public class LdapUserImporter {
         this.ldapTemplate = ldapTemplate;
     }
 
+    public LdapUser update(final LdapUser user) {
+        save("People", user.getDepartment(), user.getUid(), buildAttributes(user), "uid", false);
+        return user;
+    }
+    
     public LdapUser save(final LdapUser user) {
         synchronized (user.getUid().intern()) {
 
@@ -106,6 +111,10 @@ public class LdapUserImporter {
                 return ((DirContextOperations)o).getStringAttribute("cn");
             }
         });
+    }
+    
+    public String getUserRolesAndGroups(String uid) {
+        return getLdapUser(uid).getRoles();
     }
 
     public List<String> getUserLdapAttributes() {

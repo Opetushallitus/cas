@@ -124,52 +124,17 @@
         <property name="authenticationHandlers">
             <list>
                 <!--
-                        | This is the authentication handler that authenticates services by means of callback via SSL, thereby validating
-                        | a server side SSL certificate.
-                        +-->
-                <!-- antti
-                    <bean class="org.jasig.cas.authentication.handler.support.HttpBasedServiceCredentialsAuthenticationHandler"
-                        p:httpClient-ref="httpClient" />
-                        -->
-                <!--
-                        | This is the authentication handler declaration that every CAS deployer will need to change before deploying CAS
-                        | into production.  The default SimpleTestUsernamePasswordAuthenticationHandler authenticates UsernamePasswordCredentials
-                        | where the username equals the password.  You will need to replace this with an AuthenticationHandler that implements your
-                        | local authentication strategy.  You might accomplish this by coding a new such handler and declaring
-                        | edu.someschool.its.cas.MySpecialHandler here, or you might use one of the handlers provided in the adaptors modules.
-                        +-->
-                <!-- antti
-                    <bean
-                        class="org.jasig.cas.authentication.handler.support.SimpleTestUsernamePasswordAuthenticationHandler" />
-                        -->
-                <!-- antti -->
-                
+                HUOM!! CASin beaneja CustomDatabaseAuthenticationHandler ja
+                CustomBindLdapAuthenticationHandler ei pidä lisätä tähän listaan
+                enää koskaan, koska LDAPin ylläpito vastuu on siirretty
+                Henkilöhallinnan puolelle!! 
+                 -->
                 <bean class="org.jasig.cas.adaptors.ldap.BindLdapAuthenticationHandler"
                       p:filter="${ldap.filter.people}"
                       p:searchBase="${ldap.search.base.people}"
                       p:contextSource-ref="contextSource">
                 </bean>
-                
-                <bean class="fi.vm.sade.auth.ldap.CustomBindLdapAuthenticationHandler"
-                      p:filter="${ldap.filter.people}"
-                      p:searchBase="${ldap.search.base.people}"
-                      p:contextSource-ref="contextSource"
-                       >
-                    <!--init-method="tryToImportOrganisaatios"-->
-        <!--p:searchBase="ou=system"-->
-                    <property name="authenticationUtil" ref="authenticationUtil"/>
-                </bean>
-                <!--p:filter="uid=%u,ou=system"-->
-                <!--p:searchBase=""-->
 
-                <!--p:filter="mail=%u"-->
-                <!--p:searchBase="ou=people,dc=example,dc=com"-->
-                <!--p:searchBase="o=sevenSeas"-->
-
-                <!-- antti: facebook/oauth -->
-                <!--<bean class="org.jasig.cas.support.oauth.authentication.handler.support.OAuthAuthenticationHandler">-->
-                    <!--<property name="configuration" ref="oauthConfig" />-->
-                <!--</bean>-->
                 <bean class="fi.vm.sade.auth.ldap.CustomOAuthAuthenticationHandler">
                     <property name="configuration" ref="oauthConfig" />
                     <property name="ldapUserImporter" ref="ldapUserImporter"/>
@@ -254,20 +219,6 @@
                     <property name="serviceId" value="^(https?|imaps?)://.*" />
                     <property name="evaluationOrder" value="10000001" />
                 </bean>
-                <!--
-                Use the following definition instead of the above to further restrict access
-                to services within your domain (including subdomains).
-                Note that example.com must be replaced with the domain you wish to permit.
-                -->
-                <!--
-                <bean class="org.jasig.cas.services.RegexRegisteredService">
-                    <property name="id" value="1" />
-                    <property name="name" value="HTTP and IMAP on example.com" />
-                    <property name="description" value="Allows HTTP(S) and IMAP(S) protocols on example.com" />
-                    <property name="serviceId" value="^(https?|imaps?)://([A-Za-z0-9_-]+\.)*example\.com/.*" />
-                    <property name="evaluationOrder" value="0" />
-                </bean>
-                -->
             </list>
         </property>
     </bean>
@@ -364,6 +315,7 @@
         <property name="organisaatioService" ref="organisaatioService"/>
         <property name="authenticationService" ref="authenticationService" />
         <property name="customAttributeService" ref="customAttributeService" />
+        <property name="useAuthenticationService" value="${cas.use.authentication.service:1}" />
     </bean>
 
 </beans>
