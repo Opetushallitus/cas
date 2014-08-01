@@ -46,13 +46,13 @@ public class AuthenticationUtil {
 
     protected Logger log = LoggerFactory.getLogger(this.getClass());
     
-    @PostConstruct
-    public void init() {
-        restClient.setWebCasUrl(webCasUrl);
-        restClient.setUsername(username);
-        restClient.setPassword(password);
-        restClient.setCasService(casService + "/j_spring_cas_security_check");
-    }
+//    @PostConstruct
+//    public void init() {
+//        restClient.setWebCasUrl(webCasUrl);
+//        restClient.setUsername(username);
+//        restClient.setPassword(password);
+//        restClient.setCasService(casService + "/j_spring_cas_security_check");
+//    }
 
     @Deprecated
     public boolean tryAuthenticationWithCustomOphAuthenticationService(
