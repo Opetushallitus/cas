@@ -38,6 +38,11 @@
             <version>6.1-SNAPSHOT</version>
         </dependency>
 
+        <dependency>
+            <groupId>fi.vm.sade.generic</groupId>
+            <artifactId>generic-common</artifactId>
+        </dependency>
+
         <!-- cas -->
         <dependency>
             <groupId>org.jasig.cas</groupId>
