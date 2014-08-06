@@ -27,7 +27,7 @@ public class ShibbolethAuthenticationHandler extends HttpServlet {
             throw new RuntimeException("Invalid message data");
         }
 
-        response.sendRedirect(/*redirectUrl*/"https://itest-virkailija.oph.ware.fi/cas/login?service=https%3A%2F%2Fitest-virkailija.oph.ware.fi%2Fregistration-ui%2Fhtml%2Findex.html%23%2Fregister" + "&authToken=" + identity);
+        response.sendRedirect(/*redirectUrl*/"https://test-virkailija.oph.ware.fi/cas/login?service=https%3A%2F%2Ftest-virkailija.oph.ware.fi%2Fregistration-ui%2Fhtml%2Findex.html%23%2Fregister" + "&authToken=" + identity);
     }
 /*
     public String getRedirectUrl() {
