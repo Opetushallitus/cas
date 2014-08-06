@@ -32,6 +32,17 @@
             <version>${organisaatio.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>fi.vm.sade.log</groupId>
+            <artifactId>log-client</artifactId>
+            <version>6.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>fi.vm.sade.generic</groupId>
+            <artifactId>generic-common</artifactId>
+        </dependency>
+
         <!-- cas -->
         <dependency>
             <groupId>org.jasig.cas</groupId>
@@ -138,6 +149,17 @@
             <artifactId>servlet-api</artifactId>
             <version>2.5</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${httpcomponents.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient-cache</artifactId>
+            <version>${httpcomponents.version}</version>
         </dependency>
 
         <!-- CAS ticket cache replication -->

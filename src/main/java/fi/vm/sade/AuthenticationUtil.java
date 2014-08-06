@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang.StringUtils;
 import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
@@ -18,6 +22,7 @@ import fi.vm.sade.authentication.service.CustomAttributeService;
 import fi.vm.sade.authentication.service.types.AccessRightType;
 import fi.vm.sade.authentication.service.types.IdentifiedHenkiloType;
 import fi.vm.sade.authentication.service.types.dto.CustomUserRoleType;
+import fi.vm.sade.generic.rest.CachingRestClient;
 import fi.vm.sade.organisaatio.api.model.OrganisaatioService;
 import fi.vm.sade.saml.action.SAMLCredentials;
 
@@ -33,28 +38,41 @@ public class AuthenticationUtil {
     private AuthenticationService authenticationService;
     private CustomAttributeService customAttributeService;
     private boolean useAuthenticationService;
+    
+    private String authenticationServiceRestUrl;
+    private String webCasUrl;
+    private String username;
+    private String password;
+    private String casService;
+    private CachingRestClient restClient = new CachingRestClient();
 
     protected Logger log = LoggerFactory.getLogger(this.getClass());
+    private static final Pattern hetuRegExp = Pattern.compile("([0-3][0-9])([0-1][0-9])([0-9]{2})(\\-|[A]|\\+)([0-9]{3})([0-9]|[A-Z])");
+    
+//    @PostConstruct
+//    public void init() {
+//        restClient.setWebCasUrl(webCasUrl);
+//        restClient.setUsername(username);
+//        restClient.setPassword(password);
+//        restClient.setCasService(casService + "/j_spring_cas_security_check");
+//    }
 
     @Deprecated
     public boolean tryAuthenticationWithCustomOphAuthenticationService(
             UsernamePasswordCredentials cred) {
         try {
-            IdentifiedHenkiloType henkilo = authenticationService
-                    .getIdentityByUsernameAndPassword(cred.getUsername(),
-                            cred.getPassword(), true);
+            IdentifiedHenkiloType henkilo = authenticationService.getIdentityByUsernameAndPassword(cred.getUsername(), cred.getPassword(), true);
 
             // service vastasi, mutta käyttäjää ei löytynyt.
             if (henkilo == null) {
                 log.info("User not found.");
                 return false;
             }
-            LdapUser user = getLdapUser(henkilo,  cred.getUsername(), cred.getPassword());
-            ldapUserImporter.update(user);
+//            LdapUser user = getLdapUser(henkilo,  cred.getUsername(), cred.getPassword());
+//            ldapUserImporter.update(user);
             
         } catch (Exception e) {
-            log.warn("WARNING - problem with authentication backend, using only ldap.");// ,
-                                                                                        // e);
+            log.warn("WARNING - problem with authentication backend, using only ldap.");
         }
         return true;
     }
@@ -84,10 +102,18 @@ public class AuthenticationUtil {
 
     public void tryToImportUserFromCustomOphAuthenticationService(SAMLCredentials cred) {
         try {
-            IdentifiedHenkiloType henkiloType = authenticationService.getIdentityByAuthToken(cred.getToken());
+            IdentifiedHenkiloType henkiloType = null;
+            Matcher m = hetuRegExp.matcher(cred.getToken());
+            if (m.matches()) {
+                henkiloType = restClient.get(authenticationServiceRestUrl + "cas/hetu/" + cred.getToken(), IdentifiedHenkiloType.class);
+            }
+            else {
+                henkiloType = restClient.get(authenticationServiceRestUrl + "cas/auth/" + cred.getToken(), IdentifiedHenkiloType.class);
+            }
             cred.setUserDetails(henkiloType);
-            tryToImport(henkiloType, henkiloType.getKayttajatiedot().getUsername(), cred.getToken());
-        } catch (Exception e) {
+//            tryToImport(henkiloType, henkiloType.getKayttajatiedot().getUsername(), cred.getToken());
+        }
+        catch (Exception e) {
             log.warn("WARNING - problem with authentication backend, using only ldap.", e);
             return;
         }
@@ -251,6 +277,46 @@ public class AuthenticationUtil {
 
     public void setUseAuthenticationService(boolean useAuthenticationService) {
         this.useAuthenticationService = useAuthenticationService;
+    }
+
+    public String getWebCasUrl() {
+        return webCasUrl;
+    }
+
+    public void setWebCasUrl(String webCasUrl) {
+        this.webCasUrl = webCasUrl;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getCasService() {
+        return casService;
+    }
+
+    public void setCasService(String casService) {
+        this.casService = casService;
+    }
+
+    public String getAuthenticationServiceRestUrl() {
+        return authenticationServiceRestUrl;
+    }
+
+    public void setAuthenticationServiceRestUrl(String authenticationServiceRestUrl) {
+        this.authenticationServiceRestUrl = authenticationServiceRestUrl;
     }
 }
 
