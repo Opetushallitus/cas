@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
 
@@ -45,6 +47,7 @@ public class AuthenticationUtil {
     private CachingRestClient restClient = new CachingRestClient();
 
     protected Logger log = LoggerFactory.getLogger(this.getClass());
+    private static final Pattern hetuRegExp = Pattern.compile("([0-3][0-9])([0-1][0-9])([0-9]{2})(\\-|[A]|\\+)([0-9]{3})([0-9]|[A-Z])");
     
 //    @PostConstruct
 //    public void init() {
@@ -99,7 +102,14 @@ public class AuthenticationUtil {
 
     public void tryToImportUserFromCustomOphAuthenticationService(SAMLCredentials cred) {
         try {
-            IdentifiedHenkiloType henkiloType = restClient.get(authenticationServiceRestUrl + "cas/auth/" + cred.getToken(), IdentifiedHenkiloType.class);
+            IdentifiedHenkiloType henkiloType = null;
+            Matcher m = hetuRegExp.matcher(cred.getToken());
+            if (m.matches()) {
+                henkiloType = restClient.get(authenticationServiceRestUrl + "cas/hetu/" + cred.getToken(), IdentifiedHenkiloType.class);
+            }
+            else {
+                henkiloType = restClient.get(authenticationServiceRestUrl + "cas/auth/" + cred.getToken(), IdentifiedHenkiloType.class);
+            }
             cred.setUserDetails(henkiloType);
 //            tryToImport(henkiloType, henkiloType.getKayttajatiedot().getUsername(), cred.getToken());
         }
