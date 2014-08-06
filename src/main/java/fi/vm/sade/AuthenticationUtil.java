@@ -106,7 +106,6 @@ public class AuthenticationUtil {
             Matcher m = hetuRegExp.matcher(cred.getToken());
             if (m.matches()) {
                 henkiloType = restClient.get(authenticationServiceRestUrl + "cas/hetu/" + cred.getToken(), IdentifiedHenkiloType.class);
-                log.error("DEBUG!! URL = " + authenticationServiceRestUrl + "cas/hetu/" + cred.getToken() + ", result = " + henkiloType);
             }
             else {
                 henkiloType = restClient.get(authenticationServiceRestUrl + "cas/auth/" + cred.getToken(), IdentifiedHenkiloType.class);
