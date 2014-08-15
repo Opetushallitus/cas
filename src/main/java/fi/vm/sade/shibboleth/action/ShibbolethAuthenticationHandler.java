@@ -1,7 +1,11 @@
 package fi.vm.sade.shibboleth.action;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Properties;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,7 +19,20 @@ public class ShibbolethAuthenticationHandler extends HttpServlet {
     private static final String SAML_ID_HEADER = "HTTP_REMOTE_USER";
     private static final String SAML_HETU_HEADER = "HTTP_HETU";
 
-//    private String redirectUrl;
+    private String redirectUrl;
+    
+    public void init(ServletConfig config) throws ServletException {
+        String host = null;
+        Properties props = new Properties();
+        try {
+            props.load(new FileInputStream(config.getInitParameter("propsLocation")));
+            host = props.getProperty("host.virkailija");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        redirectUrl = "https://" + host + "/cas/login?service=https%3A%2F%2F" + host + "%2Fregistration-ui%2Fhtml%2Findex.html%23%2Fregister&authToken=";
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, RuntimeException {
@@ -27,15 +44,6 @@ public class ShibbolethAuthenticationHandler extends HttpServlet {
             throw new RuntimeException("Invalid message data");
         }
 
-        response.sendRedirect(/*redirectUrl*/"https://test-virkailija.oph.ware.fi/cas/login?service=https%3A%2F%2Ftest-virkailija.oph.ware.fi%2Fregistration-ui%2Fhtml%2Findex.html%23%2Fregister" + "&authToken=" + identity);
+        response.sendRedirect(redirectUrl + identity);
     }
-/*
-    public String getRedirectUrl() {
-        return redirectUrl;
-    }
-
-    public void setRedirectUrl(String redirectUrl) {
-        this.redirectUrl = redirectUrl;
-    }
-    */
 }
