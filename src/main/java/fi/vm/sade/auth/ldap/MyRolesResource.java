@@ -45,23 +45,27 @@ public class MyRolesResource extends AbstractController {
                     return;
                 }
                 final PrintWriter writer = response.getWriter();
-                writer.print(authenticationUtil.getUserRoles(uid));
-                // render roles string list as javascript/json array
-                /* FIXME!! TÄMÄ KOODI PITÄÄ POISTAA SITTEN, KUN KAIKKIEN HENKILÖIDEN
-                 * RYHMÄTIEDOT ON SAATU GENEROITUA HENKILÖN ATTRIBUUTTEIHIN!!!
-                final List<String> roles = authenticationUtil.getRoles(uid);
-                writer.print("[\"USER_");
-                writer.print(uid);
-                writer.print("\"");
-                for (int i = 0; i < roles.size(); i++) {
-                    String role = roles.get(i);
-                    writer.print(", ");
-                    writer.print("\"");
-                    writer.print(role);
-                    writer.print("\"");
+                String userRoles = authenticationUtil.getUserRoles(uid);
+                if (userRoles != null) {
+                    writer.print(userRoles);
                 }
-                writer.print("]");
-                */
+                else {
+                    // render roles string list as javascript/json array
+                    // FIXME!! TÄMÄ KOODI PITÄÄ POISTAA SITTEN, KUN KAIKKIEN HENKILÖIDEN
+                    // RYHMÄTIEDOT ON SAATU GENEROITUA HENKILÖN ATTRIBUUTTEIHIN!!!
+                    final List<String> roles = authenticationUtil.getRoles(uid);
+                    writer.print("[\"USER_");
+                    writer.print(uid);
+                    writer.print("\"");
+                    for (int i = 0; i < roles.size(); i++) {
+                        String role = roles.get(i);
+                        writer.print(", ");
+                        writer.print("\"");
+                        writer.print(role);
+                        writer.print("\"");
+                    }
+                    writer.print("]");
+                }
             }
         });
     }
