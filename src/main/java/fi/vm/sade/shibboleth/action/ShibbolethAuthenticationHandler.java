@@ -16,7 +16,7 @@ public class ShibbolethAuthenticationHandler extends HttpServlet {
 
     private static final long serialVersionUID = -7820101462800860576L;
 
-    private static final String SAML_ID_HEADER = "HTTP_REMOTE_USER";
+    private static final String SAML_ID_HEADER = "REMOTE_USER";
     private static final String SAML_HETU_HEADER = "HTTP_HETU";
 
     private String redirectUrl;
