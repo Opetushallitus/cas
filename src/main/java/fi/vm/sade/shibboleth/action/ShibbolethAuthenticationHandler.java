@@ -2,6 +2,7 @@ package fi.vm.sade.shibboleth.action;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.Properties;
 
 import javax.servlet.ServletConfig;
@@ -11,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ShibbolethAuthenticationHandler extends HttpServlet {
 
@@ -18,6 +21,7 @@ public class ShibbolethAuthenticationHandler extends HttpServlet {
 
     private static final String SAML_ID_HEADER = "REMOTE_USER";
     private static final String SAML_HETU_HEADER = "HTTP_HETU";
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private String redirectUrl;
     
@@ -36,6 +40,18 @@ public class ShibbolethAuthenticationHandler extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, RuntimeException {
+        // FIXME!! VAIN DEBUG KÄYTTÖÖN!!!
+        try {
+            Enumeration<String> headers = request.getHeaderNames();
+            for (;headers.hasMoreElements();) {
+                String h = headers.nextElement();
+                log.error("DEBUG::header -- " + h + " = " + request.getHeader(h));
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        
         String identity = request.getHeader(SAML_ID_HEADER);
         if (StringUtils.isBlank(identity)) {
             identity = request.getHeader(SAML_HETU_HEADER);
