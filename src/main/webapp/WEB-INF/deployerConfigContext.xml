@@ -311,10 +311,6 @@
         <property name="useAuthenticationService" value="${cas.use.authentication.service:1}" />
         
         <property name="authenticationServiceRestUrl" value="${authentication-service.rest.url}" />
-        <property name="webCasUrl" value="${web.url.cas}" />
-        <property name="username" value="${serviceprovider.app.username.to.usermanagement}" />
-        <property name="password" value="${serviceprovider.app.password.to.usermanagement}" />
-        <property name="casService" value="${cas.service.authentication-service}" />
     </bean>
 
 </beans>
