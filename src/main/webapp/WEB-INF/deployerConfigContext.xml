@@ -131,7 +131,6 @@
 
                 <bean class="fi.vm.sade.auth.ldap.CustomOAuthAuthenticationHandler">
                     <property name="configuration" ref="oauthConfig" />
-                    <property name="ldapUserImporter" ref="ldapUserImporter"/>
                 </bean>
 
                 <bean class="fi.vm.sade.saml.action.SAMLAuthenticationHandler">
