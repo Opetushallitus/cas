@@ -1,6 +1,12 @@
 package fi.vm.sade.auth.ldap;
 
-import fi.vm.sade.AuthenticationUtil;
+import java.io.PrintWriter;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.jasig.cas.ticket.TicketGrantingTicket;
 import org.jasig.cas.ticket.registry.TicketRegistry;
 import org.jasig.cas.web.support.CookieRetrievingCookieGenerator;
@@ -8,11 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.mvc.AbstractController;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.PrintWriter;
-import java.util.List;
-import java.util.Map;
+import fi.vm.sade.AuthenticationUtil;
 
 /**
  * @author Antti Salonen

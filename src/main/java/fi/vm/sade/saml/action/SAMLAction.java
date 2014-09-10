@@ -1,17 +1,17 @@
 package fi.vm.sade.saml.action;
 
-import fi.vm.sade.authentication.service.AuthenticationService;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
+
 import org.jasig.cas.CentralAuthenticationService;
 import org.jasig.cas.authentication.principal.Credentials;
 import org.jasig.cas.ticket.TicketException;
 import org.jasig.cas.web.support.WebUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.webflow.action.AbstractAction;
 import org.springframework.webflow.execution.Event;
 import org.springframework.webflow.execution.RequestContext;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.NotNull;
+import fi.vm.sade.authentication.service.AuthenticationService;
 
 /**
  * User: tommiha
