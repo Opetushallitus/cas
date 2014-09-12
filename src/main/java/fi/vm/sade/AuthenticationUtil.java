@@ -76,22 +76,22 @@ public class AuthenticationUtil {
         return true;
     }
 
-    public void tryToImportUserFromCustomOphAuthenticationService(SAMLCredentials cred) {
+    public boolean tryToImportUserFromCustomOphAuthenticationService(SAMLCredentials cred) {
+        boolean success = false;
         try {
             IdentifiedHenkiloType henkiloType = null;
-            Matcher m = hetuRegExp.matcher(cred.getToken());
-            if (m.matches()) {
-                henkiloType = restClient.get(authenticationServiceRestUrl + "cas/hetu/" + cred.getToken(), IdentifiedHenkiloType.class);
+            henkiloType = restClient.get(authenticationServiceRestUrl + "cas/auth/" + cred.getToken(), IdentifiedHenkiloType.class);
+            
+            if (henkiloType != null) {
+                cred.setUserDetails(henkiloType);
+                success = true;
             }
-            else {
-                henkiloType = restClient.get(authenticationServiceRestUrl + "cas/auth/" + cred.getToken(), IdentifiedHenkiloType.class);
-            }
-            cred.setUserDetails(henkiloType);
         }
         catch (Exception e) {
             log.warn("WARNING - problem with authentication backend, using only ldap.", e);
-            return;
+            success = false;
         }
+        return success;
     }
 
     public LdapUserImporter getLdapUserImporter() {

@@ -28,9 +28,7 @@ public class SAMLAuthenticationHandler extends AbstractPreAndPostProcessingAuthe
     @Override
     protected boolean preAuthenticate(Credentials credentials) {
         
-        authenticationUtil.tryToImportUserFromCustomOphAuthenticationService((SAMLCredentials) credentials);
-        
-        return true;
+        return authenticationUtil.tryToImportUserFromCustomOphAuthenticationService((SAMLCredentials) credentials);
     }
 
     public AuthenticationUtil getAuthenticationUtil() {
