@@ -1,7 +1,5 @@
 package fi.vm.sade.auth.ldap;
 
-import java.util.Map;
-
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.StringUtils;
@@ -21,43 +19,19 @@ import org.slf4j.LoggerFactory;
  * "Extend" final OAuthAuthenticationHandler to do custom things (import user to
  * ldap) after authentication
  * 
+ * HUOM!! Tämä luokka pitää suunnitella uudestaan sitten kun/jos OAuthia halutaan alkaa käyttämään!!
+ * 
  * @author Antti Salonen
  */
 public class CustomOAuthAuthenticationHandler extends AbstractPreAndPostProcessingAuthenticationHandler {
 
-    private LdapUserImporter ldapUserImporter;
-
+    /**
+     * Tämä metodi pitää miettiä kokonaan uusiksi, jos OAuthia aletaan käyttämään! Tämä toteutus
+     * pitää muokata sellaiseksi, että se ottaa huomioon LDAPin päivittämisen poistumisen CASilta!
+     */
     @Override
     protected boolean postAuthenticate(Credentials credentials, boolean authenticated) {
-        // WARN! credentialssin tulostaminen paljastaa salasanan!!!
-        // log.debug("CustomOAuthAuthenticationHandler.postAuthenticate, cred: "+credentials);
-
-        OAuthCredentials cred = (OAuthCredentials) credentials;
-        Map<String, Object> attrs = cred.getUserProfile().getAttributes();
-
-        log.info("CustomOAuthAuthenticationHandler.postAuthenticate, token : " + cred.getUserProfile().getAccessToken());
-        log.info("CustomOAuthAuthenticationHandler.postAuthenticate, id    : " + cred.getUserProfile().getId());
-        log.info("CustomOAuthAuthenticationHandler.postAuthenticate, typeid: " + cred.getUserProfile().getTypedId());
-        log.info("CustomOAuthAuthenticationHandler.postAuthenticate, attrs : " + attrs);
-
-        // add user to ldap
-        LdapUser user = new LdapUser();
-        // user.setUid(attrs.get("username").toString()+"@facebook.com");
-        user.setUid(cred.getUserProfile().getTypedId());
-        user.setFirstName(attrs.get("first_name").toString());
-        user.setLastName(attrs.get("last_name").toString());
-        user.setEmail(attrs.get("username").toString() + "@facebook.com");
-        // user.setPassword();
-
-        log.info("CustomOAuthAuthenticationHandler.postAuthenticate, save user, uid: " + user.getUid());
-
-        ldapUserImporter.save(user);
-
         return true;
-    }
-
-    public void setLdapUserImporter(LdapUserImporter ldapUserImporter) {
-        this.ldapUserImporter = ldapUserImporter;
     }
 
     // REST IS COPYPASTE FROM CustomOAuthAuthenticationHandler
@@ -91,7 +65,8 @@ public class CustomOAuthAuthenticationHandler extends AbstractPreAndPostProcessi
         if (userProfile != null && StringUtils.isNotBlank(userProfile.getId())) {
             oauthCredentials.setUserProfile(userProfile);
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }

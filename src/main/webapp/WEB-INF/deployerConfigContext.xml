@@ -123,12 +123,6 @@
               +-->
         <property name="authenticationHandlers">
             <list>
-                <!--
-                HUOM!! CASin beaneja CustomDatabaseAuthenticationHandler ja
-                CustomBindLdapAuthenticationHandler ei pidä lisätä tähän listaan
-                enää koskaan, koska LDAPin ylläpito vastuu on siirretty
-                Henkilöhallinnan puolelle!! 
-                 -->
                 <bean class="org.jasig.cas.adaptors.ldap.BindLdapAuthenticationHandler"
                       p:filter="${ldap.filter.people}"
                       p:searchBase="${ldap.search.base.people}"
@@ -137,7 +131,6 @@
 
                 <bean class="fi.vm.sade.auth.ldap.CustomOAuthAuthenticationHandler">
                     <property name="configuration" ref="oauthConfig" />
-                    <property name="ldapUserImporter" ref="ldapUserImporter"/>
                 </bean>
 
                 <bean class="fi.vm.sade.saml.action.SAMLAuthenticationHandler">
@@ -318,10 +311,6 @@
         <property name="useAuthenticationService" value="${cas.use.authentication.service:1}" />
         
         <property name="authenticationServiceRestUrl" value="${authentication-service.rest.url}" />
-        <property name="webCasUrl" value="${web.url.cas}" />
-        <property name="username" value="${serviceprovider.app.username.to.usermanagement}" />
-        <property name="password" value="${serviceprovider.app.password.to.usermanagement}" />
-        <property name="casService" value="${cas.service.authentication-service}" />
     </bean>
 
 </beans>
