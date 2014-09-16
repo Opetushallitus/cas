@@ -36,7 +36,7 @@ public class ShibbolethAuthenticationHandler extends HttpServlet {
             host = props.getProperty("host.virkailija");
             hostOppija = props.getProperty("host.oppija");
             vetumaErrorPage = props.getProperty("vetuma.error.page");
-            authenticationServiceRestUrl = props.getProperty("authentication-service.rest.url");
+            authenticationServiceRestUrl = host + "/authentication-service/resources/cas/hetu/";
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -54,7 +54,7 @@ public class ShibbolethAuthenticationHandler extends HttpServlet {
             identity = request.getHeader(SAML_HETU_HEADER);
         }
         if (StringUtils.isNotBlank(identity)) {
-            String authToken = restClient.get(authenticationServiceRestUrl + "cas/hetu/" + identity, String.class);
+            String authToken = restClient.get(authenticationServiceRestUrl + identity, String.class);
             if (authToken != null) {
                 redirectUrl = successRedirectUrl + identity;
             }
