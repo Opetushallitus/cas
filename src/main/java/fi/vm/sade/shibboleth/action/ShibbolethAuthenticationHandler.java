@@ -36,7 +36,7 @@ public class ShibbolethAuthenticationHandler extends HttpServlet {
             host = props.getProperty("host.virkailija");
             hostOppija = props.getProperty("host.oppija");
             vetumaErrorPage = props.getProperty("vetuma.error.page");
-            authenticationServiceRestUrl = host + "/authentication-service/resources/cas/hetu/";
+            authenticationServiceRestUrl = "https://" + host + "/authentication-service/resources/cas/hetu/";
         }
         catch (Exception e) {
             e.printStackTrace();
