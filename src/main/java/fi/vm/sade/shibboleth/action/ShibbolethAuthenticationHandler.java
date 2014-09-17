@@ -56,7 +56,7 @@ public class ShibbolethAuthenticationHandler extends HttpServlet {
         if (StringUtils.isNotBlank(identity)) {
             String authToken = restClient.get(authenticationServiceRestUrl + identity, String.class);
             if (authToken != null) {
-                redirectUrl = successRedirectUrl + identity;
+                redirectUrl = successRedirectUrl + authToken;
             }
             else {
                 redirectUrl = failureRedirectUrl;
