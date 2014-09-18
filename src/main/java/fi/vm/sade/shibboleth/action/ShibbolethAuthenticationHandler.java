@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import fi.vm.sade.generic.rest.CachingRestClient;
 
@@ -25,6 +27,7 @@ public class ShibbolethAuthenticationHandler extends HttpServlet {
     private String failureRedirectUrl;
     private String authenticationServiceRestUrl;
     private CachingRestClient restClient = new CachingRestClient();
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     
     public void init(ServletConfig config) throws ServletException {
         String host = null;
@@ -47,25 +50,24 @@ public class ShibbolethAuthenticationHandler extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, RuntimeException {
-        String redirectUrl = "";
-        
+        String redirectUrl = failureRedirectUrl;
+
         String identity = request.getHeader(SAML_ID_HEADER);
         if (StringUtils.isBlank(identity)) {
             identity = request.getHeader(SAML_HETU_HEADER);
         }
         if (StringUtils.isNotBlank(identity)) {
-            String authToken = restClient.get(authenticationServiceRestUrl + identity, String.class);
-            if (authToken != null) {
-                redirectUrl = successRedirectUrl + authToken;
+            try {
+                String authToken = restClient.get(authenticationServiceRestUrl + identity, String.class);
+                if (authToken != null) {
+                    redirectUrl = successRedirectUrl + authToken;
+                }
             }
-            else {
-                redirectUrl = failureRedirectUrl;
+            catch (Exception e) {
+                logger.error("Internal error encountered", e);
             }
         }
-        else {
-            redirectUrl = failureRedirectUrl;
-        }
-
+        
         response.sendRedirect(redirectUrl);
     }
 }
