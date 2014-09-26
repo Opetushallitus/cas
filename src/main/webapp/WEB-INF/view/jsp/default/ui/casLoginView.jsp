@@ -104,8 +104,7 @@
 	</div>
 
 	<div class="grid16-11 offset-left-16-2 margin-vertical-2">
-		<div><a href="<c:url value="/Rekisteriseloste_opintopolku_180613.pdf" />">Rekisteriseloste</a></div>
-		<div><a href="<c:url value="/Tietosuojaseloste-opintopolku.htm" />">Tietosuoja</a></div>
+		<div><a href="<c:url value="https://opintopolku.fi/wp/fi/rekisteriseloste/" />">Rekisteriseloste</a></div>
 	</div>
 
 </div>
