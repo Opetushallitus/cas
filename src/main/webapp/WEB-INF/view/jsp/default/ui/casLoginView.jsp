@@ -103,7 +103,7 @@
 	    <a href="<c:url value="${hakaUrl}" />"><img src="<c:url value='/img/haka_landscape_medium.gif' /> "/></a>
 	</div>
 
-	<div class="grid16-11 offset-left-16-2 margin-vertical-2">
+	<div class="grid16-11 offset-right-16-1 margin-vertical-2">
 		<div><a href="<c:url value="https://opintopolku.fi/wp/fi/rekisteriseloste/" />">Rekisteriseloste</a></div>
 	</div>
 
