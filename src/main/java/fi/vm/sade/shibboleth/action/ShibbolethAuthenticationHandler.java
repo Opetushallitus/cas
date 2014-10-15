@@ -42,7 +42,7 @@ public class ShibbolethAuthenticationHandler extends HttpServlet {
             authenticationServiceRestUrl = "https://" + host + "/authentication-service/resources/cas/hetu/";
         }
         catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error instantiating ShibbolethAuthenticationHandler", e);
         }
         successRedirectUrl = "https://" + host + "/cas/login?service=https%3A%2F%2F" + host + "%2Fregistration-ui%2Fhtml%2Findex.html%23%2Fregister&authToken=";
         failureRedirectUrl = "https://" + hostOppija + vetumaErrorPage;
@@ -51,7 +51,6 @@ public class ShibbolethAuthenticationHandler extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, RuntimeException {
         String redirectUrl = failureRedirectUrl;
-
         String identity = request.getHeader(SAML_ID_HEADER);
         if (StringUtils.isBlank(identity)) {
             identity = request.getHeader(SAML_HETU_HEADER);
@@ -67,7 +66,7 @@ public class ShibbolethAuthenticationHandler extends HttpServlet {
                 logger.error("Internal error encountered", e);
             }
         }
-        
+
         response.sendRedirect(redirectUrl);
     }
 }
