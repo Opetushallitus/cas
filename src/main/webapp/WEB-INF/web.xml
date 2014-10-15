@@ -116,6 +116,23 @@
         <servlet-class>com.noelios.restlet.ext.spring.RestletFrameworkServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
+    
+    <!-- Shibboleth custom servlet -->
+    <servlet>
+        <servlet-name>shibboleth</servlet-name>
+        <servlet-class>fi.vm.sade.shibboleth.action.ShibbolethAuthenticationHandler</servlet-class>
+        <init-param>
+            <param-name>propsLocation</param-name>
+            <param-value>/data00/oph/authentication/oph-configuration/common.properties</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>shibboleth</servlet-name>
+        <url-pattern>/vetuma</url-pattern>
+    </servlet-mapping>
+    
     <servlet-mapping>
         <servlet-name>restlet</servlet-name>
         <url-pattern>/v1/*</url-pattern>

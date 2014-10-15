@@ -1,7 +1,11 @@
 package fi.vm.sade.auth.ldap;
 
+import java.util.List;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import org.jasig.cas.authentication.AbstractAuthenticationManager;
-import org.jasig.cas.authentication.AuthenticationManagerImpl;
 import org.jasig.cas.authentication.handler.AuthenticationException;
 import org.jasig.cas.authentication.handler.AuthenticationHandler;
 import org.jasig.cas.authentication.handler.BadCredentialsAuthenticationException;
@@ -10,10 +14,6 @@ import org.jasig.cas.authentication.principal.Credentials;
 import org.jasig.cas.authentication.principal.CredentialsToPrincipalResolver;
 import org.jasig.cas.authentication.principal.Principal;
 import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.util.List;
 
 /**
  * Synhronized authemnticate-metohod, otherwise copypaste from AuthenticationManagerImpl
