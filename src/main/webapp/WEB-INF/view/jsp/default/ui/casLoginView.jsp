@@ -95,6 +95,7 @@
             <input type="hidden" name="_eventId" value="submit" />
 
             <input class="button small primary" name="submit" accesskey="l" value="<spring:message code="screen.welcome.button.login" />" tabindex="4" type="submit" />
+            <a href="/registration-ui/html/index.html#/forgotPassword">Unohtuiko salasana?</a>
         </div>
 
     </form:form>
