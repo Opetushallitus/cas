@@ -4,36 +4,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.naming.NamingException;
-import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
 
 import org.springframework.ldap.core.AttributesMapper;
 
 public class LdapUserAttributeMapper implements AttributesMapper {
 
-    private static final String EMPLOYEE_NUMBER = "employeeNumber";
-    private static final String PREFERRED_LANGUAGE = "preferredLanguage";
-    private static final String SN = "sn";
-    private static final String CN = "cn";
-    private static final String DESCRIPTION = "description";
-
     private static final Logger LOG = LoggerFactory.getLogger(LdapUserImporter.class);
 
     @Override
     public Object mapFromAttributes(Attributes attrs) throws NamingException {
-
         LdapUser user = new LdapUser();
-        user.setFirstName(getAttributeValueAsString(attrs, CN, null));
-        user.setLastName(getAttributeValueAsString(attrs, SN, null));
-        user.setLang(getAttributeValueAsString(attrs, PREFERRED_LANGUAGE, "fi"));
-        user.setOid(getAttributeValueAsString(attrs, EMPLOYEE_NUMBER, null));
-        user.setRoles(getAttributeValueAsString(attrs, DESCRIPTION, null));
+        user.setFirstName(getAttributeValueAsString(attrs, "cn", null));
+        user.setLastName(getAttributeValueAsString(attrs, "sn", null));
+        user.setLang(getAttributeValueAsString(attrs, "preferredLanguage", "fi"));
+        user.setOid(getAttributeValueAsString(attrs, "employeeNumber", null));
+        user.setRoles(getAttributeValueAsString(attrs, "description", null));
         return user;
-
-    }
-
-    private boolean isNull(Attribute a) throws NamingException {
-        return a == null || a.get() == null;
     }
 
     private String getAttributeValueAsString(Attributes attrs, String key, String defaultValueIfNull) throws NamingException {
