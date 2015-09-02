@@ -55,7 +55,7 @@ P&aring; arbetsbordet loggar man in med anv&auml;ndarkoder, som man t.ex. f&arin
         <form:errors path="*" id="msg" cssClass="notification warning" element="div" />
 
         <div class="form-item">
-            <label for="username" class="form-label"><spring:message code="screen.welcome.label.netid" /></label>
+            <label for="username" class="form-label">K&auml;ytt&auml;j&auml;tunnus:</label>
             <c:if test="${not empty sessionScope.openIdLocalId}">
                 <strong>${sessionScope.openIdLocalId}</strong>
                 <input type="hidden" id="username" name="username" value="${sessionScope.openIdLocalId}" />
@@ -70,7 +70,7 @@ P&aring; arbetsbordet loggar man in med anv&auml;ndarkoder, som man t.ex. f&arin
         </div>
 
         <div class="form-item">
-            <label for="password" class="form-label"><spring:message code="screen.welcome.label.password" /></label>
+            <label for="password" class="form-label">Salasana:</label>
             <%--
                            NOTE: Certain browsers will offer the option of caching passwords for a user.  There is a non-standard attribute,
                            "autocomplete" that when set to "off" will tell certain browsers not to prompt to cache credentials.  For more
@@ -90,7 +90,7 @@ P&aring; arbetsbordet loggar man in med anv&auml;ndarkoder, som man t.ex. f&arin
             <input type="hidden" name="_eventId" value="submit" />
 
             <input class="button small primary" name="submit" accesskey="l" value="<spring:message code="screen.welcome.button.login" />" tabindex="4" type="submit" />
-            <a href="/registration-ui/html/index.html#/forgotPassword">Unohtuiko salasana?</a>
+            <a href="/registration-ui/html/index.html#/forgotPassword">Unohtuiko salasana / Har du glömt ditt lösenord?</a>
         </div>
 
     </form:form>
@@ -100,7 +100,7 @@ P&aring; arbetsbordet loggar man in med anv&auml;ndarkoder, som man t.ex. f&arin
 	</div>
 
 	<div class="grid16-11 offset-right-16-1 margin-vertical-2">
-		<div><a href="<c:url value="https://opintopolku.fi/wp/fi/rekisteriseloste/" />">Tietosuojaseloste / Dataskyddsbeskrivning</a></div>
+		<div><a href="<c:url value="https://opintopolku.fi/wp/fi/rekisteriseloste/" />">Tietosuojaseloste /</a> <a href="<c:url value="https://studieinfo.fi/wp/dataskyddsbeskrivning/" />">Dataskyddsbeskrivning</a></div>
 	</div>
 
 </div>
