@@ -90,7 +90,7 @@ P&aring; arbetsbordet loggar man in med anv&auml;ndarkoder, som man t.ex. f&arin
             <input type="hidden" name="_eventId" value="submit" />
 
             <input class="button small primary" name="submit" accesskey="l" value="<spring:message code="screen.welcome.button.login" />" tabindex="4" type="submit" />
-            <a href="/registration-ui/html/index.html#/forgotPassword">Unohtuiko salasana / Har du glömt ditt lösenord?</a>
+            <a href="/registration-ui/html/index.html#/forgotPassword">Unohtuiko salasana / Har du gl&ouml;mt ditt l&ouml;senord?</a>
         </div>
 
     </form:form>
