@@ -23,11 +23,6 @@
 <header id="siteheader" class="width-100">
     <div class="header-content">
         <img class="margin-left-2" src="<c:url value='/img/opintopolkufi.png' /> "/>
-
-        <a class="float-right margin-right-2" href="#">P&aring; svenska</a>
-        <span class="float-right margin-right-1">|</span>
-        <a class="bold float-right margin-right-1" href="#">Suomeksi</a>
-
     </div>
 </header>
 
@@ -41,18 +36,18 @@
 
 <div class="offset-left-16-2 grid16-6">
     <h1 class="margin-bottom-3 margin-top-0">
-        Opintopolku - Yll&auml;pidon ty&ouml;p&ouml;yt&auml;
+        Opintopolku - Virkailijan ty&ouml;p&ouml;yt&auml;
     </h1>
-    <p class="margin-bottom-3">
-        Yll&auml;pidon s&auml;hk&ouml;isell&auml; ty&ouml;p&ouml;yd&auml;ll&auml; voit hallinnoida Opintopolku.fi:ss&auml; n&auml;ytett&auml;vi&auml; koulutuksia ja organisaatiosi tietoja sek&auml; k&auml;sitell&auml; hakemuksia ja paikan vastaanottajia.
-    </p>
-    <p class="margin-bottom-3">
-        Tunnukset yll&auml;pidon ty&ouml;p&ouml;yd&auml;lle saat tarvittaessa organisaatiosi p&auml;&auml;k&auml;ytt&auml;j&auml;lt&auml;. Eri oppilaitosten     yll&auml;pit&auml;j&auml;t n&auml;kev&auml;t ty&ouml;p&ouml;yd&auml;ll&auml; osin eri palveluita k&auml;ytt&ouml;oikeuksiensa mukaan.
-    </p>
-    <p>
-        Yll&auml;pidon ty&ouml;p&ouml;yt&auml; on kehittyv&auml; palvelu. Ensimm&auml;isess&auml; vaiheessa ty&ouml;p&ouml;yd&auml;lt&auml; l&ouml;ytyv&auml;t opiskelijaksi ottamisen kannalta v&auml;ltt&auml;m&auml;tt&ouml;m&auml;t palvelut ja ohjeet koulutustarjonnan sy&ouml;tt&auml;misest&auml; hakemusten k&auml;sittelyyn. My&ouml;hemmin ty&ouml;p&ouml;yd&auml;lle saadaan my&ouml;s opetussuunnitelmien ja tutkintojen perusteet s&auml;hk&ouml;isess&auml; muodossa, ryhm&auml;ty&ouml;tiloja sek&auml; tiedonl&auml;hteit&auml;.
-    </p>
+    <p class="margin-bottom-5">
+Ty&ouml;p&ouml;yd&auml;lle kirjaudutaan tunnuksilla, jotka saa esimerkiksi oman organisaation Opintopolku-vastuu/p&auml;&auml;k&auml;ytt&auml;j&auml;lt&auml;. Ty&ouml;p&ouml;yd&auml;ll&auml; n&auml;kyv&auml;t virkailijapalvelut riippuvat k&auml;ytt&auml;j&auml;n k&auml;ytt&ouml;oikeuksista.   
+   </p>
+      <h1 class="margin-bottom-3 margin-top-1">
+        Studieinfo - Administrat&ouml;rens arbetsbord
+    </h1>
 
+  <p class="margin-bottom-3">
+P&aring; arbetsbordet loggar man in med anv&auml;ndarkoder, som man t.ex. f&aring;r av den egna organisationens ansvariga anv&auml;ndare eller huvudanv&auml;ndare. Anv&auml;ndarr&auml;ttigheterna avg&ouml;r vilka tj&auml;nster syns p&aring; arbetsbordet.  
+ </p>
 
 </div>
 <div class="offset-left-16-2 grid16-4" id="login">
@@ -105,7 +100,7 @@
 	</div>
 
 	<div class="grid16-11 offset-right-16-1 margin-vertical-2">
-		<div><a href="<c:url value="https://opintopolku.fi/wp/fi/rekisteriseloste/" />">Rekisteriseloste</a></div>
+		<div><a href="<c:url value="https://opintopolku.fi/wp/fi/rekisteriseloste/" />">Tietosuojaseloste / Dataskyddsbeskrivning</a></div>
 	</div>
 
 </div>
