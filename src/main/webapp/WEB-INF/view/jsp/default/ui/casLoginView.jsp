@@ -55,7 +55,7 @@ P&aring; arbetsbordet loggar man in med anv&auml;ndarkoder, som man t.ex. f&arin
         <form:errors path="*" id="msg" cssClass="notification warning" element="div" />
 
         <div class="form-item">
-            <label for="username" class="form-label">K&auml;ytt&auml;j&auml;tunnus:</label>
+            <label for="username" class="form-label">K&auml;ytt&auml;j&auml;tunnus / Anv&auml;ndarnamn:</label>
             <c:if test="${not empty sessionScope.openIdLocalId}">
                 <strong>${sessionScope.openIdLocalId}</strong>
                 <input type="hidden" id="username" name="username" value="${sessionScope.openIdLocalId}" />
@@ -70,7 +70,7 @@ P&aring; arbetsbordet loggar man in med anv&auml;ndarkoder, som man t.ex. f&arin
         </div>
 
         <div class="form-item">
-            <label for="password" class="form-label">Salasana:</label>
+            <label for="password" class="form-label">Salasana / L&ouml;senord:</label>
             <%--
                            NOTE: Certain browsers will offer the option of caching passwords for a user.  There is a non-standard attribute,
                            "autocomplete" that when set to "off" will tell certain browsers not to prompt to cache credentials.  For more
@@ -89,7 +89,7 @@ P&aring; arbetsbordet loggar man in med anv&auml;ndarkoder, som man t.ex. f&arin
             <input type="hidden" name="execution" value="${flowExecutionKey}" />
             <input type="hidden" name="_eventId" value="submit" />
 
-            <input class="button small primary" name="submit" accesskey="l" value="KIRJAUDU" tabindex="4" type="submit" />
+            <input class="button small primary" name="submit" accesskey="l" value="Kirjaudu / Logga in" tabindex="4" type="submit" />
         </div>
         <div class="row">
             <a href="/registration-ui/html/index.html#/forgotPassword">Unohtuiko salasana / Har du gl&ouml;mt ditt l&ouml;senord?</a>
