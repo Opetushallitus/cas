@@ -20,6 +20,15 @@
 --%>
 <jsp:directive.include file="includes/top.jsp" />
 
+<%
+    String targetServiceUrl = request.getParameter("service");
+
+    if (targetServiceUrl != null) {
+        targetServiceUrl = targetServiceUrl.replaceAll("j_spring_cas_security_check", "");
+        targetServiceUrl = targetServiceUrl.replaceAll("login/cas", "");
+    }
+
+%>
 <header id="siteheader" class="width-100">
     <div class="header-content">
         <img class="margin-left-2" src="<c:url value='/img/opintopolkufi.png' /> "/>
@@ -98,7 +107,7 @@ P&aring; arbetsbordet loggar man in med anv&auml;ndarkoder, som man t.ex. f&arin
     </form:form>
 
 	<div class="margin-vertical-2">
-	    <a href="<c:url value="${hakaUrl}" />"><img src="<c:url value='/img/haka_landscape_medium.gif' /> "/></a>
+	    <a href="<c:url value="${hakaUrl}?redirect=" /><%= targetServiceUrl %>"><img src="<c:url value='/img/haka_landscape_medium.gif' /> "/></a>
 	</div>
 
 	<div class="grid16-11 offset-right-16-1 margin-vertical-2">
