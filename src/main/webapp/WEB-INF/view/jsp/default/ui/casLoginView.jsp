@@ -26,6 +26,7 @@
     if (targetServiceUrl != null) {
         targetServiceUrl = targetServiceUrl.replaceAll("j_spring_cas_security_check", "");
         targetServiceUrl = targetServiceUrl.replaceAll("login/cas", "");
+        targetServiceUrl = java.net.URLEncoder.encode(targetServiceUrl, "UTF-8");
     }
 
 %>
