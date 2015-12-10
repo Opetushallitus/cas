@@ -222,6 +222,14 @@
                     <property name="serviceId" value="^(https?|imaps?)://([A-Za-z0-9_-]+\.)*(oiva\.minedu|oph\.ware|opintopolku|studyinfo|studieinfo|arvo\.csc|oph|oph\.reaktor|avoptest\.csc|avopsnap\.csc|amkoutetestapp\.csc|lataus\.ylioppilastutkinto)\.fi(/.*)?" />
                     <property name="evaluationOrder" value="0" />
                 </bean>
+
+                <bean class="org.jasig.cas.services.RegexRegisteredService">
+                    <property name="id" value="2" />
+                    <property name="name" value="HTTP and IMAP on example.com" />
+                    <property name="description" value="Allows HTTP(S) and IMAP(S) protocols on localhost" />
+                    <property name="serviceId" value="^(https?|imaps?)://localhost:8081/login/cas" />
+                    <property name="evaluationOrder" value="10" />
+                </bean>
             </list>
         </property>
     </bean>
