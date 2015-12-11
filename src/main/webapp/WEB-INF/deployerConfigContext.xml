@@ -187,7 +187,6 @@
             class="org.jasig.cas.services.InMemoryServiceRegistryDaoImpl">
         <property name="registeredServices">
             <list>
-                <!-- Whitelist for services allowed to use CAS -->
                 <bean class="org.jasig.cas.services.RegexRegisteredService">
                     <property name="id" value="1" />
                     <property name="name" value="Login whitelist" />
