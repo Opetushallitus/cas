@@ -187,48 +187,13 @@
             class="org.jasig.cas.services.InMemoryServiceRegistryDaoImpl">
         <property name="registeredServices">
             <list>
-
-                <!-- antti: facebook/oauth >
-                <bean class="org.jasig.cas.services.RegisteredServiceImpl">
-                    <property name="id" value="0"/>
-                    <property name="name" value="HTTP"/>
-                    <property name="description" value="Only Allows HTTP Urls"/>
-                    <property name="serviceId" value="http://**"/>
-                    <property name="evaluationOrder" value="10000001"/>
-                    <property name="allowedAttributes">
-                        <list>
-                            < facebook >
-                            <value>name</value>
-                            <value>first_name</value>
-                            <value>middle_name</value>
-                        </list>
-                    </property>
-                </bean>
-
-                <bean class="org.jasig.cas.services.RegexRegisteredService">
-                    <property name="id" value="0" />
-                    <property name="name" value="HTTP and IMAP" />
-                    <property name="description" value="Allows HTTP(S) and IMAP(S) protocols" />
-                    <!property name="serviceId" value="^(https?|imaps?)://.*" >
-                    <property name="serviceId" value="^(https?|imaps?)://.*(opintopolku|studyinfo|studienfo|oph\\.ware|arvo\\.csc|oph|oph\\.reaktor|avoptest\\.csc|avopsnap\\.csc|amkoutetestapp\\.csc|ylioppilastutkinto)\\.fi.*" />
-                    <property name="evaluationOrder" value="10000001" />
-                </bean-->
-                
                 <!-- Whitelist for services allowed to use CAS -->
                 <bean class="org.jasig.cas.services.RegexRegisteredService">
                     <property name="id" value="1" />
-                    <property name="name" value="HTTP and IMAP on example.com" />
-                    <property name="description" value="Allows HTTP(S) and IMAP(S) protocols on oph.ware.fi" />
-                    <property name="serviceId" value="^(https?|imaps?)://([A-Za-z0-9_-]+\.)*(oiva\.minedu|oph\.ware|opintopolku|studyinfo|studieinfo|arvo\.csc|oph|oph\.reaktor|avoptest\.csc|avopsnap\.csc|amkoutetestapp\.csc|lataus\.ylioppilastutkinto)\.fi(/.*)?" />
+                    <property name="name" value="Login whitelist" />
+                    <property name="description" value="Allows CAS login on domains in whitelist" />
+                    <property name="serviceId" value="${cas.whitelist.regexp}" />
                     <property name="evaluationOrder" value="0" />
-                </bean>
-
-                <bean class="org.jasig.cas.services.RegexRegisteredService">
-                    <property name="id" value="2" />
-                    <property name="name" value="HTTP and IMAP on example.com" />
-                    <property name="description" value="Allows HTTP(S) and IMAP(S) protocols on localhost" />
-                    <property name="serviceId" value="^(https?|imaps?)://localhost:8081/login/cas" />
-                    <property name="evaluationOrder" value="10" />
                 </bean>
             </list>
         </property>
