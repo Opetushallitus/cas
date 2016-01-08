@@ -131,6 +131,7 @@
           p:order="2">
         <property name="interceptors">
             <ref local="localeChangeInterceptor"/>
+            <ref bean="throttleInterceptor"/>
         </property>
     </bean>
 
