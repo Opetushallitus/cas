@@ -130,8 +130,10 @@
     <bean class="org.springframework.webflow.mvc.servlet.FlowHandlerMapping" p:flowRegistry-ref="flowRegistry"
           p:order="2">
         <property name="interceptors">
-            <ref local="localeChangeInterceptor"/>
-            <ref bean="throttleInterceptor"/>
+            <list>
+                <ref local="localeChangeInterceptor"/>
+                <ref bean="throttleInterceptor"/>
+            </list>
         </property>
     </bean>
 
