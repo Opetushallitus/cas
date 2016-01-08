@@ -6,7 +6,7 @@
 
     <bean id="throttleInterceptor" class="org.jasig.cas.web.support.InMemoryThrottledSubmissionByIpAddressAndUsernameHandlerInterceptorAdapter"
           p:failureRangeInSeconds="30"
-          p:failureThreshold="5"/>
+          p:failureThreshold="20"/>
 
     <bean id="throttleInterceptorJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
           p:targetObject-ref="throttleInterceptor"
