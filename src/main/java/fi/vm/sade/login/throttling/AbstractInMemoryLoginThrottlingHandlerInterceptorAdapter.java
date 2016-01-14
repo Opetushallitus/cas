@@ -94,4 +94,16 @@ public abstract class AbstractInMemoryLoginThrottlingHandlerInterceptorAdapter e
     public long getLimitForLoginFailures() {
         return limitForLoginFailures;
     }
+
+    public void setInitialLoginDelayInMillis(long initialLoginDelayInMillis) {
+        this.initialLoginDelayInMillis = initialLoginDelayInMillis;
+    }
+
+    public void setTimeLimitForLoginFailuresInMillis(long timeLimitForLoginFailuresInMillis) {
+        this.timeLimitForLoginFailuresInMillis = timeLimitForLoginFailuresInMillis;
+    }
+
+    public void setLimitForLoginFailures(long limitForLoginFailures) {
+        this.limitForLoginFailures = limitForLoginFailures;
+    }
 }
