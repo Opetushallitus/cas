@@ -8,10 +8,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class AbstractInMemoryLoginThrottlingHandlerInterceptorAdapter extends AbstractLoginThrottlingHandlerInterceptorAdapter implements InitializingBean {
 
     private ConcurrentMap<String, List<Long>> failedLogins = new ConcurrentHashMap<String, List<Long>>();
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractInMemoryLoginThrottlingHandlerInterceptorAdapter.class);
 
     private final long DEFAULT_INITIAL_LOGIN_DELAY_IN_MILLIS = 2000;
     private final long DEFAULT_TIME_LIMIT_FOR_LOGIN_FAILURES_IN_MILLIS = 24 * 60 * 60 * 1000;
@@ -39,12 +43,14 @@ public abstract class AbstractInMemoryLoginThrottlingHandlerInterceptorAdapter e
 
         List<Long> failedLoginTimes = failedLogins.get(key);
 
-        if( getLimitForLoginFailures() >= failedLoginTimes.size() ) {
+        if( getLimitForLoginFailures() <= failedLoginTimes.size() ) {
+            LOGGER.error("Too many {} login attempts for user {}!", failedLoginTimes.size(), key);
             return false;
         }
 
         long loginDelayEndTime = calculateLoginDelayEndTime(failedLogins.get(key));
-        return loginDelayEndTime < System.currentTimeMillis();
+        LOGGER.error("Allowing new login attempt after {} ms", loginDelayEndTime - System.currentTimeMillis());
+        return loginDelayEndTime <= System.currentTimeMillis();
     }
 
     @Override
@@ -64,11 +70,12 @@ public abstract class AbstractInMemoryLoginThrottlingHandlerInterceptorAdapter e
     }
 
     public void clean() {
-        String[] keys = (String[])failedLogins.keySet().toArray();
+        Object[] keys = failedLogins.keySet().toArray();
         for(int i = 0; i < keys.length; i++) {
-            List<Long> loginAttemptTimes = failedLogins.get(keys[i]);
+            String key = (String)keys[i];
+            List<Long> loginAttemptTimes = failedLogins.get(key);
             if(loginAttemptTimes.get(0) + getTimeLimitForLoginFailuresInMillis() <= System.currentTimeMillis()) {
-                failedLogins.remove(keys[i]);
+                failedLogins.remove(key);
             }
         }
     }
