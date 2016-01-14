@@ -55,6 +55,7 @@ public abstract class AbstractInMemoryLoginThrottlingHandlerInterceptorAdapter e
 
     @Override
     public void notifySuccessfullLogin(HttpServletRequest request) {
+        LOGGER.error("Succesfull login {}", createKey(request));
         failedLogins.remove(createKey(request));
     }
 
@@ -63,10 +64,12 @@ public abstract class AbstractInMemoryLoginThrottlingHandlerInterceptorAdapter e
         String key = createKey(request);
 
         if( !failedLogins.containsKey(key) ) {
+            LOGGER.error("First failed login {}", key);
             failedLogins.put(key, Arrays.asList(System.currentTimeMillis()));
         } else {
             List<Long> failedLoginTimes = failedLogins.get(key);
             failedLoginTimes.add(System.currentTimeMillis());
+            LOGGER.error("One more failed login {}", key);
             failedLogins.put(key, failedLoginTimes);
         }
         LOGGER.error("User {} has {} failed login attempts", key, failedLogins.get(key).size());
@@ -88,6 +91,7 @@ public abstract class AbstractInMemoryLoginThrottlingHandlerInterceptorAdapter e
         for(int i = 1; i < failedLoginTimes.size(); i++) {
             delay = delay * 2;
         }
+        LOGGER.error("Delay is {} from latest failed login {}", delay, failedLoginTimes.get(failedLoginTimes.size() - 1));
         return failedLoginTimes.get(failedLoginTimes.size() - 1) + delay;
     }
 

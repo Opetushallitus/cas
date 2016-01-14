@@ -6,8 +6,12 @@ import org.springframework.webflow.execution.RequestContext;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends HandlerInterceptorAdapter {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractLoginThrottlingHandlerInterceptorAdapter.class);
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -22,14 +26,17 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-
+        LOGGER.error("POST HANDLE");
         if (!isPostRequest(request)) {
+            LOGGER.error("NOT POST REQUEST");
             return;
         }
 
         if( hasSuccessfullAuthenticationEvent(request) ) {
+            LOGGER.error("NOTIFY SUCCESSFULL AUTH");
             notifySuccessfullLogin(request);
         } else {
+            LOGGER.error("NOTIFY FAILED ATTEMPT");
             notifyFailedLoginAttempt(request);
         }
     }
