@@ -65,8 +65,11 @@ public abstract class AbstractInMemoryLoginThrottlingHandlerInterceptorAdapter e
         if( !failedLogins.containsKey(key) ) {
             failedLogins.put(key, Arrays.asList(System.currentTimeMillis()));
         } else {
-            failedLogins.get(key).add(System.currentTimeMillis());
+            List<Long> failedLoginTimes = failedLogins.get(key);
+            failedLoginTimes.add(System.currentTimeMillis());
+            failedLogins.put(key, failedLoginTimes);
         }
+        LOGGER.error("User {} has {} failed login attempts", key, failedLogins.get(key).size());
     }
 
     public void clean() {
@@ -83,7 +86,7 @@ public abstract class AbstractInMemoryLoginThrottlingHandlerInterceptorAdapter e
     private long calculateLoginDelayEndTime(List<Long> failedLoginTimes) {
         long delay = getInitialLoginDelayInMillis();
         for(int i = 1; i < failedLoginTimes.size(); i++) {
-            delay *= 2;
+            delay = delay * 2;
         }
         return failedLoginTimes.get(failedLoginTimes.size() - 1) + delay;
     }
