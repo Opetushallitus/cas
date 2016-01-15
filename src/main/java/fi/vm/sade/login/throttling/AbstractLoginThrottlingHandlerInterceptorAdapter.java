@@ -35,7 +35,7 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
             LOGGER.error("Request attribute {}={}", attributeName, request.getAttribute(attributeName));
         }
 
-        if (!isPostRequest(request)) {
+        /*if (!isPostRequest(request)) {
             LOGGER.error("NOT POST REQUEST");
             return;
         }
@@ -46,7 +46,8 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
         } else {
             LOGGER.error("NOTIFY FAILED ATTEMPT");
             notifyFailedLoginAttempt(request);
-        }
+        }*/
+
     }
 
     private boolean isPostRequest(HttpServletRequest request) {
