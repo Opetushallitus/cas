@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Enumeration;
+
 public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends HandlerInterceptorAdapter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractLoginThrottlingHandlerInterceptorAdapter.class);
@@ -27,8 +29,12 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         LOGGER.error("POST HANDLE");
-        LOGGER.error("REQUEST {}", request);
-        LOGGER.error("RESPONSE {}", response);
+
+        for( Enumeration<String> attributeNames = request.getAttributeNames(); ; attributeNames.hasMoreElements() ) {
+            String attributeName = attributeNames.nextElement();
+            LOGGER.error("Request attribute {}={}", attributeName, request.getAttribute(attributeName));
+        }
+
         if (!isPostRequest(request)) {
             LOGGER.error("NOT POST REQUEST");
             return;
