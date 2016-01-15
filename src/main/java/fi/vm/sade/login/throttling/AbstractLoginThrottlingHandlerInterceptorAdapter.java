@@ -27,6 +27,8 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         LOGGER.error("POST HANDLE");
+        LOGGER.error("REQUEST {}", request);
+        LOGGER.error("RESPONSE {}", response);
         if (!isPostRequest(request)) {
             LOGGER.error("NOT POST REQUEST");
             return;
