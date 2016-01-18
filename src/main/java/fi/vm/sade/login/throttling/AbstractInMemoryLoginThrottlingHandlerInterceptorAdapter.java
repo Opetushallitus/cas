@@ -66,7 +66,9 @@ public abstract class AbstractInMemoryLoginThrottlingHandlerInterceptorAdapter e
 
         if( !failedLogins.containsKey(key) ) {
             LOGGER.error("First failed login {}", key);
-            failedLogins.put(key, Arrays.asList(System.currentTimeMillis()));
+            List<Long> failedLoginTimes = new ArrayList<Long>();
+            failedLoginTimes.add(System.currentTimeMillis());
+            failedLogins.put(key, failedLoginTimes);
         } else {
             LOGGER.error("Increasing failed login attempts.");
             List<Long> failedLoginTimes = failedLogins.get(key);
