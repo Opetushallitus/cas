@@ -62,12 +62,15 @@ public abstract class AbstractInMemoryLoginThrottlingHandlerInterceptorAdapter e
     public void notifyFailedLoginAttempt(HttpServletRequest request) {
         String key = createKey(request);
         LOGGER.error("Notifying failed login attempt for {}", key);
+        LOGGER.error("Contains key {}", failedLogins.containsKey(key));
 
         if( !failedLogins.containsKey(key) ) {
             LOGGER.error("First failed login {}", key);
             failedLogins.put(key, Arrays.asList(System.currentTimeMillis()));
         } else {
+            LOGGER.error("Increasing failed login attempts.");
             List<Long> failedLoginTimes = failedLogins.get(key);
+            LOGGER.error("GOT {}", failedLoginTimes);
             failedLoginTimes.add(System.currentTimeMillis());
             LOGGER.error("One more failed login {}", key);
             failedLogins.put(key, failedLoginTimes);

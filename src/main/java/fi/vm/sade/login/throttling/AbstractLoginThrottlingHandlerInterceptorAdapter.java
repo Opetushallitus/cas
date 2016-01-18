@@ -57,7 +57,7 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
         if( null == context || null == context.getCurrentEvent() ) {
             return false;
         }
-        LOGGER.error("Request context {}", context);
+        //LOGGER.error("Request context {}", context);
         return "success".equals(context.getCurrentEvent().getId());
     }
 
