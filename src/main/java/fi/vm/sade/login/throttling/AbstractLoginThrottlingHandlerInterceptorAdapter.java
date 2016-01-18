@@ -19,7 +19,8 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         if (isPostRequest(request) && !allowLoginAttempt(request)) {
-            response.sendError(403);
+            response.setIntHeader("Retry-After", 120);
+            response.sendError(503);
             return false;
         }
 
@@ -41,8 +42,6 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
         } else {
             LOGGER.error("NOTIFY FAILED ATTEMPT");
             long time = notifyFailedLoginAttempt(request);
-            response.setIntHeader("Retry-After", (int)(time / 1000));
-            response.sendError(503);
         }
 
 
