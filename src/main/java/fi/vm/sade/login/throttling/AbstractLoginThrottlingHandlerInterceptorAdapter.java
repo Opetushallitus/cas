@@ -41,7 +41,8 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
         } else {
             LOGGER.error("NOTIFY FAILED ATTEMPT");
             long time = notifyFailedLoginAttempt(request);
-            throw new Exception("Voit yrittää kirjautumista " + time + " ms kuluttua.");
+            response.setIntHeader("Retry-After", (int)(time / 1000));
+            response.sendError(503);
         }
 
 
