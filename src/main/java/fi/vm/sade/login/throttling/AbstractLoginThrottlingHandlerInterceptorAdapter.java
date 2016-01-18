@@ -18,30 +18,31 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        if (isPostRequest(request) && !allowLoginAttempt(request)) {
+        if (/*isPostRequest(request) &&*/ !allowLoginAttempt(request)) {
+            LOGGER.error("Not allowing login attempt");
             response.setIntHeader("Retry-After", 120);
             response.sendError(503);
             return false;
         }
-
+        LOGGER.error("Allowing login attempt.");
         return true;
     }
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        LOGGER.error("POST HANDLE");
+        /*LOGGER.error("POST HANDLE");
 
         if (!isPostRequest(request)) {
             LOGGER.error("NOT POST REQUEST");
             return;
-        }
+        }*/
 
         if( hasSuccessfullAuthenticationEvent(request) ) {
             LOGGER.error("NOTIFY SUCCESSFULL AUTH");
             notifySuccessfullLogin(request);
         } else {
             LOGGER.error("NOTIFY FAILED ATTEMPT");
-            long time = notifyFailedLoginAttempt(request);
+            notifyFailedLoginAttempt(request);
         }
 
 
@@ -64,6 +65,6 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
 
     public abstract void notifySuccessfullLogin(HttpServletRequest request);
 
-    public abstract long notifyFailedLoginAttempt(HttpServletRequest request);
+    public abstract void notifyFailedLoginAttempt(HttpServletRequest request);
 
 }

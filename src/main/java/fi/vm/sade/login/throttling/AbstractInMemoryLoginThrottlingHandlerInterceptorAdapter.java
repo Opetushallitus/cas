@@ -4,7 +4,9 @@ import org.springframework.beans.factory.InitializingBean;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Min;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -38,6 +40,7 @@ public abstract class AbstractInMemoryLoginThrottlingHandlerInterceptorAdapter e
         String key = createKey(request);
 
         if(!failedLogins.containsKey(key)) {
+            LOGGER.error("No failed login attempst for {}", key);
             return true;
         }
 
@@ -49,7 +52,7 @@ public abstract class AbstractInMemoryLoginThrottlingHandlerInterceptorAdapter e
         }
 
         long loginDelayEndTime = calculateLoginDelayEndTime(failedLogins.get(key));
-        LOGGER.error("Allowing new login attempt after {} ms", loginDelayEndTime - System.currentTimeMillis());
+        LOGGER.error("Allowing new login attempt at {} ms", new SimpleDateFormat("dd-MM-yyyy").format(new Date(loginDelayEndTime)));
         return loginDelayEndTime <= System.currentTimeMillis();
     }
 
@@ -60,7 +63,7 @@ public abstract class AbstractInMemoryLoginThrottlingHandlerInterceptorAdapter e
     }
 
     @Override
-    public long notifyFailedLoginAttempt(HttpServletRequest request) {
+    public void notifyFailedLoginAttempt(HttpServletRequest request) {
         String key = createKey(request);
 
         if( !failedLogins.containsKey(key) ) {
@@ -73,7 +76,6 @@ public abstract class AbstractInMemoryLoginThrottlingHandlerInterceptorAdapter e
             failedLogins.put(key, failedLoginTimes);
         }
         LOGGER.error("User {} has {} failed login attempts", key, failedLogins.get(key).size());
-        return calculateLoginDelayEndTime(failedLogins.get(key));
     }
 
     public void clean() {
