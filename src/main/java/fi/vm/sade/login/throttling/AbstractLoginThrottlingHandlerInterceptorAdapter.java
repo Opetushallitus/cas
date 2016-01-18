@@ -43,7 +43,9 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
         } else {
             LOGGER.error("NOTIFY FAILED ATTEMPT");
             notifyFailedLoginAttempt(request);
-            throw new Exception("Virhe!");
+            LOGGER.error("View name " + modelAndView.getViewName());
+            LOGGER.error("model" + modelAndView.getModel());
+            LOGGER.error("" + modelAndView.toString());
         }
 
 
