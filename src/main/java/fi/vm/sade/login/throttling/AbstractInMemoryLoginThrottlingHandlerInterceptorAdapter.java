@@ -5,17 +5,13 @@ import org.springframework.beans.factory.InitializingBean;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Min;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public abstract class AbstractInMemoryLoginThrottlingHandlerInterceptorAdapter extends AbstractLoginThrottlingHandlerInterceptorAdapter implements InitializingBean {
 
-    private ConcurrentMap<String, List<Long>> failedLogins = new ConcurrentHashMap<String, List<Long>>();
+    private Map<String, List<Long>> failedLogins = new HashMap<String, List<Long>>();
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractInMemoryLoginThrottlingHandlerInterceptorAdapter.class);
 
@@ -52,7 +48,7 @@ public abstract class AbstractInMemoryLoginThrottlingHandlerInterceptorAdapter e
         }
 
         long loginDelayEndTime = calculateLoginDelayEndTime(failedLogins.get(key));
-        LOGGER.error("Allowing new login attempt at {} ms", new SimpleDateFormat("dd-MM-yyyy").format(new Date(loginDelayEndTime)));
+        LOGGER.error("Allowing new login attempt at {}", new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date(loginDelayEndTime)));
         return loginDelayEndTime <= System.currentTimeMillis();
     }
 
@@ -65,6 +61,7 @@ public abstract class AbstractInMemoryLoginThrottlingHandlerInterceptorAdapter e
     @Override
     public void notifyFailedLoginAttempt(HttpServletRequest request) {
         String key = createKey(request);
+        LOGGER.error("Notifying failed login attempt for {}", key);
 
         if( !failedLogins.containsKey(key) ) {
             LOGGER.error("First failed login {}", key);
