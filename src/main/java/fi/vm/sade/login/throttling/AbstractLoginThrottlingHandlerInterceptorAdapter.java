@@ -30,12 +30,7 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         LOGGER.error("POST HANDLE");
 
-        for( Enumeration<String> attributeNames = request.getAttributeNames(); ; attributeNames.hasMoreElements() ) {
-            String attributeName = attributeNames.nextElement();
-            LOGGER.error("Request attribute {}={}", attributeName, request.getAttribute(attributeName));
-        }
-
-        /*if (!isPostRequest(request)) {
+        if (!isPostRequest(request)) {
             LOGGER.error("NOT POST REQUEST");
             return;
         }
@@ -45,8 +40,10 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
             notifySuccessfullLogin(request);
         } else {
             LOGGER.error("NOTIFY FAILED ATTEMPT");
-            notifyFailedLoginAttempt(request);
-        }*/
+            long time = notifyFailedLoginAttempt(request);
+            throw new Exception("Voit yrittää kirjautumista " + time + " ms kuluttua.");
+        }
+
 
     }
 
@@ -67,6 +64,6 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
 
     public abstract void notifySuccessfullLogin(HttpServletRequest request);
 
-    public abstract void notifyFailedLoginAttempt(HttpServletRequest request);
+    public abstract long notifyFailedLoginAttempt(HttpServletRequest request);
 
 }

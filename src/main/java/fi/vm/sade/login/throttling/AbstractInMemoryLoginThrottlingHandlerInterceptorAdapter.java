@@ -60,7 +60,7 @@ public abstract class AbstractInMemoryLoginThrottlingHandlerInterceptorAdapter e
     }
 
     @Override
-    public void notifyFailedLoginAttempt(HttpServletRequest request) {
+    public long notifyFailedLoginAttempt(HttpServletRequest request) {
         String key = createKey(request);
 
         if( !failedLogins.containsKey(key) ) {
@@ -73,6 +73,7 @@ public abstract class AbstractInMemoryLoginThrottlingHandlerInterceptorAdapter e
             failedLogins.put(key, failedLoginTimes);
         }
         LOGGER.error("User {} has {} failed login attempts", key, failedLogins.get(key).size());
+        return calculateLoginDelayEndTime(failedLogins.get(key));
     }
 
     public void clean() {
