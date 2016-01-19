@@ -49,7 +49,8 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
             LOGGER.error("NOTIFY FAILED ATTEMPT");
             notifyFailedLoginAttempt(request);
             LOGGER.error("Redirect {}", request.getRequestURL());
-            response.sendRedirect(request.getRequestURL().toString() + "&tooManyLoginAttempts=true");
+            response.sendRedirect("http://www.siili.fi");
+            //response.sendRedirect(request.getRequestURL().toString() + "&tooManyLoginAttempts=true");
         }
 
     }
