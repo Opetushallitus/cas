@@ -19,13 +19,24 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        if (/*isPostRequest(request) &&*/ !allowLoginAttempt(request) && null == request.getParameter("tooManyLoginAttempts")) {
+        long allowLoginAttemptInMs = allowLoginAttempt(request);
+
+        if(allowLoginAttemptInMs != 0 && null == request.getParameter("tooManyLoginAttempts")) {
+            LOGGER.error("Not allowing login attempt; too many attempts");
+
+            String service = request.getParameter("service");
+
+            response.sendRedirect(request.getRequestURI() + "?tooManyLoginAttempts=" + allowLoginAttemptInMs + "&service=" + service);
+            return false;
+        }
+
+        /*if (isPostRequest(request) && !allowLoginAttempt(request) && null == request.getParameter("tooManyLoginAttempts")) {
             LOGGER.error("Not allowing login attempt");
             response.sendRedirect(request.getRequestURI() + "?tooManyLoginAttempts=true");
             //response.setIntHeader("Retry-After", 120);
             //response.sendError(503);
             return false;
-        }
+        }*/
         LOGGER.error("Allowing login attempt.");
         return true;
     }
@@ -69,7 +80,7 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
         return "success".equals(context.getCurrentEvent().getId());
     }
 
-    public abstract boolean allowLoginAttempt(HttpServletRequest request);
+    public abstract long allowLoginAttempt(HttpServletRequest request);
 
     public abstract void notifySuccessfullLogin(HttpServletRequest request);
 
