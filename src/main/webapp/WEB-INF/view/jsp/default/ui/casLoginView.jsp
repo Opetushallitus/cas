@@ -29,7 +29,8 @@
         targetServiceUrl = java.net.URLEncoder.encode(targetServiceUrl, "UTF-8");
     }
 
-    String tooManyAttempts = request.getParameter("tooManyLoginAttempts");
+    String loginDelay = request.getParameter("waitBeforeNextLogin");
+    boolean showDelayBox = null != loginDelay;
 
 %>
 <header id="siteheader" class="width-100">
@@ -66,10 +67,10 @@ P&aring; arbetsbordet loggar man in med anv&auml;ndarkoder, som man t.ex. f&arin
     <form:form method="post" cssClass="fm-v clearfix" commandName="${commandName}" htmlEscape="true">
         <form:errors path="*" id="msg" cssClass="notification warning" element="div" />
 
-        <div id="msg3" cssClass="notification warning"><strong><%= targetServiceUrl %></strong></div>
+        <div id="msg3" cssClass="notification warning"><strong><%= loginDelay %></strong></div>
 
-        <c:if test="${null != tooManyAttempts}" >
-            <div id="msg2" cssClass="notification warning"><strong>Liikaa yrityksiä!</strong></div>
+        <c:if test="${showDelayBox}" >
+            <div id="msg2" cssClass="notification warning"><strong>Liikaa yrityksiä! Yritä uudelleen: <%=loginDelay%> ms päästä...%></strong></div>
         </c:if>
 
         <div class="form-item">

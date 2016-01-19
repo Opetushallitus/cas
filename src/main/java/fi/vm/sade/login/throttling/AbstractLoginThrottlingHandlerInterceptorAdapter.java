@@ -19,7 +19,22 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        long allowLoginAttemptInMs = allowLoginAttempt(request);
+        if(!isPostRequest(request)) {
+            return true;
+        }
+
+        long loginDelay = getLoginDelay(request);
+
+        if(0 != loginDelay /*&& null == request.getParameter("waitBeforeNextLogin")*/ ) {
+            LOGGER.error("Not allowing login attempt.");
+
+            String service = request.getParameter("service");
+            response.sendRedirect(request.getRequestURI() + "?service=" + service + "&waitBeforeNextLogin=" + loginDelay);
+
+            return false;
+        }
+
+        /*long allowLoginAttemptInMs = allowLoginAttempt(request);
 
         if(allowLoginAttemptInMs != 0 && null == request.getParameter("tooManyLoginAttempts")) {
             LOGGER.error("Not allowing login attempt; too many attempts");
@@ -28,7 +43,7 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
 
             response.sendRedirect(request.getRequestURI() + "?tooManyLoginAttempts=" + allowLoginAttemptInMs + "&service=" + service);
             return false;
-        }
+        }*/
 
         /*if (isPostRequest(request) && !allowLoginAttempt(request) && null == request.getParameter("tooManyLoginAttempts")) {
             LOGGER.error("Not allowing login attempt");
@@ -43,12 +58,12 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        /*LOGGER.error("POST HANDLE");
+        /*LOGGER.error("POST HANDLE");*/
 
         if (!isPostRequest(request)) {
             LOGGER.error("NOT POST REQUEST");
             return;
-        }*/
+        }
 
         /*LOGGER.error("View name " + modelAndView.getViewName());
         LOGGER.error("model" + modelAndView.getModel());
@@ -80,7 +95,9 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
         return "success".equals(context.getCurrentEvent().getId());
     }
 
-    public abstract long allowLoginAttempt(HttpServletRequest request);
+    //public abstract boolean allowLoginAttempt(HttpServletRequest request);
+
+    public abstract long getLoginDelay(HttpServletRequest request);
 
     public abstract void notifySuccessfullLogin(HttpServletRequest request);
 

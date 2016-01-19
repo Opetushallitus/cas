@@ -32,24 +32,26 @@ public abstract class AbstractInMemoryLoginThrottlingHandlerInterceptorAdapter e
     }
 
     @Override
-    public long allowLoginAttempt(HttpServletRequest request) {
+    public long getLoginDelay(HttpServletRequest request) {
         String key = createKey(request);
 
         if(!failedLogins.containsKey(key)) {
             LOGGER.error("No failed login attempst for {}", key);
-            return 0l;
+            return 0;
         }
 
         List<Long> failedLoginTimes = failedLogins.get(key);
 
         if( getLimitForLoginFailures() <= failedLoginTimes.size() ) {
             LOGGER.error("Too many {} login attempts for user {}!", failedLoginTimes.size(), key);
-            return -1l;
+            return Long.MAX_VALUE;
         }
 
-        long loginDelayEndTime = calculateLoginDelayEndTime(failedLogins.get(key));
+        return calculateLoginDelay(failedLoginTimes);
+
+        /*long loginDelayEndTime = calculateLoginDelayEndTime(failedLogins.get(key));
         LOGGER.error("Allowing new login attempt at {}", new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date(loginDelayEndTime)));
-        return loginDelayEndTime - System.currentTimeMillis();
+        return loginDelayEndTime <= System.currentTimeMillis();*/
     }
 
     @Override
@@ -91,14 +93,23 @@ public abstract class AbstractInMemoryLoginThrottlingHandlerInterceptorAdapter e
         }
     }
 
-    private long calculateLoginDelayEndTime(List<Long> failedLoginTimes) {
+    private long calculateLoginDelay(List<Long> failedLoginTimes) {
+        long delay = getInitialLoginDelayInMillis();
+        for(int i = 1; i < failedLoginTimes.size(); i++) {
+            delay = delay * 2;
+        }
+        LOGGER.error("Delay is {} from latest failed login {}", delay, new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date(failedLoginTimes.size() - 1)));
+        return delay;
+    }
+
+    /*private long calculateLoginDelayEndTime(List<Long> failedLoginTimes) {
         long delay = getInitialLoginDelayInMillis();
         for(int i = 1; i < failedLoginTimes.size(); i++) {
             delay = delay * 2;
         }
         LOGGER.error("Delay is {} from latest failed login {}", delay, failedLoginTimes.get(failedLoginTimes.size() - 1));
         return failedLoginTimes.get(failedLoginTimes.size() - 1) + delay;
-    }
+    }*/
 
     public abstract String createKey(HttpServletRequest request);
 
