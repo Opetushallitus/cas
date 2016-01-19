@@ -2,6 +2,7 @@ package fi.vm.sade.login.throttling;
 
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import org.springframework.webflow.engine.RequestControlContext;
 import org.springframework.webflow.execution.RequestContext;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,10 +48,9 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
         } else {
             LOGGER.error("NOTIFY FAILED ATTEMPT");
             notifyFailedLoginAttempt(request);
-            modelAndView.addObject("msg", "moi");
-            LOGGER.error("Added moi.");
+            LOGGER.error("Redirect {}", request.getRequestURL());
+            response.sendRedirect(request.getRequestURL().toString() + "&tooManyLoginAttempts=true");
         }
-
 
     }
 
@@ -63,7 +63,7 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
         if( null == context || null == context.getCurrentEvent() ) {
             return false;
         }
-        //LOGGER.error("Request context {}", context);
+        LOGGER.error("currentFormObject {}", context.getFlowScope().get("currentFormObject"));
         return "success".equals(context.getCurrentEvent().getId());
     }
 
