@@ -37,17 +37,18 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
             return;
         }*/
 
-        LOGGER.error("View name " + modelAndView.getViewName());
+        /*LOGGER.error("View name " + modelAndView.getViewName());
         LOGGER.error("model" + modelAndView.getModel());
-        LOGGER.error("" + modelAndView.toString());
-        
+        LOGGER.error("" + modelAndView.toString());*/
+
         if( hasSuccessfullAuthenticationEvent(request) ) {
             LOGGER.error("NOTIFY SUCCESSFULL AUTH");
             notifySuccessfullLogin(request);
         } else {
             LOGGER.error("NOTIFY FAILED ATTEMPT");
             notifyFailedLoginAttempt(request);
-
+            modelAndView.addObject("msg", "moi");
+            LOGGER.error("Added moi.");
         }
 
 
