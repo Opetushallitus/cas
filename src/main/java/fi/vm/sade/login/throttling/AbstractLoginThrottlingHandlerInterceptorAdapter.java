@@ -19,7 +19,7 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        if (/*isPostRequest(request) &&*/ !allowLoginAttempt(request)) {
+        if (/*isPostRequest(request) &&*/ !allowLoginAttempt(request) && null == request.getParameter("tooManyLoginAttempts")) {
             LOGGER.error("Not allowing login attempt");
             response.sendRedirect(request.getRequestURI() + "?tooManyLoginAttempts=true");
             //response.setIntHeader("Retry-After", 120);
