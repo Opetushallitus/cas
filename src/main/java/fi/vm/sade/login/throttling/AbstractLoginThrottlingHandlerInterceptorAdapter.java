@@ -21,8 +21,9 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
 
         if (/*isPostRequest(request) &&*/ !allowLoginAttempt(request)) {
             LOGGER.error("Not allowing login attempt");
-            response.setIntHeader("Retry-After", 120);
-            response.sendError(503);
+            response.sendRedirect(request.getRequestURI() + "?tooManyLoginAttempts=true");
+            //response.setIntHeader("Retry-After", 120);
+            //response.sendError(503);
             return false;
         }
         LOGGER.error("Allowing login attempt.");
