@@ -32,24 +32,24 @@ public abstract class AbstractInMemoryLoginThrottlingHandlerInterceptorAdapter e
     }
 
     @Override
-    public boolean allowLoginAttempt(HttpServletRequest request) {
+    public long allowLoginAttempt(HttpServletRequest request) {
         String key = createKey(request);
 
         if(!failedLogins.containsKey(key)) {
             LOGGER.error("No failed login attempst for {}", key);
-            return true;
+            return 0l;
         }
 
         List<Long> failedLoginTimes = failedLogins.get(key);
 
         if( getLimitForLoginFailures() <= failedLoginTimes.size() ) {
             LOGGER.error("Too many {} login attempts for user {}!", failedLoginTimes.size(), key);
-            return false;
+            return -1l;
         }
 
         long loginDelayEndTime = calculateLoginDelayEndTime(failedLogins.get(key));
         LOGGER.error("Allowing new login attempt at {}", new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date(loginDelayEndTime)));
-        return loginDelayEndTime <= System.currentTimeMillis();
+        return loginDelayEndTime - System.currentTimeMillis();
     }
 
     @Override
