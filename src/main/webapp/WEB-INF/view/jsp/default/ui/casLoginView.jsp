@@ -29,7 +29,7 @@
         targetServiceUrl = java.net.URLEncoder.encode(targetServiceUrl, "UTF-8");
     }
 
-    String tooManyAttempts = request.getParameter("tooManyAttempts");
+    String tooManyAttempts = request.getParameter("tooManyLoginAttempts");
 
 %>
 <header id="siteheader" class="width-100">
@@ -65,6 +65,8 @@ P&aring; arbetsbordet loggar man in med anv&auml;ndarkoder, som man t.ex. f&arin
 <div class="offset-left-16-2 grid16-4" id="login">
     <form:form method="post" cssClass="fm-v clearfix" commandName="${commandName}" htmlEscape="true">
         <form:errors path="*" id="msg" cssClass="notification warning" element="div" />
+
+        <div id="msg3" cssClass="notification warning"><strong><%= targetServiceUrl %></strong></div>
 
         <c:if test="${null != tooManyAttempts}" >
             <div id="msg2" cssClass="notification warning"><strong>Liikaa yrityksiä!</strong></div>
