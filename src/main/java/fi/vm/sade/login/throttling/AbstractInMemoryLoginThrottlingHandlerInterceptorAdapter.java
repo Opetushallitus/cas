@@ -95,7 +95,7 @@ public abstract class AbstractInMemoryLoginThrottlingHandlerInterceptorAdapter e
         long loginDelay = calculateLoginDelay(failedLoginTimes);
         long lastLoginTime = failedLoginTimes.get(failedLoginTimes.size() -1 );
 
-        return (int)((System.currentTimeMillis() - (lastLoginTime + loginDelay)) / 1000 );
+        return (int)(((lastLoginTime + loginDelay) - System.currentTimeMillis()) / 1000 );
     }
 
     private long calculateLoginDelay(List<Long> failedLoginTimes) {
