@@ -23,7 +23,7 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
             return true;
         }
 
-        long loginDelay = getLoginDelay(request);
+        long loginDelay = getSecondsToAllowLogin(request);
 
         if(0 != loginDelay /*&& null == request.getParameter("waitBeforeNextLogin")*/ ) {
             LOGGER.error("Not allowing login attempt.");
@@ -95,9 +95,7 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
         return "success".equals(context.getCurrentEvent().getId());
     }
 
-    //public abstract boolean allowLoginAttempt(HttpServletRequest request);
-
-    public abstract long getLoginDelay(HttpServletRequest request);
+    public abstract int getSecondsToAllowLogin(HttpServletRequest request);
 
     public abstract void notifySuccessfullLogin(HttpServletRequest request);
 

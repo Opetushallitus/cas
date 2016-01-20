@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.SystemEnvironmentPropertySource;
 
 public abstract class AbstractInMemoryLoginThrottlingHandlerInterceptorAdapter extends AbstractLoginThrottlingHandlerInterceptorAdapter implements InitializingBean {
 
@@ -32,26 +33,22 @@ public abstract class AbstractInMemoryLoginThrottlingHandlerInterceptorAdapter e
     }
 
     @Override
-    public long getLoginDelay(HttpServletRequest request) {
+    public int getSecondsToAllowLogin(HttpServletRequest request) {
         String key = createKey(request);
 
         if(!failedLogins.containsKey(key)) {
-            LOGGER.error("No failed login attempst for {}", key);
             return 0;
         }
 
         List<Long> failedLoginTimes = failedLogins.get(key);
 
         if( getLimitForLoginFailures() <= failedLoginTimes.size() ) {
-            LOGGER.error("Too many {} login attempts for user {}!", failedLoginTimes.size(), key);
-            return Long.MAX_VALUE;
+            return -1;
         }
 
-        return calculateLoginDelay(failedLoginTimes);
+        int currentLoginDelay = calculateCurrentLoginDelay(failedLoginTimes);
 
-        /*long loginDelayEndTime = calculateLoginDelayEndTime(failedLogins.get(key));
-        LOGGER.error("Allowing new login attempt at {}", new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date(loginDelayEndTime)));
-        return loginDelayEndTime <= System.currentTimeMillis();*/
+        return 0 < currentLoginDelay ? currentLoginDelay : 0;
     }
 
     @Override
@@ -91,6 +88,14 @@ public abstract class AbstractInMemoryLoginThrottlingHandlerInterceptorAdapter e
                 failedLogins.remove(key);
             }
         }
+    }
+
+    private int calculateCurrentLoginDelay(List<Long> failedLoginTimes) {
+
+        long loginDelay = calculateLoginDelay(failedLoginTimes);
+        long lastLoginTime = failedLoginTimes.get(failedLoginTimes.size() -1 );
+
+        return (int)((System.currentTimeMillis() - (lastLoginTime + loginDelay)) / 1000 );
     }
 
     private long calculateLoginDelay(List<Long> failedLoginTimes) {

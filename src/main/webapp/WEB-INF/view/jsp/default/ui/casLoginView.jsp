@@ -69,9 +69,7 @@ P&aring; arbetsbordet loggar man in med anv&auml;ndarkoder, som man t.ex. f&arin
 
         <div id="msg3" cssClass="notification warning"><strong><%= loginDelay %></strong></div>
 
-        <c:if test="${showDelayBox}" >
-            <div id="msg2" cssClass="notification warning"><strong>Liikaa yrityksiä! Yritä uudelleen: <%=loginDelay%> ms päästä...%></strong></div>
-        </c:if>
+        <div id="msg2" cssClass="notification warning"><strong>Liikaa yrityksiä! Yritä uudelleen: <%=loginDelay%> ms päästä...%></strong></div>
 
         <div class="form-item">
             <label for="username" class="form-label">K&auml;ytt&auml;j&auml;tunnus / Anv&auml;ndarnamn:</label>
