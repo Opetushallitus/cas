@@ -34,6 +34,8 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
             return false;
         }
 
+
+
         /*long allowLoginAttemptInMs = allowLoginAttempt(request);
 
         if(allowLoginAttemptInMs != 0 && null == request.getParameter("tooManyLoginAttempts")) {
@@ -75,10 +77,11 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
         } else {
             LOGGER.error("NOTIFY FAILED ATTEMPT");
             notifyFailedLoginAttempt(request);
-            LOGGER.error("Redirect {}", request.getRequestURL());
-            response.sendRedirect("http://www.siili.fi");
-            //response.sendRedirect(request.getRequestURL().toString() + "&tooManyLoginAttempts=true");
         }
+
+        LOGGER.error("Trying to read model and view... {}", modelAndView == null);
+        LOGGER.error(modelAndView.toString());
+        LOGGER.error(modelAndView.getModel().toString());
 
     }
 
