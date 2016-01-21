@@ -1,5 +1,6 @@
 package fi.vm.sade.login.throttling;
 
+import org.jasig.cas.web.support.WebUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.webflow.engine.RequestControlContext;
@@ -79,10 +80,6 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
             notifyFailedLoginAttempt(request);
         }
 
-        LOGGER.error("Trying to read model and view... {}", modelAndView == null);
-        LOGGER.error(modelAndView.toString());
-        LOGGER.error(modelAndView.getModel().toString());
-
     }
 
     private boolean isPostRequest(HttpServletRequest request) {
@@ -94,7 +91,15 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
         if( null == context || null == context.getCurrentEvent() ) {
             return false;
         }
-        LOGGER.error("currentFormObject {}", context.getFlowScope().get("currentFormObject"));
+        LOGGER.error(WebUtils.CAS_ACCESS_DENIED_REASON);
+
+        Enumeration names = request.getAttributeNames();
+        LOGGER.error("ATTRIBUTES....");
+        while(names.hasMoreElements()) {
+            String attribute = (String)names.nextElement();
+            LOGGER.error("{}={}", attribute, request.getAttribute(attribute));
+        }
+
         return "success".equals(context.getCurrentEvent().getId());
     }
 
