@@ -29,11 +29,11 @@
         targetServiceUrl = java.net.URLEncoder.encode(targetServiceUrl, "UTF-8");
     }
 
-    String loginDelay = request.getParameter("waitBeforeNextLogin");
+    /*String loginDelay = request.getParameter("waitBeforeNextLogin");
     boolean showDelayBox = null != loginDelay;
 
     Object attribute = request.getAttribute("loginWaitTime");
-    String attributeString = null == attribute ? "NULL" : attribute.toString();
+    String attributeString = null == attribute ? "NULL" : attribute.toString();*/
 
 %>
 <header id="siteheader" class="width-100">
@@ -70,9 +70,9 @@ P&aring; arbetsbordet loggar man in med anv&auml;ndarkoder, som man t.ex. f&arin
     <form:form method="post" cssClass="fm-v clearfix" commandName="${commandName}" htmlEscape="true">
         <form:errors path="*" id="msg" cssClass="notification warning" element="div" />
 
-        <div id="msg3" cssClass="notification warning"><strong><%= loginDelay %></strong></div>
+        <!--div id="msg3" cssClass="notification warning"><strong--><!--%= loginDelay %--><!--/strong></div-->
 
-        <div id="msg4" cssClass="notification warning"><strong><%= attributeString %></strong></div>
+        <!--div id="msg4" cssClass="notification warning"><strong--><!--%= attributeString %--><!--/strong></div-->
 
         <div class="form-item">
             <label for="username" class="form-label">K&auml;ytt&auml;j&auml;tunnus / Anv&auml;ndarnamn:</label>

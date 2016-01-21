@@ -24,13 +24,13 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
             return true;
         }
 
-        long loginDelay = getSecondsToAllowLogin(request);
+        int loginDelay = getSecondsToAllowLogin(request);
 
         if(0 != loginDelay /*&& null == request.getParameter("waitBeforeNextLogin")*/ ) {
             LOGGER.error("Not allowing login attempt.");
 
-            request.setAttribute("loginWaitTime", loginDelay);
-            response.setStatus(200);
+            response.setIntHeader("LoginDelay", loginDelay);
+            response.sendError(503);
             //String service = request.getParameter("service");
             //response.sendRedirect(request.getRequestURI() + "?service=" + service + "&waitBeforeNextLogin=" + loginDelay);
 
@@ -80,14 +80,14 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
         } else {
             LOGGER.error("NOTIFY FAILED ATTEMPT");
             notifyFailedLoginAttempt(request);
-            LOGGER.error("SETTING ATTRIBUTE");
-            request.setAttribute("loginWaitTime", getSecondsToAllowLogin(request));
-            LOGGER.error("ATTRIBUTE SET");
-            Enumeration names = request.getAttributeNames();
+            //LOGGER.error("SETTING ATTRIBUTE");
+            //request.setAttribute("loginWaitTime", getSecondsToAllowLogin(request));
+            //LOGGER.error("ATTRIBUTE SET");
+            /*Enumeration names = request.getAttributeNames();
             while(names.hasMoreElements()) {
                 String attribute = (String)names.nextElement();
                 LOGGER.error("{}={}", attribute, request.getAttribute(attribute));
-            }
+            }*/
         }
 
     }

@@ -42,6 +42,10 @@ public abstract class AbstractInMemoryLoginThrottlingHandlerInterceptorAdapter e
 
         List<Long> failedLoginTimes = failedLogins.get(key);
 
+        if(failedLoginTimes.size() <= 5) {
+            return 0;
+        }
+
         if( getLimitForLoginFailures() <= failedLoginTimes.size() ) {
             return -1;
         }

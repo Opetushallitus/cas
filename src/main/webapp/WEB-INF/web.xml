@@ -65,14 +65,14 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-    <filter>
+    <!--filter>
         <filter-name>LoginThrottlingFilter</filter-name>
         <filter-class>fi.vm.sade.login.throttling.LoginThrottlingFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>LoginThrottlingFilter</filter-name>
         <url-pattern>/login</url-pattern>
-    </filter-mapping>
+    </filter-mapping-->
 
     <!--
       - Loads the CAS ApplicationContext.
@@ -293,6 +293,11 @@
     <error-page>
         <error-code>403</error-code>
         <location>/403.html</location>
+    </error-page>
+
+    <error-page>
+        <error-code>503</error-code>
+        <location>/WEB-INF/view/jsp/503.jsp</location>
     </error-page>
 
     <welcome-file-list>
