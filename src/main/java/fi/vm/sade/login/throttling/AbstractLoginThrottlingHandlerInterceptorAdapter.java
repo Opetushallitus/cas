@@ -78,6 +78,14 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
         } else {
             LOGGER.error("NOTIFY FAILED ATTEMPT");
             notifyFailedLoginAttempt(request);
+            LOGGER.error("SETTING ATTRIBUTE");
+            request.setAttribute("loginWaitTime", getSecondsToAllowLogin(request));
+            LOGGER.error("ATTRIBUTE SET");
+            Enumeration names = request.getAttributeNames();
+            while(names.hasMoreElements()) {
+                String attribute = (String)names.nextElement();
+                LOGGER.error("{}={}", attribute, request.getAttribute(attribute));
+            }
         }
 
     }
@@ -91,15 +99,6 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
         if( null == context || null == context.getCurrentEvent() ) {
             return false;
         }
-        LOGGER.error(WebUtils.CAS_ACCESS_DENIED_REASON);
-
-        Enumeration names = request.getAttributeNames();
-        LOGGER.error("ATTRIBUTES....");
-        while(names.hasMoreElements()) {
-            String attribute = (String)names.nextElement();
-            LOGGER.error("{}={}", attribute, request.getAttribute(attribute));
-        }
-
         return "success".equals(context.getCurrentEvent().getId());
     }
 
