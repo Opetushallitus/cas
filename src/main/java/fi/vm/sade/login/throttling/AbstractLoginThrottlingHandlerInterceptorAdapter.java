@@ -29,8 +29,10 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
         if(0 != loginDelay /*&& null == request.getParameter("waitBeforeNextLogin")*/ ) {
             LOGGER.error("Not allowing login attempt.");
 
-            String service = request.getParameter("service");
-            response.sendRedirect(request.getRequestURI() + "?service=" + service + "&waitBeforeNextLogin=" + loginDelay);
+            request.setAttribute("loginWaitTime", loginDelay);
+            response.setStatus(200);
+            //String service = request.getParameter("service");
+            //response.sendRedirect(request.getRequestURI() + "?service=" + service + "&waitBeforeNextLogin=" + loginDelay);
 
             return false;
         }
