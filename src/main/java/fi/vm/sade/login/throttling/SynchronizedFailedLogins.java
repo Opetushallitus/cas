@@ -22,7 +22,7 @@ public class SynchronizedFailedLogins {
 
     public Long[] get(String key) {
         synchronized (loginMap) {
-            return loginMap.containsKey(key) ? new Long[0] : loginMap.get(key).toArray(new Long[0]);
+            return loginMap.containsKey(key) ? loginMap.get(key).toArray(new Long[0]) : new Long[0];
         }
     }
 
