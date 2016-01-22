@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class SynchronizedFailedLogins {
     private Map<String, List<Long>> loginMap = new HashMap<String, List<Long>>();
@@ -35,14 +36,17 @@ public class SynchronizedFailedLogins {
         }
     }
 
-    public void clean() {
-        long comparisonTime = System.currentTimeMillis() - (24 * 60 * 60 * 1000);
+    public void clean(int timeLimitInMinutes) {
+
+        long timeLimitInMillis = TimeUnit.MINUTES.toMillis(timeLimitInMinutes);
+        long currentTime = System.currentTimeMillis();
+
         synchronized (loginMap) {
             Object[] keys = loginMap.keySet().toArray();
             for(int i = 0; i < keys.length; i++) {
                 String key = (String) keys[i];
                 long firstLogin = loginMap.get(key).get(0);
-                if(firstLogin <= comparisonTime) {
+                if(firstLogin + timeLimitInMillis <= currentTime) {
                     loginMap.remove(key);
                 }
             }

@@ -4,8 +4,6 @@ import org.springframework.beans.factory.InitializingBean;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Min;
-import java.text.SimpleDateFormat;
-import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -33,7 +31,10 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
 
     @Override
     public void afterPropertiesSet() throws Exception {
-
+        LOGGER.info("Setting initial login delay in minutes to {}", getInitialLoginDelayInMinutes());
+        LOGGER.info("Setting time limit for login failures in minutes to {}", getTimeLimitForLoginFailuresInMinutes());
+        LOGGER.info("Setting max limit for login failures in minutes to {}", getMaxLimitForLoginFailures());
+        LOGGER.info("Setting min limit for login failures in minutes to {}", getMinLimitForLoginFailures());
     }
 
     @Override
@@ -47,30 +48,37 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
         }
 
         if( getMaxLimitForLoginFailures() <= numberOfFailedLogins) {
+            LOGGER.warn("Maximum limit {} of failed login attempts reached for user {}", getMaxLimitForLoginFailures(), key);
             return -1;
         }
 
         int currentLoginDelay = calculateCurrentLoginDelay(key);
+
+        LOGGER.info("Current login delay for user {} is {} minutes.", key, currentLoginDelay);
 
         return 0 < currentLoginDelay ? currentLoginDelay : 0;
     }
 
     @Override
     public void notifySuccessfullLogin(HttpServletRequest request) {
-        LOGGER.error("Succesfull login {}", createKey(request));
+        LOGGER.debug("Succesfull login for {}. Cleaning failed logins.", createKey(request));
         failedLogins.remove(createKey(request));
     }
 
     @Override
     public void notifyFailedLoginAttempt(HttpServletRequest request) {
+
         String key = createKey(request);
-        LOGGER.error("Notifying failed login attempt for {}", key);
         failedLogins.add(key, System.currentTimeMillis());
-        LOGGER.error("User {} has {} failed login attempts", key, failedLogins.size(key));
+
+        if(LOGGER.isDebugEnabled()) {
+            LOGGER.debug("User {} has {} failed login attempts.", key, failedLogins.size(key));
+        }
     }
 
     public void clean() {
-        failedLogins.clean();
+        LOGGER.info("Resetting failed logins older than {} minutes.", getTimeLimitForLoginFailuresInMinutes());
+        failedLogins.clean(getTimeLimitForLoginFailuresInMinutes());
     }
 
     private int calculateCurrentLoginDelay(String key) {
@@ -78,8 +86,6 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
 
         long loginDelay = calculateLoginDelay(failedLoginTimes.length);
         long lastLoginTime = failedLoginTimes[failedLoginTimes.length-1];
-
-        LOGGER.error("Delay is {} m from latest failed login {}", loginDelay, new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date(lastLoginTime)));
 
         long nextAllowedLoginTimeMillis = lastLoginTime + TimeUnit.MINUTES.toMillis(loginDelay);
         long delayToNextLoginMillis = nextAllowedLoginTimeMillis - System.currentTimeMillis();

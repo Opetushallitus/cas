@@ -6,13 +6,9 @@ import org.springframework.webflow.execution.RequestContext;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 public abstract class AbstractLoginFailureHandlerInterceptorAdapter extends HandlerInterceptorAdapter {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractLoginFailureHandlerInterceptorAdapter.class);
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -24,7 +20,6 @@ public abstract class AbstractLoginFailureHandlerInterceptorAdapter extends Hand
         int loginDelay = getMinutesToAllowLogin(request);
 
         if(0 != loginDelay ) {
-            LOGGER.error("Not allowing login attempt in {} minutes.", loginDelay);
             response.sendError(503);
             return false;
         }
