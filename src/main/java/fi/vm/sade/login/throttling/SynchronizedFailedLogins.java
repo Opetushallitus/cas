@@ -10,7 +10,7 @@ public class SynchronizedFailedLogins {
 
     public int size(String key) {
         synchronized (loginMap) {
-            return loginMap.containsKey(key) ? 0 : loginMap.get(key).size();
+            return loginMap.containsKey(key) ? loginMap.get(key).size() : 0;
         }
     }
 
