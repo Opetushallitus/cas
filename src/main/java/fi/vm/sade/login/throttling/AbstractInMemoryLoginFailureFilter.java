@@ -71,7 +71,7 @@ public abstract class AbstractInMemoryLoginFailureFilter extends AbstractLoginFa
         Long[] failedLoginTimes = failedLogins.get(key);
 
         long loginDelay = calculateLoginDelay(failedLoginTimes.length);
-        long lastLoginTime = failedLoginTimes[failedLoginTimes.length];
+        long lastLoginTime = failedLoginTimes[failedLoginTimes.length-1];
 
         LOGGER.error("Delay is {} m from latest failed login {}", loginDelay, new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date(lastLoginTime)));
 
