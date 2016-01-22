@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Min;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,11 +81,10 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
 
         LOGGER.error("Delay is {} m from latest failed login {}", loginDelay, new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date(lastLoginTime)));
 
-        long nextAllowedLoginTime = lastLoginTime + (loginDelay * 60 * 1000);
+        long nextAllowedLoginTimeMillis = lastLoginTime + TimeUnit.MINUTES.toMillis(loginDelay);
+        long delayToNextLoginMillis = nextAllowedLoginTimeMillis - System.currentTimeMillis();
 
-        int currentDelayInMinutes = (int)((( nextAllowedLoginTime - System.currentTimeMillis() ) / 1000) / 60);
-
-        return currentDelayInMinutes;
+        return 0 >= delayToNextLoginMillis ? 0 : (int)TimeUnit.MILLISECONDS.toMinutes(delayToNextLoginMillis);
     }
 
     private long calculateLoginDelay(int numberOfFailedLogins) {
@@ -93,7 +94,7 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
         }
 
         long delay = getInitialLoginDelayInMinutes();
-        for(int i = getMinLimitForLoginFailures() - 1; i < numberOfFailedLogins; i++) {
+        for(int i = getMinLimitForLoginFailures(); i < numberOfFailedLogins; i++) {
             delay = delay * 2;
         }
 
