@@ -1,8 +1,8 @@
-package fi.vm.sade.login.throttling;
+package fi.vm.sade.login.failure;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class InMemoryLoginThrottlingByIpAddressAndUsernameHandlerInterceptorAdapter extends AbstractInMemoryLoginThrottlingHandlerInterceptorAdapter {
+public class ByIpAndUserInMemoryLoginFailureHandlerInterceptorAdapter extends AbstractInMemoryLoginFailureHandlerInterceptorAdapter {
 
     @Override
     public String createKey(HttpServletRequest request) {

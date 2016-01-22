@@ -1,4 +1,4 @@
-package fi.vm.sade.login.throttling;
+package fi.vm.sade.login.failure;
 
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -10,9 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends HandlerInterceptorAdapter {
+public abstract class AbstractLoginFailureHandlerInterceptorAdapter extends HandlerInterceptorAdapter {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractLoginThrottlingHandlerInterceptorAdapter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractLoginFailureHandlerInterceptorAdapter.class);
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -24,7 +24,7 @@ public abstract class AbstractLoginThrottlingHandlerInterceptorAdapter extends H
         int loginDelay = getMinutesToAllowLogin(request);
 
         if(0 != loginDelay ) {
-            LOGGER.error("Not allowing login attempt in {} seconds.", loginDelay);
+            LOGGER.error("Not allowing login attempt in {} minutes.", loginDelay);
             response.sendError(503);
             return false;
         }

@@ -1,4 +1,4 @@
-package fi.vm.sade.login.throttling;
+package fi.vm.sade.login.failure;
 
 import java.util.ArrayList;
 import java.util.HashMap;

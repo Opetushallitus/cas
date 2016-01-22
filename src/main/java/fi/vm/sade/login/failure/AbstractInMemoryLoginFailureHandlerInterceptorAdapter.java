@@ -1,18 +1,19 @@
-package fi.vm.sade.login.throttling;
+package fi.vm.sade.login.failure;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Min;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public abstract class AbstractInMemoryLoginFailureFilter extends AbstractLoginFailureFilter {
+public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter extends AbstractLoginFailureHandlerInterceptorAdapter implements InitializingBean {
 
     private SynchronizedFailedLogins failedLogins = new SynchronizedFailedLogins();
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractInMemoryLoginFailureFilter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractInMemoryLoginFailureHandlerInterceptorAdapter.class);
 
     private final int DEFAULT_INITIAL_LOGIN_DELAY_IN_MINUTES = 5;
     private final int DEFAULT_TIME_LIMIT_FOR_LOGIN_FAILURES_IN_MINUTES = 24 * 60;
@@ -29,6 +30,11 @@ public abstract class AbstractInMemoryLoginFailureFilter extends AbstractLoginFa
     private int minLimitForLoginFailures = DEFAULT_MIN_LIMIT_FOR_LOGIN_FAILURES;
 
     @Override
+    public void afterPropertiesSet() throws Exception {
+
+    }
+
+    @Override
     public int getMinutesToAllowLogin(HttpServletRequest request) {
         String key = createKey(request);
 
@@ -37,8 +43,6 @@ public abstract class AbstractInMemoryLoginFailureFilter extends AbstractLoginFa
         if(getMinLimitForLoginFailures() > numberOfFailedLogins) {
             return 0;
         }
-
-        LOGGER.error("MAX LIMIT for login failures {}", getMaxLimitForLoginFailures());
 
         if( getMaxLimitForLoginFailures() <= numberOfFailedLogins) {
             return -1;
