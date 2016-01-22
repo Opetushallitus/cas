@@ -73,15 +73,10 @@
             <param-value>8</param-value>
         </init-param>
     </filter>
-
-    <!--filter>
-        <filter-name>LoginThrottlingFilter</filter-name>
-        <filter-class>fi.vm.sade.login.throttling.LoginThrottlingFilter</filter-class>
-    </filter>
     <filter-mapping>
-        <filter-name>LoginThrottlingFilter</filter-name>
+        <filter-name>loginFailureFilter</filter-name>
         <url-pattern>/login</url-pattern>
-    </filter-mapping-->
+    </filter-mapping>
 
     <!--
       - Loads the CAS ApplicationContext.
