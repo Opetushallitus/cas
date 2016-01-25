@@ -65,19 +65,6 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-    <!--filter>
-        <filter-name>loginFailureFilter</filter-name>
-        <filter-class>fi.vm.sade.login.throttling.CasInMemoryByUserAndIpLoginFailureFilter</filter-class>
-        <init-param>
-            <param-name>maxLimitForLoginFailures</param-name>
-            <param-value>8</param-value>
-        </init-param>
-    </filter>
-    <filter-mapping>
-        <filter-name>loginFailureFilter</filter-name>
-        <url-pattern>/login</url-pattern>
-    </filter-mapping-->
-
     <!--
       - Loads the CAS ApplicationContext.
       - The deployer choice here is how to handle Throwables thrown by Spring's
