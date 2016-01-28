@@ -7,6 +7,7 @@ import org.springframework.webflow.execution.RequestContext;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,6 +53,15 @@ public abstract class AbstractLoginFailureHandlerInterceptorAdapter extends Hand
             LOGGER.debug("Response contains Location header {}", response.containsHeader("Location"));
 
             notifyFailedLoginAttempt(request);
+
+            if(response instanceof HttpResponseWrapper) {
+                HttpResponseWrapper wrapper = (HttpResponseWrapper)response;
+                LOGGER.debug("Response status {}", wrapper.getStatus());
+                LOGGER.debug("Redirect location {}", wrapper.getRedirectLocation());
+
+            } else {
+                LOGGER.debug("Response is not HttpResponseWrapper!!");
+            }
         }
 
         LOGGER.debug("Handler {}", handler);

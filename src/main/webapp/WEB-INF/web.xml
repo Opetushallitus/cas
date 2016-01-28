@@ -65,6 +65,15 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <filter>
+        <filter-name>responseWrapperFilter</filter-name>
+        <filter-class>fi.vm.sade.login.failure.HttpResposeWrapperFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>responseWrapperFilter</filter-name>
+        <url-pattern>/login</url-pattern>
+    </filter-mapping>
+
     <!--
       - Loads the CAS ApplicationContext.
       - The deployer choice here is how to handle Throwables thrown by Spring's
