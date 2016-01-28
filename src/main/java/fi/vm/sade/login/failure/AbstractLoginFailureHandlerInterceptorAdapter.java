@@ -67,7 +67,7 @@ public abstract class AbstractLoginFailureHandlerInterceptorAdapter extends Hand
             return false;
         }
 
-        if(response instanceof RedirectHttpServletResponseWrapper) {
+        if(!(response instanceof RedirectHttpServletResponseWrapper)) {
             LOGGER.warn("HttpServletResponse {} is not instance of RedirectHttpServletResponseWrapper. " +
               "Filter configuration might be missing or wrong!", response.getClass().getName());
             return false;
