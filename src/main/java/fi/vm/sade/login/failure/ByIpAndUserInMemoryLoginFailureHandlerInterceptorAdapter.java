@@ -22,7 +22,7 @@ public class ByIpAndUserInMemoryLoginFailureHandlerInterceptorAdapter extends Ab
         if(null == username) {
             return ipAddress;
         }
-        
+
         return ipAddress + ";" + username.toLowerCase();
     }
 }

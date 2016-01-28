@@ -36,7 +36,7 @@ public abstract class AbstractLoginFailureHandlerInterceptorAdapter extends Hand
         if (!isPostRequest(request)) {
             return;
         }
-        if( hasSuccessfullAuthentication(request, response) ) {
+        if( hasSuccessfulAuthentication(request, response) ) {
             notifySuccessfullLogin(request);
         } else {
             notifyFailedLoginAttempt(request);
@@ -47,7 +47,7 @@ public abstract class AbstractLoginFailureHandlerInterceptorAdapter extends Hand
         return "POST".equalsIgnoreCase(request.getMethod());
     }
 
-    private boolean hasSuccessfullAuthentication(HttpServletRequest request, HttpServletResponse response) {
+    private boolean hasSuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response) {
         Event currentEvent = getCurrentRequestFlowEvent(request);
         if(null == currentEvent) {
             LOGGER.debug("There is no current flow event in request. Checking redirect...");
