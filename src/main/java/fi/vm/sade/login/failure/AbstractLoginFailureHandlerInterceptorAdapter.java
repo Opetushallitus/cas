@@ -1,18 +1,15 @@
 package fi.vm.sade.login.failure;
 
-import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import org.springframework.webflow.execution.Event;
 import org.springframework.webflow.execution.RequestContext;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletResponseWrapper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Enumeration;
 
 public abstract class AbstractLoginFailureHandlerInterceptorAdapter extends HandlerInterceptorAdapter {
 
@@ -39,71 +36,55 @@ public abstract class AbstractLoginFailureHandlerInterceptorAdapter extends Hand
         if (!isPostRequest(request)) {
             return;
         }
-        if( hasSuccessfullAuthenticationEvent(request) ) {
+        if( hasSuccessfullAuthentication(request, response) ) {
             notifySuccessfullLogin(request);
         } else {
-
-            LOGGER.debug("service param {}", request.getParameter("service"));
-            Enumeration e = request.getHeaderNames();
-            while(e.hasMoreElements()){
-                Object name  = e.nextElement();
-                LOGGER.debug("Request header {}={}", name, request.getHeader((String)name));
-            }
-            LOGGER.debug("Requested URI {}", request.getRequestURI());
-            LOGGER.debug("Response contains Location header {}", response.containsHeader("Location"));
-
             notifyFailedLoginAttempt(request);
-
-            if(response instanceof HttpResponseWrapper) {
-                HttpResponseWrapper wrapper = (HttpResponseWrapper)response;
-                LOGGER.debug("Response status {}", wrapper.getStatus());
-                LOGGER.debug("Redirect location {}", wrapper.getRedirectLocation());
-
-            } else {
-                LOGGER.debug("Response is not HttpResponseWrapper!!");
-            }
         }
-
-        LOGGER.debug("Handler {}", handler);
     }
 
     private boolean isPostRequest(HttpServletRequest request) {
         return "POST".equalsIgnoreCase(request.getMethod());
     }
 
-    private boolean hasSuccessfullAuthenticationEvent(HttpServletRequest request) {
-        /*LOGGER.debug("Request has following attributes:");
-        Enumeration e = request.getAttributeNames();
-        while(e.hasMoreElements()) {
-            Object name = e.nextElement();
-            LOGGER.debug("{}={}", name, request.getAttribute((String)name));
+    private boolean hasSuccessfullAuthentication(HttpServletRequest request, HttpServletResponse response) {
+        Event currentEvent = getCurrentRequestFlowEvent(request);
+        if(null == currentEvent) {
+            LOGGER.debug("There is no current flow event in request. Checking redirect...");
+            return hasRedirectToService(request, response);
+        } else {
+            LOGGER.debug("Current event ID is {}", currentEvent.getId());
+            return "success".equals(currentEvent.getId());
         }
 
-        WebApplicationContext wacontext = (WebApplicationContext)request.getAttribute("org.springframework.web.servlet.DispatcherServlet.CONTEXT");
+    }
 
-        if(null != wacontext.getServletContext()) {
-            e = wacontext.getServletContext().getAttributeNames();
+    private boolean hasRedirectToService(HttpServletRequest request, HttpServletResponse response) {
 
-            LOGGER.debug("Servlet context has following attributes:");
-            while(e.hasMoreElements()) {
-                Object name = e.nextElement();
-                LOGGER.debug("{}={}", name, request.getAttribute((String)name));
-            }
-        } else {
-            LOGGER.debug("Servlet context is null.");
-        }*/
-
-
-        RequestContext context = (RequestContext) request.getAttribute("flowRequestContext");
-        if( null == context || null == context.getCurrentEvent() ) {
-            LOGGER.debug("Either context {} or current event {} is null!", context, null == context ? null : context.getCurrentEvent());
-
-
+        String serviceUri = request.getParameter("service");
+        if(null == serviceUri || "".equals(serviceUri)) {
+            LOGGER.debug("There is no service parameter in HttpServletRequest.");
             return false;
         }
 
-        LOGGER.debug("Current event ID is {}", context.getCurrentEvent().getId());
-        return "success".equals(context.getCurrentEvent().getId());
+        if(response instanceof RedirectHttpServletResponseWrapper) {
+            LOGGER.warn("HttpServletResponse {} is not instance of RedirectHttpServletResponseWrapper. " +
+              "Filter configuration might be missing or wrong!", response.getClass().getName());
+            return false;
+        }
+
+        RedirectHttpServletResponseWrapper responseWrapper = (RedirectHttpServletResponseWrapper)response;
+        if( !responseWrapper.redirectSent() ) {
+            return false;
+        }
+
+        LOGGER.debug("There is redirect to {} and service parameter is {}.", responseWrapper.getRedirectLocation(), serviceUri);
+        return responseWrapper.getRedirectLocation().startsWith(serviceUri);
+    }
+
+    private Event getCurrentRequestFlowEvent(HttpServletRequest request) {
+        RequestContext context = (RequestContext) request.getAttribute("flowRequestContext");
+        return null == context ? null : context.getCurrentEvent();
     }
 
     public abstract int getMinutesToAllowLogin(HttpServletRequest request);
