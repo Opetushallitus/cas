@@ -41,8 +41,20 @@ public abstract class AbstractLoginFailureHandlerInterceptorAdapter extends Hand
         if( hasSuccessfullAuthenticationEvent(request) ) {
             notifySuccessfullLogin(request);
         } else {
+
+            LOGGER.debug("service param {}", request.getParameter("service"));
+            Enumeration e = request.getHeaderNames();
+            while(e.hasMoreElements()){
+                Object name  = e.nextElement();
+                LOGGER.debug("Request header {}={}", name, request.getHeader((String)name));
+            }
+            LOGGER.debug("Requested URI {}", request.getRequestURI());
+            LOGGER.debug("Response contains Location header {}", response.containsHeader("Location"));
+
             notifyFailedLoginAttempt(request);
         }
+
+        LOGGER.debug("Handler {}", handler);
     }
 
     private boolean isPostRequest(HttpServletRequest request) {
@@ -50,7 +62,7 @@ public abstract class AbstractLoginFailureHandlerInterceptorAdapter extends Hand
     }
 
     private boolean hasSuccessfullAuthenticationEvent(HttpServletRequest request) {
-        LOGGER.debug("Request has following attributes:");
+        /*LOGGER.debug("Request has following attributes:");
         Enumeration e = request.getAttributeNames();
         while(e.hasMoreElements()) {
             Object name = e.nextElement();
@@ -69,7 +81,7 @@ public abstract class AbstractLoginFailureHandlerInterceptorAdapter extends Hand
             }
         } else {
             LOGGER.debug("Servlet context is null.");
-        }
+        }*/
 
 
         RequestContext context = (RequestContext) request.getAttribute("flowRequestContext");
