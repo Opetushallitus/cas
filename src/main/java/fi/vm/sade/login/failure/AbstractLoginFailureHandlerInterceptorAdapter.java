@@ -1,5 +1,6 @@
 package fi.vm.sade.login.failure;
 
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.webflow.execution.RequestContext;
@@ -42,7 +43,6 @@ public abstract class AbstractLoginFailureHandlerInterceptorAdapter extends Hand
         } else {
             notifyFailedLoginAttempt(request);
         }
-
     }
 
     private boolean isPostRequest(HttpServletRequest request) {
@@ -56,6 +56,21 @@ public abstract class AbstractLoginFailureHandlerInterceptorAdapter extends Hand
             Object name = e.nextElement();
             LOGGER.debug("{}={}", name, request.getAttribute((String)name));
         }
+
+        WebApplicationContext wacontext = (WebApplicationContext)request.getAttribute("org.springframework.web.servlet.DispatcherServlet.CONTEXT");
+
+        if(null != wacontext.getServletContext()) {
+            e = wacontext.getServletContext().getAttributeNames();
+
+            LOGGER.debug("Servlet context has following attributes:");
+            while(e.hasMoreElements()) {
+                Object name = e.nextElement();
+                LOGGER.debug("{}={}", name, request.getAttribute((String)name));
+            }
+        } else {
+            LOGGER.debug("Servlet context is null.");
+        }
+
 
         RequestContext context = (RequestContext) request.getAttribute("flowRequestContext");
         if( null == context || null == context.getCurrentEvent() ) {
