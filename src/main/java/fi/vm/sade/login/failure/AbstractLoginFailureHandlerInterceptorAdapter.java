@@ -7,8 +7,14 @@ import org.springframework.webflow.execution.RequestContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Enumeration;
 
 public abstract class AbstractLoginFailureHandlerInterceptorAdapter extends HandlerInterceptorAdapter {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractLoginFailureHandlerInterceptorAdapter.class);
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -44,10 +50,22 @@ public abstract class AbstractLoginFailureHandlerInterceptorAdapter extends Hand
     }
 
     private boolean hasSuccessfullAuthenticationEvent(HttpServletRequest request) {
+        LOGGER.debug("Request has following attributes:");
+        Enumeration e = request.getAttributeNames();
+        while(e.hasMoreElements()) {
+            Object name = e.nextElement();
+            LOGGER.debug("{}={}", name, request.getAttribute((String)name));
+        }
+
         RequestContext context = (RequestContext) request.getAttribute("flowRequestContext");
         if( null == context || null == context.getCurrentEvent() ) {
+            LOGGER.debug("Either context {} or current event {} is null!", context, null == context ? null : context.getCurrentEvent());
+
+
             return false;
         }
+
+        LOGGER.debug("Current event ID is {}", context.getCurrentEvent().getId());
         return "success".equals(context.getCurrentEvent().getId());
     }
 
