@@ -6,9 +6,9 @@
 
     <bean id="loginFailureInterceptor" class="fi.vm.sade.login.failure.ByIpAndUserInMemoryLoginFailureHandlerInterceptorAdapter"
           p:initialLoginDelayInMinutes="5"
-          p:timeLimitForLoginFailuresInMinutes="1440"
-          p:maxLimitForLoginFailures="10"
-          p:minLimitForLoginFailures="5"/>
+          p:cleanLoginFailuresOlderThanInMinutes="1440"
+          p:denyLoginAfterFailedLoginsCount="10"
+          p:delayLoginAfterFailedLoginsCount="5"/>
 
     <bean id="loginFailureInterceptorJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
           p:targetObject-ref="loginFailureInterceptor"

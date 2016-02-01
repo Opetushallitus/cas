@@ -36,10 +36,12 @@ public class SynchronizedFailedLogins {
         }
     }
 
-    public void clean(int timeLimitInMinutes) {
+    public Map<String, Integer> clean(int timeLimitInMinutes) {
 
         long timeLimitInMillis = TimeUnit.MINUTES.toMillis(timeLimitInMinutes);
         long currentTime = System.currentTimeMillis();
+
+        Map<String, Integer> removed = new HashMap<String, Integer>();
 
         synchronized (loginMap) {
             Object[] keys = loginMap.keySet().toArray();
@@ -47,9 +49,12 @@ public class SynchronizedFailedLogins {
                 String key = (String) keys[i];
                 long firstLogin = loginMap.get(key).get(0);
                 if(firstLogin + timeLimitInMillis <= currentTime) {
+                    removed.put(key, loginMap.get(key).size());
                     loginMap.remove(key);
                 }
             }
         }
+
+        return removed;
     }
 }

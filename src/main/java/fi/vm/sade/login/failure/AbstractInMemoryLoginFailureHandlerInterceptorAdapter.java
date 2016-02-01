@@ -4,10 +4,14 @@ import org.springframework.beans.factory.InitializingBean;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Min;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter extends AbstractLoginFailureHandlerInterceptorAdapter implements InitializingBean {
 
@@ -16,25 +20,25 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractInMemoryLoginFailureHandlerInterceptorAdapter.class);
 
     private final int DEFAULT_INITIAL_LOGIN_DELAY_IN_MINUTES = 5;
-    private final int DEFAULT_TIME_LIMIT_FOR_LOGIN_FAILURES_IN_MINUTES = 24 * 60;
-    private final int DEFAULT_MAX_LIMIT_FOR_LOGIN_FAILURES = 10;
-    private final int DEFAULT_MIN_LIMIT_FOR_LOGIN_FAILURES = 5;
+    private final int DEFAULT_CLEAN_LOGIN_FAILURES_OLDER_THAN_IN_MINUTES = 24 * 60;
+    private final int DEFAULT_DENY_LOGIN_AFTER_FAILED_LOGINS_COUNT = 10;
+    private final int DEFAULT_DELAY_LOGIN_AFTER_FAILED_LOGINS_COUNT = 5;
 
     @Min(1)
     private int initialLoginDelayInMinutes = DEFAULT_INITIAL_LOGIN_DELAY_IN_MINUTES;
     @Min(1)
-    private int timeLimitForLoginFailuresInMinutes = DEFAULT_TIME_LIMIT_FOR_LOGIN_FAILURES_IN_MINUTES;
+    private int cleanLoginFailuresOlderThanInMinutes = DEFAULT_CLEAN_LOGIN_FAILURES_OLDER_THAN_IN_MINUTES;
     @Min(1)
-    private int maxLimitForLoginFailures = DEFAULT_MAX_LIMIT_FOR_LOGIN_FAILURES;
+    private int denyLoginAfterFailedLoginsCount = DEFAULT_DENY_LOGIN_AFTER_FAILED_LOGINS_COUNT;
     @Min(1)
-    private int minLimitForLoginFailures = DEFAULT_MIN_LIMIT_FOR_LOGIN_FAILURES;
+    private int delayLoginAfterFailedLoginsCount = DEFAULT_DELAY_LOGIN_AFTER_FAILED_LOGINS_COUNT;
 
     @Override
     public void afterPropertiesSet() throws Exception {
         LOGGER.info("Setting initial login delay in minutes to {}", getInitialLoginDelayInMinutes());
-        LOGGER.info("Setting time limit for login failures in minutes to {}", getTimeLimitForLoginFailuresInMinutes());
-        LOGGER.info("Setting max limit for login failures in minutes to {}", getMaxLimitForLoginFailures());
-        LOGGER.info("Setting min limit for login failures in minutes to {}", getMinLimitForLoginFailures());
+        LOGGER.info("Setting clean login failures older than in minutes to {}", getCleanLoginFailuresOlderThanInMinutes());
+        LOGGER.info("Setting deny login after failed logins count to {}", getDenyLoginAfterFailedLoginsCount());
+        LOGGER.info("Setting delay login after failed logins count to {}", getDelayLoginAfterFailedLoginsCount());
     }
 
     @Override
@@ -43,18 +47,16 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
 
         int numberOfFailedLogins = failedLogins.size(key);
 
-        if(getMinLimitForLoginFailures() > numberOfFailedLogins) {
+        if(getDelayLoginAfterFailedLoginsCount() > numberOfFailedLogins) {
             return 0;
         }
 
-        if( getMaxLimitForLoginFailures() <= numberOfFailedLogins) {
-            LOGGER.warn("Maximum limit {} of failed login attempts reached for user {}", getMaxLimitForLoginFailures(), key);
+        if( getDenyLoginAfterFailedLoginsCount() <= numberOfFailedLogins) {
+            LOGGER.warn("Maximum limit {} of failed login attempts reached for user {}", getDenyLoginAfterFailedLoginsCount(), key);
             return -1;
         }
 
         int currentLoginDelay = calculateCurrentLoginDelay(key);
-
-        LOGGER.info("Current login delay for user {} is {} minutes.", key, currentLoginDelay);
 
         return 0 < currentLoginDelay ? currentLoginDelay : 0;
     }
@@ -77,8 +79,20 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
     }
 
     public void clean() {
-        LOGGER.info("Resetting failed logins older than {} minutes.", getTimeLimitForLoginFailuresInMinutes());
-        failedLogins.clean(getTimeLimitForLoginFailuresInMinutes());
+        LOGGER.info("Cleaning failed logins older than {} minutes.", getCleanLoginFailuresOlderThanInMinutes());
+        logRemovedLogins(failedLogins.clean(getCleanLoginFailuresOlderThanInMinutes()));
+    }
+
+    private void logRemovedLogins(Map<String, Integer> removed) {
+        if(0 == removed.size()) {
+            LOGGER.info("No failed logins to clean.");
+        } else {
+            List<String> messages = new ArrayList<String>();
+            for(String key : removed.keySet()) {
+                messages.add(key + "=" + removed.get(key));
+            }
+            LOGGER.info("Cleaned failed logins {}", StringUtils.collectionToCommaDelimitedString(messages));
+        }
     }
 
     private int calculateCurrentLoginDelay(String key) {
@@ -90,17 +104,24 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
         long nextAllowedLoginTimeMillis = lastLoginTime + TimeUnit.MINUTES.toMillis(loginDelay);
         long delayToNextLoginMillis = nextAllowedLoginTimeMillis - System.currentTimeMillis();
 
-        return 0 >= delayToNextLoginMillis ? 0 : (int)TimeUnit.MILLISECONDS.toMinutes(delayToNextLoginMillis);
+        int currentLoginDelay = 0 >= delayToNextLoginMillis ? 0 : (int)TimeUnit.MILLISECONDS.toMinutes(delayToNextLoginMillis);
+
+        if(0 < currentLoginDelay) {
+            LOGGER.warn("User {} has {} failed login attempts. Current login delay is {} minutes.",
+              new Object[] {key, failedLoginTimes.length, currentLoginDelay});
+        }
+
+        return currentLoginDelay;
     }
 
     private long calculateLoginDelay(int numberOfFailedLogins) {
 
-        if(getMinLimitForLoginFailures() > numberOfFailedLogins) {
+        if(getDelayLoginAfterFailedLoginsCount() > numberOfFailedLogins) {
             return 0;
         }
 
         long delay = getInitialLoginDelayInMinutes();
-        for(int i = getMinLimitForLoginFailures(); i < numberOfFailedLogins; i++) {
+        for(int i = getDelayLoginAfterFailedLoginsCount(); i < numberOfFailedLogins; i++) {
             delay = delay * 2;
         }
 
@@ -117,27 +138,27 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
         this.initialLoginDelayInMinutes = initialLoginDelayInMinutes;
     }
 
-    public int getTimeLimitForLoginFailuresInMinutes() {
-        return timeLimitForLoginFailuresInMinutes;
+    public int getCleanLoginFailuresOlderThanInMinutes() {
+        return cleanLoginFailuresOlderThanInMinutes;
     }
 
-    public void setTimeLimitForLoginFailuresInMinutes(int timeLimitForLoginFailuresInMinutes) {
-        this.timeLimitForLoginFailuresInMinutes = timeLimitForLoginFailuresInMinutes;
+    public void setCleanLoginFailuresOlderThanInMinutes(int cleanLoginFailuresOlderThanInMinutes) {
+        this.cleanLoginFailuresOlderThanInMinutes = cleanLoginFailuresOlderThanInMinutes;
     }
 
-    public int getMaxLimitForLoginFailures() {
-        return maxLimitForLoginFailures;
+    public int getDenyLoginAfterFailedLoginsCount() {
+        return denyLoginAfterFailedLoginsCount;
     }
 
-    public void setMaxLimitForLoginFailures(int maxLimitForLoginFailures) {
-        this.maxLimitForLoginFailures = maxLimitForLoginFailures;
+    public void setDenyLoginAfterFailedLoginsCount(int denyLoginAfterFailedLoginsCount) {
+        this.denyLoginAfterFailedLoginsCount = denyLoginAfterFailedLoginsCount;
     }
 
-    public int getMinLimitForLoginFailures() {
-        return minLimitForLoginFailures;
+    public int getDelayLoginAfterFailedLoginsCount() {
+        return delayLoginAfterFailedLoginsCount;
     }
 
-    public void setMinLimitForLoginFailures(int minLimitForLoginFailures) {
-        this.minLimitForLoginFailures = minLimitForLoginFailures;
+    public void setDelayLoginAfterFailedLoginsCount(int delayLoginAfterFailedLoginsCount) {
+        this.delayLoginAfterFailedLoginsCount = delayLoginAfterFailedLoginsCount;
     }
 }
