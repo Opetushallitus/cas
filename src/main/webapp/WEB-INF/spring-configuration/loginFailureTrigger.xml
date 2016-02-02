@@ -6,7 +6,7 @@
 
     <bean id="loginFailureInterceptor" class="fi.vm.sade.login.failure.ByIpAndUserInMemoryLoginFailureHandlerInterceptorAdapter"
           p:initialLoginDelayInMinutes="5"
-          p:cleanLoginFailuresOlderThanInMinutes="1"
+          p:cleanLoginFailuresOlderThanInMinutes="1440"
           p:denyLoginAfterFailedLoginsCount="10"
           p:delayLoginAfterFailedLoginsCount="5"/>
 
@@ -17,5 +17,5 @@
     <bean id="periodicLoginFailureCleanerTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean"
           p:jobDetail-ref="loginFailureInterceptorJobDetail"
           p:startDelay="0"
-          p:repeatInterval="30000" />
+          p:repeatInterval="43200000" />
 </beans>
