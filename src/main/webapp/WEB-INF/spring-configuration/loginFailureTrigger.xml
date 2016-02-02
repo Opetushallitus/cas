@@ -6,7 +6,7 @@
 
     <bean id="loginFailureInterceptor" class="fi.vm.sade.login.failure.ByIpAndUserInMemoryLoginFailureHandlerInterceptorAdapter"
           p:initialLoginDelayInMinutes="5"
-          p:cleanLoginFailuresOlderThanInMinutes="1440"
+          p:cleanLoginFailuresOlderThanInMinutes="1"
           p:denyLoginAfterFailedLoginsCount="10"
           p:delayLoginAfterFailedLoginsCount="5"/>
 
