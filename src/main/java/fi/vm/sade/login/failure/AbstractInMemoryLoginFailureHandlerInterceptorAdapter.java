@@ -63,8 +63,11 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
 
     @Override
     public void notifySuccessfullLogin(HttpServletRequest request) {
-        LOGGER.debug("Succesfull login for {}. Cleaning failed logins.", createKey(request));
-        failedLogins.remove(createKey(request));
+        LOGGER.debug("Succesfull login for {}.", createKey(request));
+        boolean cleaned = failedLogins.remove(createKey(request));
+        if(cleaned) {
+            LOGGER.info("Succesfull login for {}. Cleaned failed logins.", createKey(request));
+        }
     }
 
     @Override

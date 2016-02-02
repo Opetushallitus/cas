@@ -15,9 +15,9 @@ public class SynchronizedFailedLogins {
         }
     }
 
-    public void remove(String key) {
+    public boolean remove(String key) {
         synchronized (loginMap) {
-            loginMap.remove(key);
+            return null != loginMap.remove(key);
         }
     }
 
