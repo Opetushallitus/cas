@@ -1,24 +1,24 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<artifactId>authentication-parent</artifactId>
-		<groupId>fi.vm.sade.auth</groupId>
-		<version>9.3-SNAPSHOT</version>
-	</parent>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>authentication-parent</artifactId>
+        <groupId>fi.vm.sade.auth</groupId>
+        <version>9.3-SNAPSHOT</version>
+    </parent>
     <groupId>fi.vm.sade.auth</groupId>
-	<artifactId>cas</artifactId>
-	<name>${project.artifactId}</name>
-	<packaging>war</packaging>
+    <artifactId>cas</artifactId>
+    <name>${project.artifactId}</name>
+    <packaging>war</packaging>
 
     <properties>
         <!--<slf4j.version>1.5.10</slf4j.version>-->
         <slf4j.version>1.6.6</slf4j.version>
         <webapp.port>8080</webapp.port>
-	<ehcache.version>2.6.0</ehcache.version>
+        <ehcache.version>2.6.0</ehcache.version>
     </properties>
 
-	<dependencies>
+    <dependencies>
 
         <!-- custom -->
         <dependency>
@@ -79,9 +79,9 @@
             <version>3.5.1</version>
         </dependency>
         <dependency>
-        	<groupId>com.google.code.gson</groupId>
-        	<artifactId>gson</artifactId>
-        	<version>2.2.4</version>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.2.4</version>
         </dependency>
         <dependency>
             <groupId>org.jasig.cas</groupId>
@@ -172,7 +172,8 @@
         <dependency>
             <groupId>net.sf.ehcache</groupId>
             <artifactId>ehcache-core</artifactId>
-            <version>2.4.8</version> <!-- cas/ticketRegistry.xml/ticketRMIAsynchronousCacheReplicator seems to want this -->
+            <version>2.4.8
+            </version> <!-- cas/ticketRegistry.xml/ticketRMIAsynchronousCacheReplicator seems to want this -->
         </dependency>
         <dependency>
             <groupId>net.sf.ehcache</groupId>
