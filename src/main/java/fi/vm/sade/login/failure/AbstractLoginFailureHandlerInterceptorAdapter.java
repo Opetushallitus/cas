@@ -38,7 +38,7 @@ public abstract class AbstractLoginFailureHandlerInterceptorAdapter extends Hand
         }
         if( hasSuccessfulAuthentication(request, response) ) {
             notifySuccessfullLogin(request);
-        } else {
+        } else if (!hasRedirectToLoginPage(request, response)){
             notifyFailedLoginAttempt(request);
         }
     }
@@ -59,6 +59,26 @@ public abstract class AbstractLoginFailureHandlerInterceptorAdapter extends Hand
 
     }
 
+    private String getRedirectLocation(HttpServletResponse response) {
+        if(!(response instanceof RedirectHttpServletResponseWrapper)) {
+            LOGGER.warn("HttpServletResponse {} is not instance of RedirectHttpServletResponseWrapper. " +
+                    "Filter configuration might be missing or wrong!", response.getClass().getName());
+            return null;
+        }
+
+        RedirectHttpServletResponseWrapper responseWrapper = (RedirectHttpServletResponseWrapper)response;
+        if( !responseWrapper.redirectSent() ) {
+            return null;
+        }
+
+        return responseWrapper.getRedirectLocation();
+    }
+
+    private boolean hasRedirectToLoginPage(HttpServletRequest request, HttpServletResponse response) {
+        String redirectLocation = getRedirectLocation(response);
+        return null == redirectLocation ? false : redirectLocation.startsWith("/cas/login");
+    }
+
     private boolean hasRedirectToService(HttpServletRequest request, HttpServletResponse response) {
 
         String serviceUri = request.getParameter("service");
@@ -67,19 +87,9 @@ public abstract class AbstractLoginFailureHandlerInterceptorAdapter extends Hand
             return false;
         }
 
-        if(!(response instanceof RedirectHttpServletResponseWrapper)) {
-            LOGGER.warn("HttpServletResponse {} is not instance of RedirectHttpServletResponseWrapper. " +
-              "Filter configuration might be missing or wrong!", response.getClass().getName());
-            return false;
-        }
-
-        RedirectHttpServletResponseWrapper responseWrapper = (RedirectHttpServletResponseWrapper)response;
-        if( !responseWrapper.redirectSent() ) {
-            return false;
-        }
-
-        LOGGER.debug("There is redirect to {} and service parameter is {}.", responseWrapper.getRedirectLocation(), serviceUri);
-        return responseWrapper.getRedirectLocation().startsWith(serviceUri);
+        String redirectLocation = getRedirectLocation(response);
+        LOGGER.debug("There is redirect to {} and service parameter is {}.", redirectLocation, serviceUri);
+        return null == redirectLocation ? false : redirectLocation.startsWith(serviceUri);
     }
 
     private Event getCurrentRequestFlowEvent(HttpServletRequest request) {
