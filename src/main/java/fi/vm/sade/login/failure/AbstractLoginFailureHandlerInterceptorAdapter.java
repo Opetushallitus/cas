@@ -38,7 +38,9 @@ public abstract class AbstractLoginFailureHandlerInterceptorAdapter extends Hand
         }
         if( hasSuccessfulAuthentication(request, response) ) {
             notifySuccessfullLogin(request);
-        } else if (!hasRedirectToLoginPage(request, response)){
+        } if (hasRedirectToLoginPage(request, response)) {
+            LOGGER.debug("There is redirect to login page. Passing it through.");
+        } else {
             notifyFailedLoginAttempt(request);
         }
     }
