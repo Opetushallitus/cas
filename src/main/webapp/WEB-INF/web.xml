@@ -132,7 +132,7 @@
         <servlet-class>fi.vm.sade.shibboleth.action.ShibbolethAuthenticationHandler</servlet-class>
         <init-param>
             <param-name>propsLocation</param-name>
-            <param-value>/data00/oph/authentication/oph-configuration/common.properties</param-value>
+            <param-value>${user.home}/oph-configuration/common.properties</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
