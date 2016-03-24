@@ -26,7 +26,7 @@ public class ShibbolethAuthenticationHandler extends HttpServlet {
     private String successRedirectUrl;
     private String failureRedirectUrl;
     private String authenticationServiceRestUrl;
-    private CachingRestClient restClient = new CachingRestClient();
+    private CachingRestClient restClient = new CachingRestClient().setClientSubSystemCode("authentication.cas");
     private final Logger logger = LoggerFactory.getLogger(getClass());
     
     public void init(ServletConfig config) throws ServletException {
