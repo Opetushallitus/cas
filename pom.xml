@@ -33,12 +33,6 @@
         </dependency>
 
         <dependency>
-            <groupId>fi.vm.sade.log</groupId>
-            <artifactId>log-client</artifactId>
-            <version>6.1-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
             <groupId>fi.vm.sade.generic</groupId>
             <artifactId>generic-common</artifactId>
         </dependency>
