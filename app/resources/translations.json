@@ -1,0 +1,83 @@
+{
+  "app": {
+    "documentTitle": {
+      "fi": "Oppijan verkkopalvelu - Virkailijan palvelut - Sisäänkirjautuminen",
+      "sv": "[SV] Oppijan verkkopalvelu - Virkailijan palvelut - Sisäänkirjautuminen"
+    },
+    "title": {
+      "fi": "Kirjaudu sisään",
+      "sv": "Logga in"
+    },
+
+    "subtitle": {
+      "fi": "Yhdellä tunnuksella kirjaudut kaikkiin opetushallinnon palveluihin",
+      "sv": "till samtliga tjänster inom utbildningsförvaltningen med ett och samma användarnamn"
+    }
+  },
+
+  "login": {
+
+    "button": {
+      "fi": "Kirjaudu",
+      "sv": "Logga in"
+    },
+
+    "usernamePlaceholder": {
+      "fi": "Käyttäjätunnus",
+      "sv": "Användarnamn"
+    },
+
+    "passwordPlaceholder": {
+      "fi": "Salasana",
+      "sv": "Lösenord"
+    },
+
+    "forgotPassword": {
+      "fi": "Unohditko salasanan?",
+      "sv": "Har du glömt ditt lösenord?"
+    },
+    "passwordRequestInfo": {
+      "fi": "Syötä kenttään käyttäjätunnuksesi. Saat sähköpostiisi ohjeet salasanan uusimista varten.",
+      "sv": "Skriv ditt användarnamn i fältet. Du får i din e-post anvisningar om hur du kan förnya ditt lösenord."
+    },
+    "sendPasswordRequest": {
+      "fi": "Lähetä pyyntö",
+      "sv": "Skicka begäran"
+    },
+    "returnLink": {
+      "fi": "Takaisin",
+      "sv": "Tillbaka"
+    }
+  },
+
+  "hakaLogin": {
+    "description" : {
+      "fi": "Haka-kirjautuminen on tarkoitettu Haka-luottamusverkostoon kuuluville jäsenille.",
+      "sv": "Inloggningen är avsedd för medlemmar av det tillitsbaserade nätverket för Haka."
+    }
+  },
+  "services": {
+    "title": {
+      "fi": "Lisätietoja palveluista",
+      "sv": "Lisätietoja palveluista"
+    }
+  },
+  "tietosuoja": {
+    "fi": "Tietosuojaseloste",
+    "sv": "SV tietosuojaseloste"
+  },
+  "rekisteri": {
+    "fi": "Rekisteriselosteet: ",
+    "sv": "SV Rekisteriselosteet: "
+  },
+  "cookie":{
+    "text":{
+      "fi":"Jotta sivuston käyttö olisi sinulle sujuvaa, käytämme evästeitä.",
+      "sv":"Vi använder oss av cookies för att underlätta användningen av webbplatsen."
+    },
+    "button":{
+      "fi":"Sulje",
+      "sv":"Stäng"
+    }
+  }
+}

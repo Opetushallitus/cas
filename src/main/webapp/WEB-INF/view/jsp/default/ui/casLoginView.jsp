@@ -1,3 +1,7 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%--
 
     Licensed to Jasig under one or more contributor license
@@ -18,107 +22,18 @@
     under the License.
 
 --%>
-<jsp:directive.include file="includes/top.jsp" />
 
-<%
-    String targetServiceUrl = request.getParameter("service");
+<head>
+    <meta charset="UTF-8">
+    <link href="<c:url value='/app/app.css'/>" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+    <title>Webpack App</title>
+</head>
 
-    if (targetServiceUrl != null) {
-        targetServiceUrl = targetServiceUrl.replaceAll("j_spring_cas_security_check", "");
-        targetServiceUrl = targetServiceUrl.replaceAll("login/cas", "");
-        targetServiceUrl = java.net.URLEncoder.encode(targetServiceUrl, "UTF-8");
-    }
-
-%>
-<header id="siteheader" class="width-100">
-    <div class="header-content">
-        <img class="margin-left-2" src="<c:url value='/img/opintopolkufi.png' /> "/>
-    </div>
-</header>
-
-
-<div class="grid16-11 offset-left-16-2 margin-vertical-5">
-   
-</div>
-
-
-<div class="clear margin-bottom-3"></div>
-
-<div class="offset-left-16-2 grid16-6">
-    <h1 class="margin-bottom-3 margin-top-0">
-        Opintopolku - Virkailijan ty&ouml;p&ouml;yt&auml;
-    </h1>
-    <p class="margin-bottom-5">
-Ty&ouml;p&ouml;yd&auml;lle kirjaudutaan tunnuksilla, jotka saa esimerkiksi oman organisaation Opintopolku-vastuu/p&auml;&auml;k&auml;ytt&auml;j&auml;lt&auml;. Ty&ouml;p&ouml;yd&auml;ll&auml; n&auml;kyv&auml;t virkailijapalvelut riippuvat k&auml;ytt&auml;j&auml;n k&auml;ytt&ouml;oikeuksista.   
-   </p>
-      <h1 class="margin-bottom-3 margin-top-1">
-        Studieinfo - Administrat&ouml;rens arbetsbord
-    </h1>
-
-  <p class="margin-bottom-3">
-P&aring; arbetsbordet loggar man in med anv&auml;ndarkoder, som man t.ex. f&aring;r av den egna organisationens ansvariga anv&auml;ndare eller huvudanv&auml;ndare. Anv&auml;ndarr&auml;ttigheterna avg&ouml;r vilka tj&auml;nster syns p&aring; arbetsbordet.  
- </p>
-
-</div>
-<div class="offset-left-16-2 grid16-4" id="login">
-    <form:form method="post" cssClass="fm-v clearfix" commandName="${commandName}" htmlEscape="true">
-        <form:errors path="*" id="msg" cssClass="notification warning" element="div" />
-
-        <div class="form-item">
-            <label for="username" class="form-label">K&auml;ytt&auml;j&auml;tunnus / Anv&auml;ndarnamn:</label>
-            <c:if test="${not empty sessionScope.openIdLocalId}">
-                <strong>${sessionScope.openIdLocalId}</strong>
-                <input type="hidden" id="username" name="username" value="${sessionScope.openIdLocalId}" />
-            </c:if>
-
-            <c:if test="${empty sessionScope.openIdLocalId}">
-                <spring:message code="screen.welcome.label.netid.accesskey" var="userNameAccessKey" />
-                <div class="form-item-content">
-                    <form:input cssClass="required" cssErrorClass="error" id="username" size="25" tabindex="1" accesskey="${userNameAccessKey}" path="username" autocomplete="false" htmlEscape="true" />
-                </div>
-            </c:if>
-        </div>
-
-        <div class="form-item">
-            <label for="password" class="form-label">Salasana / L&ouml;senord:</label>
-            <%--
-                           NOTE: Certain browsers will offer the option of caching passwords for a user.  There is a non-standard attribute,
-                           "autocomplete" that when set to "off" will tell certain browsers not to prompt to cache credentials.  For more
-                           information, see the following web page:
-                           http://www.geocities.com/technofundo/tech/web/ie_autocomplete.html
-                           --%>
-            <spring:message code="screen.welcome.label.password.accesskey" var="passwordAccessKey" />
-                <div class="form-item-content">
-                    <form:password cssClass="required" cssErrorClass="error" id="password" size="25" tabindex="2" path="password"  accesskey="${passwordAccessKey}" htmlEscape="true"  />
-                </div>
-            <%--autocomplete="off"--%>
-        </div>
-
-        <div class="row btn-row">
-            <input type="hidden" name="lt" value="${loginTicket}" />
-            <input type="hidden" name="execution" value="${flowExecutionKey}" />
-            <input type="hidden" name="_eventId" value="submit" />
-
-            <input class="button small primary" name="submit" accesskey="l" value="Kirjaudu / Logga in" tabindex="4" type="submit" />
-        </div>
-        <div class="row">
-            <a href="/registration-ui/html/index.html#/forgotPassword">Unohtuiko salasana / Har du gl&ouml;mt ditt l&ouml;senord?</a>
-        </div>
-
-    </form:form>
-
-	<div class="margin-vertical-2">
-	    <a href="<c:url value="${hakaUrl}?redirect=" /><%= targetServiceUrl %>"><img src="<c:url value='/img/haka_landscape_medium.gif' /> "/></a>
-	</div>
-
-	<div class="grid16-11 offset-right-16-1 margin-vertical-2">
-		<div><a href="<c:url value="https://opintopolku.fi/wp/fi/rekisteriseloste/" />">Tietosuojaseloste /</a> <a href="<c:url value="https://studieinfo.fi/wp/dataskyddsbeskrivning/" />">Dataskyddsbeskrivning</a></div>
-	</div>
-
-</div>
-
-<div class="clear margin-bottom-4"></div>
-
-
-<jsp:directive.include file="includes/bottom.jsp" />
-
+<body data-openid="${sessionScope.openIdLocalId}"
+      data-executionKey="${flowExecutionKey}"
+      data-loginTicket="${loginTicket}"
+      data-hakaUrl="${hakaUrl}">
+<div id="app"></div>
+<script src="<c:url value='/app/app.js' />"></script>
+</body>

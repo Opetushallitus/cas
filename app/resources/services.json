@@ -1,0 +1,130 @@
+{
+  "aipal":{
+    "name":{
+      "fi": "AIPAL",
+      "sv": "AIPAL"
+    },
+    "shortname":{
+      "fi": "AIPAL",
+      "sv": "AIPAL"
+    },
+    "description": {
+      "fi": "AIPAL on ammatillisen koulutuksen palautejärjestelmä, jolla kerätään näyttötutkinnon suorittajien mielipiteitä tutkinnon suorittamisesta sekä näyttötutkintomestarikoulutuksen suorittajien mielipiteitä NTM-koulutuksesta. AIPALin käyttäjäneuvonta: aipal@oph.fi, puh. 029 533 1025.",
+      "sv": "SV: APAL on internetin kautta käytettävä palautejärjestelmä..."
+    },
+    "link": "http://www.oph.fi/download/163738_Rekisteriseloste_AIPAL_dnro_45_022_2014.pdf"
+  },
+  "aitu":{
+    "name":{
+      "fi": "AITU - Tutkintotoimikunta- ja näyttötutkintojen järjestämissopimusrekisteri",
+      "sv": "AITU-Tutkintatoimirekisteri"
+    },
+    "shortname":{
+      "fi": "AITU",
+      "sv": "AITU"
+    },
+    "description": {
+      "fi": "Opetushallituksen käytössä oleva rekisteri tutkintotoimikunnista, niiden toimialoista ja jäsenistä sekä tehdyistä näyttötutkintojen järjestämissopimuksista. 1.8.2016 alkaen AITU toimii lisäksi tutkintotoimikuntien tehtävien hoidossa tarvittavien näyttötutkintojen suoritustietojen rekisterinä. AITUn käyttäjäneuvonta:  aitu-tuki@oph.fi, puh. 029 533 1025",
+      "sv": "SV: AITU kuvaus"
+    },
+    "link": "http://www.aitu.fi/download/159599_Rekisteriseloste_AITU.pdf"
+  },
+  "arvo": {
+    "name": {
+      "fi": "Arvo - opetushallinnon vaikuttavuustietopalvelu",
+      "sv": "Arvo"
+    },
+    "shortname":{
+      "fi": "Arvo",
+      "sv": "Arvo"
+    },
+    "description":{
+      "fi": "Opetushallinnon vaikuttavuustietopalvelu Arvo on opetushallinnon kyselytiedonkeruun järjestelmä, jolla kerätään valtakunnallisesti yhteismitallista ja vertailukelpoista tietoa koulutuksen vaikuttavuuden arvioimiseksi. Lisätietoa: arvo@postit.csc.fi.",
+      "sv": "???"
+    }
+  },
+  "eperusteet": {
+    "name": {
+      "fi": "ePerusteet",
+      "sv": "eGrunder"
+    },
+    "shortname":{
+      "fi": "ePerusteet",
+      "sv": "eGrunder"
+    },
+    "description":{
+      "fi": "Käyttäjäneuvonta: eperusteet@opintopolku.fi, puh. 029 533 1025",
+      "sv": "SV: ePerusteet-palvelussa voit tutustua voimassa oleviin opetussuunnitelmien..."
+    }
+  },
+  "koski": {
+    "name": {
+      "fi": "Koski",
+      "sv": "Koski"
+    },
+    "shortname":{
+      "fi": "Koski",
+      "sv": "Koski"
+    },
+    "description":{
+      "fi": "Kansallisten opiskeluoikeuksien ja suoritusten keskitetty integraatiopalvelu – Koski kerää yhteen tiedot kunkin oppijan koulutuksesta yksittäisestä opintosuorituksesta suoritettuihin tutkintoihin asti. Palvelu sisältää tiedot oppijan opinto-oikeuksista sekä suoritettujen tutkintojen keskeisistä sisällöistä ja osaamisvaatimuksista. Kosken käyttäjäneuvonta: koski@oph.fi",
+      "sv": "SV: Kansallisten opiskeluoikeuksien ja suoritusten keskitetty integraatiopalvelu."
+    }
+  },
+  "oikeustulkkirekisteri": {
+    "name": {
+      "fi": "Oikeustulkkirekisteri",
+      "sv": "Registret över rättstolkar"
+    },
+    "shortname":{
+      "fi": "Oikeustulkkirekisteri",
+      "sv": "Registret över rättstolkar"
+    },
+    "description":{
+      "fi": "Oikeustulkkirekisterin tarkoituksena on edistää riittävän laadukkaan tulkkaustaidon omaavien oikeustulkkien saatavuutta",
+      "sv": "SV: Oikeustulkkirekisterin tarkoituksena on edistää riittävän laadukkaan tulkkaustaidon omaavien oikeustulkkien saatavuutta"
+    }
+  },
+  "oiva": {
+    "name": {
+      "fi": "Oiva",
+      "sv": "Oiva"
+    },
+    "shortname": {
+      "fi": "Oiva",
+      "sv": "Oiva"
+    },
+    "description":{
+      "fi": "ammatillisen peruskoulutuksen ohjaus- ja säätelypalvelu (OIVA)",
+      "sv": "SV: Oiva on sosiaalisen median toimintatapoja hyödyntävä yhteisöalusta. Sitä käytetään mm. asiakkuuksien hallintaan."
+    }
+  },
+  "opintopolku": {
+    "name": {
+      "fi": "Opintopolku",
+      "sv": "Studieinfo"
+    },
+    "shortname": {
+      "fi": "Opintopolku",
+      "sv": "Studieinfo"
+    },
+    "description":{
+      "fi": "Opintopolun Virkailijan työpöydälle kirjaudutaan tunnuksilla, jotka saa esimerkiksi oman organisaation Opintopolku-vastuu/pääkäyttäjältä. Työpöydällä näkyvät virkailijapalvelut riippuvat käyttäjän käyttöoikeuksista.",
+      "sv": "SV: Opintopolku.fi-palvelu sisältää tietoa tutkinnoista, ammateista sekä opiskelusta eri oppilaitoksissa."
+    }
+  },
+  "valtionavustukset": {
+    "name": {
+      "fi": "Valtionavustukset",
+      "sv": "Statsunderstöd"
+    },
+    "shortname": {
+      "fi": "Valtionavustukset",
+      "sv": "Statsunderstöd"
+    },
+    "description":{
+      "fi": "Valtionavustusjärjestelmällä toteutetaan ja käsitellään digitaalisesti Opetushallituksen myöntämät valtionavustukset. Järjestelmän käyttäjiä ovat Opetushallituksen virkailijat.",
+      "sv": "SV: ???"
+    }
+  }
+}
