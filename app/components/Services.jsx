@@ -25,8 +25,8 @@ export class ServiceDescriptions extends React.Component{
   render(){
     return(
         <div className="container">
-          <div className="sevices row">
-            <h2 className="sevices-title">{translation("services.title")}</h2>
+          <div className="services row">
+            <h2 className="services-title">{translation("services.title")}</h2>
             {Object.keys(services).sort(sortTranslation).map(k =>
               <div className="service col-xs-12 col-sm-6 " key={k} id={k}>
                 <span className={"bullet "+k}></span>

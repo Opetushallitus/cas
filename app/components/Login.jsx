@@ -34,14 +34,16 @@ export default class Login extends React.Component {
       );
 
       const loginParams = this.props.loginParams;
+      var executionKey = loginParams.executionKey ? loginParams.executionKey : "";
+      var loginTicket = loginParams.loginTicket ? loginParams.loginTicket : "";
 
       return(
           <div className="login-box">
             <form ref={(ref) => this.loginForm = ref}
                   id="credentials"
                   action={"/cas/login?service="+this.props.targetService} method="post">
-              <input type="hidden" name="lt" value={loginParams.loginTicket} />
-              <input type="hidden" name="execution" value={loginParams.executionKey} />
+              <input type="hidden" name="lt" value={loginTicket} />
+              <input type="hidden" name="execution" value={executionKey} />
               <input type="hidden" name="_eventId" value="submit" />
 
               <div>
@@ -65,6 +67,7 @@ export default class Login extends React.Component {
                   <input id="password" name="password"
                          type="password"
                          ref="password"
+                         value=""
                          className={this.loginError ? "invalid-input error" : "login-input"}
                          placeholder={translation("login.passwordPlaceholder")}
                          onChange={e => this.setState({password: e.target.value})}/>

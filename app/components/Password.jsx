@@ -13,17 +13,18 @@ export default class Password extends React.Component {
   render() {
     const controller = this.props.controller;
     return(
-        <div className="login-box">
-        <div className="link" onClick={this.toggleMode}>
+      <div className="login-box">
+        <div className="return-link" onClick={this.toggleMode}>
           {translation("login.returnLink")}
         </div>
-        <div>
+        <div className="password-text-content">
+          <p><strong>{translation("login.forgotPasswordTitle")}</strong></p>
           {translation("login.passwordRequestInfo")}
         </div>
         <div>
           <input type="text" placeholder={translation("login.usernamePlaceholder")} onChange={e => this.setState({username: e.target.value})}/>
         </div>
-        <div>
+        <div className="password-button-container">
           <button className="btn btn-login" onClick={() => controller.requestPassword(this.state.username)}>{translation("login.sendPasswordRequest")}</button>
         </div>
       </div>

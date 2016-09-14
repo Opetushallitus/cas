@@ -36,13 +36,17 @@
       "fi": "Unohditko salasanan?",
       "sv": "Har du glömt ditt lösenord?"
     },
+    "forgotPasswordTitle": {
+      "fi": "Salasana unohtunut",
+      "sv": "SV: salasana unohtunut"
+    },
     "passwordRequestInfo": {
       "fi": "Syötä kenttään käyttäjätunnuksesi. Saat sähköpostiisi ohjeet salasanan uusimista varten.",
       "sv": "Skriv ditt användarnamn i fältet. Du får i din e-post anvisningar om hur du kan förnya ditt lösenord."
     },
     "sendPasswordRequest": {
-      "fi": "Lähetä pyyntö",
-      "sv": "Skicka begäran"
+      "fi": "Lähetä",
+      "sv": "Skicka"
     },
     "returnLink": {
       "fi": "Takaisin",

@@ -29,7 +29,7 @@ body{
   .languageSelector {
     line-height: 90px;
     text-align: right;
-    font-family: 'OpenSans', sans-serif;
+    font-family: 'Open Sans', sans-serif;
     font-size: 16px;
     list-style-type: none;
     display:inline;
@@ -51,7 +51,7 @@ body{
 }
 
 .error{
-  font-family: 'OpenSans', sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 15px;
   color: #2B2B2B;
   letter-spacing: 0px;
@@ -64,7 +64,7 @@ body{
 
 .notice{
   text-align: center;
-  font-family: 'OpenSans', sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 15px;
   color: #ffffff;
   letter-spacing: 0px;
@@ -79,8 +79,9 @@ body{
   max-width: 1000px;
   text-align: center;
   height: 45px;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  font-family: 'Open Sans';
   .btn-cookies{
     margin-left: 5px;
     height: 20px;
@@ -115,14 +116,18 @@ body{
   letter-spacing: 0px;
   line-height: 20px;
   margin-top: 10px;
-}
-.btn-login:hover {
-  background: $hoverElement;
-  color: #FFFFFF;
+  &:hover{
+    background: $hoverElement;
+    color: #FFFFFF;
+  }
 }
 .btn-cookies {
   color: #FFFFFF;
   background-color: $activeElement;
+  &:hover{
+    background: $hoverElement;
+    color: #ffffff;
+  }
 }
 
 #content{
@@ -140,10 +145,11 @@ body{
   margin: 0 auto;
   padding-left: 30px;
   padding-right: 30px;
-  padding-top: 20px !important;
+  padding-top: 20px;
   padding-bottom: 25px !important;
   border-radius: 3px;
   box-shadow: 0px 0px 10px #888888;
+  font-family: 'Open Sans', sans-serif;
   .login-box{
     height: 250px;
   }
@@ -152,14 +158,17 @@ body{
     padding-bottom: 10px;
     input {
       width: 100%;
-      font-family: 'Open Sans', sans-serif;
       font-size: 15px;
       border: 1px solid #AEAEAE;
       border-radius: 3px;
       color: #2B2B2B;
       letter-spacing: 0px;
       line-height: 40px;
+      height: 40px;
       padding-left: 10px;
+      &:-ms-input-placeholder {
+        color: #999;
+      }
 
     }
     input:focus{
@@ -173,7 +182,7 @@ body{
 }
 
 .link{
-  font-family: 'OpenSans';
+  font-family: 'Open Sans', sans-serif;
   font-size: 15px;
   color: #159ECB;
   letter-spacing: 0px;
@@ -181,6 +190,28 @@ body{
   cursor: pointer;
 }
 
+.return-link{
+  font-family: 'Open Sans', sans-serif;
+  font-size: 15px;
+  color: #159ECB;
+  letter-spacing: 0px;
+  line-height: 16px;
+  cursor: pointer;
+  text-align: left;
+  padding: 0 !important;
+}
+
+.password-text-content{
+  padding: 0 !important;
+  p{
+    font-family: 'Open Sans', sans-serif;
+    font-size: 15px;
+  }
+}
+
+.password-button-container{
+  padding-top: 15px !important;
+}
 
 textarea:active,
 input:active,
@@ -231,7 +262,7 @@ text{
 #service-list{
   margin: 0 auto;
   padding-bottom: 10px;
-  text-shadow: 0 0 24px rgba(0, 0, 0, 0.92);
+  text-shadow: 0 0 24px rgba(0, 0, 0, 0.50);
   ul {
     list-style-type: none;
     padding-left: 0;
@@ -252,7 +283,7 @@ text{
   }
 }
 
-.sevices-title{
+.services-title{
   margin-left: 15px;
   margin-bottom: 30px;
 }
@@ -277,6 +308,7 @@ text{
   }
   margin-bottom: 20px;
   display: inline-block;
+  font-family: 'Open Sans', sans-serif;
 
   vertical-align: top;
 }
