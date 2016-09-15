@@ -110,10 +110,8 @@ export function initAppState() {
 
   function login(state, credentials) {
     console.log("login for user "+credentials.username +" password: "+credentials.password)
-    ax.post("/cas/v1/tickets", "username="+credentials.username+"&password="+encodeURIComponent(credentials.password))
-      .then(listeners.submitForm())
-    ax.post("/cas/v1/tickets", "username="+credentials.username+"&password="+credentials.password)
-      .then(response =>listeners.submitForm())
+    ax.post("/cas/v1/tickets", "username="+encodeURIComponent(credentials.username)+"&password="+encodeURIComponent(credentials.password))
+      .then(response => listeners.submitForm())
       .catch(error => {
         console.log("Login failed: "+error.status)
         listeners.loginError();
