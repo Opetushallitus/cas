@@ -67,7 +67,7 @@ export default class Login extends React.Component {
                   <input id="password" name="password"
                          type="password"
                          ref="password"
-                         value=""
+                         value={this.state.password}
                          className={this.loginError ? "invalid-input error" : "login-input"}
                          placeholder={translation("login.passwordPlaceholder")}
                          onChange={e => this.setState({password: e.target.value})}/>
