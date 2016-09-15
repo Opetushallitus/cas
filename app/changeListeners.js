@@ -31,6 +31,9 @@ export function initChangeListeners(dispatcher, events){
     dispatcher.push(events.submitForm)
   }
 
+  function passwordResetSuccessful(){
+    dispatcher.push(events.passwordReset)
+  }
   return{
     modeChange : modeChange,
     changeLang : changeLang,
@@ -38,6 +41,7 @@ export function initChangeListeners(dispatcher, events){
     doLogin : doLogin,
     requestPassword : requestPassword,
     loginError : loginError,
-    submitForm : submitForm
+    submitForm : submitForm,
+    passwordResetSuccessful : passwordResetSuccessful
   }
 }

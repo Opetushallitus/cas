@@ -48,6 +48,10 @@
       "fi": "Lähetä",
       "sv": "Skicka"
     },
+    "passwordRequestSuccessful": {
+      "fi": "Sähköpostiisi on lähetetty linkki, jolla voit kirjautua sisään.",
+      "sv": "SV: Sähköpostiisi on lähetetty linkki, jolla voit kirjautua sisään."
+    },
     "returnLink": {
       "fi": "Takaisin",
       "sv": "Tillbaka"

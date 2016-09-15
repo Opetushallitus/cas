@@ -17,6 +17,7 @@ const events = {
   requestPassword  : 'requestPassword',
   loginError: 'loginError',
   submitForm: 'submitForm',
+  passwordReset: "passwordReset"
 }
 
 const dispatcher = new Dispatcher();
@@ -49,8 +50,12 @@ export function initAppState() {
 
   const configPath = 'api/configuration'
 
+  function clearNotices(state){
+    return {...state, ["error"]: {}, ["passwordResetSuccessful"]: false}
+  }
+
   function toggleMode(state){
-    return {...state, ['changingPassword']: !state.changingPassword}
+    return clearNotices({...state, ['changingPassword']: !state.changingPassword})
   }
   
   function setLang(state, {field, lang}){
@@ -91,8 +96,11 @@ export function initAppState() {
   function requestPassword(state, {username}) {
     console.log("Password requested for user "+username)
     ax.post("/authentication-service/resources/salasana/poletti", username)
-      .then(response => console.log("Password requested successfully"))
-      .catch(error => console.log("Error requesting password"));
+      .then(listeners.passwordResetSuccessful())
+      .catch(error => {
+        console.log("Error requesting password")
+        // listeners.passwordResetSuccessful()
+      });
     return {...state}
   }
 
@@ -100,19 +108,10 @@ export function initAppState() {
     return {...state, ["error"]: {type: "login", message: "Invalid credentials!"}}
   }
 
-  function clearNotices(state){
-    return {...state, ["error"]: {}}
-  }
-
   function login(state, credentials) {
     console.log("login for user "+credentials.username +" password: "+credentials.password)
-    // var casAddress = state["configuration"]["cas.address"];
-    ax.post("/cas/v1/tickets", "username="+credentials.username+"&password="+credentials.password)
-      .then(response => {
-        console.log("Login successful, ticket: "+response.headers.location)
-        console.log(response.status);
-        console.log(response.headers.location);
-        listeners.submitForm()})
+    ax.post("/cas/v1/tickets", "username="+credentials.username+"&password="+encodeURIComponent(credentials.password))
+      .then(listeners.submitForm())
       .catch(error => {
         console.log("Login failed: "+error.status)
         listeners.loginError();
@@ -125,6 +124,10 @@ export function initAppState() {
     return {...state, ["submitForm"]: true}
   }
 
+  function onPasswordReset(state){
+    return {...state, ["passwordResetSuccessful"]: true}
+  }
+
   return Bacon.update(initialState,
     [dispatcher.stream(events.changeMode)], toggleMode,
     [dispatcher.stream(events.changeLang)], setLang,
@@ -132,6 +135,7 @@ export function initAppState() {
     [dispatcher.stream(events.doLogin)], login,
     [dispatcher.stream(events.requestPassword)], requestPassword,
     [dispatcher.stream(events.loginError)], loginError,
-    [dispatcher.stream(events.submitForm)], submitForm);
+    [dispatcher.stream(events.submitForm)], submitForm,
+    [dispatcher.stream(events.passwordReset)], onPasswordReset);
     // [noticeS], onFetchNotices,
 }

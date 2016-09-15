@@ -73,7 +73,6 @@ var config = {
   },
 
   plugins: [
-    //new LiveReloadPlugin({appendScriptTag:true}),
     new ExtractTextPlugin("[name].css"),
     new CleanWebpackPlugin([PATHS.webapp], {
       root: process.cwd()

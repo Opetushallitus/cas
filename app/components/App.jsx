@@ -41,7 +41,7 @@ export default class App extends React.Component {
 
             <div className="box">
               {state.changingPassword ?
-                <Password controller={this.props.controller}/> :
+                <Password controller={this.props.controller} success={state.passwordResetSuccessful}/> :
                 <Login controller={this.props.controller} error={state["error"]}
                        loginParams={state.bodyParams}
                        targetService={state.targetService}

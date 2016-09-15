@@ -201,7 +201,7 @@ body{
   padding: 0 !important;
 }
 
-.password-text-content{
+.password-reset-prompt{
   padding: 0 !important;
   p{
     font-family: 'Open Sans', sans-serif;
@@ -209,8 +209,14 @@ body{
   }
 }
 
+.password-reset-success{
+  background-color: #E6FEC4;
+  border: 2px solid #AFDC72;
+}
+
 .password-button-container{
-  padding-top: 15px !important;
+  padding-top: 3px !important;
+  margin-top: 0;
 }
 
 textarea:active,
