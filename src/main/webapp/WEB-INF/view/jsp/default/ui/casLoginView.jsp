@@ -33,7 +33,8 @@
 <body data-openid="${sessionScope.openIdLocalId}"
       data-executionKey="${flowExecutionKey}"
       data-loginTicket="${loginTicket}"
-      data-hakaUrl="${hakaUrl}">
+      data-hakaUrl="${hakaUrl}"
+      data-loginError="${loginError}">
 <div id="app"></div>
 <script src="<c:url value='/app/app.js' />"></script>
 </body>

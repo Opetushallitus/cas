@@ -4,8 +4,8 @@ import {translation} from '../resources/translations';
 export default class Password extends React.Component {
   
   constructor(props){
-    super()
-    this.toggleMode = props.controller.modeChange
+    super();
+    this.toggleMode = props.controller.modeChange;
     this.state = {username: ''}
   }
   
@@ -17,8 +17,7 @@ export default class Password extends React.Component {
         <div className="return-link" onClick={this.toggleMode}>
           {translation("login.returnLink")}
         </div>
-
-          <p><strong>{translation("login.forgotPasswordTitle")}</strong></p>
+        <p><strong>{translation("login.forgotPasswordTitle")}</strong></p>
         {successful ?
         <div className="password-reset-success">
           {translation("login.passwordRequestSuccessful")}

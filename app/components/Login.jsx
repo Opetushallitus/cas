@@ -14,18 +14,10 @@ export default class Login extends React.Component {
                   password: ''}
   }
 
-  componentDidUpdate(){
-    if(this.props.submitForm){
-      this.loginForm.submit();
-    }
-  }
-
   render() {
+      this.loginError = this.props.error;
+      this.errorMsg = "Väärä käyttäjätunnus tai salasana";
 
-      this.loginError = this.props.error && this.props.error.type === "login";
-      this.errorMsg = this.props.error ? this.props.error.message : '';
-
-      const controller = this.props.controller;
       const loginTooltip = (
           <Tooltip id="tooltip">asd</Tooltip>
       );
@@ -49,35 +41,25 @@ export default class Login extends React.Component {
               <div>
                   <input id="username" name="username" value={this.state.username} type="text"
                          ref="login"
+                         tabIndex="1"
                          className={this.loginError ? "invalid-input error" : "login-input"}
                          placeholder={translation("login.usernamePlaceholder")}
                          onChange={e => this.setState({username: e.target.value})}/>
-                  <Overlay
-                      show={this.loginError}
-                      target={() => this.refs.login}
-                      placement="right"
-                      container={this.refs.login}
-                    >
-                      <Popover id="popover-contained">
-                          {this.errorMsg}
-                      </Popover>
-                  </Overlay>
               </div>
               <div>
                   <input id="password" name="password"
                          type="password"
                          ref="password"
+                         tabIndex="2"
                          value={this.state.password}
                          className={this.loginError ? "invalid-input error" : "login-input"}
                          placeholder={translation("login.passwordPlaceholder")}
                          onChange={e => this.setState({password: e.target.value})}/>
               </div>
               <div ref="pwreset" className="link" onClick={this.modeChange}>
-
                   {translation("login.forgotPassword")}
-
               </div>
-              <button type="button" onClick={() => controller.doLogin(this.state.username, this.state.password) } className="btn btn-login">{translation("login.button")}</button>
+              <input type="submit" className="btn btn-login" value={translation("login.button")}/>
              </form>
           </div>
       )

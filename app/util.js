@@ -28,5 +28,6 @@ export function getBodyParams(){
   return {loginTicket: document.body.getAttribute("data-loginTicket"),
           executionKey: document.body.getAttribute("data-executionKey"),
           targetService: document.body.getAttribute("data-targetService"),
-          hakaUrl: document.body.getAttribute("data-hakaUrl")}
+          hakaUrl: document.body.getAttribute("data-hakaUrl"),
+          loginError: document.body.getAttribute("data-loginError")}
 }

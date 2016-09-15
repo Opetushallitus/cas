@@ -106,10 +106,10 @@ body{
 }
 
 .btn-login {
-  color: #FFFFFF;
+  color: #FFFFFF !important;
   background-color: $activeElement;
   width: 100%;
-  height: 60px;
+  height: 60px !important;
   font-family: 'Open Sans', sans-serif;
   font-weight:600;
   font-size: 16px;

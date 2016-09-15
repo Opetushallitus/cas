@@ -45,13 +45,13 @@ export function initAppState() {
                         password: '',
                         targetService: getTargetService(),
                         bodyParams: getBodyParams(),
-                        error: {},
+                        error: getBodyParams().loginError,
                         submitForm: false};
 
   const configPath = 'api/configuration'
 
   function clearNotices(state){
-    return {...state, ["error"]: {}, ["passwordResetSuccessful"]: false}
+    return {...state, ["error"]: null, ["passwordResetSuccessful"]: false}
   }
 
   function toggleMode(state){
