@@ -21,7 +21,7 @@ export default class Password extends React.Component {
           <p><strong>{translation("login.forgotPasswordTitle")}</strong></p>
         {successful ?
         <div className="password-reset-success">
-          {translation("passwordRequestSuccessful")}
+          {translation("login.passwordRequestSuccessful")}
         </div> :
         <div className="password-reset-form">
           {translation("login.passwordRequestInfo")}
