@@ -5,8 +5,10 @@ var DeployToWar = require('webpack-deploy2war');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CleanWebpackPlugin = require('clean-webpack-plugin');
 //var LiveReloadPlugin = require('webpack-livereload-plugin');
+var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 
-const webpack = require('webpack')
+const webpack = require('webpack');
 
 const PATHS = {
   webapp: path.join(__dirname, 'src/main/webapp/app/'),
@@ -29,7 +31,7 @@ var config = {
   resolve: {
     extensions: ['', '.js', '.jsx']
   },
-  devtool: 'source-map',
+  devtool: 'cheap-module-source-map',
   module: {
     loaders: [
       {
@@ -38,7 +40,7 @@ var config = {
         loader: 'babel',
         query: {
           presets:['es2015', 'react'],
-          plugins: ["transform-object-rest-spread"]
+          plugins: ["transform-object-rest-spread", "lodash"]
         }
       },
       {
@@ -73,7 +75,19 @@ var config = {
   },
 
   plugins: [
+    new LodashModuleReplacementPlugin,
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': JSON.stringify('production')
+      }
+    }),
     new ExtractTextPlugin("[name].css"),
+    // new OptimizeCssAssetsPlugin({
+    //   assetNameRegExp: /\.optimize\.css$/g,
+    //   cssProcessor: require('cssnano'),
+    //   cssProcessorOptions: { discardComments: {removeAll: true } },
+    //   canPrint: true
+    // }),
     new CleanWebpackPlugin([PATHS.webapp], {
       root: process.cwd()
     }),

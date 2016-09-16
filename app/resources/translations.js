@@ -18,7 +18,6 @@ export function translation(key, lang=resolveLang()) {
   const fullKey = key + "." + lang
   const trans = flatTrans[fullKey]
   if (_.isEmpty(trans)) {
-    console.log("Missing key " + fullKey)
     return fullKey
   } else {
     return trans

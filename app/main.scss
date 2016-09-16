@@ -1,11 +1,20 @@
-$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap";
-
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/mixins";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/variables";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/scaffolding";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/grid";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/buttons";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/normalize";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/type";
 
 $activeElement:   #159ECB;
 $darkBlue:        #00526C;
 $backgroundGray:  #F6F4F0;
 $hoverElement:    #00B5EF;
+
+$successBackground: #E6FEC4;
+$successBorder:     #AFDC72;
+$errorBackground:   #FFE9E9;
+$errorBorder:       #E09191;
 
 $aipal:                 #F38019;
 $aitu:                  #E5001C;
@@ -16,6 +25,7 @@ $oikeustulkkirekisteri: #898989;
 $oiva:                  #7E007E;
 $opintopolku:           #3B7ADB;
 $valtionavaustukset:    #211B81;
+
 
 body{
   background: #F6F4F0;
@@ -56,8 +66,8 @@ body{
   color: #2B2B2B;
   letter-spacing: 0px;
   line-height: 16px;
-  background: #FFE9E9 ;
-  border: 1px solid #E09191 ;
+  background: $errorBackground ;
+  border: 1px solid $errorBorder;
   border-radius: 2px;
 }
 
@@ -210,8 +220,13 @@ body{
 }
 
 .password-reset-success{
-  background-color: #E6FEC4;
-  border: 2px solid #AFDC72;
+  background-color: $successBackground;
+  border: 2px solid $successBorder;
+}
+
+.password-reset-failure{
+  background-color: $errorBackground;
+  border: 2px solid $errorBorder;
 }
 
 .password-button-container{

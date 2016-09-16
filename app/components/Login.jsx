@@ -8,10 +8,6 @@ export default class Login extends React.Component {
     super();
     this.id = "LoginForm";
     this.modeChange = props.controller.modeChange;
-
-
-    this.state = {username: '',
-                  password: ''}
   }
 
   render() {
@@ -25,23 +21,25 @@ export default class Login extends React.Component {
           <Tooltip id="tooltip"><strong>Holy guacamole!</strong> Check this info.</Tooltip>
       );
 
+      //TODO: move to constructor?
       const loginParams = this.props.loginParams;
-      var executionKey = loginParams.executionKey ? loginParams.executionKey : "";
-      var loginTicket = loginParams.loginTicket ? loginParams.loginTicket : "";
+      const executionKey = loginParams.executionKey ? loginParams.executionKey : "";
+      const loginTicket = loginParams.loginTicket ? loginParams.loginTicket : "";
 
       return(
           <div className="login-box">
-            <form ref={(ref) => this.loginForm = ref}
-                  id="credentials"
+            <form id="credentials"
                   action={"/cas/login?service="+this.props.targetService} method="post">
               <input type="hidden" name="lt" value={loginTicket} />
               <input type="hidden" name="execution" value={executionKey} />
               <input type="hidden" name="_eventId" value="submit" />
 
               <div>
-                  <input id="username" name="username" value={this.state.username} type="text"
+                  <input id="username" name="username" type="text"
                          ref="login"
+                         autoFocus="autoFocus"
                          tabIndex="1"
+                         autoComplete="false"
                          className={this.loginError ? "invalid-input error" : "login-input"}
                          placeholder={translation("login.usernamePlaceholder")}
                          onChange={e => this.setState({username: e.target.value})}/>
@@ -51,7 +49,6 @@ export default class Login extends React.Component {
                          type="password"
                          ref="password"
                          tabIndex="2"
-                         value={this.state.password}
                          className={this.loginError ? "invalid-input error" : "login-input"}
                          placeholder={translation("login.passwordPlaceholder")}
                          onChange={e => this.setState({password: e.target.value})}/>

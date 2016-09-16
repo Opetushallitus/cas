@@ -1,7 +1,6 @@
 export function initChangeListeners(dispatcher, events){
 
   function modeChange(value){
-    // console.log("Mode changed: val: "+value)
     dispatcher.push(events.changeMode, value)
   }
 
@@ -31,17 +30,14 @@ export function initChangeListeners(dispatcher, events){
     dispatcher.push(events.submitForm)
   }
 
-  function passwordResetSuccessful(){
-    dispatcher.push(events.passwordReset)
+  function passwordResetResult(success){
+    dispatcher.push(events.passwordReset, {success: success})
   }
   return{
     modeChange : modeChange,
     changeLang : changeLang,
     acceptCookies : acceptCookies,
-    doLogin : doLogin,
     requestPassword : requestPassword,
-    loginError : loginError,
-    submitForm : submitForm,
-    passwordResetSuccessful : passwordResetSuccessful
+    passwordResetResult : passwordResetResult
   }
 }

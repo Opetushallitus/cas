@@ -52,6 +52,10 @@
       "fi": "Sähköpostiisi on lähetetty linkki, jolla voit kirjautua sisään.",
       "sv": "SV: Sähköpostiisi on lähetetty linkki, jolla voit kirjautua sisään."
     },
+    "passwordRequestFailed":{
+      "fi": "Salasanan tilaaminen epäonnistui, yritä myöhemmin uudelleen.",
+      "sv": "SV: Salasanan tilaaminen epäonnistui, yritä myöhemmin uudelleen."
+    },
     "returnLink": {
       "fi": "Takaisin",
       "sv": "Tillbaka"

@@ -20,7 +20,7 @@ const whiteStyle = {
     color: "white"
 };
 export default class App extends React.Component {
-    constructor(props){
+    constructor(){
         super();
         document.title = translation("app.documentTitle");
     }
@@ -28,7 +28,6 @@ export default class App extends React.Component {
   render(){
     const state = this.props.state;
     const displayCookieBanner = !state.cookiesAccepted;
-    const configuration = state.configuration;
     return(
       <div id="main" className="asdcontainer-fluid">
         {displayCookieBanner ? <CookieBanner controller={this.props.controller}/> : ""}
@@ -41,7 +40,7 @@ export default class App extends React.Component {
 
             <div className="box">
               {state.changingPassword ?
-                <Password controller={this.props.controller} success={state.passwordResetSuccessful}/> :
+                <Password controller={this.props.controller} resetDone={state.passwordResetStatus}/> :
                 <Login controller={this.props.controller} error={state["error"]}
                        loginParams={state.bodyParams}
                        targetService={state.targetService}
