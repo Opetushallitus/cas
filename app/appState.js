@@ -3,9 +3,8 @@ import Dispatcher from './dispatcher.js'
 import axios from 'axios'
 import Promise from 'bluebird'
 import {initChangeListeners} from './changeListeners.js'
-import {resolveLang, changeLang} from './resources/translations.js'
-import configuration from './config'
-import {getCookie, setCookie, getTargetService, getBodyParams} from './util'
+import {resolveLang, changeLang} from './translations.js'
+import {getCookie, setCookie, getTargetService, getConfiguration, getLoginError} from './util'
 
 const ax = Promise.promisifyAll(axios);
 
@@ -38,19 +37,19 @@ export function initAppState() {
                         notices: [],
                         cookiesAccepted: cookiesAccepted(),
                         targetService: getTargetService(),
-                        bodyParams: getBodyParams(),
-                        error: getBodyParams().loginError,
+                        configuration: getConfiguration(),
+                        loginError: getLoginError(),
                         passwordResetStatus: {reset: false}};
 
   function clearNotices(state){
-    return {...state, ["error"]: null, ["passwordResetStatus"]: {reset: false}}
+    return {...state, ["loginError"]: null, ["passwordResetStatus"]: {reset: false}}
   }
 
   function toggleMode(state){
     return clearNotices({...state, ['changingPassword']: !state.changingPassword})
   }
   
-  function setLang(state, {field, lang}){
+  function setLang(state, {lang}){
     changeLang(lang);
     return {...state, ['lang']: lang}
   }

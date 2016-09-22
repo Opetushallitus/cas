@@ -24,10 +24,12 @@ export function getTargetService(){
   return "";
 }
 
-export function getBodyParams(){
+export function getLoginError(){
+  return document.body.getAttribute("data-loginError");
+}
+
+export function getConfiguration(){
   return {loginTicket: document.body.getAttribute("data-loginTicket"),
           executionKey: document.body.getAttribute("data-executionKey"),
-          targetService: document.body.getAttribute("data-targetService"),
-          hakaUrl: document.body.getAttribute("data-hakaUrl"),
-          loginError: document.body.getAttribute("data-loginError")}
+          hakaUrl: document.body.getAttribute("data-hakaUrl")}
 }

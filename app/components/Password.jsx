@@ -1,5 +1,5 @@
 import React from 'react';
-import {translation} from '../resources/translations';
+import {translation} from '../translations';
 
 function resetNotification(resetDone){
   return(
@@ -16,30 +16,38 @@ export default class Password extends React.Component {
   
   constructor(props){
     super();
+    this.controller = props.controller;
     this.toggleMode = props.controller.modeChange;
     this.state = {username: ''}
   }
 
+  requestPassword(e, username){
+    e.preventDefault();
+    this.controller.requestPassword(username)
+  }
+
   render() {
-    const controller = this.props.controller;
-    const resetDone = this.props.resetDone.reset;
+    const resetStatus = this.props.resetStatus;
+    const resetDone = resetStatus.reset;
+
     return(
-      <div className="login-box">
+      <div className={resetDone ? "short-box" : "login-box"}>
         <div className="return-link" onClick={this.toggleMode}>
           {translation("login.returnLink")}
         </div>
         <p><strong>{translation("login.forgotPasswordTitle")}</strong></p>
         {resetDone ?
-          resetNotification(this.props.resetDone) :
+          resetNotification(this.props.resetStatus) :
         <div className="password-reset-form">
           {translation("login.passwordRequestInfo")}
-
-          <div>
-            <input autoFocus="autoFocus" type="text" placeholder={translation("login.usernamePlaceholder")} onChange={e => this.setState({username: e.target.value})}/>
-          </div>
-          <div className="password-button-container">
-            <button className="btn btn-login" onClick={() => controller.requestPassword(this.state.username)}>{translation("login.sendPasswordRequest")}</button>
-          </div>
+          <form className="resetPasswordForm" onSubmit={(e) => this.requestPassword(e, this.state.username)}>
+            <div>
+              <input className="login-input" autoFocus="autoFocus" type="text" placeholder={translation("login.usernamePlaceholder")} onChange={e => this.setState({username: e.target.value})}/>
+            </div>
+            <div className="password-button-container">
+              <button className="btn btn-login" onClick={() => controller.requestPassword(this.state.username)}>{translation("login.sendPasswordRequest")}</button>
+            </div>
+           </form>
         </div>}
       </div>
     )

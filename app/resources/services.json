@@ -10,14 +10,14 @@
     },
     "description": {
       "fi": "AIPAL on ammatillisen koulutuksen palautejärjestelmä, jolla kerätään näyttötutkinnon suorittajien mielipiteitä tutkinnon suorittamisesta sekä näyttötutkintomestarikoulutuksen suorittajien mielipiteitä NTM-koulutuksesta. AIPALin käyttäjäneuvonta: aipal@oph.fi, puh. 029 533 1025.",
-      "sv": "SV: APAL on internetin kautta käytettävä palautejärjestelmä..."
+      "sv": "AIPAL är ett system för respons om yrkesutbildning, med vilket man samlar åsikter av dem som avlägger fristående examen eller examensmästareutbildning. AIPAL användarrådgivning:  aipal@oph.fi, tfn 029 533 1025."
     },
     "link": "http://www.oph.fi/download/163738_Rekisteriseloste_AIPAL_dnro_45_022_2014.pdf"
   },
   "aitu":{
     "name":{
       "fi": "AITU - Tutkintotoimikunta- ja näyttötutkintojen järjestämissopimusrekisteri",
-      "sv": "AITU-Tutkintatoimirekisteri"
+      "sv": "AITU – Register över examenskommissioner och avtal för ordnande av fristående examina"
     },
     "shortname":{
       "fi": "AITU",
@@ -25,14 +25,14 @@
     },
     "description": {
       "fi": "Opetushallituksen käytössä oleva rekisteri tutkintotoimikunnista, niiden toimialoista ja jäsenistä sekä tehdyistä näyttötutkintojen järjestämissopimuksista. 1.8.2016 alkaen AITU toimii lisäksi tutkintotoimikuntien tehtävien hoidossa tarvittavien näyttötutkintojen suoritustietojen rekisterinä. AITUn käyttäjäneuvonta:  aitu-tuki@oph.fi, puh. 029 533 1025",
-      "sv": "SV: AITU kuvaus"
+      "sv": "Utbildningsstyrelsens register över examenskommissioner, verksamhetsområden och medlemmar samt avtal för ordnande av fristående yrkesexamina. Från och med 1.8.2016 fungerar dessutom AITU som ett register över avlagda studier inom fristående yrkesexamina (används av examenskommissionerna). Användarrådgivning för AITU: aitu-tuki@oph.fi, tfn 029 533 1025."
     },
     "link": "http://www.aitu.fi/download/159599_Rekisteriseloste_AITU.pdf"
   },
   "arvo": {
     "name": {
       "fi": "Arvo - opetushallinnon vaikuttavuustietopalvelu",
-      "sv": "Arvo"
+      "sv": "Arvo – informationstjänst för effektivering inom utbildningsförvaltningen"
     },
     "shortname":{
       "fi": "Arvo",
@@ -40,7 +40,7 @@
     },
     "description":{
       "fi": "Opetushallinnon vaikuttavuustietopalvelu Arvo on opetushallinnon kyselytiedonkeruun järjestelmä, jolla kerätään valtakunnallisesti yhteismitallista ja vertailukelpoista tietoa koulutuksen vaikuttavuuden arvioimiseksi. Lisätietoa: arvo@postit.csc.fi.",
-      "sv": "???"
+      "sv": "Informationstjänsten Arvo är ett datainsamlingssystem. Via systemet samlar man in jämförbara uppgifter som utgör grund för utvärderingen av utbildningens effektivitet. Mera information: arvo@postit.csc.fi."
     }
   },
   "eperusteet": {
@@ -54,7 +54,7 @@
     },
     "description":{
       "fi": "Käyttäjäneuvonta: eperusteet@opintopolku.fi, puh. 029 533 1025",
-      "sv": "SV: ePerusteet-palvelussa voit tutustua voimassa oleviin opetussuunnitelmien..."
+      "sv": "Tjänsten eGrunder är en plattform för att utarbeta läroplans- och examensgrunder och grunder för utbildningar. Utbildningsstyrelsen ansvarar för att grunderna som finns i tjänsten vid behov ändras eller revideras samt för att nya grunder utarbetas. En länk till de lokala verktygen (LP-verktyg, YRKESKUNNANDE-verktyg) för utbildningsanordnarna finns under eGrunder. Användarrådgivning: egrunder@studieinfo.fi"
     }
   },
   "koski": {
@@ -68,7 +68,7 @@
     },
     "description":{
       "fi": "Kansallisten opiskeluoikeuksien ja suoritusten keskitetty integraatiopalvelu – Koski kerää yhteen tiedot kunkin oppijan koulutuksesta yksittäisestä opintosuorituksesta suoritettuihin tutkintoihin asti. Palvelu sisältää tiedot oppijan opinto-oikeuksista sekä suoritettujen tutkintojen keskeisistä sisällöistä ja osaamisvaatimuksista. Kosken käyttäjäneuvonta: koski@oph.fi",
-      "sv": "SV: Kansallisten opiskeluoikeuksien ja suoritusten keskitetty integraatiopalvelu."
+      "sv": "Tjänsten för nationella studierätter och prestationer – Koski samlar uppgifter om elevers och studerandes separata studieprestationer och avlagda examina. Tjänsten innehåller uppgifter om studerandes studierätter och centralt innehåll och kompetenskrav i avlagda examina. Användarrådgivningen för Koski: koski@oph.fi"
     }
   },
   "oikeustulkkirekisteri": {
@@ -96,7 +96,7 @@
     },
     "description":{
       "fi": "ammatillisen peruskoulutuksen ohjaus- ja säätelypalvelu (OIVA)",
-      "sv": "SV: Oiva on sosiaalisen median toimintatapoja hyödyntävä yhteisöalusta. Sitä käytetään mm. asiakkuuksien hallintaan."
+      "sv": "OIVA - Utbildningsförvaltningens styrning- och regleringstjänst."
     }
   },
   "opintopolku": {
@@ -110,21 +110,21 @@
     },
     "description":{
       "fi": "Opintopolun Virkailijan työpöydälle kirjaudutaan tunnuksilla, jotka saa esimerkiksi oman organisaation Opintopolku-vastuu/pääkäyttäjältä. Työpöydällä näkyvät virkailijapalvelut riippuvat käyttäjän käyttöoikeuksista.",
-      "sv": "SV: Opintopolku.fi-palvelu sisältää tietoa tutkinnoista, ammateista sekä opiskelusta eri oppilaitoksissa."
+      "sv": "Du loggar in på Administratörens arbetsbord i Studieinfo med ett användarnamn, vilket du får av exempelvis den ansvariga användaren/huvudanvändaren i din egen organisation. De tjänster som visas på arbetsbordet beror på hurudana rättigheter du har."
     }
   },
   "valtionavustukset": {
     "name": {
       "fi": "Valtionavustukset",
-      "sv": "Statsunderstöd"
+      "sv": "Statsunderstödssystemet "
     },
     "shortname": {
       "fi": "Valtionavustukset",
-      "sv": "Statsunderstöd"
+      "sv": "Statsunderstödssystemet "
     },
     "description":{
       "fi": "Valtionavustusjärjestelmällä toteutetaan ja käsitellään digitaalisesti Opetushallituksen myöntämät valtionavustukset. Järjestelmän käyttäjiä ovat Opetushallituksen virkailijat.",
-      "sv": "SV: ???"
+      "sv": "Genom statsunderstödssystemet genomförs och behandlas statsunderstöd som beviljats av Utbildningsstyrelsen. Systemanvändare är tjänstemän vid Utbildningsstyrelsen. "
     }
   }
 }

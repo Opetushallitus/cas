@@ -1,7 +1,9 @@
 import React from 'react';
 import services from '../resources/services.json';
-import {translation} from '../resources/translations';
+import Scroll from 'react-scroll';
+import {translation} from '../translations';
 
+const scroller = Scroll.scroller;
 
 function sortTranslation(a, b){
   if(translation(a+".name").toUpperCase() < translation(b+".name").toUpperCase()) return -1;
@@ -14,7 +16,9 @@ export class ServiceList extends React.Component{
     return(
       <div>
         <ul id="service-list">
-          {Object.keys(services).sort(sortTranslation).map(k =>  <li key={k}><a href={"#"+k}>{translation(k+".shortname")+ " "}</a></li>)}
+          {Object.keys(services).sort(sortTranslation).map(k =>
+            <li key={k}><a onClick={() =>
+              scroller.scrollTo(k, {duration: 500, smooth: true })}>{translation(k+".shortname")+ " "}</a></li>)}
         </ul>
       </div>
     )
@@ -28,8 +32,8 @@ export class ServiceDescriptions extends React.Component{
           <div className="services row">
             <h2 className="services-title">{translation("services.title")}</h2>
             {Object.keys(services).sort(sortTranslation).map(k =>
-              <div className="service col-xs-12 col-sm-6 " key={k} id={k}>
-                <span className={"bullet "+k}></span>
+              <div className="service col-xs-12 col-sm-6 " key={k} id={k} name={k}>
+                <span className={"bullet "+k}/>
                 <div id="service-title">{translation((k+".name"))}</div>
                 <div>{translation(k+".description")}</div>
               </div>)}

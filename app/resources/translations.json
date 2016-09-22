@@ -59,6 +59,20 @@
     "returnLink": {
       "fi": "Takaisin",
       "sv": "Tillbaka"
+    },
+    "error" : {
+      "badCredentials": {
+        "fi": "Väärä käyttäjätunnus tai salasana",
+        "sv": "[SV] Väärä käyttäjätunnus tai salasana."
+      },
+      "accountDisabled": {
+        "fi": "Tunnuksesi on poistettu käytöstä",
+        "sv": "[SV]Tunnuksesi on poistettu käytöstä"
+      },
+      "accountLocked": {
+        "fi": "Liian monta kirjautumisyritystä, yritä myöhemmin uudelleen",
+        "sv": "[SV]Liian monta kirjautumisyritystä, yritä myöhemmin uudelleen"
+      }
     }
   },
 

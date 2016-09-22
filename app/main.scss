@@ -69,6 +69,9 @@ body{
   background: $errorBackground ;
   border: 1px solid $errorBorder;
   border-radius: 2px;
+  &:focus{
+    background: $errorBackground !important;
+  }
 }
 
 
@@ -91,7 +94,7 @@ body{
   height: 45px;
   padding-top: 15px;
   padding-bottom: 15px;
-  font-family: 'Open Sans';
+  font-family: 'Open Sans', sans-serif;
   .btn-cookies{
     margin-left: 5px;
     height: 20px;
@@ -126,9 +129,13 @@ body{
   letter-spacing: 0px;
   line-height: 20px;
   margin-top: 10px;
+  border: 0 !important;
   &:hover{
     background: $hoverElement;
     color: #FFFFFF;
+  }
+  &:focus{
+    background: $hoverElement !important;
   }
 }
 .btn-cookies {
@@ -161,16 +168,15 @@ body{
   box-shadow: 0px 0px 10px #888888;
   font-family: 'Open Sans', sans-serif;
   .login-box{
-    height: 250px;
-  }
+    height: 250px}
+  .short-box {
+    max-height: 160px}
   div{
     padding-top: 10px;
     padding-bottom: 10px;
     input {
       width: 100%;
       font-size: 15px;
-      border: 1px solid #AEAEAE;
-      border-radius: 3px;
       color: #2B2B2B;
       letter-spacing: 0px;
       line-height: 40px;
@@ -189,6 +195,11 @@ body{
     display: block;
     margin-top: 20px;
   }
+}
+
+.login-input {
+  border: 1px solid #AEAEAE;
+  border-radius: 3px;
 }
 
 .link{

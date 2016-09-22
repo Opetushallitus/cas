@@ -1,7 +1,6 @@
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Bacon from 'baconjs';
 import App from './components/App';
 import {initAppState, getController} from './appState.js'
 

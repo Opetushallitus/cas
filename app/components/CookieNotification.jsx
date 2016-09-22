@@ -1,5 +1,5 @@
 import React from 'react'
-import {translation} from '../resources/translations';
+import {translation} from '../translations';
 
 export default class CookieNotification extends React.Component {
 
@@ -11,10 +11,10 @@ export default class CookieNotification extends React.Component {
   render(){
     return(
         <div>
-      <div className="cookieHeader">
-        {translation("cookie.text")}
-        <button className="btn btn-cookies" onClick={this.acceptCookies}>{translation("cookie.button")}</button>
-      </div>
+          <div className="cookieHeader">
+            {translation("cookie.text")}
+            <button className="btn btn-cookies" onClick={this.acceptCookies}>{translation("cookie.button")}</button>
+          </div>
       </div> )
   }
 }

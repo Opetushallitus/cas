@@ -160,14 +160,26 @@
           -->
         <transition on="success" to="sendTicketGrantingTicket" />
         <transition on="error" to="generateLoginTicket">
-            <set name="flowScope.loginError" value="'bad.credentials'" type="string" />
+            <set name="flowScope.loginError" value="'badCredentials'" type="string" />
         </transition>
-        <transition on="accountDisabled" to="casAccountDisabledView" />
-        <transition on="mustChangePassword" to="casMustChangePassView" />
-        <transition on="accountLocked" to="casAccountLockedView" />
-        <transition on="badHours" to="casBadHoursView" />
-        <transition on="badWorkstation" to="casBadWorkstationView" />
-        <transition on="passwordExpired" to="casExpiredPassView" />
+        <transition on="accountDisabled" to="generateLoginTicket">
+            <set name="flowScope.loginError" value="'accountDisabled'" type="string" />
+        </transition>
+        <transition on="mustChangePassword" to="generateLoginTicket">
+            <set name="flowScope.loginError" value="'mustChangePassword'" type="string" />
+        </transition>
+        <transition on="accountLocked" to="generateLoginTicket">
+            <set name="flowScope.loginError" value="'accountLocked'" type="string" />
+        </transition>
+        <transition on="badHours" to="generateLoginTicket">
+            <set name="flowScope.loginError" value="'badHours'" type="string" />
+        </transition>
+        <transition on="badWorkstation" to="generateLoginTicket">
+            <set name="flowScope.loginError" value="'badWorkstation'" type="string" />
+        </transition>
+        <transition on="passwordExpired" to="generateLoginTicket">
+            <set name="flowScope.loginError" value="'passwordExpired'" type="string" />
+        </transition>
     </action-state>
 
     <action-state id="sendTicketGrantingTicket">

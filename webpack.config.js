@@ -5,7 +5,6 @@ var DeployToWar = require('webpack-deploy2war');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CleanWebpackPlugin = require('clean-webpack-plugin');
 //var LiveReloadPlugin = require('webpack-livereload-plugin');
-var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 
 const webpack = require('webpack');
@@ -31,7 +30,7 @@ var config = {
   resolve: {
     extensions: ['', '.js', '.jsx']
   },
-  devtool: 'cheap-module-source-map',
+  devtool: 'source-map',
   module: {
     loaders: [
       {
@@ -82,12 +81,12 @@ var config = {
       }
     }),
     new ExtractTextPlugin("[name].css"),
-    // new OptimizeCssAssetsPlugin({
-    //   assetNameRegExp: /\.optimize\.css$/g,
-    //   cssProcessor: require('cssnano'),
-    //   cssProcessorOptions: { discardComments: {removeAll: true } },
-    //   canPrint: true
-    // }),
+    new webpack.optimize.UglifyJsPlugin({
+      mangle: true,
+      compress: {
+        warnings: false,
+      }
+    }),
     new CleanWebpackPlugin([PATHS.webapp], {
       root: process.cwd()
     }),
