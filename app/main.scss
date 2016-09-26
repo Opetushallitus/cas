@@ -74,6 +74,13 @@ body{
   }
 }
 
+.errortext{
+  font-family: 'Open Sans', sans-serif;
+  font-size: 15px;
+  color: $errorBorder ;
+  padding-top: 10px;
+}
+
 
 .notice{
   text-align: center;

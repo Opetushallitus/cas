@@ -18,12 +18,6 @@ export default class Login extends React.Component {
       const loginError = this.props.error;
       const errorMsg =  loginError ? translation("login.error."+loginError) : "";
       console.log("Login error: "+ errorMsg);
-      const loginTooltip = (
-          <Tooltip id="tooltip">asd</Tooltip>
-      );
-      const passwordTooltip = (
-          <Tooltip id="tooltip"><strong>Holy guacamole!</strong> Check this info.</Tooltip>
-      );
 
       return(
           <div className="login-box">
@@ -57,6 +51,7 @@ export default class Login extends React.Component {
               </div>
               <input type="submit" className="btn btn-login" value={translation("login.button")}/>
              </form>
+            <div className={loginError ? "errortext" : ""}>{loginError ? translation("login.error."+loginError) : ""}</div>
           </div>
       )
   }
