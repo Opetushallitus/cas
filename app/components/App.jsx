@@ -32,7 +32,7 @@ export default class App extends React.Component {
       <div id="main">
         {displayCookieBanner ? <CookieBanner controller={this.props.controller}/> : ""}
         <Header lang={state.lang} controller={this.props.controller}/>
-        <Notices notices={state["notices"]}/>
+        <Notices notices={state.notices}/>
         <div id="content" style={bgStyle}>
           <h1 style={whiteStyle} className="page-title">{translation("app.title")}</h1>
           <h2 style={whiteStyle} className="page-subtitle">{translation("app.subtitle")}</h2>

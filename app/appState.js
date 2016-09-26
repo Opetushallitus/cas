@@ -18,6 +18,7 @@ const events = {
 
 const dispatcher = new Dispatcher();
 const controller = initChangeListeners(dispatcher, events);
+const notificationUrl = '/notifications/api/notifications';
 
 export function getController(){
   return controller;
@@ -41,6 +42,8 @@ export function initAppState() {
                         loginError: getLoginError(),
                         passwordResetStatus: {reset: false}};
 
+  const notificationsS = Bacon.fromPromise(ax.get(notificationUrl));
+
   function clearNotices(state){
     return {...state, ["loginError"]: null, ["passwordResetStatus"]: {reset: false}}
   }
@@ -54,12 +57,8 @@ export function initAppState() {
     return {...state, ['lang']: lang}
   }
 
-  function fetchNotices(){
-    return Bacon.fromPromise(ax.get(configuration.noticeUrl))
-  }
-
-  function onFetchNotices(state, notices){
-    return {...state, ['notices']: notices["data"]}
+  function onFetchNotices(state, notifications){
+    return {...state, ['notices']: notifications.data}
   }
 
   function acceptCookies(state){
@@ -87,5 +86,6 @@ export function initAppState() {
     [dispatcher.stream(events.changeLang)], setLang,
     [dispatcher.stream(events.acceptCookies)], acceptCookies,
     [dispatcher.stream(events.requestPassword)], requestPassword,
-    [dispatcher.stream(events.passwordReset)], onPasswordReset);
+    [dispatcher.stream(events.passwordReset)], onPasswordReset,
+    [notificationsS], onFetchNotices)
 }

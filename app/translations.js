@@ -24,6 +24,11 @@ export function translation(key, lang=resolveLang()) {
   }
 }
 
+export function translateNotification(key, obj, lang=resolveLang()){
+  const fullKey = key + '_' + lang;
+  return obj[fullKey];
+}
+
 export function resolveLang() {
   return getCookie("i18next") || browserLanguage()
 }
