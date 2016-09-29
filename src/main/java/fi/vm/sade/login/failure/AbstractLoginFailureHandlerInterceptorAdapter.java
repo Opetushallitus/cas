@@ -1,5 +1,7 @@
 package fi.vm.sade.login.failure;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.webflow.execution.Event;
@@ -7,9 +9,6 @@ import org.springframework.webflow.execution.RequestContext;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public abstract class AbstractLoginFailureHandlerInterceptorAdapter extends HandlerInterceptorAdapter {
 
@@ -38,7 +37,7 @@ public abstract class AbstractLoginFailureHandlerInterceptorAdapter extends Hand
         }
         if( hasSuccessfulAuthentication(request, response) ) {
             notifySuccessfullLogin(request);
-        } if (hasRedirectToLoginPage(request, response)) {
+        } else if (hasRedirectToLoginPage(request, response)) {
             LOGGER.debug("There is redirect to login page. Passing it through.");
         } else {
             notifyFailedLoginAttempt(request);

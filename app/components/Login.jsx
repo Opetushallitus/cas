@@ -16,8 +16,6 @@ export default class Login extends React.Component {
 
   render() {
       const loginError = this.props.error;
-      const errorMsg =  loginError ? translation("login.error."+loginError) : "";
-      console.log("Login error: "+ errorMsg);
 
       return(
           <div className="login-box">

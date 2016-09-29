@@ -13,13 +13,20 @@ export function setCookie(name, val){
 
 export function getUrlParameters(){
   var pairs = location.search.substr(1).split('&').map(item => item.split('='));
-  return _.zipObject(pairs)
+  return _.fromPairs(pairs)
 }
+
+function isEncoded(str){return decodeURIComponent(str) !== str;}
 
 export function getTargetService(){
   var service = getUrlParameters().service;
   if(service && service !== null){
-    return service.replace(/j_spring_cas_security_check/g, "").replace(/login\/cas/g, "");
+
+    if(isEncoded(service)){
+      return service;
+    } else{
+      return encodeURIComponent(service.replace(/j_spring_cas_security_check/g, "").replace(/login\/cas/g, ""));
+    }
   }
   return "";
 }
