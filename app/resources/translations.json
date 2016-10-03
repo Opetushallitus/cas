@@ -2,7 +2,7 @@
   "app": {
     "documentTitle": {
       "fi": "Oppijan verkkopalvelu - Virkailijan palvelut - Sisäänkirjautuminen",
-      "sv": "[SV] Oppijan verkkopalvelu - Virkailijan palvelut - Sisäänkirjautuminen"
+      "sv": "Webbtjänster för administratörer inom utbildningsförvaltningen – Inloggning "
     },
     "title": {
       "fi": "Kirjaudu sisään",
@@ -85,12 +85,12 @@
   "services": {
     "title": {
       "fi": "Lisätietoja palveluista",
-      "sv": "Lisätietoja palveluista"
+      "sv": "Information om tjänsterna"
     }
   },
   "tietosuoja": {
     "fi": "Tietosuojaseloste",
-    "sv": "SV tietosuojaseloste"
+    "sv": "Dataskyddsbeskrivning"
   },
   "rekisteri": {
     "fi": "Rekisteriselosteet: ",
