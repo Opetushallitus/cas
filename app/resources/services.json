@@ -39,7 +39,7 @@
       "sv": "Arvo"
     },
     "description":{
-      "fi": "Opetushallinnon vaikuttavuustietopalvelu Arvo on opetushallinnon kyselytiedonkeruun järjestelmä, jolla kerätään valtakunnallisesti yhteismitallista ja vertailukelpoista tietoa koulutuksen vaikuttavuuden arvioimiseksi. Lisätietoa: arvo@postit.csc.fi.",
+      "fi": "Opetushallinnon vaikuttavuustietopalvelu Arvo on opetushallinnon alueelle räätälöity kyselytiedonkeruun järjestelmä, jolla kerätään valtakunnallisesti yhteismitallista ja vertailukelpoista tietoa koulutuksen vaikuttavuuden arvioimiseksi. Palvelua kehittää ja ylläpitää CSC - Tieteen tietotekniikan keskus Oy. Lisätietoa: arvo@postit.csc.fi",
       "sv": "Informationstjänsten Arvo är ett datainsamlingssystem. Via systemet samlar man in jämförbara uppgifter som utgör grund för utvärderingen av utbildningens effektivitet. Mera information: arvo@postit.csc.fi."
     }
   },
@@ -53,7 +53,7 @@
       "sv": "eGrunder"
     },
     "description":{
-      "fi": "ePerusteet-palvelu toimii opetussuunnitelmien, tutkintojen ja koulutusten perusteiden laatimisen alustana. Palvelussa olevien perusteiden muutoksista, uudistamisesta ja uusien perusteiden laadinnasta vastaa Opetushallitus. Opetuksen ja koulutuksen järjestäjille suunnatut paikalliset työkalut (Ops-työkalu, AMOSAA-työkalu) löytyvät navigaatiosta ePerusteet alta.Käyttäjäneuvonta: eperusteet@opintopolku.fi, puh. 029 533 1025",
+      "fi": "ePerusteet-palvelu toimii opetussuunnitelmien, tutkintojen ja koulutusten perusteiden laatimisen alustana. Palvelussa olevien perusteiden muutoksista, uudistamisesta ja uusien perusteiden laadinnasta vastaa Opetushallitus.Opetuksen ja koulutuksen järjestäjille suunnatut paikalliset työkalut (Ops-työkalu, AMOSAA-työkalu) löytyvät navigaatiosta ePerusteet alta.Lisätietoa: eperusteet@opintopolku.fi.",
       "sv": "Tjänsten eGrunder är en plattform för att utarbeta läroplans- och examensgrunder och grunder för utbildningar. Utbildningsstyrelsen ansvarar för att grunderna som finns i tjänsten vid behov ändras eller revideras samt för att nya grunder utarbetas. En länk till de lokala verktygen (LP-verktyg, YRKESKUNNANDE-verktyg) för utbildningsanordnarna finns under eGrunder. Användarrådgivning: egrunder@studieinfo.fi"
     }
   },
@@ -81,7 +81,7 @@
       "sv": "Registret över rättstolkar"
     },
     "description":{
-      "fi": "Oikeustulkkirekisterin tarkoituksena on edistää riittävän laadukkaan tulkkaustaidon omaavien oikeustulkkien saatavuutta",
+      "fi": "Rekisterin ylläpidolla edistetään oikeudellisissa asioissa riittävän pätevien tulkkien saatavuutta. Lisätietoja oikeustulkkirekisteri@oph.fi",
       "sv": "SV: Oikeustulkkirekisterin tarkoituksena on edistää riittävän laadukkaan tulkkaustaidon omaavien oikeustulkkien saatavuutta"
     }
   },
