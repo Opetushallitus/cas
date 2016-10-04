@@ -18,7 +18,7 @@ const events = {
 
 const dispatcher = new Dispatcher();
 const controller = initChangeListeners(dispatcher, events);
-const notificationUrl = '/notifications/api/notifications';
+const notificationUrl = '/login-notifications/api/notifications';
 
 export function getController(){
   return controller;
