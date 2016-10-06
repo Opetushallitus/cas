@@ -28,7 +28,7 @@ export function getTargetService(){
       return encodeURIComponent(service.replace(/j_spring_cas_security_check/g, "").replace(/login\/cas/g, ""));
     }
   }
-  return "";
+  return window.location.origin + '/virkailijan-stp-ui';
 }
 
 export function getLoginError(){
