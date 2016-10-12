@@ -12,8 +12,8 @@ export default class CookieNotification extends React.Component {
     return(
         <div>
           <div className="cookieHeader">
-            {translation("cookie.text")}
-            <button className="btn btn-cookies" onClick={this.acceptCookies}>{translation("cookie.button")}</button>
+            <span className="cookieText"> {translation("cookie.text")}</span>
+            <span className="btn-cookies" onClick={this.acceptCookies}>{translation("cookie.button")}</span>
           </div>
       </div> )
   }

@@ -10,7 +10,3 @@ const appState = initAppState();
 appState.onValue((state) => {
   ReactDOM.render(<App state={state} controller={getController()}/>, document.getElementById('app'));
 });
-
-
-// ReactDOM.render(<App />, document.getElementById('app'));
-
