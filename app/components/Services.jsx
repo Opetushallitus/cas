@@ -41,9 +41,9 @@ export class ServiceDescriptions extends React.Component{
             <div className="seloste">
                 <a id="tietosuojaseloste" href="https://opintopolku.fi/wp/tietosuojaseloste/">{translation("tietosuoja")}</a>
                 {translation("rekisteri")}
-                {Object.keys(services).map(k =>
+                {Object.keys(services).filter(s => services[s].link).map(k =>
                     <span key={k} className="seloste-link">
-                    {services[k].link ? <a href={services[k].link}>{translation((k+".shortname"))}</a> : ""}
+                      {services[k].link ? <a href={services[k].link}>{translation(k+".shortname")}</a> : ""}
                     </span>
                 )}
             </div>

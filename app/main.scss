@@ -28,7 +28,6 @@ $oiva:                  #7E007E;
 $opintopolku:           #3B7ADB;
 $valtionavaustukset:    #211B81;
 
-
 body{
   background: #F6F4F0;
 }
@@ -89,7 +88,7 @@ body{
   font-family: 'Open Sans', sans-serif;
   font-size: 15px;
   color: #ffffff;
-  letter-spacing: 0px;
+  letter-spacing: 0;
   line-height: 16px;
   background: #EF8E1D;
   padding:10px;
@@ -372,7 +371,7 @@ text{
   margin: 20px 0px;
 }
 
-.seloste-link + .seloste-link> a:before{
+.seloste-link + .seloste-link:before{
   content: ", ";
 }
 
