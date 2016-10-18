@@ -1,6 +1,3 @@
-import _ from 'lodash'
-
-
 export function getCookie(name) {
   var value = "; " + document.cookie;
   var parts = value.split("; " + name + "=");
@@ -11,24 +8,9 @@ export function setCookie(name, val){
   document.cookie=name+"="+val+"; path=/";
 }
 
-export function getUrlParameters(){
-  var pairs = location.search.substr(1).split('&').map(item => item.split('='));
-  return _.fromPairs(pairs)
-}
-
-function isEncoded(str){return decodeURIComponent(str) !== str;}
-
 export function getTargetService(){
-  var service = getUrlParameters().service;
-  if(service && service !== null){
-
-    if(isEncoded(service)){
-      return service;
-    } else{
-      return encodeURIComponent(service.replace(/j_spring_cas_security_check/g, "").replace(/login\/cas/g, ""));
-    }
-  }
-  return window.location.origin + '/virkailijan-stp-ui';
+  let service = document.body.getAttribute("data-targetService");
+  return (service && service.length > 0) ? service :  window.location.origin + '/virkailijan-stp-ui';
 }
 
 export function getLoginError(){

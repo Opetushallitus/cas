@@ -30,11 +30,26 @@
     <title>Webpack App</title>
 </head>
 
+<%
+    String targetServiceUrl = request.getParameter("service");
+
+    if (targetServiceUrl != null) {
+        targetServiceUrl = targetServiceUrl.replaceAll("j_spring_cas_security_check", "");
+        targetServiceUrl = targetServiceUrl.replaceAll("login/cas", "");
+        targetServiceUrl = java.net.URLEncoder.encode(targetServiceUrl, "UTF-8");
+    } else {
+        targetServiceUrl = "";
+    }
+
+%>
+
 <body data-openid="${sessionScope.openIdLocalId}"
       data-executionKey="${flowExecutionKey}"
       data-loginTicket="${loginTicket}"
       data-hakaUrl="${hakaUrl}"
-      data-loginError="${loginError}">
+      data-loginError="${loginError}"
+      data-targetService=<%= targetServiceUrl %>>
+
 <div id="app"></div>
 <script src="<c:url value='/app/app.js' />"></script>
 
