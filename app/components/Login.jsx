@@ -1,5 +1,4 @@
 import React from 'react';
-import {Overlay, Tooltip, Popover} from 'react-bootstrap';
 import {translation} from '../translations'
 
 export default class Login extends React.Component {

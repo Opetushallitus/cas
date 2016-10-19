@@ -47,7 +47,6 @@
     "lodash-es": "^4.15.0",
     "flat": "^1.6.0",
     "react": "^15.1.0",
-    "react-bootstrap": "^0.30.3",
     "react-dom": "^15.1.0",
     "react-scroll": "1.4.0"
   }
