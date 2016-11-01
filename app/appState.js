@@ -13,7 +13,8 @@ const events = {
   changeLang: 'changeLang',
   acceptCookies : 'acceptCookies',
   requestPassword  : 'requestPassword',
-  passwordReset: "passwordReset"
+  passwordReset: "passwordReset",
+  passwordResetUsernameChanged: "passwordResetUsernameChanged"
 };
 
 const dispatcher = new Dispatcher();
@@ -40,6 +41,7 @@ export function initAppState() {
                         targetService: getTargetService(),
                         configuration: getConfiguration(),
                         loginError: getLoginError(),
+                        passwordResetUsername: '',
                         passwordResetStatus: {reset: false}};
 
   const notificationsS = Bacon.fromPromise(ax.get(notificationUrl));
@@ -70,11 +72,15 @@ export function initAppState() {
     return getCookie("oph-cookies-accepted");
   }
 
-  function requestPassword(state, {username}) {
-    ax.post("/authentication-service/resources/salasana/poletti", username)
+  function requestPassword(state) {
+    ax.post("/authentication-service/resources/salasana/poletti", state.passwordResetUsername)
       .then(controller.passwordResetResult(true))
       .catch(e => {controller.passwordResetResult(false)});
-    return {...state}
+    return state
+  }
+
+  function onPasswordResetUsernameChange(state, {value}){
+    return {...state, ['passwordResetUsername']: value}
   }
 
   function onPasswordReset(state, {success}){
@@ -87,5 +93,6 @@ export function initAppState() {
     [dispatcher.stream(events.acceptCookies)], acceptCookies,
     [dispatcher.stream(events.requestPassword)], requestPassword,
     [dispatcher.stream(events.passwordReset)], onPasswordReset,
+    [dispatcher.stream(events.passwordResetUsernameChanged)], onPasswordResetUsernameChange,
     [notificationsS], onFetchNotices)
 }

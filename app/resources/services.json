@@ -82,7 +82,7 @@
     },
     "description":{
       "fi": "Rekisterin ylläpidolla edistetään oikeudellisissa asioissa riittävän pätevien tulkkien saatavuutta. Lisätietoja oikeustulkkirekisteri@oph.fi",
-      "sv": "SV: Oikeustulkkirekisterin tarkoituksena on edistää riittävän laadukkaan tulkkaustaidon omaavien oikeustulkkien saatavuutta"
+      "sv": "Registret upprätthålls för att säkerställa tillgången på kompetenta rättstolkar. Mera information: oikeustulkkirekisteri@oph.fi."
     },
     "link": "http://www.oph.fi/download/177413_Rekisteriseloste_oikeustulkkirekisteri.pdf"
   },
@@ -96,8 +96,8 @@
       "sv": "Oiva"
     },
     "description":{
-      "fi": "ammatillisen peruskoulutuksen ohjaus- ja säätelypalvelu (OIVA)",
-      "sv": "OIVA - Utbildningsförvaltningens styrning- och regleringstjänst."
+      "fi": "Ammatillisen peruskoulutuksen ohjaus- ja säätelypalvelu (OIVA) on palvelu ammatillisen peruskoulutuksen järjestämislupien ja koulutustehtävien muutosten hakemiseen. Palvelu otetaan käyttöön vaiheittain ja se palvelee ensivaiheessa ammatillisen peruskoulutuksen lupapalveluna.",
+      "sv": "OIVA - Utbildningsförvaltningens styrning- och regleringstjänst. En tjänst för ansökan om tillstånd att ordna grundläggande yrkesutbildning och ändra utbildningsuppgifter. Tjänsten tas i bruk stegvis och betjänar i första skedet den grundläggande yrkesutbildningen."
     }
   },
   "opintopolku": {

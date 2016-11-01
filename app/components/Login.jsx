@@ -1,56 +1,46 @@
 import React from 'react';
 import {translation} from '../translations'
 
-export default class Login extends React.Component {
+const Login = ({modeChange, configuration, targetService, loginError}) => {
 
-  constructor(props){
-    super();
+  const executionKey = configuration.executionKey ? configuration.executionKey : "";
+  const loginTicket = configuration.loginTicket ? configuration.loginTicket : "";
 
-    this.modeChange = props.controller.modeChange;
+  return(
+      <div className="login-box">
+        <form id="credentials"
+              action={"/cas/login?service="+targetService} method="post">
+          <input type="hidden" name="lt" value={loginTicket} />
+          <input type="hidden" name="execution" value={executionKey} />
+          <input type="hidden" name="_eventId" value="submit" />
 
-    const configuration = props.configuration;
-    this.executionKey = configuration.executionKey ? configuration.executionKey : "";
-    this.loginTicket = configuration.loginTicket ? configuration.loginTicket : "";
-  }
-
-  render() {
-      const loginError = this.props.error;
-
-      return(
-          <div className="login-box">
-            <form id="credentials"
-                  action={"/cas/login?service="+this.props.targetService} method="post">
-              <input type="hidden" name="lt" value={this.loginTicket} />
-              <input type="hidden" name="execution" value={this.executionKey} />
-              <input type="hidden" name="_eventId" value="submit" />
-
-              <div>
-                  <input id="username" name="username" type="text"
-                         ref="login"
-                         autoFocus="autoFocus"
-                         tabIndex="1"
-                         autoComplete="false"
-                         className={loginError ? "invalid-input error" : "login-input"}
-                         placeholder={translation("login.usernamePlaceholder")}
-                         onChange={e => this.setState({username: e.target.value})}/>
-              </div>
-              <div>
-                  <input id="password" name="password"
-                         type="password"
-                         ref="password"
-                         tabIndex="2"
-                         className={loginError ? "invalid-input error" : "login-input"}
-                         placeholder={translation("login.passwordPlaceholder")}
-                         onChange={e => this.setState({password: e.target.value})}/>
-              </div>
-              <div ref="pwreset" className="link" onClick={this.modeChange}>
-                  {translation("login.forgotPassword")}
-              </div>
-              <input type="submit" className="btn btn-login" value={translation("login.button")}/>
-             </form>
-            <div className={loginError ? "errortext" : ""}>{loginError ? translation("login.error."+loginError) : ""}</div>
+          <div>
+              <input id="username" name="username" type="text"
+                     autoFocus="autoFocus"
+                     tabIndex="1"
+                     autoComplete="false"
+                     className={loginError ? "invalid-input error" : "login-input"}
+                     placeholder={translation("login.usernamePlaceholder")}
+                     onChange={e => this.setState({username: e.target.value})}/>
           </div>
-      )
-  }
-}
+          <div>
+              <input id="password" name="password"
+                     type="password"
+                     tabIndex="2"
+                     className={loginError ? "invalid-input error" : "login-input"}
+                     placeholder={translation("login.passwordPlaceholder")}
+                     onChange={e => this.setState({password: e.target.value})}/>
+          </div>
+          <div className="link" onClick={modeChange}>
+              {translation("login.forgotPassword")}
+          </div>
+          <input type="submit" className="btn btn-login" value={translation("login.button")}/>
+         </form>
+        <div className={loginError ? "errortext" : ""}>{loginError ? translation("login.error."+loginError) : ""}</div>
+      </div>
+  )
+};
+
+export default Login;
+
 

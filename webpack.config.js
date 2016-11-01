@@ -1,10 +1,8 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const validate = require('webpack-validator');
-var DeployToWar = require('webpack-deploy2war');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CleanWebpackPlugin = require('clean-webpack-plugin');
-//var LiveReloadPlugin = require('webpack-livereload-plugin');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 
 const webpack = require('webpack');

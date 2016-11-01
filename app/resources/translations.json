@@ -38,7 +38,7 @@
     },
     "forgotPasswordTitle": {
       "fi": "Salasana unohtunut",
-      "sv": "SV: salasana unohtunut"
+      "sv": "Har du glömt lösenordet?"
     },
     "passwordRequestInfo": {
       "fi": "Syötä kenttään käyttäjätunnuksesi. Saat sähköpostiisi ohjeet salasanan uusimista varten.",
@@ -50,11 +50,11 @@
     },
     "passwordRequestSuccessful": {
       "fi": "Sähköpostiisi on lähetetty linkki, jolla voit kirjautua sisään.",
-      "sv": "SV: Sähköpostiisi on lähetetty linkki, jolla voit kirjautua sisään."
+      "sv": "Du har i din e-post fått en länk, med vilken du kan logga in."
     },
     "passwordRequestFailed":{
       "fi": "Salasanan tilaaminen epäonnistui, yritä myöhemmin uudelleen.",
-      "sv": "SV: Salasanan tilaaminen epäonnistui, yritä myöhemmin uudelleen."
+      "sv": "Att beställa lösenordet misslyckades, försök på nytt senare."
     },
     "returnLink": {
       "fi": "Takaisin",
@@ -63,15 +63,15 @@
     "error" : {
       "badCredentials": {
         "fi": "Väärä käyttäjätunnus tai salasana",
-        "sv": "[SV] Väärä käyttäjätunnus tai salasana."
+        "sv": "Fel användarnamn eller lösenord"
       },
       "accountDisabled": {
         "fi": "Tunnuksesi on poistettu käytöstä",
-        "sv": "[SV]Tunnuksesi on poistettu käytöstä"
+        "sv": "Ditt användarnamn är inte i bruk"
       },
       "accountLocked": {
         "fi": "Liian monta kirjautumisyritystä, yritä myöhemmin uudelleen",
-        "sv": "[SV]Liian monta kirjautumisyritystä, yritä myöhemmin uudelleen"
+        "sv": "Du har för många inloggningsförsök. Försök på nytt senare."
       }
     }
   },
@@ -94,7 +94,7 @@
   },
   "rekisteri": {
     "fi": "Rekisteriselosteet: ",
-    "sv": "SV Rekisteriselosteet: "
+    "sv": "Registerbeskrivningar: "
   },
   "cookie":{
     "text":{

@@ -34,7 +34,7 @@ export function resolveLang() {
 }
 
 function browserLanguage(){
-  var lang =  (navigator.language || navigator.userLanguage).substr(0,2);
+  const lang =  (navigator.language || navigator.userLanguage).substr(0,2);
   if(["fi", "sv"].indexOf(lang) >= 0) return lang; else return "fi"
 }
 

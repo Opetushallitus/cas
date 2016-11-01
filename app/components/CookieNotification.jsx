@@ -1,20 +1,15 @@
 import React from 'react'
 import {translation} from '../translations';
 
-export default class CookieNotification extends React.Component {
+const CookieNotification = ({onAccept}) => {
 
-  constructor(props){
-    super();
-    this.acceptCookies = props.controller.acceptCookies;
-  }
+  return(
+      <div>
+        <div className="cookieHeader">
+          <span className="cookieText"> {translation("cookie.text")}</span>
+          <span className="btn-cookies" onClick={onAccept}>{translation("cookie.button")}</span>
+        </div>
+    </div> )
+};
 
-  render(){
-    return(
-        <div>
-          <div className="cookieHeader">
-            <span className="cookieText"> {translation("cookie.text")}</span>
-            <span className="btn-cookies" onClick={this.acceptCookies}>{translation("cookie.button")}</span>
-          </div>
-      </div> )
-  }
-}
+export default CookieNotification;

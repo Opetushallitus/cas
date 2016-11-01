@@ -11,22 +11,19 @@ function sortTranslation(a, b){
   return 0;
 }
 
-export class ServiceList extends React.Component{
-  render(){
-    return(
-      <div>
-        <ul id="service-list">
-          {Object.keys(services).sort(sortTranslation).map(k =>
-            <li key={k}><a onClick={() =>
-              scroller.scrollTo(k, {duration: 500, smooth: true })}>{translation(k+".shortname")+ " "}</a></li>)}
-        </ul>
-      </div>
-    )
-  }
-}
+const ServiceList = () => {
+  return(
+    <div>
+      <ul id="service-list">
+        {Object.keys(services).sort(sortTranslation).map(k =>
+        <li key={k}><a onClick={() =>
+          scroller.scrollTo(k, {duration: 500, smooth: true })}>{translation(k+".shortname")+ " "}</a></li>)}
+      </ul>
+    </div>)
+};
 
-export class ServiceDescriptions extends React.Component{
-  render(){
+
+const ServiceDescriptions = () => {
     return(
         <div className="container">
           <div className="services row">
@@ -49,5 +46,7 @@ export class ServiceDescriptions extends React.Component{
             </div>
         </div>
     )
-  }
-}
+};
+
+module.exports = {ServiceList: ServiceList,
+  ServiceDescriptions: ServiceDescriptions};

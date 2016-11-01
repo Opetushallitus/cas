@@ -33,11 +33,17 @@ export function initChangeListeners(dispatcher, events){
   function passwordResetResult(success){
     dispatcher.push(events.passwordReset, {success: success})
   }
+
+  function passwordResetUsernameChanged(value){
+    dispatcher.push(events.passwordResetUsernameChanged, {value: value})
+  }
+
   return{
     modeChange : modeChange,
     changeLang : changeLang,
     acceptCookies : acceptCookies,
     requestPassword : requestPassword,
-    passwordResetResult : passwordResetResult
+    passwordResetResult : passwordResetResult,
+    passwordResetUsernameChanged : passwordResetUsernameChanged
   }
 }
