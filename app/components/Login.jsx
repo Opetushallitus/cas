@@ -20,16 +20,14 @@ const Login = ({modeChange, configuration, targetService, loginError}) => {
                      tabIndex="1"
                      autoComplete="false"
                      className={loginError ? "invalid-input error" : "login-input"}
-                     placeholder={translation("login.usernamePlaceholder")}
-                     onChange={e => this.setState({username: e.target.value})}/>
+                     placeholder={translation("login.usernamePlaceholder")}/>
           </div>
           <div>
               <input id="password" name="password"
                      type="password"
                      tabIndex="2"
                      className={loginError ? "invalid-input error" : "login-input"}
-                     placeholder={translation("login.passwordPlaceholder")}
-                     onChange={e => this.setState({password: e.target.value})}/>
+                     placeholder={translation("login.passwordPlaceholder")}/>
           </div>
           <div className="link" onClick={modeChange}>
               {translation("login.forgotPassword")}
