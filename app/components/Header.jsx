@@ -1,5 +1,5 @@
 import React from 'react'
-import ophLogo from '../resources/img/logo_oph.png'
+import ophLogo from '../resources/img/logo_oph.svg'
 import okmLogo from '../resources/img/logo_okm.png'
 
 const imgStyles = {
