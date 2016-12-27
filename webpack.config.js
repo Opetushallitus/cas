@@ -45,11 +45,11 @@ var config = {
         loader: "json-loader"
       },
       {
-        test: /\.woff2?$|\.ttf$|\.eot$|\.svg$/,
+        test: /\.woff2?$|\.ttf$|\.eot$/,
         loader: "url?limit=200000"
       },
       {
-        test: /\.(jpg|png|gif)$/,
+        test: /\.(jpg|png|gif|svg)$/,
         loader: 'url?limit=200000',
         include: PATHS.images
       },
