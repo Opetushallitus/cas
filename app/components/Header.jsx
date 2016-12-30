@@ -18,11 +18,11 @@ const Header = ({lang, changeLang}) => {
   return(
   <div className="container-fluid">
     <div id="header" className="row">
-        <div style={imgStyles} className="col-xs-6 col-md-9">
+        <div style={imgStyles} className="headerImages col-xs-12 col-md-9">
           <img src={ophLogo}/> <img src={okmLogo} />
         </div>
       <div>
-      <ul className="languageSelector col-xs-6 col-md-3">
+      <ul className="languageSelector col-xs-12 col-md-3">
         {langLinks}
       </ul>
       </div>
