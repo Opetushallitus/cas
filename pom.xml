@@ -168,6 +168,12 @@
             <version>${httpcomponents.version}</version>
         </dependency>
 
+        <!-- CAS ticket cache -->
+        <dependency>
+            <groupId>org.jasig.cas.client</groupId>
+            <artifactId>cas-client-support-distributed-ehcache</artifactId>
+        </dependency>
+
         <!-- tests -->
         <dependency>
             <groupId>org.springframework</groupId>
