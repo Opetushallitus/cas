@@ -124,12 +124,6 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
         <constructor-arg name="replicateRemovals" value="true" type="boolean" />
     </bean>
 
-    <bean id="ticketRMIAsynchronousCacheReplicator" class="net.sf.ehcache.distribution.RMIAsynchronousCacheReplicator"
-          parent="ticketRMISynchronousCacheReplicator">
-        <constructor-arg name="replicationInterval" value="10000" />
-        <constructor-arg name="maximumBatchSize" value="100" />
-    </bean>
-
     <bean id="ticketCacheBootstrapCacheLoader" class="net.sf.ehcache.distribution.RMIBootstrapCacheLoader">
         <constructor-arg name="asynchronous" value="true" />
         <constructor-arg name="maximumChunkSize" value="5000000" />
