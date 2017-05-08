@@ -67,8 +67,8 @@
       "sv": "Koski"
     },
     "description":{
-      "fi": "Kansallisten opiskeluoikeuksien ja suoritusten keskitetty integraatiopalvelu – Koski kerää yhteen tiedot kunkin oppijan koulutuksesta yksittäisestä opintosuorituksesta suoritettuihin tutkintoihin asti. Palvelu sisältää tiedot oppijan opinto-oikeuksista sekä suoritettujen tutkintojen keskeisistä sisällöistä ja osaamisvaatimuksista. Kosken käyttäjäneuvonta: koski@oph.fi",
-      "sv": "Tjänsten för nationella studierätter och prestationer – Koski samlar uppgifter om elevers och studerandes separata studieprestationer och avlagda examina. Tjänsten innehåller uppgifter om studerandes studierätter och centralt innehåll och kompetenskrav i avlagda examina. Användarrådgivningen för Koski: koski@oph.fi"
+      "fi": "Kansallisten opiskeluoikeuksien ja suoritusten keskitetty integraatiopalvelu – Koski kerää yhteen tiedot kunkin oppijan koulutuksesta yksittäisestä opintosuorituksesta suoritettuihin tutkintoihin asti. Palvelu sisältää tiedot oppijan opinto-oikeuksista sekä suoritettujen tutkintojen keskeisistä sisällöistä ja osaamisvaatimuksista. Kosken käyttäjäneuvonta: koski@opintopolku.fi",
+      "sv": "Tjänsten för nationella studierätter och prestationer – Koski samlar uppgifter om elevers och studerandes separata studieprestationer och avlagda examina. Tjänsten innehåller uppgifter om studerandes studierätter och centralt innehåll och kompetenskrav i avlagda examina. Användarrådgivningen för Koski: koski@opintopolku.fi"
     }
   },
   "oikeustulkkirekisteri": {
