@@ -1,7 +1,6 @@
 package fi.vm.sade;
 
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
@@ -15,6 +14,7 @@ import fi.vm.sade.authentication.service.CustomAttributeService;
 import fi.vm.sade.authentication.service.types.IdentifiedHenkiloType;
 import fi.vm.sade.generic.rest.CachingRestClient;
 import fi.vm.sade.organisaatio.api.model.OrganisaatioService;
+import fi.vm.sade.properties.OphProperties;
 import fi.vm.sade.saml.action.SAMLCredentials;
 
 /**
@@ -29,8 +29,7 @@ public class AuthenticationUtil {
     private AuthenticationService authenticationService;
     private CustomAttributeService customAttributeService;
     private boolean useAuthenticationService;
-    
-    private String authenticationServiceRestUrl;
+    private OphProperties ophProperties;
     private CachingRestClient restClient = new CachingRestClient().setClientSubSystemCode("authentication.cas");
 
     protected Logger log = LoggerFactory.getLogger(this.getClass());
@@ -80,7 +79,7 @@ public class AuthenticationUtil {
         boolean success = false;
         try {
             IdentifiedHenkiloType henkiloType = null;
-            henkiloType = restClient.get(authenticationServiceRestUrl + "cas/auth/" + cred.getToken(), IdentifiedHenkiloType.class);
+            henkiloType = restClient.get(ophProperties.url("henkilo.cas.auth", cred.getToken()), IdentifiedHenkiloType.class);
             
             if (henkiloType != null) {
                 cred.setUserDetails(henkiloType);
@@ -163,12 +162,13 @@ public class AuthenticationUtil {
         this.useAuthenticationService = useAuthenticationService;
     }
 
-    public String getAuthenticationServiceRestUrl() {
-        return authenticationServiceRestUrl;
+    public OphProperties getOphProperties() {
+        return ophProperties;
     }
 
-    public void setAuthenticationServiceRestUrl(String authenticationServiceRestUrl) {
-        this.authenticationServiceRestUrl = authenticationServiceRestUrl;
+    public void setOphProperties(OphProperties ophProperties) {
+        this.ophProperties = ophProperties;
     }
+
 }
 

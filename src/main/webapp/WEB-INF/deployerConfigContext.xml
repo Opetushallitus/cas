@@ -283,6 +283,9 @@
         </property>
     </bean>
 
+    <bean id="ophProperties" class="fi.vm.sade.CasOphProperties">
+    </bean>
+
     <bean id="authenticationUtil" class="fi.vm.sade.AuthenticationUtil">
         <property name="ldapUserImporter" ref="ldapUserImporter"/>
         <property name="authenticationServiceWsdlUrl" value="${authentication.service.wsdl.url}"/>
@@ -291,8 +294,7 @@
         <property name="authenticationService" ref="authenticationService" />
         <property name="customAttributeService" ref="customAttributeService" />
         <property name="useAuthenticationService" value="${cas.use.authentication.service:1}" />
-        
-        <property name="authenticationServiceRestUrl" value="${authentication-service.rest.url}" />
+        <property name="ophProperties" ref="ophProperties" />
     </bean>
 
 </beans>

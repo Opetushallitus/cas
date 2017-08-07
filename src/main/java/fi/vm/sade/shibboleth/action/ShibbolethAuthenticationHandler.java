@@ -1,8 +1,6 @@
 package fi.vm.sade.shibboleth.action;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Properties;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -15,6 +13,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fi.vm.sade.generic.rest.CachingRestClient;
+import fi.vm.sade.properties.OphProperties;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 public class ShibbolethAuthenticationHandler extends HttpServlet {
 
@@ -23,43 +24,31 @@ public class ShibbolethAuthenticationHandler extends HttpServlet {
     private static final String SAML_ID_HEADER = "REMOTE_USER";
     private static final String SAML_HETU_HEADER = "HETU";
 
-    private String successRedirectUrl;
-    private String failureRedirectUrl;
-    private String authenticationServiceRestUrl;
+    @Autowired
+    private OphProperties ophProperties;
+
     private CachingRestClient restClient = new CachingRestClient().setClientSubSystemCode("authentication.cas");
     private final Logger logger = LoggerFactory.getLogger(getClass());
     
+    @Override
     public void init(ServletConfig config) throws ServletException {
-        String host = null;
-        String hostOppija = null;
-        String vetumaErrorPage = null;
-        Properties props = new Properties();
-        try {
-            props.load(new FileInputStream(config.getInitParameter("propsLocation")));
-            host = props.getProperty("host.virkailija");
-            hostOppija = props.getProperty("host.oppija");
-            vetumaErrorPage = props.getProperty("vetuma.error.page");
-            authenticationServiceRestUrl = "https://" + host + "/authentication-service/resources/cas/hetu/";
-        }
-        catch (Exception e) {
-            logger.error("Error instantiating ShibbolethAuthenticationHandler", e);
-        }
-        successRedirectUrl = "https://" + host + "/cas/login?service=https%3A%2F%2F" + host + "%2Fregistration-ui%2Fhtml%2Findex.html%23%2Fregister&authToken=";
-        failureRedirectUrl = "https://" + hostOppija + vetumaErrorPage;
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, RuntimeException {
-        String redirectUrl = failureRedirectUrl;
+        String redirectUrl = ophProperties.url("omattiedot.vetuma.error");
         String identity = request.getHeader(SAML_ID_HEADER);
         if (StringUtils.isBlank(identity)) {
             identity = request.getHeader(SAML_HETU_HEADER);
         }
         if (StringUtils.isNotBlank(identity)) {
             try {
-                String authToken = restClient.get(authenticationServiceRestUrl + identity, String.class);
+                String authToken = restClient.get(ophProperties.url("henkilo.cas.hetu", identity), String.class);
                 if (authToken != null) {
-                    redirectUrl = successRedirectUrl + authToken;
+                    String registerUiUrl = ophProperties.url("henkilo.register-ui");
+                    redirectUrl = ophProperties.url("cas.login", registerUiUrl, authToken);
                 }
             }
             catch (Exception e) {
