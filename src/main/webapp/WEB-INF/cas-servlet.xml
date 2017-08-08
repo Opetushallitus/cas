@@ -293,7 +293,6 @@
     <!--</bean>-->
     <bean id="samlAction" class="fi.vm.sade.saml.action.SAMLAction">
         <property name="centralAuthenticationService" ref="centralAuthenticationService" />
-        <property name="authenticationService" ref="authenticationService" />
     </bean>
 
     <bean id="configuration" class="fi.vm.sade.Configuration">

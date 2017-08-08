@@ -143,12 +143,6 @@
     <jaxws:client id="organisaatioService"
                   serviceClass="fi.vm.sade.organisaatio.api.model.OrganisaatioService"
                   address="${organisaatio.webservice.url.backend}"/>
-    <jaxws:client id="authenticationService"
-                  serviceClass="fi.vm.sade.authentication.service.AuthenticationService"
-                  address="${authentication.webservice.url.backend}"/>
-    <jaxws:client id="customAttributeService"
-                  serviceClass="fi.vm.sade.authentication.service.CustomAttributeService"
-                  address="${customAttribute.webservice.url.backend}" />
 
     <!--
      This bean defines the security roles for the Services Management application.  Simple deployments can use the in-memory version.
@@ -288,12 +282,8 @@
 
     <bean id="authenticationUtil" class="fi.vm.sade.AuthenticationUtil">
         <property name="ldapUserImporter" ref="ldapUserImporter"/>
-        <property name="authenticationServiceWsdlUrl" value="${authentication.service.wsdl.url}"/>
         <property name="rootOrganisaatioOid" value="${root.organisaatio.oid}"/>
         <property name="organisaatioService" ref="organisaatioService"/>
-        <property name="authenticationService" ref="authenticationService" />
-        <property name="customAttributeService" ref="customAttributeService" />
-        <property name="useAuthenticationService" value="${cas.use.authentication.service:1}" />
         <property name="ophProperties" ref="ophProperties" />
     </bean>
 

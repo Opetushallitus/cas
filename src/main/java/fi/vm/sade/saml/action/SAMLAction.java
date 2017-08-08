@@ -11,7 +11,6 @@ import org.springframework.webflow.action.AbstractAction;
 import org.springframework.webflow.execution.Event;
 import org.springframework.webflow.execution.RequestContext;
 
-import fi.vm.sade.authentication.service.AuthenticationService;
 
 /**
  * User: tommiha
@@ -19,9 +18,6 @@ import fi.vm.sade.authentication.service.AuthenticationService;
  * Time: 11:45 AM
  */
 public class SAMLAction extends AbstractAction {
-
-    @NotNull
-    private AuthenticationService authenticationService;
 
     @NotNull
     private CentralAuthenticationService centralAuthenticationService;
@@ -42,14 +38,6 @@ public class SAMLAction extends AbstractAction {
             }
         }
         return error();
-    }
-
-    public AuthenticationService getAuthenticationService() {
-        return authenticationService;
-    }
-
-    public void setAuthenticationService(AuthenticationService authenticationService) {
-        this.authenticationService = authenticationService;
     }
 
     public CentralAuthenticationService getCentralAuthenticationService() {
