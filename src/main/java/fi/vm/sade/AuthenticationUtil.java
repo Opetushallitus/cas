@@ -32,7 +32,7 @@ public class AuthenticationUtil {
         boolean success = false;
         try {
             IdentifiedHenkiloType henkiloType = null;
-            henkiloType = restClient.get(ophProperties.url("henkilo.cas.auth", cred.getToken()), IdentifiedHenkiloType.class);
+            henkiloType = restClient.get(ophProperties.url("kayttooikeus-service.cas.henkiloByAuthToken", cred.getToken()), IdentifiedHenkiloType.class);
             
             if (henkiloType != null) {
                 cred.setUserDetails(henkiloType);
