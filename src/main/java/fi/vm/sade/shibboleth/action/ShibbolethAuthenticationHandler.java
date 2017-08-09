@@ -47,7 +47,7 @@ public class ShibbolethAuthenticationHandler extends HttpServlet {
             try {
                 String authToken = restClient.get(ophProperties.url("kayttooikeus-service.cas.authTokenByHetu", identity), String.class);
                 if (authToken != null) {
-                    String registerUiUrl = ophProperties.url("henkilo.register-ui");
+                    String registerUiUrl = ophProperties.url("registration-ui.register");
                     redirectUrl = ophProperties.url("cas.login", registerUiUrl, authToken);
                 }
             }
