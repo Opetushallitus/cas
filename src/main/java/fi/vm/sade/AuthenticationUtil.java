@@ -1,5 +1,6 @@
 package fi.vm.sade;
 
+import fi.vm.sade.auth.dto.IdentifiedHenkiloType;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -8,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import fi.vm.sade.auth.ldap.LdapUser;
 import fi.vm.sade.auth.ldap.LdapUserImporter;
-import fi.vm.sade.authentication.service.types.IdentifiedHenkiloType;
 import fi.vm.sade.generic.rest.CachingRestClient;
 import fi.vm.sade.organisaatio.api.model.OrganisaatioService;
 import fi.vm.sade.properties.OphProperties;

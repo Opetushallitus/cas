@@ -1,6 +1,6 @@
 package fi.vm.sade.saml.action;
 
-import fi.vm.sade.authentication.service.types.IdentifiedHenkiloType;
+import fi.vm.sade.auth.dto.IdentifiedHenkiloType;
 import org.jasig.cas.authentication.principal.Credentials;
 
 /**
