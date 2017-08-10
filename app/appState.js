@@ -73,7 +73,7 @@ export function initAppState() {
   }
 
   function requestPassword(state) {
-    ax.post("/authentication-service/resources/salasana/poletti", state.passwordResetUsername)
+    ax.post("/kayttooikeus-service/salasana/unohtunut/" + state.passwordResetUsername)
       .then(controller.passwordResetResult(true))
       .catch(e => {controller.passwordResetResult(false)});
     return state
