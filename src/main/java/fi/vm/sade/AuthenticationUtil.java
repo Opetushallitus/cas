@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import fi.vm.sade.auth.ldap.LdapUser;
 import fi.vm.sade.auth.ldap.LdapUserImporter;
 import fi.vm.sade.generic.rest.CachingRestClient;
-import fi.vm.sade.organisaatio.api.model.OrganisaatioService;
 import fi.vm.sade.properties.OphProperties;
 import fi.vm.sade.saml.action.SAMLCredentials;
 
@@ -20,8 +19,6 @@ import fi.vm.sade.saml.action.SAMLCredentials;
 public class AuthenticationUtil {
 
     private LdapUserImporter ldapUserImporter;
-    private OrganisaatioService organisaatioService;
-    private String rootOrganisaatioOid;
     private OphProperties ophProperties;
     private CachingRestClient restClient = new CachingRestClient().setClientSubSystemCode("authentication.cas");
 
@@ -52,22 +49,6 @@ public class AuthenticationUtil {
 
     public void setLdapUserImporter(LdapUserImporter ldapUserImporter) {
         this.ldapUserImporter = ldapUserImporter;
-    }
-
-    public OrganisaatioService getOrganisaatioService() {
-        return organisaatioService;
-    }
-
-    public void setOrganisaatioService(OrganisaatioService organisaatioService) {
-        this.organisaatioService = organisaatioService;
-    }
-
-    public String getRootOrganisaatioOid() {
-        return rootOrganisaatioOid;
-    }
-
-    public void setRootOrganisaatioOid(String rootOrganisaatioOid) {
-        this.rootOrganisaatioOid = rootOrganisaatioOid;
     }
 
     public String getUserRoles(String uid) {

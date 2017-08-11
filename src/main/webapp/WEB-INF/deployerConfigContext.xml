@@ -140,10 +140,6 @@
         </property>
     </bean>
 
-    <jaxws:client id="organisaatioService"
-                  serviceClass="fi.vm.sade.organisaatio.api.model.OrganisaatioService"
-                  address="${organisaatio.webservice.url.backend}"/>
-
     <!--
      This bean defines the security roles for the Services Management application.  Simple deployments can use the in-memory version.
      More robust deployments will want to use another option, such as the Jdbc version.
@@ -282,8 +278,6 @@
 
     <bean id="authenticationUtil" class="fi.vm.sade.AuthenticationUtil">
         <property name="ldapUserImporter" ref="ldapUserImporter"/>
-        <property name="rootOrganisaatioOid" value="${root.organisaatio.oid}"/>
-        <property name="organisaatioService" ref="organisaatioService"/>
         <property name="ophProperties" ref="ophProperties" />
     </bean>
 
