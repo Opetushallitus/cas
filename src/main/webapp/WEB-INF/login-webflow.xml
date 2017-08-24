@@ -35,12 +35,13 @@
         <transition on="error" to="ticketGrantingTicketExistsCheck" />
     </action-state>
 
+    <!-- Dead code -->
     <!-- antti: facebook/oauth -->
-    <action-state id="oauthAction">
-        <evaluate expression="oauthAction" />
-        <transition on="success" to="sendTicketGrantingTicket" />
-        <transition on="error" to="ticketGrantingTicketExistsCheck" />
-    </action-state>
+    <!--<action-state id="oauthAction">-->
+        <!--<evaluate expression="oauthAction" />-->
+        <!--<transition on="success" to="sendTicketGrantingTicket" />-->
+        <!--<transition on="error" to="ticketGrantingTicketExistsCheck" />-->
+    <!--</action-state>-->
 
 
     <decision-state id="ticketGrantingTicketExistsCheck">
@@ -48,7 +49,9 @@
     </decision-state>
 
     <decision-state id="gatewayRequestCheck">
-        <if test="requestParameters.gateway != '' and requestParameters.gateway != null and flowScope.service != null" then="gatewayServicesManagementCheck" else="serviceAuthorizationCheck" />
+        <if test="requestParameters.gateway != '' and requestParameters.gateway != null and flowScope.service != null"
+            then="gatewayServicesManagementCheck"
+            else="serviceAuthorizationCheck" />
     </decision-state>
 
     <decision-state id="hasServiceCheck">
@@ -180,6 +183,7 @@
         <transition on="passwordExpired" to="generateLoginTicket">
             <set name="flowScope.loginError" value="'passwordExpired'" type="string" />
         </transition>
+        <transition on="noStrongIdentification" to="strongIdentificationRedirectView" />
     </action-state>
 
     <action-state id="sendTicketGrantingTicket">
@@ -193,7 +197,7 @@
 
     <action-state id="generateServiceTicket">
         <evaluate expression="generateServiceTicketAction" />
-        <transition on="success" to ="warn" />
+        <transition on="success" to="warn" />
         <transition on="error" to="generateLoginTicket" />
         <transition on="gateway" to="gatewayServicesManagementCheck" />
     </action-state>
@@ -204,13 +208,24 @@
     </action-state>
 
     <action-state id="redirect">
-        <evaluate expression="flowScope.service.getResponse(requestScope.serviceTicketId)" result-type="org.jasig.cas.authentication.principal.Response" result="requestScope.response" />
+        <evaluate expression="flowScope.service.getResponse(requestScope.serviceTicketId)"
+                  result-type="org.jasig.cas.authentication.principal.Response"
+                  result="requestScope.response" />
         <transition to="postRedirectDecision" />
     </action-state>
 
     <decision-state id="postRedirectDecision">
         <if test="requestScope.response.responseType.name() == 'POST'" then="postView" else="redirectView" />
     </decision-state>
+
+    <!-- In case user has not been strongly identified he will be redirected to  -->
+    <end-state id="strongIdentificationRedirectView" view="externalRedirect:${flowScope.strongIdentificationRedirectUrl}" >
+        <on-entry>
+            <evaluate expression="strongIdentificationRedirectAction.createRedirectUrl(flowScope.credentials)"
+                      result="flowScope.strongIdentificationRedirectUrl"
+                      result-type="string" />
+        </on-entry>
+    </end-state>
 
     <!--
          the "viewGenericLogin" is the end state for when a user attempts to login without coming directly from a service.

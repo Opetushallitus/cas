@@ -231,6 +231,11 @@
     <bean id="generateServiceTicketAction" class="org.jasig.cas.web.flow.GenerateServiceTicketAction"
           p:centralAuthenticationService-ref="centralAuthenticationService"/>
 
+    <bean id="strongIdentificationRedirectAction" class="fi.vm.sade.auth.action.StrongIdentificationRedirectAction"
+          p:kayttooikeusClient-ref="kayttooikeusRestClient"
+          p:oppijanumerorekisteriClient-ref="oppijanumerorekisteriRestClient"
+          p:ophProperties-ref="ophProperties" />
+
     <bean id="sendTicketGrantingTicketAction" class="org.jasig.cas.web.flow.SendTicketGrantingTicketAction"
           p:centralAuthenticationService-ref="centralAuthenticationService"
           p:ticketGrantingTicketCookieGenerator-ref="ticketGrantingTicketCookieGenerator"/>

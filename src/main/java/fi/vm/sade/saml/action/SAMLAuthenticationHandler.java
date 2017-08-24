@@ -6,11 +6,6 @@ import org.jasig.cas.authentication.principal.Credentials;
 
 import fi.vm.sade.AuthenticationUtil;
 
-/**
- * User: tommiha
- * Date: 3/26/13
- * Time: 2:39 PM
- */
 public class SAMLAuthenticationHandler extends AbstractPreAndPostProcessingAuthenticationHandler {
 
     private AuthenticationUtil authenticationUtil;

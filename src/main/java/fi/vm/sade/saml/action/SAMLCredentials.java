@@ -3,11 +3,6 @@ package fi.vm.sade.saml.action;
 import fi.vm.sade.auth.dto.IdentifiedHenkiloType;
 import org.jasig.cas.authentication.principal.Credentials;
 
-/**
- * User: tommiha
- * Date: 3/26/13
- * Time: 2:01 PM
- */
 public class SAMLCredentials implements Credentials {
 
     private String token;

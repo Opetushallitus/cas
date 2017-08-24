@@ -13,14 +13,12 @@ import fi.vm.sade.generic.rest.CachingRestClient;
 import fi.vm.sade.properties.OphProperties;
 import fi.vm.sade.saml.action.SAMLCredentials;
 
-/**
- * User: tommiha Date: 3/26/13 Time: 2:47 PM
- */
 public class AuthenticationUtil {
+    public static final String CLIENT_SUB_SYSTEM_CODE = "authentication.cas";
 
     private LdapUserImporter ldapUserImporter;
     private OphProperties ophProperties;
-    private CachingRestClient restClient = new CachingRestClient().setClientSubSystemCode("authentication.cas");
+    private CachingRestClient restClient = new CachingRestClient().setClientSubSystemCode(CLIENT_SUB_SYSTEM_CODE);
 
     protected Logger log = LoggerFactory.getLogger(this.getClass());
     private static final Pattern hetuRegExp = Pattern.compile("([0-3][0-9])([0-1][0-9])([0-9]{2})(\\-|[A]|\\+)([0-9]{3})([0-9]|[A-Z])");

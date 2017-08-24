@@ -20,18 +20,17 @@ package org.jasig.cas;
 
 import com.github.inspektr.audit.annotation.Audit;
 
+import fi.vm.sade.auth.clients.KayttooikeusRestClient;
+import fi.vm.sade.auth.exception.NoStrongIdentificationException;
+import fi.vm.sade.properties.OphProperties;
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.AuthenticationManager;
 import org.jasig.cas.authentication.ImmutableAuthentication;
 import org.jasig.cas.authentication.MutableAuthentication;
 import org.jasig.cas.authentication.handler.AuthenticationException;
-import org.jasig.cas.authentication.principal.Credentials;
-import org.jasig.cas.authentication.principal.PersistentIdGenerator;
-import org.jasig.cas.authentication.principal.Principal;
-import org.jasig.cas.authentication.principal.Service;
-import org.jasig.cas.authentication.principal.ShibbolethCompatiblePersistentIdGenerator;
-import org.jasig.cas.authentication.principal.SimplePrincipal;
+import org.jasig.cas.authentication.principal.*;
 import org.jasig.cas.services.RegisteredService;
 import org.jasig.cas.services.ServicesManager;
 import org.jasig.cas.services.UnauthorizedProxyingException;
@@ -55,7 +54,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import javax.imageio.IIOException;
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -137,6 +138,15 @@ public final class CentralAuthenticationServiceImpl implements CentralAuthentica
     /** Encoder to generate PseudoIds. */
     @NotNull
     private PersistentIdGenerator persistentIdGenerator = new ShibbolethCompatiblePersistentIdGenerator();
+
+    @NotNull
+    private KayttooikeusRestClient kayttooikeusClient;
+
+    @NotNull
+    private OphProperties ophProperties;
+
+    @NotNull
+    private boolean requireStrongIdentification;
 
     /**
      * Implementation of destoryTicketGrantingTicket expires the ticket provided
@@ -464,6 +474,7 @@ public final class CentralAuthenticationServiceImpl implements CentralAuthentica
 
     /**
      * @throws IllegalArgumentException if the credentials are null.
+     * @throws TicketCreationException if authentication fails
      */
     @Audit(
         action="TICKET_GRANTING_TICKET",
@@ -477,6 +488,21 @@ public final class CentralAuthenticationServiceImpl implements CentralAuthentica
         try {
             final Authentication authentication = this.authenticationManager
                 .authenticate(credentials);
+
+            if(this.requireStrongIdentification && credentials instanceof UsernamePasswordCredentials) {
+                String username = ((UsernamePasswordCredentials) credentials).getUsername();
+                String vahvaTunnistusUrl = this.ophProperties.url("kayttooikeus-service.cas.vahva-tunnistus-username", username);
+                Boolean vahvastiTunnistettu;
+                try {
+                    vahvastiTunnistettu = this.kayttooikeusClient.get(vahvaTunnistusUrl, Boolean.class);
+                } catch (IOException e) {
+                    throw new NoStrongIdentificationException("error");
+                }
+                if (BooleanUtils.isFalse(vahvastiTunnistettu)) {
+                    // type (3rd parameter) is important since it decides webflow route. Default is "error".
+                    throw new NoStrongIdentificationException("noStrongIdentification", "Need strong identificatin", "noStrongIdentification");
+                }
+            }
 
             final TicketGrantingTicket ticketGrantingTicket = new TicketGrantingTicketImpl(
                 this.ticketGrantingTicketUniqueTicketIdGenerator
@@ -561,5 +587,29 @@ public final class CentralAuthenticationServiceImpl implements CentralAuthentica
     public void setPersistentIdGenerator(
         final PersistentIdGenerator persistentIdGenerator) {
         this.persistentIdGenerator = persistentIdGenerator;
+    }
+
+    public KayttooikeusRestClient getKayttooikeusClient() {
+        return kayttooikeusClient;
+    }
+
+    public void setKayttooikeusClient(KayttooikeusRestClient kayttooikeusClient) {
+        this.kayttooikeusClient = kayttooikeusClient;
+    }
+
+    public OphProperties getOphProperties() {
+        return ophProperties;
+    }
+
+    public void setOphProperties(OphProperties ophProperties) {
+        this.ophProperties = ophProperties;
+    }
+
+    public boolean isRequireStrongIdentification() {
+        return requireStrongIdentification;
+    }
+
+    public void setRequireStrongIdentification(boolean requireStrongIdentification) {
+        this.requireStrongIdentification = requireStrongIdentification;
     }
 }
