@@ -20,10 +20,7 @@ package org.jasig.cas;
 
 import com.github.inspektr.audit.annotation.Audit;
 
-import fi.vm.sade.auth.clients.KayttooikeusRestClient;
 import fi.vm.sade.auth.exception.NoStrongIdentificationException;
-import fi.vm.sade.properties.OphProperties;
-import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.AuthenticationManager;
@@ -54,9 +51,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import javax.imageio.IIOException;
 import javax.validation.constraints.NotNull;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -92,14 +87,14 @@ import java.util.Map;
  * @version $Revision: 1.16 $ $Date: 2007/04/24 18:11:36 $
  * @since 3.0
  */
-public final class CentralAuthenticationServiceImpl implements CentralAuthenticationService {
+public class CentralAuthenticationServiceImpl implements CentralAuthenticationService {
 
     /** Log instance for logging events, info, warnings, errors, etc. */
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
+    protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
     /** TicketRegistry for storing and retrieving tickets as needed. */
     @NotNull
-    private TicketRegistry ticketRegistry;
+    protected TicketRegistry ticketRegistry;
 
     /** New Ticket Registry for storing and retrieving services tickets. Can point to the same one as the ticketRegistry variable. */
     @NotNull
@@ -138,15 +133,6 @@ public final class CentralAuthenticationServiceImpl implements CentralAuthentica
     /** Encoder to generate PseudoIds. */
     @NotNull
     private PersistentIdGenerator persistentIdGenerator = new ShibbolethCompatiblePersistentIdGenerator();
-
-    @NotNull
-    private KayttooikeusRestClient kayttooikeusClient;
-
-    @NotNull
-    private OphProperties ophProperties;
-
-    @NotNull
-    private boolean requireStrongIdentification;
 
     /**
      * Implementation of destoryTicketGrantingTicket expires the ticket provided
@@ -487,33 +473,24 @@ public final class CentralAuthenticationServiceImpl implements CentralAuthentica
 
         try {
             final Authentication authentication = this.authenticationManager
-                .authenticate(credentials);
+                    .authenticate(credentials);
 
-            if(this.requireStrongIdentification && credentials instanceof UsernamePasswordCredentials) {
-                String username = ((UsernamePasswordCredentials) credentials).getUsername();
-                String vahvaTunnistusUrl = this.ophProperties.url("kayttooikeus-service.cas.vahva-tunnistus-username", username);
-                Boolean vahvastiTunnistettu;
-                try {
-                    vahvastiTunnistettu = this.kayttooikeusClient.get(vahvaTunnistusUrl, Boolean.class);
-                } catch (IOException e) {
-                    throw new NoStrongIdentificationException("error");
-                }
-                if (BooleanUtils.isFalse(vahvastiTunnistettu)) {
-                    // type (3rd parameter) is important since it decides webflow route. Default is "error".
-                    throw new NoStrongIdentificationException("noStrongIdentification", "Need strong identificatin", "noStrongIdentification");
-                }
-            }
+            this.checkStrongIdentificationHook(credentials);
 
             final TicketGrantingTicket ticketGrantingTicket = new TicketGrantingTicketImpl(
-                this.ticketGrantingTicketUniqueTicketIdGenerator
-                    .getNewTicketId(TicketGrantingTicket.PREFIX),
-                authentication, this.ticketGrantingTicketExpirationPolicy);
+                    this.ticketGrantingTicketUniqueTicketIdGenerator
+                            .getNewTicketId(TicketGrantingTicket.PREFIX),
+                    authentication, this.ticketGrantingTicketExpirationPolicy);
 
             this.ticketRegistry.addTicket(ticketGrantingTicket);
             return ticketGrantingTicket.getId();
         } catch (final AuthenticationException e) {
             throw new TicketCreationException(e);
         }
+    }
+
+    protected void checkStrongIdentificationHook(Credentials credentials) throws NoStrongIdentificationException {
+
     }
 
     /**
@@ -587,29 +564,5 @@ public final class CentralAuthenticationServiceImpl implements CentralAuthentica
     public void setPersistentIdGenerator(
         final PersistentIdGenerator persistentIdGenerator) {
         this.persistentIdGenerator = persistentIdGenerator;
-    }
-
-    public KayttooikeusRestClient getKayttooikeusClient() {
-        return kayttooikeusClient;
-    }
-
-    public void setKayttooikeusClient(KayttooikeusRestClient kayttooikeusClient) {
-        this.kayttooikeusClient = kayttooikeusClient;
-    }
-
-    public OphProperties getOphProperties() {
-        return ophProperties;
-    }
-
-    public void setOphProperties(OphProperties ophProperties) {
-        this.ophProperties = ophProperties;
-    }
-
-    public boolean isRequireStrongIdentification() {
-        return requireStrongIdentification;
-    }
-
-    public void setRequireStrongIdentification(boolean requireStrongIdentification) {
-        this.requireStrongIdentification = requireStrongIdentification;
     }
 }

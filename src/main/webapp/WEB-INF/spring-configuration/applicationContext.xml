@@ -91,6 +91,18 @@
           p:servicesManager-ref="servicesManager"
           p:persistentIdGenerator-ref="persistentIdGenerator"
           p:uniqueTicketIdGeneratorsForService-ref="uniqueIdGeneratorsMap"
+          />
+
+    <bean id="strongIdentificationRequiringCentralAuthenticationService"
+          class="org.jasig.cas.StrongIdentificationRequiringCentralAuthenticationServiceImpl"
+          p:ticketGrantingTicketExpirationPolicy-ref="grantingTicketExpirationPolicy"
+          p:serviceTicketExpirationPolicy-ref="serviceTicketExpirationPolicy"
+          p:authenticationManager-ref="authenticationManager"
+          p:ticketGrantingTicketUniqueTicketIdGenerator-ref="ticketGrantingTicketUniqueIdGenerator"
+          p:ticketRegistry-ref="ticketRegistry"
+          p:servicesManager-ref="servicesManager"
+          p:persistentIdGenerator-ref="persistentIdGenerator"
+          p:uniqueTicketIdGeneratorsForService-ref="uniqueIdGeneratorsMap"
           p:kayttooikeusClient-ref="kayttooikeusRestClient"
           p:ophProperties-ref="ophProperties"
           p:requireStrongIdentification="${cas.require-strong-identification}" />

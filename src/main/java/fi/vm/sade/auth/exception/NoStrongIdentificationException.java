@@ -8,6 +8,10 @@ public class NoStrongIdentificationException extends AuthenticationException {
         super(code);
     }
 
+    public NoStrongIdentificationException(String code, String message) {
+        super(code, message);
+    }
+
     public NoStrongIdentificationException(String code, String message, String type) {
         super(code, message, type);
     }
