@@ -66,9 +66,9 @@ public final class SynchronizedAuthenticationManager extends AbstractAuthenticat
                     }
                 } catch (AuthenticationException e) {
                     unAuthSupportedHandlerException = e;
-                    logAuthenticationHandlerError(handlerName, credentials, e);
+                    this.log.info("{} failed authenticating {}", handlerName, credentials);
                 } catch (Exception e) {
-                    logAuthenticationHandlerError(handlerName, credentials, e);
+                    this.log.error("{} threw error authenticating {}", new Object[]{handlerName, credentials, e});
                 }
             }
         }

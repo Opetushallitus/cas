@@ -183,6 +183,7 @@
                     <property name="description" value="Allows CAS login on domains in whitelist" />
                     <property name="serviceId" value="${cas.whitelist.regexp}" />
                     <property name="evaluationOrder" value="0" />
+                    <property name="allowedToProxy" value="true" />
                 </bean>
             </list>
         </property>
