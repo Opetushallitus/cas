@@ -1,5 +1,6 @@
 package fi.vm.sade.login.failure;
 
+import fi.vm.sade.auth.exception.UsernameMissingException;
 import org.springframework.beans.factory.InitializingBean;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,7 +44,7 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
 
     @Override
     public int getMinutesToAllowLogin(HttpServletRequest request) {
-        String key = createKey(request);
+        final String key = createKey(request);
 
         int numberOfFailedLogins = failedLogins.size(key);
 
@@ -63,17 +64,17 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
 
     @Override
     public void notifySuccessfullLogin(HttpServletRequest request) {
-        LOGGER.debug("Succesfull login for {}.", createKey(request));
-        boolean cleaned = failedLogins.remove(createKey(request));
+        final String key = createKey(request);
+        LOGGER.debug("Succesfull login for {}.", key);
+        boolean cleaned = failedLogins.remove(key);
         if(cleaned) {
-            LOGGER.info("Succesfull login for {}. Cleaned failed logins.", createKey(request));
+            LOGGER.info("Succesfull login for {}. Cleaned failed logins.", key);
         }
     }
 
     @Override
     public void notifyFailedLoginAttempt(HttpServletRequest request) {
-
-        String key = createKey(request);
+        final String key = createKey(request);
         failedLogins.add(key, System.currentTimeMillis());
 
         if(LOGGER.isDebugEnabled()) {
@@ -131,7 +132,7 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
         return delay;
     }
 
-    public abstract String createKey(HttpServletRequest request);
+    public abstract String createKey(HttpServletRequest request) throws UsernameMissingException;
 
     public int getInitialLoginDelayInMinutes() {
         return initialLoginDelayInMinutes;
