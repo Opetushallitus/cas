@@ -141,6 +141,7 @@
         <on-entry>
             <set name="viewScope.commandName" value="'credentials'" />
             <set name="viewScope.hakaUrl" value="configuration.hakaUrl" />
+            <set name="viewScope.loginTietosuojaselosteUrl" value="configuration.loginTietosuojaselosteUrl" />
         </on-entry>
         <transition on="submit" bind="true" validate="true" to="realSubmit">
             <evaluate expression="authenticationViaFormAction.doBind(flowRequestContext, flowScope.credentials)" />

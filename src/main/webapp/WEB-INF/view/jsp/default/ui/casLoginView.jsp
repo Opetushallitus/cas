@@ -47,6 +47,7 @@
       data-executionKey="${flowExecutionKey}"
       data-loginTicket="${loginTicket}"
       data-hakaUrl="${hakaUrl}"
+      data-loginTietosuojaselosteUrl="${loginTietosuojaselosteUrl}"
       data-loginError="${loginError}"
       data-targetService=<%= targetServiceUrl %>>
 

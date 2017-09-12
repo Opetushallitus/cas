@@ -23,7 +23,10 @@ const ServiceList = () => {
 };
 
 
-const ServiceDescriptions = () => {
+const ServiceDescriptions = ({configuration}) => {
+
+    const loginTietosuojaselosteUrl = configuration.loginTietosuojaselosteUrl;
+
     return(
         <div className="container">
           <div className="services row">
@@ -36,11 +39,11 @@ const ServiceDescriptions = () => {
               </div>)}
           </div>
             <div className="seloste">
-                <a id="tietosuojaseloste" href="https://opintopolku.fi/wp/tietosuojaseloste/">{translation("tietosuoja")}</a>
+                <a id="tietosuojaseloste" target="_blank" href={loginTietosuojaselosteUrl}>{translation("tietosuoja")}</a>
                 {translation("rekisteri")}
                 {Object.keys(services).filter(s => services[s].link).map(k =>
                     <span key={k} className="seloste-link">
-                      {services[k].link ? <a href={services[k].link}>{translation(k+".shortname")}</a> : ""}
+                      {services[k].link ? <a target="_blank" href={services[k].link}>{translation(k+".shortname")}</a> : ""}
                     </span>
                 )}
             </div>

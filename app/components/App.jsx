@@ -57,7 +57,7 @@ const App = ({controller, state}) => {
          </div>
       </div>
     </div>
-    <ServiceDescriptions/>
+    <ServiceDescriptions configuration={state.configuration} />
   </div>
   )
 };

@@ -302,6 +302,7 @@
 
     <bean id="configuration" class="fi.vm.sade.Configuration">
         <property name="hakaUrl" value="${haka.url}" />
+        <property name="loginTietosuojaselosteUrl" value="${login.tietosuojaseloste.url}" />
     </bean>
 
     <!-- oph rest resource to get list of user's roles -->
