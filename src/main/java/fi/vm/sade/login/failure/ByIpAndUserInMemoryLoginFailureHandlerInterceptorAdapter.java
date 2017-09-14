@@ -12,14 +12,17 @@ public class ByIpAndUserInMemoryLoginFailureHandlerInterceptorAdapter extends Ab
 
     @Override
     public String createKey(HttpServletRequest request) throws UsernameMissingException {
-        String username = request.getParameter("username");
-        String ipAddress = request.getHeader("x-real-ip");
 
+        String ipAddress = request.getHeader("x-real-ip");
         if(null == ipAddress) {
-            LOGGER.warn("Unable to find x-real-ip request header!! Using remote address instead!!");
-            ipAddress = request.getRemoteAddr();
+            ipAddress = request.getHeader("x-forwarded-for");
+            if(null == ipAddress) {
+                LOGGER.warn("Unable to find x-real-ip or x-forwarded-for request header!! Using remote address instead!!");
+                ipAddress = request.getRemoteAddr();
+            }
         }
 
+        String username = request.getParameter("username");
         if(null == username) {
             throw new UsernameMissingException("Cannot create key because username is missing");
         }
