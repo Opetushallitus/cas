@@ -132,7 +132,17 @@
         <servlet-class>fi.vm.sade.shibboleth.action.ShibbolethAuthenticationHandler</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
-    
+
+    <servlet>
+        <servlet-name>redirect</servlet-name>
+        <servlet-class>fi.vm.sade.servlet.RedirectServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>redirect</servlet-name>
+        <url-pattern>/redirect</url-pattern>
+    </servlet-mapping>
+
     <servlet-mapping>
         <servlet-name>shibboleth</servlet-name>
         <url-pattern>/vetuma</url-pattern>
