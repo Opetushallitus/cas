@@ -38,6 +38,7 @@
                 <value>file:///${user.home:''}/oph-configuration/cas.properties</value>
                 <value>classpath:cluster.node/cas.cluster.node.properties</value>
                 <value>file:///${user.home:''}/oph-configuration/override.properties</value>
+                <value>file:///${user.home:''}/oph-configuration/cas-strong-identifiables.properties</value>
             </list>
         </property>
         <!-- clustering.. host.name must unique in cluster -->
