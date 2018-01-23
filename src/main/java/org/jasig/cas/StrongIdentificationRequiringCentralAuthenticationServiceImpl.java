@@ -53,9 +53,9 @@ public class StrongIdentificationRequiringCentralAuthenticationServiceImpl exten
         Assert.notNull(credentials, "credentials cannot be null");
 
         // Do this only for UsernamePasswordCredentials. Service-provider-app wants to do this before creating authentication token.
-        if (this.requireStrongIdentification && credentials instanceof UsernamePasswordCredentials
-                && (casRequireStrongIdentificationList.isEmpty()
-                || casRequireStrongIdentificationList.contains(((UsernamePasswordCredentials) credentials).getUsername()))) {
+        if (credentials instanceof UsernamePasswordCredentials
+                && (this.requireStrongIdentification
+                || this.casRequireStrongIdentificationList.contains(((UsernamePasswordCredentials) credentials).getUsername()))) {
             String username = ((UsernamePasswordCredentials) credentials).getUsername();
             String vahvaTunnistusUrl = this.ophProperties.url("kayttooikeus-service.cas.vahva-tunnistus-username", username);
             Boolean vahvastiTunnistettu;

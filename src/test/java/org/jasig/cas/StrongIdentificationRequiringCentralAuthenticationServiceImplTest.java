@@ -72,6 +72,7 @@ public class StrongIdentificationRequiringCentralAuthenticationServiceImplTest {
 
     @Test
     public void usernameNotFound() throws Exception {
+        this.strongIdentificationRequiringCentralAuthenticationService.setRequireStrongIdentification(false);
         this.strongIdentificationRequiringCentralAuthenticationService.setCasRequireStrongIdentificationListAsString("username1,username2");
         this.strongIdentificationRequiringCentralAuthenticationService.checkStrongIdentificationHook(this.usernamePasswordCredentials);
         verifyZeroInteractions(this.kayttooikeusRestClient);
