@@ -52,23 +52,23 @@ public class StrongIdentificationRequiringCentralAuthenticationServiceImpl exten
     public void checkStrongIdentificationHook(final Credentials credentials) throws NoStrongIdentificationException {
         Assert.notNull(credentials, "credentials cannot be null");
 
-            // Do this only for UsernamePasswordCredentials. Service-provider-app wants to do this before creating authentication token.
-            if (this.requireStrongIdentification && credentials instanceof UsernamePasswordCredentials
-                    && (casRequireStrongIdentificationList.isEmpty()
-                    || casRequireStrongIdentificationList.contains(((UsernamePasswordCredentials) credentials).getUsername()))) {
-                String username = ((UsernamePasswordCredentials) credentials).getUsername();
-                String vahvaTunnistusUrl = this.ophProperties.url("kayttooikeus-service.cas.vahva-tunnistus-username", username);
-                Boolean vahvastiTunnistettu;
-                try {
-                    vahvastiTunnistettu = this.kayttooikeusClient.get(vahvaTunnistusUrl, Boolean.class);
-                } catch (IOException e) {
-                    throw new NoStrongIdentificationException("error", "Could not determine if user is strongly identified");
-                }
-                if (BooleanUtils.isFalse(vahvastiTunnistettu)) {
-                    // type (3rd parameter) is important since it decides webflow route. Default is "error".
-                    throw new NoStrongIdentificationException("noStrongIdentification", "Need strong identificatin", "noStrongIdentification");
-                }
+        // Do this only for UsernamePasswordCredentials. Service-provider-app wants to do this before creating authentication token.
+        if (this.requireStrongIdentification && credentials instanceof UsernamePasswordCredentials
+                && (casRequireStrongIdentificationList.isEmpty()
+                || casRequireStrongIdentificationList.contains(((UsernamePasswordCredentials) credentials).getUsername()))) {
+            String username = ((UsernamePasswordCredentials) credentials).getUsername();
+            String vahvaTunnistusUrl = this.ophProperties.url("kayttooikeus-service.cas.vahva-tunnistus-username", username);
+            Boolean vahvastiTunnistettu;
+            try {
+                vahvastiTunnistettu = this.kayttooikeusClient.get(vahvaTunnistusUrl, Boolean.class);
+            } catch (IOException e) {
+                throw new NoStrongIdentificationException("error", "Could not determine if user is strongly identified");
             }
+            if (BooleanUtils.isFalse(vahvastiTunnistettu)) {
+                // type (3rd parameter) is important since it decides webflow route. Default is "error".
+                throw new NoStrongIdentificationException("noStrongIdentification", "Need strong identificatin", "noStrongIdentification");
+            }
+        }
     }
 
     public void setKayttooikeusClient(KayttooikeusRestClient kayttooikeusClient) {
