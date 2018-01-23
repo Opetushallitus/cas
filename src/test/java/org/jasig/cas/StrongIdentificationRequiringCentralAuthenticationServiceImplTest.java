@@ -43,42 +43,42 @@ public class StrongIdentificationRequiringCentralAuthenticationServiceImplTest {
     }
 
     @Test
-    public void testEmptyIsStronglyIdentified() throws Exception {
+    public void emptyIsStronglyIdentified() throws Exception {
         when(this.kayttooikeusRestClient.get(anyString(), eq(Boolean.class))).thenReturn(true);
         this.strongIdentificationRequiringCentralAuthenticationService.checkStrongIdentificationHook(this.usernamePasswordCredentials);
         verify(this.kayttooikeusRestClient, times(1)).get(anyString(), eq(Boolean.class));
     }
 
     @Test(expected = NoStrongIdentificationException.class)
-    public void testEmptyIsNotStronglyIdentified() throws Exception {
+    public void emptyIsNotStronglyIdentified() throws Exception {
         when(this.kayttooikeusRestClient.get(anyString(), eq(Boolean.class))).thenReturn(false);
         this.strongIdentificationRequiringCentralAuthenticationService.checkStrongIdentificationHook(this.usernamePasswordCredentials);
         verify(this.kayttooikeusRestClient, times(1)).get(anyString(), eq(Boolean.class));
     }
 
     @Test
-    public void testDefaultValueIsStronglyIdentified() throws Exception {
+    public void defaultValueIsStronglyIdentified() throws Exception {
         when(this.kayttooikeusRestClient.get(anyString(), eq(Boolean.class))).thenReturn(true);
         this.strongIdentificationRequiringCentralAuthenticationService.checkStrongIdentificationHook(this.usernamePasswordCredentials);
         verify(this.kayttooikeusRestClient, times(1)).get(anyString(), eq(Boolean.class));
     }
 
     @Test(expected = NoStrongIdentificationException.class)
-    public void testDefaultValueIsNotStronglyIdentified() throws Exception {
+    public void defaultValueIsNotStronglyIdentified() throws Exception {
         when(this.kayttooikeusRestClient.get(anyString(), eq(Boolean.class))).thenReturn(false);
         this.strongIdentificationRequiringCentralAuthenticationService.checkStrongIdentificationHook(this.usernamePasswordCredentials);
         verify(this.kayttooikeusRestClient, times(1)).get(anyString(), eq(Boolean.class));
     }
 
     @Test
-    public void testUsernameNotFound() throws Exception {
+    public void usernameNotFound() throws Exception {
         this.strongIdentificationRequiringCentralAuthenticationService.setCasRequireStrongIdentificationListAsString("username1,username2");
         this.strongIdentificationRequiringCentralAuthenticationService.checkStrongIdentificationHook(this.usernamePasswordCredentials);
         verifyZeroInteractions(this.kayttooikeusRestClient);
     }
 
     @Test
-    public void testUsernameFoundIsStronglyIdentified() throws Exception {
+    public void usernameFoundIsStronglyIdentified() throws Exception {
         when(this.kayttooikeusRestClient.get(anyString(), eq(Boolean.class))).thenReturn(true);
         this.strongIdentificationRequiringCentralAuthenticationService.setCasRequireStrongIdentificationListAsString("username,username2");
         this.strongIdentificationRequiringCentralAuthenticationService.checkStrongIdentificationHook(this.usernamePasswordCredentials);
@@ -86,7 +86,7 @@ public class StrongIdentificationRequiringCentralAuthenticationServiceImplTest {
     }
 
     @Test(expected = NoStrongIdentificationException.class)
-    public void testUsernameFoundIsNotStronglyIdentified() throws Exception {
+    public void usernameFoundIsNotStronglyIdentified() throws Exception {
         when(this.kayttooikeusRestClient.get(anyString(), eq(Boolean.class))).thenReturn(false);
         this.strongIdentificationRequiringCentralAuthenticationService.setCasRequireStrongIdentificationListAsString("username,username2");
         this.strongIdentificationRequiringCentralAuthenticationService.checkStrongIdentificationHook(this.usernamePasswordCredentials);
