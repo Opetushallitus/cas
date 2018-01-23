@@ -83,11 +83,11 @@ public class StrongIdentificationRequiringCentralAuthenticationServiceImpl exten
         this.requireStrongIdentification = requireStrongIdentification;
     }
 
-    public String getCasRequireStrongIdentificationList() {
+    public String getCasRequireStrongIdentificationListAsString() {
         return casRequireStrongIdentificationListAsString;
     }
 
-    public void setCasRequireStrongIdentificationList(String casRequireStrongIdentificationList) {
+    public void setCasRequireStrongIdentificationListAsString(String casRequireStrongIdentificationList) {
         this.casRequireStrongIdentificationListAsString = casRequireStrongIdentificationList;
         this.casRequireStrongIdentificationList = !"".equals(casRequireStrongIdentificationList)
                 ? Arrays.asList(casRequireStrongIdentificationList.split(","))

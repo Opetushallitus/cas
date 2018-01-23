@@ -106,7 +106,7 @@
           p:kayttooikeusClient-ref="kayttooikeusRestClient"
           p:ophProperties-ref="ophProperties"
           p:requireStrongIdentification="${cas.require-strong-identification}"
-          p:casRequireStrongIdentificationList="${cas.require-strong-identification.usernamelist}"
+          p:casRequireStrongIdentificationListAsString="${cas.require-strong-identification.usernamelist}"
     />
 
     <bean id="kayttooikeusRestClient" class="fi.vm.sade.auth.clients.KayttooikeusRestClient">
