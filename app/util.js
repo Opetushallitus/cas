@@ -10,7 +10,7 @@ export function setCookie(name, val){
 
 export function getTargetService(){
   const service = document.body.getAttribute("data-targetService");
-  return (service && service.length > 0) ? service :  window.location.origin + '/virkailijan-stp-ui';
+  return (service && service.length > 0) ? service :  window.location.origin + '/virkailijan-tyopoyta/';
 }
 
 export function getLoginError(){
