@@ -105,7 +105,9 @@
           p:uniqueTicketIdGeneratorsForService-ref="uniqueIdGeneratorsMap"
           p:kayttooikeusClient-ref="kayttooikeusRestClient"
           p:ophProperties-ref="ophProperties"
-          p:requireStrongIdentification="${cas.require-strong-identification}" />
+          p:requireStrongIdentification="${cas.require-strong-identification}"
+          p:casRequireStrongIdentificationListAsString="${cas.require-strong-identification.usernamelist}"
+    />
 
     <bean id="kayttooikeusRestClient" class="fi.vm.sade.auth.clients.KayttooikeusRestClient">
         <constructor-arg ref="ophProperties" />

@@ -28,6 +28,9 @@ import org.springframework.util.Assert;
 
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class StrongIdentificationRequiringCentralAuthenticationServiceImpl extends CentralAuthenticationServiceImpl {
     @NotNull
@@ -39,25 +42,33 @@ public class StrongIdentificationRequiringCentralAuthenticationServiceImpl exten
     @NotNull
     private boolean requireStrongIdentification;
 
+    @NotNull
+    private String casRequireStrongIdentificationListAsString;
+
+    @NotNull
+    private List<String> casRequireStrongIdentificationList;
+
     @Override
     public void checkStrongIdentificationHook(final Credentials credentials) throws NoStrongIdentificationException {
         Assert.notNull(credentials, "credentials cannot be null");
 
-            // Do this only for UsernamePasswordCredentials. Service-provider-app wants to do this before creating authentication token.
-            if (this.requireStrongIdentification && credentials instanceof UsernamePasswordCredentials) {
-                String username = ((UsernamePasswordCredentials) credentials).getUsername();
-                String vahvaTunnistusUrl = this.ophProperties.url("kayttooikeus-service.cas.vahva-tunnistus-username", username);
-                Boolean vahvastiTunnistettu;
-                try {
-                    vahvastiTunnistettu = this.kayttooikeusClient.get(vahvaTunnistusUrl, Boolean.class);
-                } catch (IOException e) {
-                    throw new NoStrongIdentificationException("error", "Could not determine if user is strongly identified");
-                }
-                if (BooleanUtils.isFalse(vahvastiTunnistettu)) {
-                    // type (3rd parameter) is important since it decides webflow route. Default is "error".
-                    throw new NoStrongIdentificationException("noStrongIdentification", "Need strong identificatin", "noStrongIdentification");
-                }
+        // Do this only for UsernamePasswordCredentials. Service-provider-app wants to do this before creating authentication token.
+        if (credentials instanceof UsernamePasswordCredentials
+                && (this.requireStrongIdentification
+                || this.casRequireStrongIdentificationList.contains(((UsernamePasswordCredentials) credentials).getUsername()))) {
+            String username = ((UsernamePasswordCredentials) credentials).getUsername();
+            String vahvaTunnistusUrl = this.ophProperties.url("kayttooikeus-service.cas.vahva-tunnistus-username", username);
+            Boolean vahvastiTunnistettu;
+            try {
+                vahvastiTunnistettu = this.kayttooikeusClient.get(vahvaTunnistusUrl, Boolean.class);
+            } catch (IOException e) {
+                throw new NoStrongIdentificationException("error", "Could not determine if user is strongly identified");
             }
+            if (BooleanUtils.isFalse(vahvastiTunnistettu)) {
+                // type (3rd parameter) is important since it decides webflow route. Default is "error".
+                throw new NoStrongIdentificationException("noStrongIdentification", "Need strong identificatin", "noStrongIdentification");
+            }
+        }
     }
 
     public void setKayttooikeusClient(KayttooikeusRestClient kayttooikeusClient) {
@@ -70,5 +81,16 @@ public class StrongIdentificationRequiringCentralAuthenticationServiceImpl exten
 
     public void setRequireStrongIdentification(boolean requireStrongIdentification) {
         this.requireStrongIdentification = requireStrongIdentification;
+    }
+
+    public String getCasRequireStrongIdentificationListAsString() {
+        return casRequireStrongIdentificationListAsString;
+    }
+
+    public void setCasRequireStrongIdentificationListAsString(String casRequireStrongIdentificationList) {
+        this.casRequireStrongIdentificationListAsString = casRequireStrongIdentificationList;
+        this.casRequireStrongIdentificationList = !"".equals(casRequireStrongIdentificationList)
+                ? Arrays.asList(casRequireStrongIdentificationList.split(","))
+                : new ArrayList<String>();
     }
 }
