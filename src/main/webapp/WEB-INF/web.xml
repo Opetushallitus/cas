@@ -302,8 +302,8 @@
     </error-page>
 
     <error-page>
-        <error-code>503</error-code>
-        <location>/WEB-INF/view/jsp/default/ui/503.jsp</location>
+        <error-code>409</error-code>
+        <location>/WEB-INF/view/jsp/default/ui/409.jsp</location>
     </error-page>
 
     <welcome-file-list>

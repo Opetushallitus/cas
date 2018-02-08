@@ -24,7 +24,7 @@ public abstract class AbstractLoginFailureHandlerInterceptorAdapter extends Hand
         int loginDelay = getMinutesToAllowLogin(request);
 
         if(0 != loginDelay ) {
-            response.sendError(503);
+            response.sendError(409);
             return false;
         }
         return true;
