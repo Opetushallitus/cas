@@ -3,8 +3,6 @@ package fi.vm.sade.auth.clients;
 import fi.vm.sade.auth.dto.HenkiloDto;
 import fi.vm.sade.generic.rest.CachingRestClient;
 import fi.vm.sade.properties.OphProperties;
-import org.jasig.cas.authentication.principal.Credentials;
-import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
 
 import java.io.IOException;
 
@@ -17,8 +15,7 @@ public class KayttooikeusRestClient extends CachingRestClient {
         this.ophProperties = ophProperties;
     }
 
-    public String getHenkiloOid(Credentials credentials) throws IOException {
-        String username = ((UsernamePasswordCredentials) credentials).getUsername();
+    public String getHenkiloOid(String username) throws IOException {
         String url = this.ophProperties.url("kayttooikeus-service.cas.get-oid", username);
         return this.get(url, HenkiloDto.class).getOid();
     }

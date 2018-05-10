@@ -1,27 +1,47 @@
 package org.jasig.cas;
 
 import fi.vm.sade.auth.clients.KayttooikeusRestClient;
-import fi.vm.sade.auth.exception.NoStrongIdentificationException;
 import fi.vm.sade.properties.OphProperties;
-import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
+import org.jasig.cas.authentication.AuthenticationException;
+import org.jasig.cas.authentication.AuthenticationManager;
+import org.jasig.cas.authentication.UsernamePasswordCredential;
+import org.jasig.cas.logout.LogoutManager;
+import org.jasig.cas.services.ServicesManager;
+import org.jasig.cas.ticket.ExpirationPolicy;
+import org.jasig.cas.ticket.registry.TicketRegistry;
+import org.jasig.cas.util.UniqueTicketIdGenerator;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = StrongIdentificationRequiringCentralAuthenticationServiceImpl.class)
 public class StrongIdentificationRequiringCentralAuthenticationServiceImplTest {
-    @Autowired
-    StrongIdentificationRequiringCentralAuthenticationServiceImpl strongIdentificationRequiringCentralAuthenticationService;
 
-    private UsernamePasswordCredentials usernamePasswordCredentials;
+    private StrongIdentificationRequiringCentralAuthenticationServiceImpl strongIdentificationRequiringCentralAuthenticationService;
+
+    private Set<UsernamePasswordCredential> usernamePasswordCredentials = new LinkedHashSet<>();
+
+    private TicketRegistry ticketRegistry;
+
+    private AuthenticationManager authenticationManager;
+
+    private UniqueTicketIdGenerator ticketGrantingTicketUniqueTicketIdGenerator;
+
+    private Map<String, UniqueTicketIdGenerator> uniqueTicketIdGeneratorsForService;
+
+    private ExpirationPolicy ticketGrantingTicketExpirationPolicy;
+
+    private ExpirationPolicy serviceTicketExpirationPolicy;
+
+    private ServicesManager servicesManager;
+
+    private LogoutManager logoutManager;
 
     private KayttooikeusRestClient kayttooikeusRestClient;
 
@@ -29,13 +49,28 @@ public class StrongIdentificationRequiringCentralAuthenticationServiceImplTest {
 
     @Before
     public void setup() {
+        this.ticketRegistry = mock(TicketRegistry.class);
+        this.authenticationManager = mock(AuthenticationManager.class);
+        this.ticketGrantingTicketUniqueTicketIdGenerator = mock(UniqueTicketIdGenerator.class);
+        this.uniqueTicketIdGeneratorsForService = new LinkedHashMap<>();
+        this.ticketGrantingTicketExpirationPolicy = mock(ExpirationPolicy.class);
+        this.serviceTicketExpirationPolicy = mock(ExpirationPolicy.class);
+        this.servicesManager = mock(ServicesManager.class);
+        this.logoutManager = mock(LogoutManager.class);
         this.kayttooikeusRestClient = mock(KayttooikeusRestClient.class);
         this.ophProperties = mock(OphProperties.class);
 
-        this.usernamePasswordCredentials = new UsernamePasswordCredentials();
-        this.usernamePasswordCredentials.setUsername("username");
-        this.usernamePasswordCredentials.setPassword("password");
+        UsernamePasswordCredential usernamePasswordCredential = new UsernamePasswordCredential();
+        usernamePasswordCredential.setUsername("username");
+        usernamePasswordCredential.setPassword("password");
+        this.usernamePasswordCredentials.add(usernamePasswordCredential);
 
+        this.strongIdentificationRequiringCentralAuthenticationService = new StrongIdentificationRequiringCentralAuthenticationServiceImpl(
+                ticketRegistry, authenticationManager,
+                ticketGrantingTicketUniqueTicketIdGenerator,
+                uniqueTicketIdGeneratorsForService,
+                ticketGrantingTicketExpirationPolicy,
+                serviceTicketExpirationPolicy, servicesManager, logoutManager);
         this.strongIdentificationRequiringCentralAuthenticationService.setKayttooikeusClient(this.kayttooikeusRestClient);
         this.strongIdentificationRequiringCentralAuthenticationService.setOphProperties(this.ophProperties);
         this.strongIdentificationRequiringCentralAuthenticationService.setRequireStrongIdentification(true);
@@ -49,7 +84,7 @@ public class StrongIdentificationRequiringCentralAuthenticationServiceImplTest {
         verify(this.kayttooikeusRestClient, times(1)).get(anyString(), eq(Boolean.class));
     }
 
-    @Test(expected = NoStrongIdentificationException.class)
+    @Test(expected = AuthenticationException.class)
     public void emptyIsNotStronglyIdentified() throws Exception {
         when(this.kayttooikeusRestClient.get(anyString(), eq(Boolean.class))).thenReturn(false);
         this.strongIdentificationRequiringCentralAuthenticationService.checkStrongIdentificationHook(this.usernamePasswordCredentials);
@@ -63,7 +98,7 @@ public class StrongIdentificationRequiringCentralAuthenticationServiceImplTest {
         verify(this.kayttooikeusRestClient, times(1)).get(anyString(), eq(Boolean.class));
     }
 
-    @Test(expected = NoStrongIdentificationException.class)
+    @Test(expected = AuthenticationException.class)
     public void defaultValueIsNotStronglyIdentified() throws Exception {
         when(this.kayttooikeusRestClient.get(anyString(), eq(Boolean.class))).thenReturn(false);
         this.strongIdentificationRequiringCentralAuthenticationService.checkStrongIdentificationHook(this.usernamePasswordCredentials);
@@ -86,7 +121,7 @@ public class StrongIdentificationRequiringCentralAuthenticationServiceImplTest {
         verify(this.kayttooikeusRestClient, times(1)).get(anyString(), eq(Boolean.class));
     }
 
-    @Test(expected = NoStrongIdentificationException.class)
+    @Test(expected = AuthenticationException.class)
     public void usernameFoundIsNotStronglyIdentified() throws Exception {
         when(this.kayttooikeusRestClient.get(anyString(), eq(Boolean.class))).thenReturn(false);
         this.strongIdentificationRequiringCentralAuthenticationService.setCasRequireStrongIdentificationListAsString("username,username2");

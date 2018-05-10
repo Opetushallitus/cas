@@ -14,7 +14,7 @@
           p:targetObject-ref="loginFailureInterceptor"
           p:targetMethod="clean" />
 
-    <bean id="periodicLoginFailureCleanerTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean"
+    <bean id="periodicLoginFailureCleanerTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean"
           p:jobDetail-ref="loginFailureInterceptorJobDetail"
           p:startDelay="0"
           p:repeatInterval="43200000" />

@@ -22,15 +22,27 @@ import fi.vm.sade.auth.clients.KayttooikeusRestClient;
 import fi.vm.sade.auth.exception.NoStrongIdentificationException;
 import fi.vm.sade.properties.OphProperties;
 import org.apache.commons.lang.BooleanUtils;
-import org.jasig.cas.authentication.principal.Credentials;
-import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
 import org.springframework.util.Assert;
 
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import static java.util.Collections.singletonMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import javax.security.auth.login.FailedLoginException;
+import org.jasig.cas.authentication.AuthenticationException;
+import org.jasig.cas.authentication.AuthenticationManager;
+import org.jasig.cas.authentication.Credential;
+import org.jasig.cas.authentication.UsernamePasswordCredential;
+import org.jasig.cas.logout.LogoutManager;
+import org.jasig.cas.services.ServicesManager;
+import org.jasig.cas.ticket.ExpirationPolicy;
+import org.jasig.cas.ticket.registry.TicketRegistry;
+import org.jasig.cas.util.UniqueTicketIdGenerator;
 
 public class StrongIdentificationRequiringCentralAuthenticationServiceImpl extends CentralAuthenticationServiceImpl {
     @NotNull
@@ -48,25 +60,43 @@ public class StrongIdentificationRequiringCentralAuthenticationServiceImpl exten
     @NotNull
     private List<String> casRequireStrongIdentificationList;
 
+    public StrongIdentificationRequiringCentralAuthenticationServiceImpl(final TicketRegistry ticketRegistry,
+                                            final AuthenticationManager authenticationManager,
+                                            final UniqueTicketIdGenerator ticketGrantingTicketUniqueTicketIdGenerator,
+                                            final Map<String, UniqueTicketIdGenerator> uniqueTicketIdGeneratorsForService,
+                                            final ExpirationPolicy ticketGrantingTicketExpirationPolicy,
+                                            final ExpirationPolicy serviceTicketExpirationPolicy,
+                                            final ServicesManager servicesManager,
+                                            final LogoutManager logoutManager) {
+        super(ticketRegistry, authenticationManager,
+                ticketGrantingTicketUniqueTicketIdGenerator,
+                uniqueTicketIdGeneratorsForService,
+                ticketGrantingTicketExpirationPolicy,
+                serviceTicketExpirationPolicy, servicesManager, logoutManager);
+    }
+
     @Override
-    public void checkStrongIdentificationHook(final Credentials credentials) throws NoStrongIdentificationException {
+    public void checkStrongIdentificationHook(final Set<? extends Credential> credentials) throws AuthenticationException {
         Assert.notNull(credentials, "credentials cannot be null");
 
+        Optional<UsernamePasswordCredential> credential = credentials.stream()
+                .filter(UsernamePasswordCredential.class::isInstance)
+                .map(UsernamePasswordCredential.class::cast)
+                .findFirst();
         // Do this only for UsernamePasswordCredentials. Service-provider-app wants to do this before creating authentication token.
-        if (credentials instanceof UsernamePasswordCredentials
+        if (credential.isPresent()
                 && (this.requireStrongIdentification
-                || this.casRequireStrongIdentificationList.contains(((UsernamePasswordCredentials) credentials).getUsername()))) {
-            String username = ((UsernamePasswordCredentials) credentials).getUsername();
+                || this.casRequireStrongIdentificationList.contains(credential.get().getUsername()))) {
+            String username = credential.get().getUsername();
             String vahvaTunnistusUrl = this.ophProperties.url("kayttooikeus-service.cas.vahva-tunnistus-username", username);
             Boolean vahvastiTunnistettu;
             try {
                 vahvastiTunnistettu = this.kayttooikeusClient.get(vahvaTunnistusUrl, Boolean.class);
             } catch (IOException e) {
-                throw new NoStrongIdentificationException("error", "Could not determine if user is strongly identified");
+                throw new AuthenticationException(singletonMap(getClass().getName(), FailedLoginException.class));
             }
             if (BooleanUtils.isFalse(vahvastiTunnistettu)) {
-                // type (3rd parameter) is important since it decides webflow route. Default is "error".
-                throw new NoStrongIdentificationException("noStrongIdentification", "Need strong identificatin", "noStrongIdentification");
+                throw new AuthenticationException(singletonMap(getClass().getName(), NoStrongIdentificationException.class));
             }
         }
     }

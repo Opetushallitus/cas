@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:webflow="http://www.springframework.org/schema/webflow-config"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/webflow-config http://www.springframework.org/schema/webflow-config/spring-webflow-config-2.3.xsd">
+
+    <!-- override cas bean to add "loginFailureInterceptor" -->
+    <bean id="loginFlowHandlerMapping" class="org.springframework.webflow.mvc.servlet.FlowHandlerMapping" primary="true"
+          p:flowRegistry-ref="loginFlowRegistry" p:order="2">
+        <property name="interceptors">
+            <array value-type="org.springframework.web.servlet.HandlerInterceptor">
+                <ref bean="localeChangeInterceptor" />
+                <ref bean="loginFailureInterceptor" />
+            </array>
+        </property>
+    </bean>
+
+    <!-- override cas exception handler to add strong identification support -->
+    <bean id="authenticationExceptionHandler" class="fi.vm.sade.auth.exception.OphAuthenticationExceptionHandler" primary="true" />
+
+    <!-- override cas bean to add strong identification support -->
+    <bean id="authenticationViaFormAction" class="org.jasig.cas.web.flow.AuthenticationViaFormAction" primary="true"
+        p:centralAuthenticationService-ref="strongIdentificationRequiringCentralAuthenticationService"
+        p:warnCookieGenerator-ref="warnCookieGenerator"/>
+
+    <bean id="oppijanumerorekisteriRestClient" class="fi.vm.sade.auth.clients.OppijanumerorekisteriRestClient">
+        <constructor-arg ref="ophProperties" />
+        <property name="clientSubSystemCode" value="authentication.cas" />
+        <property name="username" value="${serviceprovider.app.username.to.usermanagement}" />
+        <property name="password" value="${serviceprovider.app.password.to.usermanagement}" />
+    </bean>
+
+    <bean id="strongIdentificationRedirectAction" class="fi.vm.sade.auth.action.StrongIdentificationRedirectAction"
+          p:kayttooikeusClient-ref="kayttooikeusRestClient"
+          p:oppijanumerorekisteriClient-ref="oppijanumerorekisteriRestClient"
+          p:ophProperties-ref="ophProperties" />
+
+    <bean id="samlAction" class="fi.vm.sade.saml.action.SAMLAction">
+        <property name="centralAuthenticationService" ref="centralAuthenticationService" />
+    </bean>
+
+    <bean id="configuration" class="fi.vm.sade.Configuration">
+        <property name="hakaUrl" value="${haka.url}" />
+        <property name="loginTietosuojaselosteUrl" value="${login.tietosuojaseloste.url}" />
+    </bean>
+
+    <!-- oph rest resource to get list of user's roles -->
+    <bean id="myrolesController" class="fi.vm.sade.auth.ldap.MyRolesResource">
+        <property name="ticketGrantingTicketCookieGenerator" ref="ticketGrantingTicketCookieGenerator"/>
+        <property name="ticketRegistry" ref="ticketRegistry"/>
+        <property name="authenticationUtil" ref="authenticationUtil"/>
+    </bean>
+
+    <!--  oph rest resource to get information about logged in user -->
+    <bean id="userinfoController" class="fi.vm.sade.auth.ldap.UserInfoResource">
+        <property name="ticketGrantingTicketCookieGenerator" ref="ticketGrantingTicketCookieGenerator"/>
+        <property name="ticketRegistry" ref="ticketRegistry"/>
+        <property name="authenticationUtil" ref="authenticationUtil"/>
+    </bean>
+
+    <bean id="handlerMappingO" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping"
+          p:alwaysUseFullPath="true">
+        <property name="mappings">
+            <util:properties>
+                <!-- oph rest resource to get list of user's roles -->
+                <prop key="/myroles">myrolesController</prop>
+                <!--  oph rest resource to get information about logged in user -->
+                <prop key="/me">userinfoController</prop>
+            </util:properties>
+        </property>
+    </bean>
+
+</beans>

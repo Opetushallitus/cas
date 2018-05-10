@@ -1,16 +1,30 @@
 package fi.vm.sade.saml.action;
 
-import org.jasig.cas.authentication.principal.AbstractPersonDirectoryCredentialsToPrincipalResolver;
-import org.jasig.cas.authentication.principal.Credentials;
+import org.jasig.cas.authentication.Credential;
+import org.jasig.cas.authentication.principal.DefaultPrincipalFactory;
+import org.jasig.cas.authentication.principal.Principal;
+import org.jasig.cas.authentication.principal.PrincipalFactory;
+import org.jasig.cas.authentication.principal.PrincipalResolver;
 
-public class SAMLCredentialsToPrincipalResolver extends AbstractPersonDirectoryCredentialsToPrincipalResolver {
-    @Override
-    protected String extractPrincipalId(Credentials credentials) {
-        return ((SAMLCredentials)credentials).getUserDetails().getKayttajatiedot().getUsername();
+public class SAMLCredentialsToPrincipalResolver implements PrincipalResolver {
+
+    private final PrincipalFactory principalFactory;
+
+    public SAMLCredentialsToPrincipalResolver() {
+        this(new DefaultPrincipalFactory());
+    }
+
+    public SAMLCredentialsToPrincipalResolver(PrincipalFactory principalFactory) {
+        this.principalFactory = principalFactory;
     }
 
     @Override
-    public boolean supports(Credentials credentials) {
+    public Principal resolve(Credential credentials) {
+        return principalFactory.createPrincipal(((SAMLCredentials)credentials).getUserDetails().getKayttajatiedot().getUsername());
+    }
+
+    @Override
+    public boolean supports(Credential credentials) {
         return credentials != null & SAMLCredentials.class.equals(credentials.getClass());
     }
 }

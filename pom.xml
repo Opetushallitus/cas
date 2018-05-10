@@ -12,10 +12,9 @@
     <packaging>war</packaging>
 
     <properties>
-        <!--<slf4j.version>1.5.10</slf4j.version>-->
-        <slf4j.version>1.6.6</slf4j.version>
         <webapp.port>8080</webapp.port>
         <ehcache.version>2.6.0</ehcache.version>
+        <spring-security.version>4.0.1.RELEASE</spring-security.version>
     </properties>
 
     <dependencies>
@@ -41,36 +40,29 @@
         <dependency>
             <groupId>org.jasig.cas</groupId>
             <artifactId>cas-server-webapp</artifactId>
-            <version>3.5.3</version>
+            <version>${cas.version}</version>
             <type>war</type>
         </dependency>
         <dependency>
             <groupId>org.jasig.cas</groupId>
-            <artifactId>cas-server-integration-restlet</artifactId>
-            <version>3.5.3</version>
-            <!-- will throw stackoverflow, replaced with cglib:cglib:2.2.2 -->
-            <exclusions>
-                <exclusion>
-                    <groupId>cglib</groupId>
-                    <artifactId>cglib-nodep</artifactId>
-                </exclusion>
-            </exclusions>
+            <artifactId>cas-server-webapp-support</artifactId>
+            <version>${cas.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jasig.cas</groupId>
+            <artifactId>cas-server-support-rest</artifactId>
+            <version>${cas.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jasig.cas</groupId>
             <artifactId>cas-server-support-ldap</artifactId>
-            <version>3.5.1</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.webflow</groupId>
-                    <artifactId>spring-webflow</artifactId>
-                </exclusion>
-            </exclusions>
+            <version>${cas.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jasig.cas</groupId>
-            <artifactId>cas-server-support-oauth</artifactId>
-            <version>3.5.1</version>
+            <artifactId>cas-management-webapp</artifactId>
+            <version>${cas.version}</version>
+            <type>war</type>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -80,41 +72,20 @@
         <dependency>
             <groupId>org.jasig.cas</groupId>
             <artifactId>cas-server-integration-ehcache</artifactId>
-            <version>3.5.1</version>
+            <version>${cas.version}</version>
+        </dependency>
+
+        <!-- spring -->
+        <dependency>
+            <groupId>org.springframework.ldap</groupId>
+            <artifactId>spring-ldap-core</artifactId>
         </dependency>
 
         <!-- logging.. -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-            <scope>${slf4j-api.scope}</scope>
         </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j.version}</version>
-            <scope>${slf4j-api.scope}</scope>
-        </dependency>
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.17</version>
-            <scope>${slf4j-api.scope}</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>log4j-over-slf4j</artifactId>
-            <version>1.6.1</version>
-            <scope>${slf4j-api.scope}</scope>
-        </dependency>
-
 
         <dependency>
             <groupId>cglib</groupId>
@@ -140,14 +111,7 @@
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>2.5</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>jstl</groupId>
-            <artifactId>jstl</artifactId>
-            <version>1.2</version>
+            <artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
 
@@ -166,21 +130,23 @@
         <dependency>
             <groupId>org.jasig.cas.client</groupId>
             <artifactId>cas-client-support-distributed-ehcache</artifactId>
-            <version>3.4.1</version>
         </dependency>
 
         <!-- tests -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>${spring.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
-            <version>${junit.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>

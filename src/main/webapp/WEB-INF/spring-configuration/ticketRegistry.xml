@@ -48,7 +48,7 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
         <property name="memoryStoreEvictionPolicy" value="LRU" />
         <property name="overflowToDisk" value="true" />
         <property name="bootstrapCacheLoader">
-            <ref local="ticketCacheBootstrapCacheLoader" />
+            <ref bean="ticketCacheBootstrapCacheLoader" />
         </property>
     </bean>
 
@@ -69,7 +69,7 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
 
         <property name="cacheEventListeners" ref="ticketRMISynchronousCacheReplicator"/>
         <!--
-            <ref local="ticketRMISynchronousCacheReplicator" />
+            <ref bean="ticketRMISynchronousCacheReplicator" />
         </property>
         -->
 
@@ -100,7 +100,7 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
         <property name="cacheName" value="ticketGrantingTicketsCache" />
 
         <property name="cacheEventListeners">
-            <ref local="ticketRMISynchronousCacheReplicator" />
+            <ref bean="ticketRMISynchronousCacheReplicator" />
         </property>
 
         <!-- The maximum number of seconds an element can exist in the cache regardless of use. The element

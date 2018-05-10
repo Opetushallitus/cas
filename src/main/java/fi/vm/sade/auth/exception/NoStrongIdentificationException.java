@@ -1,18 +1,14 @@
 package fi.vm.sade.auth.exception;
 
-import org.jasig.cas.authentication.handler.AuthenticationException;
+import javax.security.auth.login.LoginException;
 
-public class NoStrongIdentificationException extends AuthenticationException {
+public class NoStrongIdentificationException extends LoginException {
 
-    public NoStrongIdentificationException(String code) {
-        super(code);
+    public NoStrongIdentificationException() {
     }
 
-    public NoStrongIdentificationException(String code, String message) {
-        super(code, message);
+    public NoStrongIdentificationException(String msg) {
+        super(msg);
     }
 
-    public NoStrongIdentificationException(String code, String message, String type) {
-        super(code, message, type);
-    }
 }

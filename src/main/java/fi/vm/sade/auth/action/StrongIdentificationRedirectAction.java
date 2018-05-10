@@ -3,10 +3,9 @@ package fi.vm.sade.auth.action;
 import fi.vm.sade.auth.clients.KayttooikeusRestClient;
 import fi.vm.sade.auth.clients.OppijanumerorekisteriRestClient;
 import fi.vm.sade.properties.OphProperties;
-import org.jasig.cas.authentication.principal.Credentials;
-import org.springframework.webflow.execution.RequestContext;
 
 import javax.validation.constraints.NotNull;
+import org.jasig.cas.authentication.Credential;
 
 public class StrongIdentificationRedirectAction {
 
@@ -19,8 +18,8 @@ public class StrongIdentificationRedirectAction {
     @NotNull
     private OphProperties ophProperties;
 
-    public String createRedirectUrl(Credentials credentials) throws Exception {
-        String oidHenkilo = this.kayttooikeusClient.getHenkiloOid(credentials);
+    public String createRedirectUrl(Credential credential) throws Exception {
+        String oidHenkilo = this.kayttooikeusClient.getHenkiloOid(credential.getId());
         String loginToken = this.kayttooikeusClient.createLoginToken(oidHenkilo);
         String asiointiKieli = this.oppijanumerorekisteriClient.getAsiointikieli(oidHenkilo);
 

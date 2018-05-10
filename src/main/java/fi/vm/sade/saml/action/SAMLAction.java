@@ -4,7 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 
 import org.jasig.cas.CentralAuthenticationService;
-import org.jasig.cas.authentication.principal.Credentials;
+import org.jasig.cas.authentication.AuthenticationException;
+import org.jasig.cas.authentication.Credential;
 import org.jasig.cas.ticket.TicketException;
 import org.jasig.cas.web.support.WebUtils;
 import org.springframework.webflow.action.AbstractAction;
@@ -21,13 +22,13 @@ public class SAMLAction extends AbstractAction {
         final HttpServletRequest request = WebUtils.getHttpServletRequest(requestContext);
         String authToken = request.getParameter("authToken");
         if(authToken != null) {
-            Credentials credentials = new SAMLCredentials(authToken);
+            Credential credential = new SAMLCredentials(authToken);
 
             try {
-                WebUtils.putTicketGrantingTicketInRequestScope(requestContext, this.centralAuthenticationService
-                        .createTicketGrantingTicket(credentials));
+                WebUtils.putTicketGrantingTicketInScopes(requestContext, this.centralAuthenticationService
+                        .createTicketGrantingTicket(credential));
                 return success();
-            } catch (final TicketException e) {
+            } catch (final AuthenticationException | TicketException e) {
                 return error();
             }
         }

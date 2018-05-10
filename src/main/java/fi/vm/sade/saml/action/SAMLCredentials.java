@@ -1,9 +1,9 @@
 package fi.vm.sade.saml.action;
 
 import fi.vm.sade.auth.dto.IdentifiedHenkiloType;
-import org.jasig.cas.authentication.principal.Credentials;
+import org.jasig.cas.authentication.Credential;
 
-public class SAMLCredentials implements Credentials {
+public class SAMLCredentials implements Credential {
 
     private String token;
     private IdentifiedHenkiloType userDetails;
@@ -27,4 +27,10 @@ public class SAMLCredentials implements Credentials {
     public void setUserDetails(IdentifiedHenkiloType userDetails) {
         this.userDetails = userDetails;
     }
+
+    @Override
+    public String getId() {
+        return token;
+    }
+
 }
