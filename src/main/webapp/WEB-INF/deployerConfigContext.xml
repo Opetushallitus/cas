@@ -62,7 +62,7 @@
                    -->
                 <entry key-ref="proxyAuthenticationHandler" value-ref="proxyPrincipalResolver" />
                 <entry key-ref="primaryAuthenticationHandler" value="#{null}" />
-                <entry key-ref="samlAuthenticationHandler" value-ref="samlPrincipalResolver" />
+                <entry key-ref="samlAuthenticationHandler" value="#{null}" />
             </map>
         </constructor-arg>
 
@@ -173,8 +173,10 @@
     <bean id="bindConnectionConfig" parent="abstractConnectionConfig" />
 
     <bean id="samlAuthenticationHandler" class="fi.vm.sade.saml.action.SAMLAuthenticationHandler">
-        <property name="authenticationUtil" ref="authenticationUtil"/>
+        <constructor-arg index="0" ref="ophProperties"/>
     </bean>
+
+    <bean id="ophProperties" class="fi.vm.sade.CasOphProperties" />
 
     <!-- Required for proxy ticket mechanism -->
     <bean id="proxyPrincipalResolver"
@@ -188,9 +190,6 @@
           class="org.jasig.cas.authentication.principal.PersonDirectoryPrincipalResolver"
           p:principalFactory-ref="principalFactory"
           p:attributeRepository-ref="attributeRepository" />
-
-    <bean id="samlPrincipalResolver"
-          class="fi.vm.sade.saml.action.SAMLCredentialsToPrincipalResolver" />
 
     <!--
     Bean that defines the attributes that a service may return.  This example uses the Stub/Mock version.  A real implementation
@@ -251,57 +250,4 @@
               p:serviceTicketCountWarnThreshold="5000"
               p:sessionCountWarnThreshold="100000" />
     </util:list>
-
-    <!-- antti -->
-    <!-- TODO: optimointi, ldap poolaus? ei bind operaatioille.. -->
-    <bean id="contextSource" class="org.springframework.ldap.core.support.LdapContextSource">
-        <!-- DO NOT enable JNDI pooling for context sources that perform LDAP bind operations. -->
-        <property name="pooled" value="false"/>
-
-        <!--
-          Although multiple URLs may defined, it's strongly recommended to avoid this configuration
-          since the implementation attempts hosts in sequence and requires a connection timeout
-          prior to attempting the next host, which incurs unacceptable latency on node failure.
-          A proper HA setup for LDAP directories should use a single virtual host that maps to multiple
-          real hosts using a hardware load balancer.
-        -->
-        <property name="url" value="${ldap.url}" />
-
-        <!--
-          Manager credentials are only required if your directory does not support anonymous searches.
-          Never provide these credentials for FastBindLdapAuthenticationHandler since the user's
-          credentials are used for the bind operation.
-        -->
-        <property name="userDn" value="${ldap.manager.userdn}"/>
-        <property name="password" value="${ldap.manager.password}"/>
-
-        <!-- Place JNDI environment properties here. -->
-        <property name="baseEnvironmentProperties">
-            <map>
-                <!-- Three seconds is an eternity to users. -->
-                <entry key="com.sun.jndi.ldap.connect.timeout" value="3000" />
-                <entry key="com.sun.jndi.ldap.read.timeout" value="3000" />
-
-                <!-- Explained at http://download.oracle.com/javase/1.3/docs/api/javax/naming/Context.html#SECURITY_AUTHENTICATION -->
-                <entry key="java.naming.security.authentication" value="simple" />
-            </map>
-        </property>
-    </bean>
-
-    <bean id="ldapUserImporter" class="fi.vm.sade.auth.ldap.LdapUserImporter" scope="singleton" init-method="init" lazy-init="false">
-        <property name="contextSource" ref="contextSource"/>
-        <property name="ldapTemplate" ref="ldapTemplate"/>
-    </bean>
-
-    <bean id="ldapTemplate" class="org.springframework.ldap.core.LdapTemplate">
-        <constructor-arg ref="contextSource" />
-    </bean>
-
-    <bean id="ophProperties" class="fi.vm.sade.CasOphProperties">
-    </bean>
-
-    <bean id="authenticationUtil" class="fi.vm.sade.AuthenticationUtil">
-        <property name="ldapUserImporter" ref="ldapUserImporter"/>
-        <property name="ophProperties" ref="ophProperties" />
-    </bean>
 </beans>
