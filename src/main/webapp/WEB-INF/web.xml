@@ -150,13 +150,6 @@
         <servlet-class>com.codahale.metrics.servlets.ThreadDumpServlet</servlet-class>
     </servlet>
 
-    <!-- oph start -->
-    <servlet>
-        <servlet-name>redirect</servlet-name>
-        <servlet-class>fi.vm.sade.servlet.RedirectServlet</servlet-class>
-    </servlet>
-    <!-- oph end -->
-
     <servlet-mapping>
         <servlet-name>cas</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -267,10 +260,6 @@
     <servlet-mapping>
         <servlet-name>cas</servlet-name>
         <url-pattern>/me</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>redirect</servlet-name>
-        <url-pattern>/redirect</url-pattern>
     </servlet-mapping>
     <!-- oph end -->
 
