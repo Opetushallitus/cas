@@ -3,7 +3,9 @@ package fi.vm.sade.login.failure;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import javax.servlet.annotation.WebFilter;
 
+@WebFilter(urlPatterns = "/login")
 public class RedirectHttpServletResponseWrapperFilter implements Filter {
 
     @Override

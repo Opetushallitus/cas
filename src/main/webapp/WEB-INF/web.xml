@@ -81,17 +81,6 @@
         <url-pattern>/statistics/*</url-pattern>
     </filter-mapping>
 
-    <!-- oph start -->
-    <filter>
-        <filter-name>responseWrapperFilter</filter-name>
-        <filter-class>fi.vm.sade.login.failure.RedirectHttpServletResponseWrapperFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>responseWrapperFilter</filter-name>
-        <url-pattern>/login</url-pattern>
-    </filter-mapping>
-    <!-- oph end -->
-
     <!--
       - Loads the CAS ApplicationContext.
     -->
