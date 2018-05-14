@@ -42,6 +42,7 @@
             <list>
                 <value>/WEB-INF/cas.properties</value>
                 <value>/WEB-INF/cas-management.properties</value>
+                <value>classpath:ldap.properties</value>
                 <value>file:///${user.home:''}/oph-configuration/common.properties</value>
                 <value>file:///${user.home:''}/oph-configuration/cas.properties</value>
                 <value>classpath:cluster.node/cas.cluster.node.properties</value>

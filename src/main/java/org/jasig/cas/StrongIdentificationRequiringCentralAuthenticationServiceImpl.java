@@ -21,29 +21,28 @@ package org.jasig.cas;
 import fi.vm.sade.auth.clients.KayttooikeusRestClient;
 import fi.vm.sade.auth.exception.NoStrongIdentificationException;
 import fi.vm.sade.properties.OphProperties;
-import org.apache.commons.lang.BooleanUtils;
-import org.springframework.util.Assert;
-
-import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import static java.util.Collections.singletonMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import javax.security.auth.login.FailedLoginException;
+import javax.validation.constraints.NotNull;
+import org.apache.commons.lang.BooleanUtils;
 import org.jasig.cas.authentication.AuthenticationException;
-import org.jasig.cas.authentication.AuthenticationManager;
-import org.jasig.cas.authentication.Credential;
+import org.jasig.cas.authentication.BasicCredentialMetaData;
+import org.jasig.cas.authentication.CredentialMetaData;
 import org.jasig.cas.authentication.UsernamePasswordCredential;
 import org.jasig.cas.logout.LogoutManager;
 import org.jasig.cas.services.ServicesManager;
-import org.jasig.cas.ticket.ExpirationPolicy;
+import org.jasig.cas.ticket.TicketFactory;
 import org.jasig.cas.ticket.registry.TicketRegistry;
-import org.jasig.cas.util.UniqueTicketIdGenerator;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
+@Transactional(readOnly = false, transactionManager = "ticketTransactionManager")
 public class StrongIdentificationRequiringCentralAuthenticationServiceImpl extends CentralAuthenticationServiceImpl {
     @NotNull
     private KayttooikeusRestClient kayttooikeusClient;
@@ -60,34 +59,29 @@ public class StrongIdentificationRequiringCentralAuthenticationServiceImpl exten
     @NotNull
     private List<String> casRequireStrongIdentificationList;
 
-    public StrongIdentificationRequiringCentralAuthenticationServiceImpl(final TicketRegistry ticketRegistry,
-                                            final AuthenticationManager authenticationManager,
-                                            final UniqueTicketIdGenerator ticketGrantingTicketUniqueTicketIdGenerator,
-                                            final Map<String, UniqueTicketIdGenerator> uniqueTicketIdGeneratorsForService,
-                                            final ExpirationPolicy ticketGrantingTicketExpirationPolicy,
-                                            final ExpirationPolicy serviceTicketExpirationPolicy,
-                                            final ServicesManager servicesManager,
-                                            final LogoutManager logoutManager) {
-        super(ticketRegistry, authenticationManager,
-                ticketGrantingTicketUniqueTicketIdGenerator,
-                uniqueTicketIdGeneratorsForService,
-                ticketGrantingTicketExpirationPolicy,
-                serviceTicketExpirationPolicy, servicesManager, logoutManager);
+    public StrongIdentificationRequiringCentralAuthenticationServiceImpl(
+            final TicketRegistry ticketRegistry,
+            final TicketFactory ticketFactory,
+            final ServicesManager servicesManager,
+            final LogoutManager logoutManager) {
+        super(ticketRegistry, ticketFactory, servicesManager, logoutManager);
     }
 
     @Override
-    public void checkStrongIdentificationHook(final Set<? extends Credential> credentials) throws AuthenticationException {
+    public void checkStrongIdentificationHook(final Collection<? extends CredentialMetaData> credentials) throws AuthenticationException {
         Assert.notNull(credentials, "credentials cannot be null");
 
-        Optional<UsernamePasswordCredential> credential = credentials.stream()
-                .filter(UsernamePasswordCredential.class::isInstance)
-                .map(UsernamePasswordCredential.class::cast)
+        Optional<String> credential = credentials.stream()
+                .filter(BasicCredentialMetaData.class::isInstance)
+                .map(BasicCredentialMetaData.class::cast)
+                .filter(this::isUsernamePasswordCredential)
+                .map(BasicCredentialMetaData::getId)
                 .findFirst();
         // Do this only for UsernamePasswordCredentials. Service-provider-app wants to do this before creating authentication token.
         if (credential.isPresent()
                 && (this.requireStrongIdentification
-                || this.casRequireStrongIdentificationList.contains(credential.get().getUsername()))) {
-            String username = credential.get().getUsername();
+                || this.casRequireStrongIdentificationList.contains(credential.get()))) {
+            String username = credential.get();
             String vahvaTunnistusUrl = this.ophProperties.url("kayttooikeus-service.cas.vahva-tunnistus-username", username);
             Boolean vahvastiTunnistettu;
             try {
@@ -99,6 +93,10 @@ public class StrongIdentificationRequiringCentralAuthenticationServiceImpl exten
                 throw new AuthenticationException(singletonMap(getClass().getName(), NoStrongIdentificationException.class));
             }
         }
+    }
+
+    private boolean isUsernamePasswordCredential(BasicCredentialMetaData metaData) {
+        return UsernamePasswordCredential.class.isAssignableFrom(metaData.getCredentialClass());
     }
 
     public void setKayttooikeusClient(KayttooikeusRestClient kayttooikeusClient) {

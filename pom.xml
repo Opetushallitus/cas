@@ -14,7 +14,6 @@
     <properties>
         <webapp.port>8080</webapp.port>
         <ehcache.version>2.6.0</ehcache.version>
-        <spring-security.version>4.0.1.RELEASE</spring-security.version>
     </properties>
 
     <dependencies>
@@ -50,6 +49,11 @@
         </dependency>
         <dependency>
             <groupId>org.jasig.cas</groupId>
+            <artifactId>cas-server-webapp-cookie</artifactId>
+            <version>${cas.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jasig.cas</groupId>
             <artifactId>cas-server-support-rest</artifactId>
             <version>${cas.version}</version>
         </dependency>
@@ -74,11 +78,30 @@
             <artifactId>cas-server-integration-ehcache</artifactId>
             <version>${cas.version}</version>
         </dependency>
+        <dependency>
+            <!-- for centralAuthenticationService override -->
+            <groupId>org.jasig.cas</groupId>
+            <artifactId>cas-server-core</artifactId>
+            <version>${cas.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <!-- for authenticationViaFormAction override -->
+            <groupId>org.jasig.cas</groupId>
+            <artifactId>cas-server-webapp-actions</artifactId>
+            <version>${cas.version}</version>
+            <scope>provided</scope>
+        </dependency>
 
         <!-- spring -->
         <dependency>
             <groupId>org.springframework.ldap</groupId>
             <artifactId>spring-ldap-core</artifactId>
+        </dependency>
+        <dependency>
+            <!-- required by generic-common/CachingRestClient -->
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
         </dependency>
 
         <!-- logging.. -->

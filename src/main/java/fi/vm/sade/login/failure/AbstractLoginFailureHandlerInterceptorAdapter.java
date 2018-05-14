@@ -9,10 +9,13 @@ import org.springframework.webflow.execution.RequestContext;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.webflow.core.collection.MutableAttributeMap;
 
 public abstract class AbstractLoginFailureHandlerInterceptorAdapter extends HandlerInterceptorAdapter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractLoginFailureHandlerInterceptorAdapter.class);
+    private static final String SUCCESSFUL_AUTHENTICATION_EVENT = "success";
+    private static final String AUTHENTICATION_RESULT = "authenticationResult";
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -49,15 +52,17 @@ public abstract class AbstractLoginFailureHandlerInterceptorAdapter extends Hand
     }
 
     private boolean hasSuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response) {
-        Event currentEvent = getCurrentRequestFlowEvent(request);
-        if(null == currentEvent) {
+        final RequestContext context = (RequestContext) request.getAttribute("flowRequestContext");
+        Event currentEvent = null == context ? null : context.getCurrentEvent();
+
+        if (context == null || currentEvent == null) {
             LOGGER.debug("There is no current flow event in request. Checking redirect...");
             return hasRedirectToService(request, response);
-        } else {
-            LOGGER.debug("Current event ID is {}", currentEvent.getId());
-            return "success".equals(currentEvent.getId());
         }
 
+        LOGGER.debug("Current event ID is {}", currentEvent.getId());
+        final MutableAttributeMap<Object> flowScope = context.getFlowScope();
+        return flowScope != null && SUCCESSFUL_AUTHENTICATION_EVENT.equals(flowScope.get(AUTHENTICATION_RESULT));
     }
 
     private String getRedirectLocation(HttpServletResponse response) {
@@ -91,11 +96,6 @@ public abstract class AbstractLoginFailureHandlerInterceptorAdapter extends Hand
         String redirectLocation = getRedirectLocation(response);
         LOGGER.debug("There is redirect to {} and service parameter is {}.", redirectLocation, serviceUri);
         return null == redirectLocation ? false : redirectLocation.startsWith(serviceUri);
-    }
-
-    private Event getCurrentRequestFlowEvent(HttpServletRequest request) {
-        RequestContext context = (RequestContext) request.getAttribute("flowRequestContext");
-        return null == context ? null : context.getCurrentEvent();
     }
 
     public abstract int getMinutesToAllowLogin(HttpServletRequest request);

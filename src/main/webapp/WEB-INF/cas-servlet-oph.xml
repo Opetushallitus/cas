@@ -13,46 +13,6 @@
        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
        http://www.springframework.org/schema/webflow-config http://www.springframework.org/schema/webflow-config/spring-webflow-config-2.3.xsd">
 
-    <!-- override cas bean to add "loginFailureInterceptor" -->
-    <bean id="loginFlowHandlerMapping" class="org.springframework.webflow.mvc.servlet.FlowHandlerMapping" primary="true"
-          p:flowRegistry-ref="loginFlowRegistry" p:order="2">
-        <property name="interceptors">
-            <array value-type="org.springframework.web.servlet.HandlerInterceptor">
-                <ref bean="localeChangeInterceptor" />
-                <ref bean="loginFailureInterceptor" />
-            </array>
-        </property>
-    </bean>
-
-    <!-- override cas exception handler to add strong identification support -->
-    <bean id="authenticationExceptionHandler" class="fi.vm.sade.auth.exception.OphAuthenticationExceptionHandler" primary="true" />
-
-    <!-- override cas bean to add strong identification support -->
-    <bean id="authenticationViaFormAction" class="org.jasig.cas.web.flow.AuthenticationViaFormAction" primary="true"
-        p:centralAuthenticationService-ref="strongIdentificationRequiringCentralAuthenticationService"
-        p:warnCookieGenerator-ref="warnCookieGenerator"/>
-
-    <bean id="oppijanumerorekisteriRestClient" class="fi.vm.sade.auth.clients.OppijanumerorekisteriRestClient">
-        <constructor-arg ref="ophProperties" />
-        <property name="clientSubSystemCode" value="authentication.cas" />
-        <property name="username" value="${serviceprovider.app.username.to.usermanagement}" />
-        <property name="password" value="${serviceprovider.app.password.to.usermanagement}" />
-    </bean>
-
-    <bean id="strongIdentificationRedirectAction" class="fi.vm.sade.auth.action.StrongIdentificationRedirectAction"
-          p:kayttooikeusClient-ref="kayttooikeusRestClient"
-          p:oppijanumerorekisteriClient-ref="oppijanumerorekisteriRestClient"
-          p:ophProperties-ref="ophProperties" />
-
-    <bean id="samlAction" class="fi.vm.sade.saml.action.SAMLAction">
-        <property name="centralAuthenticationService" ref="centralAuthenticationService" />
-    </bean>
-
-    <bean id="configuration" class="fi.vm.sade.Configuration">
-        <property name="hakaUrl" value="${haka.url}" />
-        <property name="loginTietosuojaselosteUrl" value="${login.tietosuojaseloste.url}" />
-    </bean>
-
     <!-- antti -->
     <!-- TODO: optimointi, ldap poolaus? ei bind operaatioille.. -->
     <bean id="contextSource" class="org.springframework.ldap.core.support.LdapContextSource">

@@ -1,45 +1,21 @@
 package fi.vm.sade.saml.action;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.NotNull;
-
-import org.jasig.cas.CentralAuthenticationService;
-import org.jasig.cas.authentication.AuthenticationException;
 import org.jasig.cas.authentication.Credential;
-import org.jasig.cas.ticket.TicketException;
+import org.jasig.cas.web.flow.AbstractNonInteractiveCredentialsAction;
 import org.jasig.cas.web.support.WebUtils;
-import org.springframework.webflow.action.AbstractAction;
-import org.springframework.webflow.execution.Event;
 import org.springframework.webflow.execution.RequestContext;
 
-public class SAMLAction extends AbstractAction {
-
-    @NotNull
-    private CentralAuthenticationService centralAuthenticationService;
+public class SAMLAction extends AbstractNonInteractiveCredentialsAction {
 
     @Override
-    protected Event doExecute(RequestContext requestContext) throws Exception {
+    protected Credential constructCredentialsFromRequest(RequestContext requestContext) {
         final HttpServletRequest request = WebUtils.getHttpServletRequest(requestContext);
         String authToken = request.getParameter("authToken");
-        if(authToken != null) {
-            Credential credential = new SAMLCredentials(authToken);
-
-            try {
-                WebUtils.putTicketGrantingTicketInScopes(requestContext, this.centralAuthenticationService
-                        .createTicketGrantingTicket(credential));
-                return success();
-            } catch (final AuthenticationException | TicketException e) {
-                return error();
-            }
+        if (authToken != null) {
+            return new SAMLCredentials(authToken);
         }
-        return error();
+        return null;
     }
 
-    public CentralAuthenticationService getCentralAuthenticationService() {
-        return centralAuthenticationService;
-    }
-
-    public void setCentralAuthenticationService(CentralAuthenticationService centralAuthenticationService) {
-        this.centralAuthenticationService = centralAuthenticationService;
-    }
 }
