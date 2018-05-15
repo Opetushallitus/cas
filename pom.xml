@@ -69,11 +69,6 @@
             <version>2.2.4</version>
         </dependency>
         <dependency>
-            <groupId>org.jasig.cas</groupId>
-            <artifactId>cas-server-integration-ehcache</artifactId>
-            <version>${cas.version}</version>
-        </dependency>
-        <dependency>
             <!-- for centralAuthenticationService override -->
             <groupId>org.jasig.cas</groupId>
             <artifactId>cas-server-core</artifactId>
