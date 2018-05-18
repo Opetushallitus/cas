@@ -24,6 +24,10 @@
             <groupId>fi.vm.sade.java-utils</groupId>
             <artifactId>java-properties</artifactId>
         </dependency>
+        <dependency>
+            <groupId>fi.vm.sade.java-utils</groupId>
+            <artifactId>java-http</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>fi.vm.sade.generic</groupId>

@@ -24,6 +24,18 @@
         </param-value>
     </context-param>
 
+    <!-- oph start -->
+    <filter>
+        <filter-name>remoteAddressFilter</filter-name>
+        <filter-class>fi.vm.sade.javautils.http.RemoteAddressFilter</filter-class>
+        <async-supported>true</async-supported>
+    </filter>
+    <filter-mapping>
+        <filter-name>remoteAddressFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!-- oph end -->
+
     <filter>
         <filter-name>characterEncodingFilter</filter-name>
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
