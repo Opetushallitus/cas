@@ -45,26 +45,14 @@ public class LdapUserImporter {
 
     public List<String> getUserLdapGroups(String member) {
         Name groupdDn = buildDn("groups", null, null, null);
-        return ldapTemplate.search(groupdDn, new EqualsFilter("uniqueMember", member).encode(), new ContextMapper() {
-            @Override
-            public Object mapFromContext(Object o) {
-                return ((DirContextOperations)o).getStringAttribute("cn");
-            }
-        });
-    }
-    
-    public String getUserRolesAndGroups(String uid) {
-        return getLdapUser(uid).getRoles();
-    }
-
-    public List<String> getUserLdapAttributes() {
-        ldapTemplate.lookup((Name)null);
-        return null;
+        return ldapTemplate.search(groupdDn,
+                new EqualsFilter("uniqueMember", member).encode(),
+                (ContextMapper<String>) o -> ((DirContextOperations)o).getStringAttribute("cn"));
     }
 
     public LdapUser getLdapUser(String uid) {
         final Name name = buildDn("uid", uid, "People");
-        return (LdapUser) ldapTemplate.lookup(name, new LdapUserAttributeMapper());
+        return ldapTemplate.lookup(name, new LdapUserAttributeMapper());
     }
 
     public static Name buildDn(String ou, String extraDepartment, String uid, String nameAttribute) {
@@ -90,17 +78,6 @@ public class LdapUserImporter {
         }
         dn.add(nameAttribute, uid);
         return dn;
-    }
-
-    public Attributes buildAttributes(String... objectClasses) {
-        Attributes attrs = new BasicAttributes();
-        BasicAttribute ocattr = new BasicAttribute("objectclass");
-        for (String objectClass : objectClasses) {
-            ocattr.add(objectClass);
-        }
-        //ocattr.add("organizationalPerson"); // inetorgperson perii tämän joten ei tarvetta
-        attrs.put(ocattr);
-        return attrs;
     }
 
     public LdapTemplate getLdapTemplate() {

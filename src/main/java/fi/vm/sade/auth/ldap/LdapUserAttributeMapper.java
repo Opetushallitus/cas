@@ -8,12 +8,12 @@ import javax.naming.directory.Attributes;
 
 import org.springframework.ldap.core.AttributesMapper;
 
-public class LdapUserAttributeMapper implements AttributesMapper {
+public class LdapUserAttributeMapper implements AttributesMapper<LdapUser> {
 
     private static final Logger LOG = LoggerFactory.getLogger(LdapUserImporter.class);
 
     @Override
-    public Object mapFromAttributes(Attributes attrs) throws NamingException {
+    public LdapUser mapFromAttributes(Attributes attrs) throws NamingException {
         LdapUser user = new LdapUser();
         user.setFirstName(getAttributeValueAsString(attrs, "cn", null));
         user.setLastName(getAttributeValueAsString(attrs, "sn", null));

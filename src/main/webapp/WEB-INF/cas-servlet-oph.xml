@@ -11,7 +11,7 @@
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
-       http://www.springframework.org/schema/webflow-config http://www.springframework.org/schema/webflow-config/spring-webflow-config-2.3.xsd">
+       http://www.springframework.org/schema/webflow-config http://www.springframework.org/schema/webflow-config/spring-webflow-config.xsd">
 
     <!-- antti -->
     <!-- TODO: optimointi, ldap poolaus? ei bind operaatioille.. -->
@@ -49,6 +49,8 @@
         </property>
     </bean>
 
+    <bean id="gson" class="com.google.gson.Gson" />
+
     <bean id="ldapUserImporter" class="fi.vm.sade.auth.ldap.LdapUserImporter" scope="singleton" init-method="init" lazy-init="false">
         <property name="contextSource" ref="contextSource"/>
         <property name="ldapTemplate" ref="ldapTemplate"/>
@@ -60,6 +62,9 @@
 
     <bean id="authenticationUtil" class="fi.vm.sade.AuthenticationUtil">
         <property name="ldapUserImporter" ref="ldapUserImporter"/>
+        <property name="oppijanumerorekisteriRestClient" ref="oppijanumerorekisteriRestClient" />
+        <property name="kayttooikeusRestClient" ref="kayttooikeusRestClient" />
+        <property name="gson" ref="gson" />
     </bean>
 
     <!-- oph rest resource to get list of user's roles -->

@@ -1,5 +1,7 @@
 package fi.vm.sade.auth.clients;
 
+import fi.vm.sade.auth.dto.HenkiloOmattiedotDto;
+import fi.vm.sade.auth.dto.KayttooikeusOmatTiedotDto;
 import fi.vm.sade.generic.rest.CachingRestClient;
 import fi.vm.sade.properties.OphProperties;
 
@@ -19,4 +21,12 @@ public class OppijanumerorekisteriRestClient extends CachingRestClient {
         return this.get(url, String.class);
     }
 
+    public HenkiloOmattiedotDto getOmattiedot(String oidHenkilo) {
+        String url = this.ophProperties.url("oppijanumerorekisteri.henkilo.omattiedot-by-oid", oidHenkilo);
+        try {
+            return this.get(url, HenkiloOmattiedotDto.class);
+        } catch (IOException ioe) {
+            throw new RuntimeException(ioe);
+        }
+    }
 }
