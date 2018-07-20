@@ -1,6 +1,9 @@
 package fi.vm.sade;
 
 import java.util.*;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -11,24 +14,13 @@ import fi.vm.sade.auth.dto.HenkiloOmattiedotDto;
 import fi.vm.sade.auth.dto.KayttooikeusOikeudetDto;
 import fi.vm.sade.auth.dto.KayttooikeusOmatTiedotDto;
 import fi.vm.sade.auth.ldap.LdapUser;
-import fi.vm.sade.auth.ldap.LdapUserImporter;
 
 public class AuthenticationUtil {
     private OppijanumerorekisteriRestClient oppijanumerorekisteriRestClient;
 
     private KayttooikeusRestClient kayttooikeusRestClient;
 
-    private LdapUserImporter ldapUserImporter;
-
     private Gson gson;
-
-    public LdapUserImporter getLdapUserImporter() {
-        return ldapUserImporter;
-    }
-
-    public void setLdapUserImporter(LdapUserImporter ldapUserImporter) {
-        this.ldapUserImporter = ldapUserImporter;
-    }
 
     public String getUserRoles(String uid) {
         KayttooikeusOmatTiedotDto kayttooikeusOmatTiedotDto = this.kayttooikeusRestClient.getOmattiedot(uid)
@@ -40,20 +32,7 @@ public class AuthenticationUtil {
     }
 
     private String mapToRolesJson(KayttooikeusOmatTiedotDto kayttooikeusOmatTiedotDto, HenkiloOmattiedotDto henkiloOmattiedotDto) {
-        List<String> roles = kayttooikeusOmatTiedotDto.getOrganisaatiot().stream()
-                .flatMap(organisaatio -> organisaatio.getKayttooikeudet().stream()
-                        .sorted(Comparator.comparing(KayttooikeusOikeudetDto::getPalvelu)
-                                .thenComparing(KayttooikeusOikeudetDto::getOikeus))
-                        .flatMap(kayttooikeusDto -> Stream.of(
-                                "APP_" + kayttooikeusDto.getPalvelu(),
-                                "APP_" + kayttooikeusDto.getPalvelu()
-                                        + "_" + kayttooikeusDto.getOikeus(),
-                                "APP_" + kayttooikeusDto.getPalvelu()
-                                        + "_" + kayttooikeusDto.getOikeus()
-                                        + "_" + organisaatio.getOrganisaatioOid())
-                        ))
-                .distinct()
-                .collect(Collectors.toList());
+        List<String> roles = this.getGroups(kayttooikeusOmatTiedotDto);
         roles.addAll(Arrays.asList(
                 "LANG_" + henkiloOmattiedotDto.getAsiointikieli(),
                 "USER_" + kayttooikeusOmatTiedotDto.getUsername(),
@@ -61,14 +40,42 @@ public class AuthenticationUtil {
         roles = roles.stream().filter(Objects::nonNull).collect(Collectors.toList());
         return this.gson.toJson(roles);
     }
-    
-    public List<String> getRoles(String uid) {
-        String member = ldapUserImporter.getMemberString(uid);
-        return ldapUserImporter.getUserLdapGroups(member);
+
+    private List<String> getGroups(KayttooikeusOmatTiedotDto kayttooikeusOmatTiedotDto) {
+        return kayttooikeusOmatTiedotDto.getOrganisaatiot().stream()
+                    .flatMap(organisaatio -> organisaatio.getKayttooikeudet().stream()
+                            .sorted(Comparator.comparing(KayttooikeusOikeudetDto::getPalvelu)
+                                    .thenComparing(KayttooikeusOikeudetDto::getOikeus))
+                            .flatMap(kayttooikeusDto -> Stream.of(
+                                    "APP_" + kayttooikeusDto.getPalvelu(),
+                                    "APP_" + kayttooikeusDto.getPalvelu()
+                                            + "_" + kayttooikeusDto.getOikeus(),
+                                    "APP_" + kayttooikeusDto.getPalvelu()
+                                            + "_" + kayttooikeusDto.getOikeus()
+                                            + "_" + organisaatio.getOrganisaatioOid())
+                            ))
+                    .distinct()
+                    .collect(Collectors.toList());
     }
-    
+
     public LdapUser getUser(String uid) {
-        return ldapUserImporter.getLdapUser(uid);
+        KayttooikeusOmatTiedotDto kayttooikeusOmatTiedotDto = this.kayttooikeusRestClient.getOmattiedot(uid)
+                .orElseThrow(() -> new RuntimeException("Username not found"));
+        HenkiloOmattiedotDto henkiloOmattiedotDto = this.oppijanumerorekisteriRestClient
+                .getOmattiedot(kayttooikeusOmatTiedotDto.getOidHenkilo());
+        LdapUser ldapUser = new LdapUser();
+        ldapUser.setOid(kayttooikeusOmatTiedotDto.getOidHenkilo());
+        ldapUser.setFirstName(henkiloOmattiedotDto.getKutsumanimi());
+        ldapUser.setLastName(henkiloOmattiedotDto.getSukunimi());
+        ldapUser.setLang(henkiloOmattiedotDto.getAsiointikieli());
+        ldapUser.setUid(kayttooikeusOmatTiedotDto.getUsername());
+        ldapUser.setRoles(this.mapToRolesJson(kayttooikeusOmatTiedotDto, henkiloOmattiedotDto));
+        List<String> groups = this.getGroups(kayttooikeusOmatTiedotDto);
+        groups.addAll(Arrays.asList(
+                "LANG_" + henkiloOmattiedotDto.getAsiointikieli(),
+                kayttooikeusOmatTiedotDto.getKayttajaTyyppi()));
+        ldapUser.setGroups(groups.toArray(new String[0]));
+        return ldapUser;
     }
 
     public OppijanumerorekisteriRestClient getOppijanumerorekisteriRestClient() {

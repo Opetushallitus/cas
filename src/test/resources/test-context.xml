@@ -23,11 +23,6 @@
         </property>
     </bean>
 
-    <bean id="ldapUserImporter" class="fi.vm.sade.auth.ldap.LdapUserImporter" scope="singleton" init-method="init" lazy-init="false">
-        <property name="contextSource" ref="contextSource"/>
-        <property name="ldapTemplate" ref="ldapTemplate"/>
-    </bean>
-
     <bean id="ldapTemplate" class="org.springframework.ldap.core.LdapTemplate">
         <constructor-arg ref="contextSource" />
     </bean>

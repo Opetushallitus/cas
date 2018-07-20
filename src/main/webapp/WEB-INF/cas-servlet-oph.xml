@@ -51,17 +51,11 @@
 
     <bean id="gson" class="com.google.gson.Gson" />
 
-    <bean id="ldapUserImporter" class="fi.vm.sade.auth.ldap.LdapUserImporter" scope="singleton" init-method="init" lazy-init="false">
-        <property name="contextSource" ref="contextSource"/>
-        <property name="ldapTemplate" ref="ldapTemplate"/>
-    </bean>
-
     <bean id="ldapTemplate" class="org.springframework.ldap.core.LdapTemplate">
         <constructor-arg ref="contextSource" />
     </bean>
 
     <bean id="authenticationUtil" class="fi.vm.sade.AuthenticationUtil">
-        <property name="ldapUserImporter" ref="ldapUserImporter"/>
         <property name="oppijanumerorekisteriRestClient" ref="oppijanumerorekisteriRestClient" />
         <property name="kayttooikeusRestClient" ref="kayttooikeusRestClient" />
         <property name="gson" ref="gson" />
@@ -79,6 +73,7 @@
         <property name="ticketGrantingTicketCookieGenerator" ref="ticketGrantingTicketCookieGenerator"/>
         <property name="ticketRegistry" ref="ticketRegistry"/>
         <property name="authenticationUtil" ref="authenticationUtil"/>
+        <property name="gson" ref="gson" />
     </bean>
 
     <bean id="handlerMappingO" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping"

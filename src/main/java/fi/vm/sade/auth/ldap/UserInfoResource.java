@@ -44,17 +44,14 @@ public class UserInfoResource extends AbstractController {
     private TicketRegistry ticketRegistry;
     private CookieRetrievingCookieGenerator ticketGrantingTicketCookieGenerator;
     private AuthenticationUtil authenticationUtil;
+    private Gson gson;
 
     @Override
-    protected ModelAndView handleRequestInternal(HttpServletRequest request,
-            HttpServletResponse response) throws Exception {
-        String ticketGrantingTicketId = ticketGrantingTicketCookieGenerator
-                .retrieveCookieValue(request);
-        TicketGrantingTicket ticketGrantingTicket = (TicketGrantingTicket) this.ticketRegistry
-                .getTicket(ticketGrantingTicketId, TicketGrantingTicket.class);
-        final String uid = ticketGrantingTicket != null
-                && ticketGrantingTicket.getAuthentication() != null ? ticketGrantingTicket
-                .getAuthentication().getPrincipal().getId()
+    protected ModelAndView handleRequestInternal(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String ticketGrantingTicketId = ticketGrantingTicketCookieGenerator.retrieveCookieValue(request);
+        TicketGrantingTicket ticketGrantingTicket = this.ticketRegistry.getTicket(ticketGrantingTicketId, TicketGrantingTicket.class);
+        final String uid = ticketGrantingTicket != null && ticketGrantingTicket.getAuthentication() != null
+                ? ticketGrantingTicket.getAuthentication().getPrincipal().getId()
                 : null;
 
         return new ModelAndView(new View() {
@@ -64,19 +61,13 @@ public class UserInfoResource extends AbstractController {
             }
 
             @Override
-            public void render(Map<String, ?> stringMap,
-                    HttpServletRequest request, HttpServletResponse response)
-                    throws Exception {
+            public void render(Map<String, ?> stringMap, HttpServletRequest request, HttpServletResponse response) throws Exception {
                 if (uid == null) {
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
                     return;
                 }
                 LdapUser user = authenticationUtil.getUser(uid);
-                final List<String> roles = authenticationUtil.getRoles(uid);
-                user.setGroups(roles.toArray(new String[roles.size()]));
-                user.setUid(uid);
-                Gson gson = new Gson();
-                gson.toJson(user, response.getWriter());
+                response.getWriter().print(gson.toJson(user));
             }
         });
     }
@@ -92,5 +83,13 @@ public class UserInfoResource extends AbstractController {
 
     public void setAuthenticationUtil(AuthenticationUtil authenticationUtil) {
         this.authenticationUtil = authenticationUtil;
+    }
+
+    public Gson getGson() {
+        return gson;
+    }
+
+    public void setGson(Gson gson) {
+        this.gson = gson;
     }
 }
