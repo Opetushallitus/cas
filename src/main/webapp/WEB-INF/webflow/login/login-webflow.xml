@@ -121,10 +121,10 @@
         <transition on="InvalidLoginLocationException" to="casBadWorkstationView"/>
         <transition on="InvalidLoginTimeException" to="casBadHoursView"/>
         <!-- oph start -->
-        <transition on="FailedLoginException" to="initializeLogin">
+        <transition on="FailedLoginException" to="viewLoginForm">
             <set name="flowScope.loginError" value="'badCredentials'" type="string" />
         </transition>
-        <transition on="AccountNotFoundException" to="initializeLogin">
+        <transition on="AccountNotFoundException" to="viewLoginForm">
             <set name="flowScope.loginError" value="'badCredentials'" type="string" />
         </transition>
         <transition on="NoStrongIdentificationException" to="strongIdentificationRedirectView" />
