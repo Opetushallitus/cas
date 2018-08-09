@@ -18,7 +18,7 @@
     <bean id="authenticationUtil" class="fi.vm.sade.AuthenticationUtil">
         <property name="oppijanumerorekisteriRestClient" ref="oppijanumerorekisteriRestClient" />
         <property name="kayttooikeusRestClient" ref="kayttooikeusRestClient" />
-        <property name="gsoncontextSource" ref="gson" />
+        <property name="gson" ref="gson" />
     </bean>
 
     <!-- oph rest resource to get list of user's roles -->
