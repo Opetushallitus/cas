@@ -106,7 +106,7 @@
         <init-param>
             <param-name>contextConfigLocation</param-name>
             <!-- Load the child application context. Start with the default, then modules, then overlays. -->
-            <param-value>/WEB-INF/cas-servlet.xml,classpath*:/META-INF/cas-servlet-*.xml,/WEB-INF/cas-servlet-*.xml</param-value>
+            <param-value>/WEB-INF/cas-servlet.xml</param-value>
         </init-param>
         <init-param>
             <param-name>publishContext</param-name>
@@ -224,17 +224,6 @@
         <servlet-name>cas</servlet-name>
         <url-pattern>/v1/services/*</url-pattern>
     </servlet-mapping>
-
-    <!-- oph start -->
-    <servlet-mapping>
-        <servlet-name>cas</servlet-name>
-        <url-pattern>/myroles</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>cas</servlet-name>
-        <url-pattern>/me</url-pattern>
-    </servlet-mapping>
-    <!-- oph end -->
 
     <session-config>
         <!-- Default to 5 minute session timeouts -->
