@@ -24,42 +24,48 @@ document.title = translation("app.documentTitle");
 
 const App = ({controller, state}) => {
 
-  const displayCookieBanner = !state.cookiesAccepted;
-  return(
-    <div id="main">
-      {displayCookieBanner ? <CookieBanner onAccept={controller.acceptCookies}/> : ""}
-      <Header lang={state.lang} changeLang={controller.changeLang}/>
-      <Notices notices={state.notices}/>
-      <div id="content" style={bgStyle}>
-        <h1 style={whiteStyle} className="page-title">{translation("app.title")}</h1>
-        <h2 style={whiteStyle} className="page-subtitle">{translation("app.subtitle")}</h2>
-        <ServiceList/>
+    const displayCookieBanner = !state.cookiesAccepted;
+    return(
+        <div id="main">
+            {displayCookieBanner ? <CookieBanner onAccept={controller.acceptCookies}/> : ""}
+            <Header lang={state.lang} changeLang={controller.changeLang}/>
+            <Notices notices={state.notices}/>
+            <div id="content" style={bgStyle}>
+                <h1 style={whiteStyle} className="page-title">{translation("app.title")}</h1>
+                <h2 style={whiteStyle} className="page-subtitle">{translation("app.subtitle")}</h2>
+                <ServiceList/>
 
-        <div className="box">
-          {state.changingPassword ?
-            <Password modeChange={controller.modeChange}
-                      requestPassword={controller.requestPassword}
-                      userName={state.passwordResetUsername}
-                      resetStatus={state.passwordResetStatus}
-                      onChange={controller.passwordResetUsernameChanged}/> :
-            <Login modeChange={controller.modeChange}
-                   loginError={state.loginError}
-                   configuration={state.configuration}
-                   targetService={state.targetService}
-                   />}
+                <div className="box">
+                    {state.changingPassword ?
+                        <Password modeChange={controller.modeChange}
+                                  requestPassword={controller.requestPassword}
+                                  userName={state.passwordResetUsername}
+                                  resetStatus={state.passwordResetStatus}
+                                  onChange={controller.passwordResetUsernameChanged}/> :
+                        <Login modeChange={controller.modeChange}
+                               loginError={state.loginError}
+                               configuration={state.configuration}
+                               targetService={state.targetService}
+                        />}
+                </div>
+                <div>
+                    <div className="box">
+                        {translation("hakaLogin.description")}
+                        <a href={state.configuration.hakaUrl + "?redirect=" + state.targetService}>
+                            <img src={hakaImg} />
+                        </a>
+                    </div>
+                </div>
+                <div className="box">
+                    {translation("suomifiLogin.description")}
+                    <a href={state.configuration.suomifiUrl + state.lang.toUpperCase() + "?target=" + state.configuration.suomifiUrlTarget}>
+                        {translation("app.title")}
+                    </a>
+                </div>
+            </div>
+            <ServiceDescriptions configuration={state.configuration} />
         </div>
-        <div>
-          <div className="box">
-            {translation("hakaLogin.description")}
-            <a href={state.configuration.hakaUrl + "?redirect=" + state.targetService}>
-              <img src={hakaImg} />
-            </a>
-         </div>
-      </div>
-    </div>
-    <ServiceDescriptions configuration={state.configuration} />
-  </div>
-  )
+    )
 };
 
 export default App;

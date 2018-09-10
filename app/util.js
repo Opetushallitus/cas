@@ -21,5 +21,7 @@ export function getConfiguration(){
   return {loginTicket: document.body.getAttribute("data-loginTicket"),
           executionKey: document.body.getAttribute("data-executionKey"),
           hakaUrl: document.body.getAttribute("data-hakaUrl"),
+          suomifiUrl: document.body.getAttribute("data-suomifiUrl"),
+          suomifiUrlTarget: document.body.getAttribute("data-suomifiUrlTarget"),
           loginTietosuojaselosteUrl: document.body.getAttribute("data-loginTietosuojaselosteUrl")}
 }

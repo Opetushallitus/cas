@@ -83,6 +83,8 @@
             -->
             <!-- oph start -->
             <set name="viewScope.hakaUrl" value="configuration.hakaUrl" />
+            <set name="viewScope.suomifiUrl" value="configuration.suomifiUrl" />
+            <set name="viewScope.suomifiUrlTarget" value="configuration.suomifiUrlTarget" />
             <set name="viewScope.loginTietosuojaselosteUrl" value="configuration.loginTietosuojaselosteUrl" />
             <!-- oph end -->
         </on-entry>

@@ -47,6 +47,8 @@
       data-executionKey="${flowExecutionKey}"
       data-loginTicket="${loginTicket}"
       data-hakaUrl="${hakaUrl}"
+      data-suomifiUrl="${suomifiUrl}"
+      data-suomifiUrlTarget="${suomifiUrlTarget}"
       data-loginTietosuojaselosteUrl="${loginTietosuojaselosteUrl}"
       data-loginError="${loginError}"
       data-targetService=<%= targetServiceUrl %>>

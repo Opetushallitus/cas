@@ -140,6 +140,8 @@
 
     <bean id="configuration" class="fi.vm.sade.Configuration">
         <property name="hakaUrl" value="${haka.url}" />
+        <property name="suomifiUrl" value="https://${host.shibboleth}/shibbolethVirkailija/virkailija" />
+        <property name="suomifiUrlTarget" value="https://${host.shibboleth}/kayttooikeus-service/cas/tunnistus" />
         <property name="loginTietosuojaselosteUrl" value="${login.tietosuojaseloste.url}" />
     </bean>
 

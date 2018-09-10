@@ -82,6 +82,12 @@
       "sv": "Inloggningen är avsedd för medlemmar av det tillitsbaserade nätverket för Haka."
     }
   },
+  "suomifiLogin": {
+    "description": {
+      "fi": "Käyttäjät joiden henkilötunnus löytyy virkailijatunnukselta järjestelmästä voivat käyttää suomi.fi tunnistusta",
+      "sv": "Användare med administratör kan logga in med suomi.fi inloggning"
+    }
+  },
   "services": {
     "title": {
       "fi": "Lisätietoja palveluista",
