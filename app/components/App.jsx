@@ -7,6 +7,7 @@ import Notices from './Notices'
 import {translation} from '../translations'
 import CookieBanner from './CookieNotification'
 import hakaImg from '../resources/img/haka_landscape_medium.gif'
+import suomifiImg from '../resources/img/suomi.fi-logo.png'
 import bgImage from '../resources/img/taustakuva.jpg'
 import {ServiceList, ServiceDescriptions} from './Services'
 
@@ -19,6 +20,8 @@ const bgStyle = {
 const whiteStyle = {
     color: "white"
 };
+
+const suomifiImgStyle = {maxWidth: "100%", maxHeight: "100%", height: "54px", width: "auto"};
 
 document.title = translation("app.documentTitle");
 
@@ -59,7 +62,7 @@ const App = ({controller, state}) => {
                 <div className="box">
                     {translation("suomifiLogin.description")}
                     <a href={state.configuration.suomifiUrl + state.lang.toUpperCase() + "?target=" + state.configuration.suomifiUrlTarget}>
-                        {translation("app.title")}
+                        <img src={suomifiImg} style={suomifiImgStyle} />
                     </a>
                 </div>
             </div>
