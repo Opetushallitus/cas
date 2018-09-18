@@ -61,7 +61,7 @@ const App = ({controller, state}) => {
                 </div>
                 <div className="box">
                     {translation("suomifiLogin.description")}
-                    <a href={state.configuration.suomifiUrl + state.lang.toUpperCase() + "?target=" + state.configuration.suomifiUrlTarget}>
+                    <a href={state.configuration.suomifiUrl + state.lang.toUpperCase() + "?target=" + state.configuration.suomifiUrlTarget + state.lang.toUpperCase()}>
                         <img src={suomifiImg} style={suomifiImgStyle} />
                     </a>
                 </div>
