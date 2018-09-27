@@ -94,13 +94,6 @@
             <version>${cas.version}</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <!-- for TicketsResource override -->
-            <groupId>org.jasig.cas</groupId>
-            <artifactId>cas-server-support-rest</artifactId>
-            <version>${cas.version}</version>
-            <scope>provided</scope>
-        </dependency>
 
         <!-- spring -->
         <dependency>
