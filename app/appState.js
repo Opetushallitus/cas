@@ -9,12 +9,8 @@ import {getCookie, setCookie, getTargetService, getConfiguration, getLoginError}
 const ax = Promise.promisifyAll(axios);
 
 const events = {
-  changeMode: 'changeMode',
   changeLang: 'changeLang',
   acceptCookies : 'acceptCookies',
-  requestPassword  : 'requestPassword',
-  passwordReset: "passwordReset",
-  passwordResetUsernameChanged: "passwordResetUsernameChanged"
 };
 
 const dispatcher = new Dispatcher();
@@ -34,24 +30,17 @@ axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 export function initAppState() {
 
-  const initialState = {changingPassword: false,
-                        lang: resolveLang(),
+  const initialState = {lang: resolveLang(),
                         notices: [],
                         cookiesAccepted: cookiesAccepted(),
                         targetService: getTargetService(),
                         configuration: getConfiguration(),
-                        loginError: getLoginError(),
-                        passwordResetUsername: '',
-                        passwordResetStatus: {reset: false}};
+                        loginError: getLoginError()};
 
   const notificationsS = Bacon.fromPromise(ax.get(notificationUrl));
 
   function clearNotices(state){
-    return {...state, ["loginError"]: null, ["passwordResetStatus"]: {reset: false}}
-  }
-
-  function toggleMode(state){
-    return clearNotices({...state, ['changingPassword']: !state.changingPassword})
+    return {...state, ["loginError"]: null}
   }
   
   function setLang(state, {lang}){
@@ -72,27 +61,8 @@ export function initAppState() {
     return getCookie("oph-cookies-accepted");
   }
 
-  function requestPassword(state) {
-    ax.post("/kayttooikeus-service/salasana/unohtunut/" + state.passwordResetUsername)
-      .then(controller.passwordResetResult(true))
-      .catch(e => {controller.passwordResetResult(false)});
-    return state
-  }
-
-  function onPasswordResetUsernameChange(state, {value}){
-    return {...state, ['passwordResetUsername']: value}
-  }
-
-  function onPasswordReset(state, {success}){
-    return {...state, ["passwordResetStatus"]: {reset: true, success: success}}
-  }
-
   return Bacon.update(initialState,
-    [dispatcher.stream(events.changeMode)], toggleMode,
     [dispatcher.stream(events.changeLang)], setLang,
     [dispatcher.stream(events.acceptCookies)], acceptCookies,
-    [dispatcher.stream(events.requestPassword)], requestPassword,
-    [dispatcher.stream(events.passwordReset)], onPasswordReset,
-    [dispatcher.stream(events.passwordResetUsernameChanged)], onPasswordResetUsernameChange,
     [notificationsS], onFetchNotices)
 }

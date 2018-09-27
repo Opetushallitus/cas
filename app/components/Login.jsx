@@ -1,7 +1,7 @@
 import React from 'react';
 import {translation} from '../translations'
 
-const Login = ({modeChange, configuration, targetService, loginError}) => {
+const Login = ({configuration, targetService, loginError}) => {
 
   const executionKey = configuration.executionKey ? configuration.executionKey : "";
   const loginTicket = configuration.loginTicket ? configuration.loginTicket : "";
@@ -28,9 +28,6 @@ const Login = ({modeChange, configuration, targetService, loginError}) => {
                      tabIndex="2"
                      className={loginError ? "invalid-input error" : "login-input"}
                      placeholder={translation("login.passwordPlaceholder")}/>
-          </div>
-          <div className="link" onClick={modeChange}>
-              {translation("login.forgotPassword")}
           </div>
           <input type="submit" className="btn btn-login" value={translation("login.button")}/>
          </form>

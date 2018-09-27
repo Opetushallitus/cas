@@ -1,7 +1,6 @@
 import React from 'react';
 
 import Login from './Login';
-import Password from './Password'
 import Header from './Header'
 import Notices from './Notices'
 import {translation} from '../translations'
@@ -39,17 +38,10 @@ const App = ({controller, state}) => {
                 <ServiceList/>
 
                 <div className="box">
-                    {state.changingPassword ?
-                        <Password modeChange={controller.modeChange}
-                                  requestPassword={controller.requestPassword}
-                                  userName={state.passwordResetUsername}
-                                  resetStatus={state.passwordResetStatus}
-                                  onChange={controller.passwordResetUsernameChanged}/> :
-                        <Login modeChange={controller.modeChange}
-                               loginError={state.loginError}
-                               configuration={state.configuration}
-                               targetService={state.targetService}
-                        />}
+                    <Login loginError={state.loginError}
+                           configuration={state.configuration}
+                           targetService={state.targetService}
+                    />
                 </div>
                 <div>
                     <div className="box">

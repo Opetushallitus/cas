@@ -32,34 +32,6 @@
       "sv": "Lösenord"
     },
 
-    "forgotPassword": {
-      "fi": "Unohditko salasanan?",
-      "sv": "Har du glömt ditt lösenord?"
-    },
-    "forgotPasswordTitle": {
-      "fi": "Salasana unohtunut",
-      "sv": "Har du glömt lösenordet?"
-    },
-    "passwordRequestInfo": {
-      "fi": "Syötä kenttään käyttäjätunnuksesi. Saat sähköpostiisi ohjeet salasanan uusimista varten.",
-      "sv": "Skriv ditt användarnamn i fältet. Du får i din e-post anvisningar om hur du kan förnya ditt lösenord."
-    },
-    "sendPasswordRequest": {
-      "fi": "Lähetä",
-      "sv": "Skicka"
-    },
-    "passwordRequestSuccessful": {
-      "fi": "Sähköpostiisi on lähetetty linkki, jolla voit kirjautua sisään.",
-      "sv": "Du har i din e-post fått en länk, med vilken du kan logga in."
-    },
-    "passwordRequestFailed":{
-      "fi": "Salasanan tilaaminen epäonnistui, yritä myöhemmin uudelleen.",
-      "sv": "Att beställa lösenordet misslyckades, försök på nytt senare."
-    },
-    "returnLink": {
-      "fi": "Takaisin",
-      "sv": "Tillbaka"
-    },
     "error" : {
       "badCredentials": {
         "fi": "Väärä käyttäjätunnus tai salasana",
