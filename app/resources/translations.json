@@ -84,8 +84,8 @@
   },
   "suomifiLogin": {
     "description": {
-      "fi": "Käyttäjät joiden henkilötunnus löytyy virkailijatunnukselta järjestelmässä voivat käyttää suomi.fi tunnistusta",
-      "sv": "Användare med administratör kan logga in med suomi.fi inloggning"
+      "fi": "Käyttäjät joiden henkilötunnus löytyy virkailijatunnukselta järjestelmästä voivat käyttää suomi.fi tunnistusta.",
+      "sv": "Du kan använda suomi.fi-identifiering, om din personbeteckning ingår i administratörsuppgifterna i systemet."
     }
   },
   "services": {
