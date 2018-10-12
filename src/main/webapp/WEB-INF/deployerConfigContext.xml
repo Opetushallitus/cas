@@ -4,9 +4,7 @@
        xmlns:c="http://www.springframework.org/schema/c"
        xmlns:p="http://www.springframework.org/schema/p"
        xmlns:util="http://www.springframework.org/schema/util"
-       xmlns:ldaptive="http://www.ldaptive.org/schema/spring-ext"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://www.ldaptive.org/schema/spring-ext http://www.ldaptive.org/schema/spring-ext.xsd
 
 
 
@@ -17,38 +15,17 @@
     <!-- oph start -->
     <util:map id="authenticationHandlersResolvers">
         <entry key-ref="proxyAuthenticationHandler" value-ref="proxyPrincipalResolver"/>
-        <entry key-ref="ldapAuthenticationHandler" value="#{null}" />
+        <entry key-ref="httpAuthenticationHandler" value="#{null}" />
         <entry key-ref="samlAuthenticationHandler" value="#{null}" />
     </util:map>
 
-    <bean id="ldapAuthenticationHandler"
-          class="org.jasig.cas.authentication.LdapAuthenticationHandler"
-          p:principalIdAttribute="uid"
-          c:authenticator-ref="authenticator" />
+    <bean id="httpAuthenticationHandler" class="fi.vm.sade.auth.cas.HttpAuthenticationHandler">
+        <constructor-arg index="0" ref="ophHttpClient" />
+    </bean>
 
-    <ldaptive:bind-search-authenticator
-        id="authenticator"
-        ldapUrl="${ldap.url}"
-        baseDn="${ldap.search.base.people}"
-        userFilter="${ldap.filter.people}"
-        bindDn="${ldap.manager.userdn}"
-        bindCredential="${ldap.manager.password}"
-        connectTimeout="${ldap.connectTimeout}"
-        useStartTLS="${ldap.useStartTLS}"
-        blockWaitTime="${ldap.pool.blockWaitTime}"
-        maxPoolSize="${ldap.pool.maxSize}"
-        allowMultipleDns="${ldap.allowMultipleDns:false}"
-        usePasswordPolicy="${ldap.usePpolicy:false}"
-        minPoolSize="${ldap.pool.minSize}"
-        validateOnCheckOut="${ldap.pool.validateOnCheckout}"
-        validatePeriodically="${ldap.pool.validatePeriodically}"
-        validatePeriod="${ldap.pool.validatePeriod}"
-        idleTime="${ldap.pool.idleTime}"
-        prunePeriod="${ldap.pool.prunePeriod}"
-        failFastInitialize="true"
-        subtreeSearch="${ldap.subtree.search:true}"
-        useSSL="${ldap.use.ssl:false}"
-    />
+    <bean id="ophHttpClient" class="fi.vm.sade.auth.clients.HttpClientFactoryBean">
+        <constructor-arg index="0" ref="ophProperties" />
+    </bean>
 
     <bean id="samlAuthenticationHandler" class="fi.vm.sade.saml.action.SAMLAuthenticationHandler">
         <constructor-arg index="0" ref="ophProperties"/>
