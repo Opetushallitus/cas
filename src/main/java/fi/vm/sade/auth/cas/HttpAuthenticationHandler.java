@@ -10,9 +10,7 @@ import org.jasig.cas.authentication.HandlerResult;
 import org.jasig.cas.authentication.PreventedException;
 import org.jasig.cas.authentication.UsernamePasswordCredential;
 import org.jasig.cas.authentication.handler.support.AbstractUsernamePasswordAuthenticationHandler;
-import org.jasig.cas.authentication.principal.DefaultPrincipalFactory;
 import org.jasig.cas.authentication.principal.Principal;
-import org.jasig.cas.authentication.principal.PrincipalFactory;
 
 import javax.security.auth.login.FailedLoginException;
 import java.security.GeneralSecurityException;
@@ -23,16 +21,14 @@ public class HttpAuthenticationHandler extends AbstractUsernamePasswordAuthentic
 
     private final OphHttpClient httpClient;
     private final Gson gson;
-    private final PrincipalFactory principalFactory;
 
     public HttpAuthenticationHandler(OphHttpClient httpClient) {
-        this(httpClient, new Gson(), new DefaultPrincipalFactory());
+        this(httpClient, new Gson());
     }
 
-    public HttpAuthenticationHandler(OphHttpClient httpClient, Gson gson, PrincipalFactory principalFactory) {
+    public HttpAuthenticationHandler(OphHttpClient httpClient, Gson gson) {
         this.httpClient = httpClient;
         this.gson = gson;
-        this.principalFactory = principalFactory;
     }
 
     @Override
