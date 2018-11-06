@@ -162,6 +162,10 @@
           p:oppijanumerorekisteriClient-ref="oppijanumerorekisteriRestClient"
           p:ophProperties-ref="ophProperties" />
 
+    <bean id="EmailVerificationRedirectAction" class="fi.vm.sade.auth.action.EmailVerificationRedirectAction"
+          p:kayttooikeusClient-ref="kayttooikeusRestClient"
+          p:ophProperties-ref="ophProperties"/>
+
     <bean id="casProxyCallbackConfiguration" class="fi.vm.sade.auth.cas.CasProxyCallbackConfiguration" init-method="initialize">
         <constructor-arg index="0" value="${cas.proxy.callback.ignore-errors}" />
         <constructor-arg index="1" ref="supportsTrustStoreSslSocketFactoryHttpClient" />

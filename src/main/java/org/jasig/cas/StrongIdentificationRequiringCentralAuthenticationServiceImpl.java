@@ -19,6 +19,7 @@
 package org.jasig.cas;
 
 import fi.vm.sade.auth.clients.KayttooikeusRestClient;
+import fi.vm.sade.auth.exception.EmailVerificationException;
 import fi.vm.sade.auth.exception.NoStrongIdentificationException;
 import fi.vm.sade.properties.OphProperties;
 import java.io.IOException;
@@ -59,6 +60,9 @@ public class StrongIdentificationRequiringCentralAuthenticationServiceImpl exten
     @NotNull
     private List<String> casRequireStrongIdentificationList;
 
+    public static final String STRONG_IDENTIFICATION = "STRONG_IDENTIFICATION";
+    public static final String EMAIL_VERIFICATION = "EMAIL_VERIFICATION";
+
     public StrongIdentificationRequiringCentralAuthenticationServiceImpl(
             final TicketRegistry ticketRegistry,
             final TicketFactory ticketFactory,
@@ -82,15 +86,20 @@ public class StrongIdentificationRequiringCentralAuthenticationServiceImpl exten
                 && (this.requireStrongIdentification
                 || this.casRequireStrongIdentificationList.contains(credential.get()))) {
             String username = credential.get();
-            String vahvaTunnistusUrl = this.ophProperties.url("kayttooikeus-service.cas.vahva-tunnistus-username", username);
-            Boolean vahvastiTunnistettu;
+            String redirectCodeUrl = this.ophProperties.url("kayttooikeus-service.cas.login.redirect", username);
+            String redirectCode;
+
+            // Get redirect code for user telling if user should be redirect somewhere or not
             try {
-                vahvastiTunnistettu = this.kayttooikeusClient.get(vahvaTunnistusUrl, Boolean.class);
+                redirectCode = this.kayttooikeusClient.get(redirectCodeUrl, String.class);
             } catch (IOException e) {
                 throw new AuthenticationException(singletonMap(getClass().getName(), FailedLoginException.class));
             }
-            if (BooleanUtils.isFalse(vahvastiTunnistettu)) {
+
+            if(STRONG_IDENTIFICATION.equals(redirectCode)) {
                 throw new AuthenticationException(singletonMap(getClass().getName(), NoStrongIdentificationException.class));
+            } else if(EMAIL_VERIFICATION.equals(redirectCode)) {
+                throw new AuthenticationException(singletonMap(getClass().getName(), EmailVerificationException.class));
             }
         }
     }

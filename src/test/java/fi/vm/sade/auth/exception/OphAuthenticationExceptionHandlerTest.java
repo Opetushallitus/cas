@@ -20,4 +20,11 @@ public class OphAuthenticationExceptionHandlerTest {
                 .anyMatch(error -> !error.isAssignableFrom(NoStrongIdentificationException.class));
     }
 
+    @Test
+    public void getErrorsShouldIncludeEmailVerificationException() {
+        assertThat(handler.getErrors())
+                .contains(EmailVerificationException.class)
+                .anyMatch(error -> !error.isAssignableFrom(EmailVerificationException.class));
+    }
+
 }

@@ -130,6 +130,7 @@
             <set name="flowScope.loginError" value="'badCredentials'" type="string" />
         </transition>
         <transition on="NoStrongIdentificationException" to="strongIdentificationRedirectView" />
+        <transition on="EmailVerificationException" to="emailVerificationRedirectView"></transition>
         <!-- oph end -->
         <transition on="UNKNOWN" to="initializeLogin"/>
     </action-state>
@@ -175,12 +176,23 @@
                       result-type="string" />
         </on-entry>
     </end-state>
+
+
+
+    <!-- In case last time user checked his/her email  -->
+    <end-state id="emailVerificationRedirectView" view="externalRedirect:#{flowScope.emailVerificationRedirectUrl}">
+        <on-entry>
+            <evaluate expression="emailVerificationRedirectAction.createRedirectUrl(flowScope.credential)"
+                      result="flowScope.emailVerificationRedirectUrl"
+                      result-type="string"/>
+        </on-entry>
+    </end-state>
     <!-- oph end -->
 
     <!--
         the "viewGenericLoginSuccess" is the end state for when a user attempts to login without coming directly from a service.
         They have only initialized their single-sign on session.
-    -->
+    -->s
 
     <end-state id="viewGenericLoginSuccess" view="casGenericSuccessView">
         <on-entry>

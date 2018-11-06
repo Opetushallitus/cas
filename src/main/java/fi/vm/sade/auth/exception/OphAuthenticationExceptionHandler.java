@@ -9,6 +9,7 @@ public final class OphAuthenticationExceptionHandler extends AuthenticationExcep
     public OphAuthenticationExceptionHandler() {
         List<Class<? extends Exception>> errors = new ArrayList<>(getErrors());
         errors.add(NoStrongIdentificationException.class);
+        errors.add(EmailVerificationException.class);
         setErrors(errors);
     }
 
