@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.Optional;
 import javax.security.auth.login.FailedLoginException;
 import javax.validation.constraints.NotNull;
-import org.apache.commons.lang.BooleanUtils;
 import org.jasig.cas.authentication.AuthenticationException;
 import org.jasig.cas.authentication.BasicCredentialMetaData;
 import org.jasig.cas.authentication.CredentialMetaData;
@@ -60,6 +59,16 @@ public class StrongIdentificationRequiringCentralAuthenticationServiceImpl exten
     @NotNull
     private List<String> casRequireStrongIdentificationList;
 
+    @NotNull
+    private boolean casEmailVerificationEnabled;
+
+    @NotNull
+    private String casEmailVerificationListAsString;
+
+    @NotNull
+    private List<String> casEmailVerificationList;
+
+
     public static final String STRONG_IDENTIFICATION = "STRONG_IDENTIFICATION";
     public static final String EMAIL_VERIFICATION = "EMAIL_VERIFICATION";
 
@@ -82,23 +91,23 @@ public class StrongIdentificationRequiringCentralAuthenticationServiceImpl exten
                 .map(BasicCredentialMetaData::getId)
                 .findFirst();
         // Do this only for UsernamePasswordCredentials. Service-provider-app wants to do this before creating authentication token.
-        if (credential.isPresent()
-                && (this.requireStrongIdentification
-                || this.casRequireStrongIdentificationList.contains(credential.get()))) {
+        if (credential.isPresent()) {
             String username = credential.get();
             String redirectCodeUrl = this.ophProperties.url("kayttooikeus-service.cas.login.redirect", username);
             String redirectCode;
 
-            // Get redirect code for user telling if user should be redirect somewhere or not
+            // Where to redirect. null for no redirect
             try {
                 redirectCode = this.kayttooikeusClient.get(redirectCodeUrl, String.class);
             } catch (IOException e) {
                 throw new AuthenticationException(singletonMap(getClass().getName(), FailedLoginException.class));
             }
 
-            if(STRONG_IDENTIFICATION.equals(redirectCode)) {
+            if(STRONG_IDENTIFICATION.equals(redirectCode) && (this.requireStrongIdentification
+                    || this.casRequireStrongIdentificationList.contains(credential.get()))) {
                 throw new AuthenticationException(singletonMap(getClass().getName(), NoStrongIdentificationException.class));
-            } else if(EMAIL_VERIFICATION.equals(redirectCode)) {
+            } else if(EMAIL_VERIFICATION.equals(redirectCode) && (this.casEmailVerificationEnabled
+                    || this.casEmailVerificationList.contains(credential.get()))) {
                 throw new AuthenticationException(singletonMap(getClass().getName(), EmailVerificationException.class));
             }
         }
@@ -129,5 +138,17 @@ public class StrongIdentificationRequiringCentralAuthenticationServiceImpl exten
         this.casRequireStrongIdentificationList = !"".equals(casRequireStrongIdentificationList)
                 ? Arrays.asList(casRequireStrongIdentificationList.split(","))
                 : new ArrayList<String>();
+    }
+
+    public void setCasEmailVerificationEnabled(boolean casEmailVerificationEnabled) {
+        this.casEmailVerificationEnabled = casEmailVerificationEnabled;
+    }
+
+    public void setCasEmailVerificationListAsString(String casEmailVerificationListAsString) {
+        this.casEmailVerificationListAsString = casEmailVerificationListAsString;
+    }
+
+    public String getCasEmailVerificationListAsString() {
+        return casEmailVerificationListAsString;
     }
 }
