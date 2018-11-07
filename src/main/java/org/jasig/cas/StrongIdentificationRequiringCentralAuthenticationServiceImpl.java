@@ -146,6 +146,9 @@ public class StrongIdentificationRequiringCentralAuthenticationServiceImpl exten
 
     public void setCasEmailVerificationListAsString(String casEmailVerificationListAsString) {
         this.casEmailVerificationListAsString = casEmailVerificationListAsString;
+        this.casEmailVerificationList = !"".equals(casEmailVerificationListAsString)
+                ? Arrays.asList(casEmailVerificationListAsString.split(","))
+                : new ArrayList<String>();
     }
 
     public String getCasEmailVerificationListAsString() {
