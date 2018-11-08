@@ -93,7 +93,7 @@ public class StrongIdentificationRequiringCentralAuthenticationServiceImpl exten
         // Do this only for UsernamePasswordCredentials. Service-provider-app wants to do this before creating authentication token.
         if (credential.isPresent()) {
             String username = credential.get();
-            String redirectCodeUrl = this.ophProperties.url("kayttooikeus-service.cas.login.redirect", username);
+            String redirectCodeUrl = this.ophProperties.url("kayttooikeus-service.cas.login.redirect.username", username);
             String redirectCode;
 
             // Where to redirect. null for no redirect
