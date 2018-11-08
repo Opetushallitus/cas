@@ -166,6 +166,7 @@
 
     <bean id="EmailVerificationRedirectAction" class="fi.vm.sade.auth.action.EmailVerificationRedirectAction"
           p:kayttooikeusClient-ref="kayttooikeusRestClient"
+          p:oppijanumerorekisteriClient-ref="oppijanumerorekisteriRestClient"
           p:ophProperties-ref="ophProperties"/>
 
     <bean id="casProxyCallbackConfiguration" class="fi.vm.sade.auth.cas.CasProxyCallbackConfiguration" init-method="initialize">
