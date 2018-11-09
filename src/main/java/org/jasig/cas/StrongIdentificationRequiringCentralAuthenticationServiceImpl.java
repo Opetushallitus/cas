@@ -144,10 +144,10 @@ public class StrongIdentificationRequiringCentralAuthenticationServiceImpl exten
         this.emailVerificationEnabled = emailVerificationEnabled;
     }
 
-    public void setEmailVerificationUsernamesAsString(String emailVerificationUsernameList) {
-        this.emailVerificationUsernamesAsString = emailVerificationUsernameList;
-        this.emailVerificationUsernameList = !"".equals(emailVerificationUsernameList)
-                ? Arrays.asList(emailVerificationUsernameList.split(","))
+    public void setEmailVerificationUsernamesAsString(String emailVerificationUsernamesAsString) {
+        this.emailVerificationUsernamesAsString = emailVerificationUsernamesAsString;
+        this.emailVerificationUsernameList = !"".equals(emailVerificationUsernamesAsString)
+                ? Arrays.asList(emailVerificationUsernamesAsString.split(","))
                 : new ArrayList<String>();
     }
 

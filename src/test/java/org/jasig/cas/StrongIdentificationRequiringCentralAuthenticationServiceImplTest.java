@@ -60,7 +60,7 @@ public class StrongIdentificationRequiringCentralAuthenticationServiceImplTest {
         this.strongIdentificationRequiringCentralAuthenticationService.setRequireStrongIdentification(true);
         this.strongIdentificationRequiringCentralAuthenticationService.setCasRequireStrongIdentificationListAsString("");
         this.strongIdentificationRequiringCentralAuthenticationService.setEmailVerificationEnabled(true);
-        this.strongIdentificationRequiringCentralAuthenticationService.setEmailVerificationUsernameList("");
+        this.strongIdentificationRequiringCentralAuthenticationService.setEmailVerificationUsernamesAsString("");
     }
 
     @Test
@@ -134,7 +134,7 @@ public class StrongIdentificationRequiringCentralAuthenticationServiceImplTest {
 
     @Test
     public void onEmailVerificationDisabledAndUsernameInEmailVerificationListShouldRedirectToEmailVerification() throws Exception {
-        this.strongIdentificationRequiringCentralAuthenticationService.setEmailVerificationUsernameList("username,username2");
+        this.strongIdentificationRequiringCentralAuthenticationService.setEmailVerificationUsernamesAsString("username,username2");
         when(this.kayttooikeusRestClient.get(any(), eq(String.class))).thenReturn(this.strongIdentificationRequiringCentralAuthenticationService.EMAIL_VERIFICATION);
         String throwExceptionSimpleName = null;
         try {
