@@ -130,7 +130,7 @@
           p:requireStrongIdentification="${cas.require-strong-identification}"
           p:casRequireStrongIdentificationListAsString="${cas.require-strong-identification.usernamelist}"
           p:emailVerificationEnabled="${cas.email-verification-enabled}"
-          p:emailVerificationUsernameList="${cas.email-verification-enabled.usernamelist}">
+          p:emailVerificationUsernamesAsString="${cas.email-verification-enabled.usernamelist}">
         <constructor-arg index="0" ref="defaultTicketRegistry" />
         <constructor-arg index="1" ref="defaultTicketFactory" />
         <constructor-arg index="2" ref="servicesManager" />

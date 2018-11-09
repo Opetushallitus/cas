@@ -60,13 +60,13 @@ public class StrongIdentificationRequiringCentralAuthenticationServiceImpl exten
     private List<String> casRequireStrongIdentificationList;
 
     @NotNull
-    private boolean casEmailVerificationEnabled;
+    private boolean emailVerificationEnabled;
 
     @NotNull
-    private String casEmailVerificationListAsString;
+    private String emailVerificationUsernamesAsString;
 
     @NotNull
-    private List<String> casEmailVerificationList;
+    private List<String> emailVerificationUsernameList;
 
 
     public static final String STRONG_IDENTIFICATION = "STRONG_IDENTIFICATION";
@@ -106,8 +106,8 @@ public class StrongIdentificationRequiringCentralAuthenticationServiceImpl exten
             if(STRONG_IDENTIFICATION.equals(redirectCode) && (this.requireStrongIdentification
                     || this.casRequireStrongIdentificationList.contains(credential.get()))) {
                 throw new AuthenticationException(singletonMap(getClass().getName(), NoStrongIdentificationException.class));
-            } else if(EMAIL_VERIFICATION.equals(redirectCode) && (this.casEmailVerificationEnabled
-                    || this.casEmailVerificationList.contains(credential.get()))) {
+            } else if(EMAIL_VERIFICATION.equals(redirectCode) && (this.emailVerificationEnabled
+                    || this.emailVerificationUsernameList.contains(credential.get()))) {
                 throw new AuthenticationException(singletonMap(getClass().getName(), EmailVerificationException.class));
             }
         }
@@ -140,18 +140,18 @@ public class StrongIdentificationRequiringCentralAuthenticationServiceImpl exten
                 : new ArrayList<String>();
     }
 
-    public void setCasEmailVerificationEnabled(boolean casEmailVerificationEnabled) {
-        this.casEmailVerificationEnabled = casEmailVerificationEnabled;
+    public void setEmailVerificationEnabled(boolean emailVerificationEnabled) {
+        this.emailVerificationEnabled = emailVerificationEnabled;
     }
 
-    public void setCasEmailVerificationListAsString(String casEmailVerificationListAsString) {
-        this.casEmailVerificationListAsString = casEmailVerificationListAsString;
-        this.casEmailVerificationList = !"".equals(casEmailVerificationListAsString)
-                ? Arrays.asList(casEmailVerificationListAsString.split(","))
+    public void setEmailVerificationUsernameList(String emailVerificationUsernameList) {
+        this.emailVerificationUsernamesAsString = emailVerificationUsernameList;
+        this.emailVerificationUsernameList = !"".equals(emailVerificationUsernameList)
+                ? Arrays.asList(emailVerificationUsernameList.split(","))
                 : new ArrayList<String>();
     }
 
-    public String getCasEmailVerificationListAsString() {
-        return casEmailVerificationListAsString;
+    public String getEmailVerificationUsernameList() {
+        return emailVerificationUsernamesAsString;
     }
 }
