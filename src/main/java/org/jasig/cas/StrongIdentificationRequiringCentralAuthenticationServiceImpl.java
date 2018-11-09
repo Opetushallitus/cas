@@ -144,14 +144,14 @@ public class StrongIdentificationRequiringCentralAuthenticationServiceImpl exten
         this.emailVerificationEnabled = emailVerificationEnabled;
     }
 
-    public void setEmailVerificationUsernameList(String emailVerificationUsernameList) {
+    public void setEmailVerificationUsernamesAsString(String emailVerificationUsernameList) {
         this.emailVerificationUsernamesAsString = emailVerificationUsernameList;
         this.emailVerificationUsernameList = !"".equals(emailVerificationUsernameList)
                 ? Arrays.asList(emailVerificationUsernameList.split(","))
                 : new ArrayList<String>();
     }
 
-    public String getEmailVerificationUsernameList() {
+    public String getEmailVerificationUsernamesAsString() {
         return emailVerificationUsernamesAsString;
     }
 }
