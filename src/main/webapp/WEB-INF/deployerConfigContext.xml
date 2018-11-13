@@ -164,7 +164,7 @@
           p:oppijanumerorekisteriClient-ref="oppijanumerorekisteriRestClient"
           p:ophProperties-ref="ophProperties" />
 
-    <bean id="EmailVerificationRedirectAction" class="fi.vm.sade.auth.action.EmailVerificationRedirectAction"
+    <bean id="emailVerificationRedirectAction" class="fi.vm.sade.auth.action.EmailVerificationRedirectAction"
           p:kayttooikeusClient-ref="kayttooikeusRestClient"
           p:oppijanumerorekisteriClient-ref="oppijanumerorekisteriRestClient"
           p:ophProperties-ref="ophProperties"/>
