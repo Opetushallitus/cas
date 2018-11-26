@@ -1,34 +1,4 @@
 {
-  "aipal":{
-    "name":{
-      "fi": "AIPAL",
-      "sv": "AIPAL"
-    },
-    "shortname":{
-      "fi": "AIPAL",
-      "sv": "AIPAL"
-    },
-    "description": {
-      "fi": "AIPAL on ammatillisen koulutuksen palautejärjestelmä, jolla kerätään näyttötutkinnon suorittajien mielipiteitä tutkinnon suorittamisesta sekä näyttötutkintomestarikoulutuksen suorittajien mielipiteitä NTM-koulutuksesta. AIPALin käyttäjäneuvonta: aipal@oph.fi, puh. 029 533 1025.",
-      "sv": "AIPAL är ett system för respons om yrkesutbildning, med vilket man samlar åsikter av dem som avlägger fristående examen eller examensmästareutbildning. AIPAL användarrådgivning:  aipal@oph.fi, tfn 029 533 1025."
-    },
-    "link": "http://www.oph.fi/download/163738_Rekisteriseloste_AIPAL_dnro_45_022_2014.pdf"
-  },
-  "aitu":{
-    "name":{
-      "fi": "AITU - Tutkintotoimikunta- ja näyttötutkintojen järjestämissopimusrekisteri",
-      "sv": "AITU – Register över examenskommissioner och avtal för ordnande av fristående examina"
-    },
-    "shortname":{
-      "fi": "AITU",
-      "sv": "AITU"
-    },
-    "description": {
-      "fi": "Opetushallituksen käytössä oleva rekisteri tutkintotoimikunnista, niiden toimialoista ja jäsenistä sekä tehdyistä näyttötutkintojen järjestämissopimuksista. 1.8.2016 alkaen AITU toimii lisäksi tutkintotoimikuntien tehtävien hoidossa tarvittavien näyttötutkintojen suoritustietojen rekisterinä. AITUn käyttäjäneuvonta:  aitu-tuki@oph.fi, puh. 029 533 1025",
-      "sv": "Utbildningsstyrelsens register över examenskommissioner, verksamhetsområden och medlemmar samt avtal för ordnande av fristående yrkesexamina. Från och med 1.8.2016 fungerar dessutom AITU som ett register över avlagda studier inom fristående yrkesexamina (används av examenskommissionerna). Användarrådgivning för AITU: aitu-tuki@oph.fi, tfn 029 533 1025."
-    },
-    "link": "http://www.aitu.fi/download/159599_Rekisteriseloste_AITU.pdf"
-  },
   "arvo": {
     "name": {
       "fi": "Arvo - opetushallinnon vaikuttavuustietopalvelu",
