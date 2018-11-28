@@ -4,7 +4,6 @@ public class HenkiloDto {
 
     private String oid;
 
-
     public String getOid() {
         return oid;
     }

@@ -9,27 +9,4 @@
        http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
        ">
 
-    <bean id="contextSource" class="org.springframework.ldap.core.support.LdapContextSource">
-        <property name="pooled" value="false"/>
-        <property name="url" value="ldap://localhost:10399"/>
-        <property name="userDn" value="uid=admin,ou=system"/>
-        <property name="password" value="secret"/>
-        <property name="baseEnvironmentProperties">
-            <map>
-                <entry key="com.sun.jndi.ldap.connect.timeout" value="3000"/>
-                <entry key="com.sun.jndi.ldap.read.timeout" value="3000"/>
-                <entry key="java.naming.security.authentication" value="simple"/>
-            </map>
-        </property>
-    </bean>
-
-    <bean id="ldapUserImporter" class="fi.vm.sade.auth.ldap.LdapUserImporter" scope="singleton" init-method="init" lazy-init="false">
-        <property name="contextSource" ref="contextSource"/>
-        <property name="ldapTemplate" ref="ldapTemplate"/>
-    </bean>
-
-    <bean id="ldapTemplate" class="org.springframework.ldap.core.LdapTemplate">
-        <constructor-arg ref="contextSource" />
-    </bean>
-
 </beans>
