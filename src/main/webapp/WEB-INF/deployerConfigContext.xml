@@ -124,7 +124,9 @@
           p:kayttooikeusClient-ref="kayttooikeusRestClient"
           p:ophProperties-ref="ophProperties"
           p:requireStrongIdentification="${cas.require-strong-identification}"
-          p:casRequireStrongIdentificationListAsString="${cas.require-strong-identification.usernamelist}">
+          p:casRequireStrongIdentificationListAsString="${cas.require-strong-identification.usernamelist}"
+          p:emailVerificationEnabled="${cas.email-verification-enabled}"
+          p:emailVerificationUsernamesAsString="${cas.email-verification-enabled.usernamelist}">
         <constructor-arg index="0" ref="defaultTicketRegistry" />
         <constructor-arg index="1" ref="defaultTicketFactory" />
         <constructor-arg index="2" ref="servicesManager" />
@@ -157,6 +159,11 @@
           p:kayttooikeusClient-ref="kayttooikeusRestClient"
           p:oppijanumerorekisteriClient-ref="oppijanumerorekisteriRestClient"
           p:ophProperties-ref="ophProperties" />
+
+    <bean id="emailVerificationRedirectAction" class="fi.vm.sade.auth.action.EmailVerificationRedirectAction"
+          p:kayttooikeusClient-ref="kayttooikeusRestClient"
+          p:oppijanumerorekisteriClient-ref="oppijanumerorekisteriRestClient"
+          p:ophProperties-ref="ophProperties"/>
 
     <bean id="casProxyCallbackConfiguration" class="fi.vm.sade.auth.cas.CasProxyCallbackConfiguration" init-method="initialize">
         <constructor-arg index="0" value="${cas.proxy.callback.ignore-errors}" />

@@ -130,6 +130,7 @@
             <set name="flowScope.loginError" value="'badCredentials'" type="string" />
         </transition>
         <transition on="NoStrongIdentificationException" to="strongIdentificationRedirectView" />
+        <transition on="EmailVerificationException" to="emailVerificationRedirectView" />
         <!-- oph end -->
         <transition on="UNKNOWN" to="initializeLogin"/>
     </action-state>
@@ -173,6 +174,17 @@
             <evaluate expression="strongIdentificationRedirectAction.createRedirectUrl(flowScope.credential)"
                       result="flowScope.strongIdentificationRedirectUrl"
                       result-type="string" />
+        </on-entry>
+    </end-state>
+
+
+
+    <!-- In case user have to checked his/her email  -->
+    <end-state id="emailVerificationRedirectView" view="externalRedirect:#{flowScope.emailVerificationRedirectUrl}">
+        <on-entry>
+            <evaluate expression="emailVerificationRedirectAction.createRedirectUrl(flowScope.credential)"
+                      result="flowScope.emailVerificationRedirectUrl"
+                      result-type="string"/>
         </on-entry>
     </end-state>
     <!-- oph end -->

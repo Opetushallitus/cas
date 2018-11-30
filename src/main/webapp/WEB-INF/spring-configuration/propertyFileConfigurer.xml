@@ -47,6 +47,7 @@
                 <value>classpath:cluster.node/cas.cluster.node.properties</value>
                 <value>file:///${user.home:''}/oph-configuration/override.properties</value>
                 <value>file:///${user.home:''}/oph-configuration/cas-strong-identifiables.properties</value>
+                <value>file:///${user.home:''}/oph-configuration/email-verification.properties</value>
             </list>
         </property>
         <property name="localOverride" value="true" />

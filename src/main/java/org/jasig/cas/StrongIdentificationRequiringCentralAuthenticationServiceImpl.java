@@ -19,6 +19,7 @@
 package org.jasig.cas;
 
 import fi.vm.sade.auth.clients.KayttooikeusRestClient;
+import fi.vm.sade.auth.exception.EmailVerificationException;
 import fi.vm.sade.auth.exception.NoStrongIdentificationException;
 import fi.vm.sade.properties.OphProperties;
 import java.io.IOException;
@@ -30,7 +31,6 @@ import java.util.List;
 import java.util.Optional;
 import javax.security.auth.login.FailedLoginException;
 import javax.validation.constraints.NotNull;
-import org.apache.commons.lang.BooleanUtils;
 import org.jasig.cas.authentication.AuthenticationException;
 import org.jasig.cas.authentication.BasicCredentialMetaData;
 import org.jasig.cas.authentication.CredentialMetaData;
@@ -59,6 +59,19 @@ public class StrongIdentificationRequiringCentralAuthenticationServiceImpl exten
     @NotNull
     private List<String> casRequireStrongIdentificationList;
 
+    @NotNull
+    private boolean emailVerificationEnabled;
+
+    @NotNull
+    private String emailVerificationUsernamesAsString;
+
+    @NotNull
+    private List<String> emailVerificationUsernameList;
+
+
+    public static final String STRONG_IDENTIFICATION = "STRONG_IDENTIFICATION";
+    public static final String EMAIL_VERIFICATION = "EMAIL_VERIFICATION";
+
     public StrongIdentificationRequiringCentralAuthenticationServiceImpl(
             final TicketRegistry ticketRegistry,
             final TicketFactory ticketFactory,
@@ -78,19 +91,24 @@ public class StrongIdentificationRequiringCentralAuthenticationServiceImpl exten
                 .map(BasicCredentialMetaData::getId)
                 .findFirst();
         // Do this only for UsernamePasswordCredentials. Service-provider-app wants to do this before creating authentication token.
-        if (credential.isPresent()
-                && (this.requireStrongIdentification
-                || this.casRequireStrongIdentificationList.contains(credential.get()))) {
+        if (credential.isPresent()) {
             String username = credential.get();
-            String vahvaTunnistusUrl = this.ophProperties.url("kayttooikeus-service.cas.vahva-tunnistus-username", username);
-            Boolean vahvastiTunnistettu;
+            String redirectCodeUrl = this.ophProperties.url("kayttooikeus-service.cas.login.redirect.username", username);
+            String redirectCode;
+
+            // Where to redirect. null for no redirect
             try {
-                vahvastiTunnistettu = this.kayttooikeusClient.get(vahvaTunnistusUrl, Boolean.class);
+                redirectCode = this.kayttooikeusClient.get(redirectCodeUrl, String.class);
             } catch (IOException e) {
                 throw new AuthenticationException(singletonMap(getClass().getName(), FailedLoginException.class));
             }
-            if (BooleanUtils.isFalse(vahvastiTunnistettu)) {
+
+            if(STRONG_IDENTIFICATION.equals(redirectCode) && (this.requireStrongIdentification
+                    || this.casRequireStrongIdentificationList.contains(credential.get()))) {
                 throw new AuthenticationException(singletonMap(getClass().getName(), NoStrongIdentificationException.class));
+            } else if(EMAIL_VERIFICATION.equals(redirectCode) && (this.emailVerificationEnabled
+                    || this.emailVerificationUsernameList.contains(credential.get()))) {
+                throw new AuthenticationException(singletonMap(getClass().getName(), EmailVerificationException.class));
             }
         }
     }
@@ -120,5 +138,20 @@ public class StrongIdentificationRequiringCentralAuthenticationServiceImpl exten
         this.casRequireStrongIdentificationList = !"".equals(casRequireStrongIdentificationList)
                 ? Arrays.asList(casRequireStrongIdentificationList.split(","))
                 : new ArrayList<String>();
+    }
+
+    public void setEmailVerificationEnabled(boolean emailVerificationEnabled) {
+        this.emailVerificationEnabled = emailVerificationEnabled;
+    }
+
+    public void setEmailVerificationUsernamesAsString(String emailVerificationUsernamesAsString) {
+        this.emailVerificationUsernamesAsString = emailVerificationUsernamesAsString;
+        this.emailVerificationUsernameList = !"".equals(emailVerificationUsernamesAsString)
+                ? Arrays.asList(emailVerificationUsernamesAsString.split(","))
+                : new ArrayList<String>();
+    }
+
+    public String getEmailVerificationUsernamesAsString() {
+        return emailVerificationUsernamesAsString;
     }
 }
