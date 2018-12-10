@@ -1,0 +1,21 @@
+#
+# TÄHÄN TIEDOSTOON EI SAA TALLENTAA YMPÄRISTÖKOHTAISIA ARVOJA MUUTOIN KUIN MUUTTUJINA!!!
+# 
+# Tämä tiedosto toimii pohjana oph-configuration/common.properties tiedostolle,
+# joka asettaa tomcatin ympäristökohtaiset arvot.
+#
+
+cas.whitelist.regexp={{cas_whitelist_regexp}}
+cas.proxy.callback.ignore-errors={{cas_proxy_callback_ignore_errors | default('false')}}
+haka.url={{haka_url}}
+host.shibboleth={{host_tunnistus}}
+host.cas={{host_cas}}
+host.virkailija={{host_virkailija}}
+host.alb={{host_alb_virkailija}}
+serviceprovider.app.username.to.usermanagement={{serviceprovider_app_username_to_usermanagement}}
+serviceprovider.app.password.to.usermanagement={{serviceprovider_app_password_to_usermanagement}}
+login.tietosuojaseloste.url={{login_tietosuojaseloste_url | default("https://opintopolku.fi/wp/tietosuojaseloste/")}}
+tgc.encryption.key={{cas_tgc_encryption_key}}
+tgc.signing.key={{cas_tgc_signing_key}}
+webflow.encryption.key={{cas_webflow_encryption_key}}
+webflow.signing.key={{cas_webflow_signing_key}}

@@ -1,0 +1,4 @@
+# To all users
+cas.require-strong-identification={{cas__require_strong_identification | default(false)}}
+# To specified users even if cas.require-strong-identification is false
+cas.require-strong-identification.usernamelist={{cas_require_strong_identification_usernamelist | default("") }}

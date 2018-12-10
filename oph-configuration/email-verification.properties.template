@@ -1,0 +1,4 @@
+# To all users
+cas.email-verification-enabled={{cas_email_verification_enabled | default(false)}}
+# To specified users even if cas.email-verification-enabled is false
+cas.email-verification-enabled.usernamelist={{cas_email_verification_enabled_usernamelist | default("") }}
