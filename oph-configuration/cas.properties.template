@@ -22,3 +22,5 @@ tgc.encryption.key={{cas_tgc_encryption_key}}
 tgc.signing.key={{cas_tgc_signing_key}}
 webflow.encryption.key={{cas_webflow_encryption_key}}
 webflow.signing.key={{cas_webflow_signing_key}}
+
+slo.callbacks.asynchronous={{cas_slo_callbacks_asynchronous | default('false')}}
