@@ -21,16 +21,6 @@ package org.jasig.cas;
 import fi.vm.sade.auth.clients.KayttooikeusRestClient;
 import fi.vm.sade.auth.exception.EmailVerificationException;
 import fi.vm.sade.auth.exception.NoStrongIdentificationException;
-import fi.vm.sade.properties.OphProperties;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import static java.util.Collections.singletonMap;
-import java.util.List;
-import java.util.Optional;
-import javax.security.auth.login.FailedLoginException;
-import javax.validation.constraints.NotNull;
 import org.jasig.cas.authentication.AuthenticationException;
 import org.jasig.cas.authentication.BasicCredentialMetaData;
 import org.jasig.cas.authentication.CredentialMetaData;
@@ -42,13 +32,16 @@ import org.jasig.cas.ticket.registry.TicketRegistry;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import javax.security.auth.login.FailedLoginException;
+import javax.validation.constraints.NotNull;
+import java.util.*;
+
+import static java.util.Collections.singletonMap;
+
 @Transactional(readOnly = false, transactionManager = "ticketTransactionManager")
 public class StrongIdentificationRequiringCentralAuthenticationServiceImpl extends CentralAuthenticationServiceImpl {
     @NotNull
     private KayttooikeusRestClient kayttooikeusClient;
-
-    @NotNull
-    private OphProperties ophProperties;
 
     @NotNull
     private boolean requireStrongIdentification;
@@ -93,13 +86,12 @@ public class StrongIdentificationRequiringCentralAuthenticationServiceImpl exten
         // Do this only for UsernamePasswordCredentials. Service-provider-app wants to do this before creating authentication token.
         if (credential.isPresent()) {
             String username = credential.get();
-            String redirectCodeUrl = this.ophProperties.url("kayttooikeus-service.cas.login.redirect.username", username);
             String redirectCode;
 
             // Where to redirect. null for no redirect
             try {
-                redirectCode = this.kayttooikeusClient.get(redirectCodeUrl, String.class);
-            } catch (IOException e) {
+                redirectCode = this.kayttooikeusClient.getRedirectCodeByUsername(username);
+            } catch (Exception e) {
                 throw new AuthenticationException(singletonMap(getClass().getName(), FailedLoginException.class));
             }
 
@@ -119,10 +111,6 @@ public class StrongIdentificationRequiringCentralAuthenticationServiceImpl exten
 
     public void setKayttooikeusClient(KayttooikeusRestClient kayttooikeusClient) {
         this.kayttooikeusClient = kayttooikeusClient;
-    }
-
-    public void setOphProperties(OphProperties ophProperties) {
-        this.ophProperties = ophProperties;
     }
 
     public void setRequireStrongIdentification(boolean requireStrongIdentification) {

@@ -1,40 +1,37 @@
 package fi.vm.sade.saml.action;
 
+import com.google.gson.Gson;
 import fi.vm.sade.auth.dto.IdentifiedHenkiloType;
-import fi.vm.sade.generic.rest.CachingRestClient;
-import fi.vm.sade.properties.OphProperties;
-import java.security.GeneralSecurityException;
-import static java.util.Collections.emptyList;
-import static java.util.Objects.requireNonNull;
-import javax.security.auth.login.FailedLoginException;
-import org.jasig.cas.authentication.AuthenticationHandler;
-import org.jasig.cas.authentication.BasicCredentialMetaData;
-import org.jasig.cas.authentication.Credential;
-import org.jasig.cas.authentication.DefaultHandlerResult;
-import org.jasig.cas.authentication.HandlerResult;
-import org.jasig.cas.authentication.PreventedException;
+import fi.vm.sade.javautils.httpclient.OphHttpClient;
+import org.jasig.cas.authentication.*;
 import org.jasig.cas.authentication.principal.DefaultPrincipalFactory;
 import org.jasig.cas.authentication.principal.Principal;
 import org.jasig.cas.authentication.principal.PrincipalFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.security.auth.login.FailedLoginException;
+import java.security.GeneralSecurityException;
+
+import static java.util.Collections.emptyList;
+import static java.util.Objects.requireNonNull;
+
 public class SAMLAuthenticationHandler implements AuthenticationHandler {
 
     private static final Logger log = LoggerFactory.getLogger(SAMLAuthenticationHandler.class);
-    private static final String CLIENT_SUB_SYSTEM_CODE = "authentication.cas";
 
-    private final CachingRestClient restClient = new CachingRestClient().setClientSubSystemCode(CLIENT_SUB_SYSTEM_CODE);
     private final PrincipalFactory principalFactory;
-    private final OphProperties ophProperties;
+    private final OphHttpClient httpClient;
+    private final Gson gson;
 
-    public SAMLAuthenticationHandler(OphProperties ophProperties) {
-        this(new DefaultPrincipalFactory(), ophProperties);
+    public SAMLAuthenticationHandler(OphHttpClient httpClient) {
+        this(new DefaultPrincipalFactory(), httpClient, new Gson());
     }
 
-    public SAMLAuthenticationHandler(PrincipalFactory principalFactory, OphProperties ophProperties) {
+    public SAMLAuthenticationHandler(PrincipalFactory principalFactory, OphHttpClient httpClient, Gson gson) {
         this.principalFactory = requireNonNull(principalFactory);
-        this.ophProperties = requireNonNull(ophProperties);
+        this.httpClient = requireNonNull(httpClient);
+        this.gson = requireNonNull(gson);
     }
 
     @Override
@@ -54,9 +51,10 @@ public class SAMLAuthenticationHandler implements AuthenticationHandler {
         }
     }
 
-    private HandlerResult doAuthentication(Credential credential) throws Exception {
-        String henkiloByAuthTokenUrl = ophProperties.url("kayttooikeus-service.cas.henkiloByAuthToken", credential.getId());
-        IdentifiedHenkiloType henkiloType = restClient.get(henkiloByAuthTokenUrl, IdentifiedHenkiloType.class);
+    private HandlerResult doAuthentication(Credential credential) {
+        IdentifiedHenkiloType henkiloType = httpClient.get("kayttooikeus-service.cas.henkiloByAuthToken", credential.getId())
+                .expectStatus(200)
+                .execute(response -> gson.fromJson(response.asText(), IdentifiedHenkiloType.class));
         Principal principal = principalFactory.createPrincipal(henkiloType.getKayttajatiedot().getUsername());
         return new DefaultHandlerResult(this, new BasicCredentialMetaData(credential), principal, emptyList());
     }

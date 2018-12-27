@@ -24,7 +24,7 @@
     </bean>
 
     <bean id="samlAuthenticationHandler" class="fi.vm.sade.saml.action.SAMLAuthenticationHandler">
-        <constructor-arg index="0" ref="ophProperties"/>
+        <constructor-arg index="0" ref="ophHttpClient"/>
     </bean>
 
     <bean id="stuckServiceTicketRetrievalThreadDumper" class="fi.vm.sade.servlet.StuckServiceTicketRetrievalThreadDumper"/>
@@ -124,7 +124,6 @@
           class="org.jasig.cas.StrongIdentificationRequiringCentralAuthenticationServiceImpl"
           p:principalFactory-ref="principalFactory"
           p:kayttooikeusClient-ref="kayttooikeusRestClient"
-          p:ophProperties-ref="ophProperties"
           p:requireStrongIdentification="${cas.require-strong-identification}"
           p:casRequireStrongIdentificationListAsString="${cas.require-strong-identification.usernamelist}"
           p:emailVerificationEnabled="${cas.email-verification-enabled}"
@@ -137,16 +136,10 @@
 
     <bean id="oppijanumerorekisteriRestClient" class="fi.vm.sade.auth.clients.OppijanumerorekisteriRestClient">
         <constructor-arg ref="ophProperties" />
-        <property name="clientSubSystemCode" value="authentication.cas" />
-        <property name="username" value="${serviceprovider.app.username.to.usermanagement}" />
-        <property name="password" value="${serviceprovider.app.password.to.usermanagement}" />
     </bean>
 
     <bean id="kayttooikeusRestClient" class="fi.vm.sade.auth.clients.KayttooikeusRestClient">
         <constructor-arg ref="ophProperties" />
-        <property name="clientSubSystemCode" value="authentication.cas" />
-        <property name="username" value="${serviceprovider.app.username.to.usermanagement}" />
-        <property name="password" value="${serviceprovider.app.password.to.usermanagement}" />
     </bean>
 
     <!-- override cas exception handler to add strong identification support -->
