@@ -97,5 +97,19 @@
       "fi": "Valtionavustusjärjestelmällä toteutetaan ja käsitellään digitaalisesti Opetushallituksen myöntämät valtionavustukset. Järjestelmän käyttäjiä ovat Opetushallituksen virkailijat.",
       "sv": "Genom statsunderstödssystemet genomförs och behandlas statsunderstöd som beviljats av Utbildningsstyrelsen. Systemanvändare är tjänstemän vid Utbildningsstyrelsen. "
     }
+  },
+  "varda": {
+    "name": {
+      "fi": "Varda",
+      "sv": "Varda"
+    },
+    "shortname": {
+      "fi": "Varda",
+      "sv": "Varda"
+    },
+    "description": {
+      "fi": "Varhaiskasvatuksen tietovaranto (Varda) kokoaa varhaiskasvatuksen kansallisessa suunnittelu- ja ohjaustyössä tarvittavat tiedot yhteen paikkaan. Keskeisiä tietoja ovat tiedot varhaiskasvatuksessa olevista lapsista, toimipaikoista sekä henkilöstöstä. Asiakaspalvelu: varda@opintopolku.fi",
+      "sv": "Informationsresursen inom småbarnspedagogiken (Varda) sammanför planerings- och styranknuten information på nationell nivå inom småbarnspedagogiken så att den finns koncentrerat på ett ställe. Barn, verksamhetsställen och personal inom småbarnspedagogiken är viktig information i sammanhanget. Kundtjänst: varda@opintopolku.fi"
+    }
   }
 }

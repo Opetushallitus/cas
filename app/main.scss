@@ -27,6 +27,7 @@ $oikeustulkkirekisteri: #898989;
 $oiva:                  #7E007E;
 $opintopolku:           #3B7ADB;
 $valtionavaustukset:    #211B81;
+$varda: #98975b;
 
 body{
   background: #F6F4F0;
@@ -142,6 +143,7 @@ body{
   &.oiva { background-color: $oiva; }
   &.opintopolku { background-color: $opintopolku; }
   &.valtionavustukset { background-color: $valtionavaustukset; }
+  &.varda { background-color: $varda; }
 
 }
 
