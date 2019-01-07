@@ -9,7 +9,6 @@ import fi.vm.sade.properties.OphProperties;
 
 import static fi.vm.sade.auth.clients.HttpClientUtil.CLIENT_SUBSYSTEM_CODE;
 import static fi.vm.sade.auth.clients.HttpClientUtil.noContentOrNotFoundException;
-import static java.util.function.Function.identity;
 
 public class KayttooikeusRestClient {
 
@@ -37,6 +36,10 @@ public class KayttooikeusRestClient {
         return new OphHttpClient.Builder(CLIENT_SUBSYSTEM_CODE).authenticator(authenticator).build();
     }
 
+    private String jsonString(String json) {
+        return gson.fromJson(json, String.class);
+    }
+
     public String getHenkiloOid(String username) {
         String url = this.ophProperties.url("kayttooikeus-service.cas.get-oid", username);
         return httpClient.<String>execute(OphHttpRequest.Builder.get(url).build())
@@ -49,7 +52,7 @@ public class KayttooikeusRestClient {
         String url = this.ophProperties.url("kayttooikeus-service.cas.create-login-token", henkiloOid);
         return httpClient.<String>execute(OphHttpRequest.Builder.get(url).build())
                 .expectedStatus(200)
-                .mapWith(identity())
+                .mapWith(this::jsonString)
                 .orElseThrow(() -> noContentOrNotFoundException(url));
     }
 
@@ -57,7 +60,7 @@ public class KayttooikeusRestClient {
         String url = this.ophProperties.url("kayttooikeus-service.cas.login.redirect.username", username);
         return httpClient.<String>execute(OphHttpRequest.Builder.get(url).build())
                 .expectedStatus(200)
-                .mapWith(identity())
+                .mapWith(this::jsonString)
                 .orElseThrow(() -> noContentOrNotFoundException(url));
     }
 

@@ -8,7 +8,6 @@ import fi.vm.sade.properties.OphProperties;
 
 import static fi.vm.sade.auth.clients.HttpClientUtil.CLIENT_SUBSYSTEM_CODE;
 import static fi.vm.sade.auth.clients.HttpClientUtil.noContentOrNotFoundException;
-import static java.util.function.Function.identity;
 
 public class OppijanumerorekisteriRestClient {
 
@@ -36,11 +35,15 @@ public class OppijanumerorekisteriRestClient {
         return new OphHttpClient.Builder(CLIENT_SUBSYSTEM_CODE).authenticator(authenticator).build();
     }
 
+    private String jsonString(String json) {
+        return gson.fromJson(json, String.class);
+    }
+
     public String getAsiointikieli(String henkiloOid) {
         String url = this.ophProperties.url("oppijanumerorekisteri.henkilo.kieliKoodi", henkiloOid);
         return httpClient.<String>execute(OphHttpRequest.Builder.get(url).build())
                 .expectedStatus(200)
-                .mapWith(identity())
+                .mapWith(this::jsonString)
                 .orElseThrow(() -> noContentOrNotFoundException(url));
     }
 
