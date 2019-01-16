@@ -4,3 +4,26 @@ src/main/webapp/app
 
 *.iml
 .idea
+
+# from cas-overlay-template
+.classpath
+!/.project
+.project
+.settings
+.history
+.vscode
+target/
+.idea/
+.DS_Store
+.idea
+overlays/
+.gradle/
+build/
+log/
+bin/
+*.war
+*.iml
+*.log
+tmp/
+./apache-tomcat
+apache-tomcat.zip
