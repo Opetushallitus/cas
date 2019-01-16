@@ -1,6 +1,6 @@
 package fi.vm.sade.saml.action;
 
-import org.jasig.cas.authentication.Credential;
+import org.apereo.cas.authentication.Credential;
 
 public class SAMLCredentials implements Credential {
 

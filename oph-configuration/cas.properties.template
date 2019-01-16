@@ -5,8 +5,24 @@
 # joka asettaa tomcatin ympäristökohtaiset arvot.
 #
 
-cas.whitelist.regexp={{cas_whitelist_regexp}}
-cas.proxy.callback.ignore-errors={{cas_proxy_callback_ignore_errors | default('false')}}
+# CAS configuration
+# https://apereo.github.io/cas/6.0.x/configuration/Configuration-Properties.html
+
+cas.server.tomcat.httpProxy.enabled=true
+cas.server.tomcat.httpProxy.secure=true
+cas.server.tomcat.httpProxy.scheme=https
+
+cas.tgc.crypto.encryption.key={{cas_tgc_encryption_key}}
+cas.tgc.crypto.signing.key={{cas_tgc_signing_key}}
+cas.webflow.crypto.encryption.key={{cas_webflow_encryption_key}}
+cas.webflow.crypto.signing.key={{cas_webflow_signing_key}}
+
+cas.slo.asynchronous={{cas_slo_callbacks_asynchronous | default('false')}}
+
+# Custom configuration
+
+whitelist.regexp={{cas_whitelist_regexp}}
+proxy.callback.ignore-errors={{cas_proxy_callback_ignore_errors | default('false')}}
 haka.url={{haka_url}}
 host.shibboleth={{host_tunnistus}}
 host.cas={{host_cas}}
@@ -18,9 +34,3 @@ login.tietosuojaseloste.url={{login_tietosuojaseloste_url | default("https://opi
 stuck.service.ticket.retrieval.ips.to.inspect={{cas_stuck_service_ticket_retrieval_ips_to_inspect | default("86.50.26.23")}}
 stuck.service.ticket.retrieval.thread.dump.interval.seconds={{cas_stuck_service_ticket_retrieval_thread_dump_interval_seconds | default("15")}}
 stuck.service.ticket.retrieval.thread.dump.times={{cas_stuck_service_ticket_retrieval_thread_dump_times | default("40")}}
-tgc.encryption.key={{cas_tgc_encryption_key}}
-tgc.signing.key={{cas_tgc_signing_key}}
-webflow.encryption.key={{cas_webflow_encryption_key}}
-webflow.signing.key={{cas_webflow_signing_key}}
-
-slo.callbacks.asynchronous={{cas_slo_callbacks_asynchronous | default('false')}}

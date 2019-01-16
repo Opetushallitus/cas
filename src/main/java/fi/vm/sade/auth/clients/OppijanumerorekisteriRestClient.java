@@ -4,17 +4,22 @@ import fi.vm.sade.javautils.http.OphHttpClient;
 import fi.vm.sade.javautils.http.OphHttpRequest;
 import fi.vm.sade.javautils.http.auth.CasAuthenticator;
 import fi.vm.sade.properties.OphProperties;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
 
 import static fi.vm.sade.auth.clients.HttpClientUtil.CLIENT_SUBSYSTEM_CODE;
 import static fi.vm.sade.auth.clients.HttpClientUtil.noContentOrNotFoundException;
 
+@Component
 public class OppijanumerorekisteriRestClient {
 
     private final OphHttpClient httpClient;
     private final OphProperties ophProperties;
 
-    public OppijanumerorekisteriRestClient(OphProperties ophProperties) {
-        this(newHttpClient(ophProperties), ophProperties);
+    @Autowired
+    public OppijanumerorekisteriRestClient(OphProperties ophProperties, Environment environment) {
+        this(newHttpClient(ophProperties, environment), ophProperties);
     }
 
     public OppijanumerorekisteriRestClient(OphHttpClient httpClient, OphProperties ophProperties) {
@@ -22,10 +27,10 @@ public class OppijanumerorekisteriRestClient {
         this.ophProperties = ophProperties;
     }
 
-    private static OphHttpClient newHttpClient(OphProperties properties) {
+    private static OphHttpClient newHttpClient(OphProperties properties, Environment environment) {
         CasAuthenticator authenticator = new CasAuthenticator.Builder()
-                .username(properties.require("serviceprovider.app.username.to.usermanagement"))
-                .password(properties.require("serviceprovider.app.password.to.usermanagement"))
+                .username(environment.getRequiredProperty("serviceprovider.app.username.to.usermanagement"))
+                .password(environment.getRequiredProperty("serviceprovider.app.password.to.usermanagement"))
                 .webCasUrl(properties.url("cas.base"))
                 .casServiceUrl(properties.url("oppijanumerorekisteri.security_check"))
                 .build();

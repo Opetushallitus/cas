@@ -1,25 +1,21 @@
 package fi.vm.sade.servlet;
 
 import com.google.common.collect.Sets;
-
 import fi.vm.sade.javautils.http.HttpServletRequestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Set;
 
+@Component
 public class StuckServiceTicketRetrievalDebuggingFilter implements Filter {
     private static final Logger log = LoggerFactory.getLogger(StuckServiceTicketRetrievalDebuggingFilter.class);
     private static final String ST_RETRIEVAL_URL_MATCHER = "cas/v1/tickets/TGT";

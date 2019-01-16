@@ -4,7 +4,9 @@ import fi.vm.sade.javautils.httpclient.OphHttpClient;
 import fi.vm.sade.javautils.httpclient.apache.ApacheOphHttpClient;
 import fi.vm.sade.properties.OphProperties;
 import org.springframework.beans.factory.FactoryBean;
+import org.springframework.stereotype.Component;
 
+@Component("httpClient")
 public class HttpClientFactoryBean implements FactoryBean<OphHttpClient> {
 
     private static final String CLIENT_SUBSYSTEM_CODE = "cas";

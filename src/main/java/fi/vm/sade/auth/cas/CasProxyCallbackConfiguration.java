@@ -1,41 +1,69 @@
 package fi.vm.sade.auth.cas;
 
-import java.net.URL;
-import org.jasig.cas.authentication.handler.support.HttpBasedServiceCredentialsAuthenticationHandler;
-import org.jasig.cas.ticket.proxy.support.Cas20ProxyHandler;
-import org.jasig.cas.util.http.HttpClient;
-import org.jasig.cas.util.http.HttpMessage;
+import org.apereo.cas.authentication.AuthenticationEventExecutionPlanConfigurer;
+import org.apereo.cas.authentication.handler.support.HttpBasedServiceCredentialsAuthenticationHandler;
+import org.apereo.cas.authentication.principal.PrincipalFactory;
+import org.apereo.cas.authentication.principal.PrincipalResolver;
+import org.apereo.cas.services.ServicesManager;
+import org.apereo.cas.ticket.UniqueTicketIdGenerator;
+import org.apereo.cas.ticket.proxy.support.Cas20ProxyHandler;
+import org.apereo.cas.util.http.HttpClient;
+import org.apereo.cas.util.http.HttpMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+
+import java.net.URL;
 
 /**
  * Configuration to ignore errors from CAS proxy authentication callback. This is may be added to test environment to
  * allow using CAS from localhost. Note that proxy authentication will not work because CAS cannot provide PGT (proxy
  * granting ticket) to service but at least validating service/proxy tickets still work.
  */
+@Configuration
 public class CasProxyCallbackConfiguration {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CasProxyCallbackConfiguration.class);
 
-    private final boolean casProxyCallbackIgnoreErrors;
-    private final HttpClient httpClient;
-    private final HttpBasedServiceCredentialsAuthenticationHandler authenticationHandler;
-    private final Cas20ProxyHandler proxyHandler;
+    @Autowired
+    @Qualifier("supportsTrustStoreSslSocketFactoryHttpClient")
+    private ObjectProvider<HttpClient> supportsTrustStoreSslSocketFactoryHttpClient;
 
-    public CasProxyCallbackConfiguration(boolean casProxyCallbackIgnoreErrors, HttpClient httpClient,
-            HttpBasedServiceCredentialsAuthenticationHandler authenticationHandler, Cas20ProxyHandler proxyHandler) {
-        this.casProxyCallbackIgnoreErrors = casProxyCallbackIgnoreErrors;
-        this.httpClient = httpClient;
-        this.authenticationHandler = authenticationHandler;
-        this.proxyHandler = proxyHandler;
+    @Autowired
+    @Qualifier("servicesManager")
+    private ObjectProvider<ServicesManager> servicesManager;
+
+    @Autowired
+    private PrincipalFactory proxyPrincipalFactory;
+
+    @Autowired
+    @Qualifier("proxy20TicketUniqueIdGenerator")
+    private UniqueTicketIdGenerator uniqueTicketIdGenerator;
+
+    @ConditionalOnProperty(prefix = "proxy.callback", name = "ignore-errors", havingValue = "true")
+    @Bean
+    @Primary
+    public AuthenticationEventExecutionPlanConfigurer proxyAuthenticationEventExecutionPlanConfigurer(PrincipalResolver proxyPrincipalResolver) {
+        LOGGER.warn("CAS proxy callback is error-tolerant. This should NOT happen in production environment! (1)");
+        OnErrorReturnTrueHttpClient onErrorReturnTrueHttpClient = new OnErrorReturnTrueHttpClient(supportsTrustStoreSslSocketFactoryHttpClient.getIfAvailable());
+        HttpBasedServiceCredentialsAuthenticationHandler proxyAuthenticationHandler = new HttpBasedServiceCredentialsAuthenticationHandler(
+                null, servicesManager.getIfAvailable(), proxyPrincipalFactory, Integer.MIN_VALUE, onErrorReturnTrueHttpClient);
+        return plan -> plan.registerAuthenticationHandlerWithPrincipalResolver(proxyAuthenticationHandler, proxyPrincipalResolver);
     }
 
-    public void initialize() {
-        if (casProxyCallbackIgnoreErrors) {
-            LOGGER.warn("CAS proxy callback is error-tolerant. This should NOT happen in production environment!");
-            authenticationHandler.setHttpClient(new OnErrorReturnTrueHttpClient(httpClient));
-            proxyHandler.setHttpClient(new OnErrorReturnTrueHttpClient(httpClient));
-        }
+    @ConditionalOnProperty(prefix = "proxy.callback", name = "ignore-errors", havingValue = "true")
+    @Bean
+    @Primary
+    public Cas20ProxyHandler cas20ProxyHandler() {
+        LOGGER.warn("CAS proxy callback is error-tolerant. This should NOT happen in production environment! (2)");
+        OnErrorReturnTrueHttpClient onErrorReturnTrueHttpClient = new OnErrorReturnTrueHttpClient(supportsTrustStoreSslSocketFactoryHttpClient.getIfAvailable());
+        return new Cas20ProxyHandler(onErrorReturnTrueHttpClient, uniqueTicketIdGenerator);
     }
 
     private static class OnErrorReturnTrueHttpClient implements HttpClient {
@@ -59,6 +87,11 @@ public class CasProxyCallbackConfiguration {
         }
 
         @Override
+        public HttpMessage sendMessageToEndPoint(URL url) {
+            return httpClient.sendMessageToEndPoint(url);
+        }
+
+        @Override
         public boolean isValidEndPoint(String url) {
             try {
                 httpClient.isValidEndPoint(url);
@@ -76,6 +109,11 @@ public class CasProxyCallbackConfiguration {
                 LOGGER.error("HttpClient#isValidEndPoint failed, ignoring", e);
             }
             return true;
+        }
+
+        @Override
+        public org.apache.http.client.HttpClient getWrappedHttpClient() {
+            return httpClient.getWrappedHttpClient();
         }
 
     }

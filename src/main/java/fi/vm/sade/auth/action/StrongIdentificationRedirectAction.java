@@ -3,20 +3,23 @@ package fi.vm.sade.auth.action;
 import fi.vm.sade.auth.clients.KayttooikeusRestClient;
 import fi.vm.sade.auth.clients.OppijanumerorekisteriRestClient;
 import fi.vm.sade.properties.OphProperties;
+import org.apereo.cas.authentication.Credential;
+import org.springframework.stereotype.Component;
 
-import javax.validation.constraints.NotNull;
-import org.jasig.cas.authentication.Credential;
-
+@Component
 public class StrongIdentificationRedirectAction {
 
-    @NotNull
-    private KayttooikeusRestClient kayttooikeusClient;
+    private final KayttooikeusRestClient kayttooikeusClient;
+    private final OppijanumerorekisteriRestClient oppijanumerorekisteriClient;
+    private final OphProperties ophProperties;
 
-    @NotNull
-    private OppijanumerorekisteriRestClient oppijanumerorekisteriClient;
-
-    @NotNull
-    private OphProperties ophProperties;
+    public StrongIdentificationRedirectAction(KayttooikeusRestClient kayttooikeusClient,
+                                              OppijanumerorekisteriRestClient oppijanumerorekisteriClient,
+                                              OphProperties ophProperties) {
+        this.kayttooikeusClient = kayttooikeusClient;
+        this.oppijanumerorekisteriClient = oppijanumerorekisteriClient;
+        this.ophProperties = ophProperties;
+    }
 
     public String createRedirectUrl(Credential credential) throws Exception {
         String oidHenkilo = this.kayttooikeusClient.getHenkiloOid(credential.getId());
@@ -26,27 +29,4 @@ public class StrongIdentificationRedirectAction {
         return this.ophProperties.url("henkilo-ui.strong-identification", asiointiKieli, loginToken);
     }
 
-    public KayttooikeusRestClient getKayttooikeusClient() {
-        return kayttooikeusClient;
-    }
-
-    public void setKayttooikeusClient(KayttooikeusRestClient kayttooikeusClient) {
-        this.kayttooikeusClient = kayttooikeusClient;
-    }
-
-    public OppijanumerorekisteriRestClient getOppijanumerorekisteriClient() {
-        return oppijanumerorekisteriClient;
-    }
-
-    public void setOppijanumerorekisteriClient(OppijanumerorekisteriRestClient oppijanumerorekisteriClient) {
-        this.oppijanumerorekisteriClient = oppijanumerorekisteriClient;
-    }
-
-    public OphProperties getOphProperties() {
-        return ophProperties;
-    }
-
-    public void setOphProperties(OphProperties ophProperties) {
-        this.ophProperties = ophProperties;
-    }
 }

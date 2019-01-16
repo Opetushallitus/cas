@@ -7,9 +7,6 @@
         </Console>
     </Appenders>
     <Loggers>
-        <Logger name="perfStatsLogger" level="warn" additivity="false" includeLocation="true">
-            <AppenderRef ref="console"/>
-        </Logger>
         <Root level="info">
             <AppenderRef ref="console"/>
         </Root>

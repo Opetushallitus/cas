@@ -14,20 +14,9 @@
             </Policies>
             <DefaultRolloverStrategy max="5" />
         </RollingFile>
-        <RollingFile name="perfFileAppender" fileName="/root/tomcat/logs/cas-perf4j.log" append="true"
-                     filePattern="cas-perf4j-%d{yyyy-MM-dd-HH}-%i.log">
-            <PatternLayout pattern="%m%n"/>
-            <Policies>
-                <SizeBasedTriggeringPolicy size="10 MB"/>
-            </Policies>
-            <DefaultRolloverStrategy max="5" />
-        </RollingFile>
     </Appenders>
     <Loggers>
-        <AsyncLogger name="perfStatsLogger" level="info" additivity="false" includeLocation="true">
-            <AppenderRef ref="perfFileAppender"/>
-        </AsyncLogger>
-        <AsyncLogger name="org.jasig.inspektr.audit.support" level="off" includeLocation="true" />
+        <AsyncLogger name="org.apereo.inspektr.audit.support" level="off" includeLocation="true" />
         <AsyncRoot level="INFO">
             <AppenderRef ref="file"/>
         </AsyncRoot>

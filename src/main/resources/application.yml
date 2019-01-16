@@ -1,0 +1,34 @@
+# CAS configuration
+# https://apereo.github.io/cas/6.0.x/configuration/Configuration-Properties.html
+
+server.port: 8080
+server.ssl.enabled: false
+
+cas.authn.accept.users:
+
+cas.tgc.secure: false
+cas.tgc.path: /cas
+
+cas.ticket.tgt.maxTimeToLiveInSeconds: 28800
+cas.ticket.tgt.timeToKillInSeconds: 28800
+
+cas.warningCookie.secure: false
+cas.warningCookie.path: /cas
+
+cas.logout.followServiceRedirects: true
+
+# Custom configuration
+
+whitelist.regexp: ^https?://.*
+proxy.callback.ignore-errors: false
+haka.url: http://localhost:8080
+host.shibboleth: http://localhost:8080
+host.cas: localhost:8080
+host.virkailija: localhost:8080
+host.alb: localhost:8080
+serviceprovider.app.username.to.usermanagement: user1
+serviceprovider.app.password.to.usermanagement: pass1
+login.tietosuojaseloste.url: http://localhost:8080/tietosuojaseloste/
+stuck.service.ticket.retrieval.ips.to.inspect: feature_disabled
+stuck.service.ticket.retrieval.thread.dump.interval.seconds: 15
+stuck.service.ticket.retrieval.thread.dump.times: 40
