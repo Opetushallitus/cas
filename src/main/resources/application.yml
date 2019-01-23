@@ -6,6 +6,9 @@ server.ssl.enabled: false
 
 cas.authn.accept.users:
 
+cas.authn.throttle.schedule.startDelay: 0
+cas.authn.throttle.schedule.repeatInterval: 43200000
+
 cas.tgc.secure: false
 cas.tgc.path: /cas
 

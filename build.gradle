@@ -46,7 +46,9 @@ dependencies {
     compile "org.apereo.cas:cas-server-webapp${project.appServer}:${casServerVersion}"
     // Other CAS dependencies/modules may be listed here...
     compile "org.apereo.cas:cas-server-support-rest:${casServerVersion}"
+    compile "org.apereo.cas:cas-server-support-throttle-core:${casServerVersion}"
     compile "org.apereo.cas:cas-server-core-authentication-api:${casServerVersion}"
+    compile "org.apereo.cas:cas-server-core-authentication-throttle:${casServerVersion}"
     compile "org.apereo.cas:cas-server-core-webflow-api:${casServerVersion}"
     compile "org.apereo.cas:cas-server-core-web-api:${casServerVersion}"
     compile "org.apereo.cas:cas-server-core-tickets-api:${casServerVersion}"
