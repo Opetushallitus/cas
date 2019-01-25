@@ -1,0 +1,68 @@
+$theme-colors: (
+  "primary": #159ECB
+);
+$body-bg: #F6F4F0;
+$font-family-sans-serif: 'Open Sans', sans-serif;
+@import "bootstrap/scss/bootstrap";
+
+$palvelut: (
+    arvo:                   #7BBE31,
+    eperusteet:             #FECD0A,
+    koski:                  #149940,
+    oikeustulkkirekisteri:  #898989,
+    oiva:                   #7E007E,
+    opintopolku:            #3B7ADB,
+    valtionavustukset:      #211B81,
+    varda:                  #98975b
+);
+
+header {
+    background-color: #ffffff;
+    color: #adadad;
+}
+header a {
+    color: #4a4a4a;
+}
+
+.taustakuva {
+    background-image: url('/cas/img/taustakuva.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    color: #ffffff;
+}
+.taustakuva a {
+    color: #ffffff;
+}
+.taustakuva .card {
+    width: 380px;
+    background-color: #f6f4f0;
+    box-shadow: 0 0 10px #888888;
+    color: #000000;
+}
+.taustakuva .card a {
+    color: $primary;
+}
+
+ul.list-inline-bullet li+li:before {
+    content: "\25CF";
+}
+ul.list-inline-bullet li+li a {
+    margin-left: .5rem;
+}
+
+.bullet {
+    float: left;
+    vertical-align: 5%;
+    margin-right: 5px;
+    margin-top: 5px;
+    width: 10px;
+    height: 10px;
+    transform: rotate(45deg);
+    transform-origin: center;
+    border-radius: 3px;
+}
+@each $palvelu, $vari in $palvelut {
+    ##{$palvelu} .bullet {
+        background-color: $vari;
+    }
+}

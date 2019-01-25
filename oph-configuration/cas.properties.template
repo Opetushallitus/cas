@@ -28,6 +28,11 @@ cas.slo.asynchronous={{cas_slo_callbacks_asynchronous | default('false')}}
 
 cas.view.defaultRedirectUrl={{cas_view_default_redirect_url | default('https://${host.virkailija}/virkailijan-tyopoyta')}}
 
+cas.custom.properties.hakaUrl={{haka_url}}
+cas.custom.properties.suomifiUrl=https://{{host_tunnistus}}/shibbolethVirkailija/virkailija
+cas.custom.properties.suomifiUrlTarget=https://{{host_tunnistus}}/kayttooikeus-service/cas/tunnistus?kielisyys=
+cas.custom.properties.loginTietosuojaselosteUrl={{login_tietosuojaseloste_url | default("https://opintopolku.fi/wp/tietosuojaseloste/")}}
+
 # Spring Boot configuration
 # https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 
@@ -46,14 +51,11 @@ server.tomcat.accesslog.max-days=7
 
 whitelist.regexp={{cas_whitelist_regexp}}
 proxy.callback.ignore-errors={{cas_proxy_callback_ignore_errors | default('false')}}
-haka.url={{haka_url}}
-host.shibboleth={{host_tunnistus}}
 host.cas={{host_cas}}
 host.virkailija={{host_virkailija}}
 host.alb={{host_alb_virkailija}}
 serviceprovider.app.username.to.usermanagement={{serviceprovider_app_username_to_usermanagement}}
 serviceprovider.app.password.to.usermanagement={{serviceprovider_app_password_to_usermanagement}}
-login.tietosuojaseloste.url={{login_tietosuojaseloste_url | default("https://opintopolku.fi/wp/tietosuojaseloste/")}}
 stuck.service.ticket.retrieval.ips.to.inspect={{cas_stuck_service_ticket_retrieval_ips_to_inspect | default("86.50.26.23")}}
 stuck.service.ticket.retrieval.thread.dump.interval.seconds={{cas_stuck_service_ticket_retrieval_thread_dump_interval_seconds | default("15")}}
 stuck.service.ticket.retrieval.thread.dump.times={{cas_stuck_service_ticket_retrieval_thread_dump_times | default("40")}}

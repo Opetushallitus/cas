@@ -30,18 +30,22 @@ cas.warningCookie.path: /cas
 
 cas.logout.followServiceRedirects: true
 
+cas.locale.defaultValue: fi
+
+cas.custom.properties.hakaUrl: http://localhost:8080/service-provider-app/saml/login/alias/hakasp
+cas.custom.properties.suomifiUrl: http://localhost:8080/shibbolethVirkailija/virkailija
+cas.custom.properties.suomifiUrlTarget: http://localhost:8080/kayttooikeus-service/cas/tunnistus?kielisyys=
+cas.custom.properties.loginTietosuojaselosteUrl: http://localhost:8080/tietosuojaseloste/
+
 # Custom configuration
 
 whitelist.regexp: ^https?://.*
 proxy.callback.ignore-errors: false
-haka.url: http://localhost:8080
-host.shibboleth: http://localhost:8080
 host.cas: localhost:8080
 host.virkailija: localhost:8080
 host.alb: localhost:8080
 serviceprovider.app.username.to.usermanagement: user1
 serviceprovider.app.password.to.usermanagement: pass1
-login.tietosuojaseloste.url: http://localhost:8080/tietosuojaseloste/
 stuck.service.ticket.retrieval.ips.to.inspect: feature_disabled
 stuck.service.ticket.retrieval.thread.dump.interval.seconds: 15
 stuck.service.ticket.retrieval.thread.dump.times: 40
