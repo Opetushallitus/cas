@@ -35,3 +35,7 @@ login.tietosuojaseloste.url: http://localhost:8080/tietosuojaseloste/
 stuck.service.ticket.retrieval.ips.to.inspect: feature_disabled
 stuck.service.ticket.retrieval.thread.dump.interval.seconds: 15
 stuck.service.ticket.retrieval.thread.dump.times: 40
+require-strong-identification: false
+require-strong-identification.usernamelist: example11,example12
+email-verification-enabled: false
+email-verification-enabled.usernamelist: example21,example22

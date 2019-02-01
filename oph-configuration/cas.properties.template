@@ -34,3 +34,11 @@ login.tietosuojaseloste.url={{login_tietosuojaseloste_url | default("https://opi
 stuck.service.ticket.retrieval.ips.to.inspect={{cas_stuck_service_ticket_retrieval_ips_to_inspect | default("86.50.26.23")}}
 stuck.service.ticket.retrieval.thread.dump.interval.seconds={{cas_stuck_service_ticket_retrieval_thread_dump_interval_seconds | default("15")}}
 stuck.service.ticket.retrieval.thread.dump.times={{cas_stuck_service_ticket_retrieval_thread_dump_times | default("40")}}
+# To all users
+require-strong-identification={{cas__require_strong_identification | default(false)}}
+# To specified users even if cas.require-strong-identification is false
+require-strong-identification.usernamelist={{cas_require_strong_identification_usernamelist | default("") }}
+# To all users
+email-verification-enabled={{cas_email_verification_enabled | default(false)}}
+# To specified users even if cas.email-verification-enabled is false
+email-verification-enabled.usernamelist={{cas_email_verification_enabled_usernamelist | default("") }}

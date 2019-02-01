@@ -3,7 +3,6 @@ package fi.vm.sade.auth.action;
 import fi.vm.sade.auth.clients.KayttooikeusRestClient;
 import fi.vm.sade.auth.clients.OppijanumerorekisteriRestClient;
 import fi.vm.sade.properties.OphProperties;
-import org.apereo.cas.authentication.Credential;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -21,8 +20,8 @@ public class StrongIdentificationRedirectAction {
         this.ophProperties = ophProperties;
     }
 
-    public String createRedirectUrl(Credential credential) throws Exception {
-        String oidHenkilo = this.kayttooikeusClient.getHenkiloOid(credential.getId());
+    public String createRedirectUrl(String username) {
+        String oidHenkilo = this.kayttooikeusClient.getHenkiloOid(username);
         String loginToken = this.kayttooikeusClient.createLoginToken(oidHenkilo);
         String asiointiKieli = this.oppijanumerorekisteriClient.getAsiointikieli(oidHenkilo);
 

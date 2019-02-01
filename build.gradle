@@ -47,6 +47,9 @@ dependencies {
     // Other CAS dependencies/modules may be listed here...
     compile "org.apereo.cas:cas-server-support-rest:${casServerVersion}"
     compile "org.apereo.cas:cas-server-support-throttle-core:${casServerVersion}"
+    compile "org.apereo.cas:cas-server-support-interrupt-api:${casServerVersion}"
+    compile "org.apereo.cas:cas-server-support-interrupt-core:${casServerVersion}"
+    compile "org.apereo.cas:cas-server-support-interrupt-webflow:${casServerVersion}"
     compile "org.apereo.cas:cas-server-core-authentication-api:${casServerVersion}"
     compile "org.apereo.cas:cas-server-core-authentication-throttle:${casServerVersion}"
     compile "org.apereo.cas:cas-server-core-webflow-api:${casServerVersion}"

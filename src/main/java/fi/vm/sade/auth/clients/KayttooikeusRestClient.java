@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 import static fi.vm.sade.auth.clients.HttpClientUtil.CLIENT_SUBSYSTEM_CODE;
 import static fi.vm.sade.auth.clients.HttpClientUtil.noContentOrNotFoundException;
 
@@ -64,12 +66,13 @@ public class KayttooikeusRestClient {
                 .orElseThrow(() -> noContentOrNotFoundException(url));
     }
 
-    public String getRedirectCodeByUsername(String username) {
+    public Optional<String> getRedirectCodeByUsername(String username) {
         String url = this.ophProperties.url("kayttooikeus-service.cas.login.redirect.username", username);
-        return httpClient.<String>execute(OphHttpRequest.Builder.get(url).build())
+        String redirectCode = httpClient.<String>execute(OphHttpRequest.Builder.get(url).build())
                 .expectedStatus(200)
                 .mapWith(this::jsonString)
                 .orElseThrow(() -> noContentOrNotFoundException(url));
+        return Optional.ofNullable(redirectCode);
     }
 
 }
