@@ -1,6 +1,5 @@
 package fi.vm.sade.login.failure;
 
-import fi.vm.sade.auth.exception.UsernameMissingException;
 import org.apereo.cas.throttle.DefaultThrottledRequestResponseHandler;
 import org.apereo.cas.throttle.ThrottledRequestExecutor;
 import org.apereo.cas.web.support.AbstractThrottledSubmissionHandlerInterceptorAdapter;
@@ -154,7 +153,7 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
         return delay;
     }
 
-    public abstract String createKey(HttpServletRequest request) throws UsernameMissingException;
+    public abstract String createKey(HttpServletRequest request);
 
     public int getInitialLoginDelayInMinutes() {
         return initialLoginDelayInMinutes;
