@@ -10,6 +10,7 @@ import org.apereo.cas.interrupt.InterruptInquirer;
 import org.apereo.cas.interrupt.InterruptResponse;
 import org.apereo.cas.services.RegisteredService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.webflow.execution.RequestContext;
 
@@ -18,6 +19,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Component
+@ConditionalOnProperty("login.redirect.interrupt.enabled")
 public class LoginRedirectInterruptInquirer implements InterruptInquirer {
 
     private final KayttooikeusRestClient kayttooikeusRestClient;

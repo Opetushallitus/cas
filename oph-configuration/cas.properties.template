@@ -34,6 +34,7 @@ login.tietosuojaseloste.url={{login_tietosuojaseloste_url | default("https://opi
 stuck.service.ticket.retrieval.ips.to.inspect={{cas_stuck_service_ticket_retrieval_ips_to_inspect | default("86.50.26.23")}}
 stuck.service.ticket.retrieval.thread.dump.interval.seconds={{cas_stuck_service_ticket_retrieval_thread_dump_interval_seconds | default("15")}}
 stuck.service.ticket.retrieval.thread.dump.times={{cas_stuck_service_ticket_retrieval_thread_dump_times | default("40")}}
+login.redirect.interrupt.enabled={{cas_login_redirect_interrupt_enabled | default('true')}}
 # To all users
 require-strong-identification={{cas__require_strong_identification | default(false)}}
 # To specified users even if cas.require-strong-identification is false
