@@ -1,6 +1,5 @@
 package fi.vm.sade.auth.clients;
 
-import com.google.gson.Gson;
 import fi.vm.sade.javautils.http.OphHttpClient;
 import fi.vm.sade.javautils.http.OphHttpRequest;
 import fi.vm.sade.javautils.http.auth.CasAuthenticator;
@@ -13,16 +12,14 @@ public class OppijanumerorekisteriRestClient {
 
     private final OphHttpClient httpClient;
     private final OphProperties ophProperties;
-    private final Gson gson;
 
     public OppijanumerorekisteriRestClient(OphProperties ophProperties) {
-        this(newHttpClient(ophProperties), ophProperties, new Gson());
+        this(newHttpClient(ophProperties), ophProperties);
     }
 
-    public OppijanumerorekisteriRestClient(OphHttpClient httpClient, OphProperties ophProperties, Gson gson) {
+    public OppijanumerorekisteriRestClient(OphHttpClient httpClient, OphProperties ophProperties) {
         this.httpClient = httpClient;
         this.ophProperties = ophProperties;
-        this.gson = gson;
     }
 
     private static OphHttpClient newHttpClient(OphProperties properties) {
@@ -36,7 +33,10 @@ public class OppijanumerorekisteriRestClient {
     }
 
     private String jsonString(String json) {
-        return gson.fromJson(json, String.class);
+        if (json == null) {
+            return "";
+        }
+        return json.replaceAll("\"", "");
     }
 
     public String getAsiointikieli(String henkiloOid) {

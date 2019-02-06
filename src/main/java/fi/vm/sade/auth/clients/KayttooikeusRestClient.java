@@ -37,7 +37,10 @@ public class KayttooikeusRestClient {
     }
 
     private String jsonString(String json) {
-        return gson.fromJson(json, String.class);
+        if (json == null) {
+            return "";
+        }
+        return json.replaceAll("\"", "");
     }
 
     public String getHenkiloOid(String username) {
