@@ -8,6 +8,8 @@
 # CAS configuration
 # https://apereo.github.io/cas/6.0.x/configuration/Configuration-Properties.html
 
+logging.config=file:/root/oph-configuration/cas-log4j.xml
+
 cas.server.tomcat.httpProxy.enabled=true
 cas.server.tomcat.httpProxy.secure=true
 cas.server.tomcat.httpProxy.scheme=https

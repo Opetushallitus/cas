@@ -2,7 +2,7 @@
 <!-- Specify the refresh internal in seconds. -->
 <Configuration monitorInterval="60">
     <Appenders>
-        <RollingFile name="file" fileName="/root/tomcat/logs/cas-cas.log" append="true"
+        <RollingFile name="file" fileName="/root/logs/cas-cas.log" append="true"
                      filePattern="cas-%d{yyyy-MM-dd-HH}-%i.log">
             <ThresholdFilter level="{{ env_loglevel }}" />
 {# raw-endraw -välillä template engine ei tee mitään! #}
