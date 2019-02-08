@@ -4,6 +4,11 @@
 server.port: 8080
 server.ssl.enabled: false
 
+cas.httpWebRequest.header.xframe: false
+cas.httpWebRequest.header.xss: false
+cas.httpWebRequest.header.xcontent: false
+cas.httpWebRequest.header.hsts: false
+
 cas.authn.accept.users:
 
 cas.authn.throttle.schedule.startDelay: 0
