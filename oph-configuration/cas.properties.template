@@ -24,6 +24,20 @@ cas.slo.asynchronous={{cas_slo_callbacks_asynchronous | default('false')}}
 
 cas.view.defaultRedirectUrl={{cas_view_default_redirect_url | default('https://${host.virkailija}/virkailijan-tyopoyta')}}
 
+# Spring Boot configuration
+# https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+
+server.tomcat.accesslog.enabled=true
+server.tomcat.accesslog.directory=/root/logs
+server.tomcat.accesslog.prefix=localhost_access_log
+server.tomcat.accesslog.suffix=.txt
+server.tomcat.accesslog.pattern={\"timestamp\": \"%{yyyy-MM-dd'T'HH:mm:ss.SSSZ}t\", \"responseCode\": \"%s\", \"request\": \"%r\", \"responseTime\": \"%D\", \"requestMethod\": \"%m\", \"service\": \"cas\", \"environment\": \"${env.name}\", \"customer\": \"OPH\", \"user-agent\": \"%{User-Agent}i\", \"caller-id\": \"%{Caller-Id}i\", \"clientSubSystemCode\": \"%{clientSubSystemCode}i\", \"x-forwarded-for\": \"%{X-Forwarded-For}i\", \"x-real-ip\": \"%{X-Real-IP}i\", \"remote-ip\": \"%a\", \"session\": \"%{JSESSIONID}c\", \"response-size\": \"%B\", \"referer\": \"%{Referer}i\", \"opintopolku-api-key\": \"%{Opintopolku-Api-Key}i\"}
+server.tomcat.accesslog.request-attributes-enabled=true
+server.tomcat.accesslog.rotate=true
+server.tomcat.accesslog.rename-on-rotate=true
+# server.tomcat.accesslog.max-days is custom parameter
+server.tomcat.accesslog.max-days=7
+
 # Custom configuration
 
 whitelist.regexp={{cas_whitelist_regexp}}
