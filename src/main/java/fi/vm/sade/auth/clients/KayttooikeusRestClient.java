@@ -14,6 +14,7 @@ import java.util.Optional;
 
 import static fi.vm.sade.auth.clients.HttpClientUtil.CLIENT_SUBSYSTEM_CODE;
 import static fi.vm.sade.auth.clients.HttpClientUtil.noContentOrNotFoundException;
+import static java.util.function.Predicate.not;
 
 @Component
 public class KayttooikeusRestClient {
@@ -72,7 +73,7 @@ public class KayttooikeusRestClient {
                 .expectedStatus(200)
                 .mapWith(this::jsonString)
                 .orElseThrow(() -> noContentOrNotFoundException(url));
-        return Optional.ofNullable(redirectCode);
+        return Optional.ofNullable(redirectCode).map(String::trim).filter(not(String::isEmpty));
     }
 
 }
