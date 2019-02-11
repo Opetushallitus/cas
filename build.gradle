@@ -51,6 +51,7 @@ dependencies {
     compile "org.apereo.cas:cas-server-support-interrupt-core:${casServerVersion}"
     compile "org.apereo.cas:cas-server-support-interrupt-webflow:${casServerVersion}"
     compile "org.apereo.cas:cas-server-core-authentication-api:${casServerVersion}"
+    compile "org.apereo.cas:cas-server-core-authentication-attributes:${casServerVersion}"
     compile "org.apereo.cas:cas-server-core-authentication-throttle:${casServerVersion}"
     compile "org.apereo.cas:cas-server-core-webflow-api:${casServerVersion}"
     compile "org.apereo.cas:cas-server-core-web-api:${casServerVersion}"

@@ -1,9 +1,6 @@
 package fi.vm.sade.auth.config;
 
-import org.apereo.cas.services.RegexMatchingRegisteredServiceProxyPolicy;
-import org.apereo.cas.services.RegexRegisteredService;
-import org.apereo.cas.services.RegisteredService;
-import org.apereo.cas.services.RegisteredServiceProxyPolicy;
+import org.apereo.cas.services.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -21,7 +18,15 @@ public class RegisteredServiceConfiguration {
     }
 
     @Bean
-    public List<? extends RegisteredService> inMemoryRegisteredServices(RegisteredServiceProxyPolicy registeredServiceProxyPolicy, Environment environment) {
+    public RegisteredServiceAttributeReleasePolicy attributeReleasePolicy() {
+        // we don't currently use attributes (also fi.vm.sade:scala-cas fails to parse response with attributes)
+        return new DenyAllAttributeReleasePolicy();
+    }
+
+    @Bean
+    public List<? extends RegisteredService> inMemoryRegisteredServices(RegisteredServiceProxyPolicy registeredServiceProxyPolicy,
+                                                                        RegisteredServiceAttributeReleasePolicy attributeReleasePolicy,
+                                                                        Environment environment) {
         RegexRegisteredService regexRegisteredService = new RegexRegisteredService();
         regexRegisteredService.setId(1L);
         regexRegisteredService.setName("Login whitelist");
@@ -29,6 +34,7 @@ public class RegisteredServiceConfiguration {
         regexRegisteredService.setServiceId(environment.getRequiredProperty("whitelist.regexp"));
         regexRegisteredService.setEvaluationOrder(0);
         regexRegisteredService.setProxyPolicy(registeredServiceProxyPolicy);
+        regexRegisteredService.setAttributeReleasePolicy(attributeReleasePolicy);
         return singletonList(regexRegisteredService);
     }
 
