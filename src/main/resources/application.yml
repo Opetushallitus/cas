@@ -3,6 +3,11 @@
 
 server.port: 8080
 server.ssl.enabled: false
+server.useForwardHeaders: false
+
+server.tomcat.portHeader:
+server.tomcat.protocolHeader:
+server.tomcat.remoteIpHeader:
 
 cas.httpWebRequest.header.xframe: false
 cas.httpWebRequest.header.xss: false
