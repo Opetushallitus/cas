@@ -9,11 +9,15 @@ import org.apereo.cas.authentication.principal.Service;
 import org.apereo.cas.interrupt.InterruptInquirer;
 import org.apereo.cas.interrupt.InterruptResponse;
 import org.apereo.cas.services.RegisteredService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.webflow.execution.RequestContext;
 
+import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -22,30 +26,30 @@ import java.util.Optional;
 @ConditionalOnProperty("login.redirect.interrupt.enabled")
 public class LoginRedirectInterruptInquirer implements InterruptInquirer {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(LoginRedirectInterruptInquirer.class);
+
     private final KayttooikeusRestClient kayttooikeusRestClient;
     private final StrongIdentificationRedirectAction strongIdentificationRedirectAction;
     private final EmailVerificationRedirectAction emailVerificationRedirectAction;
-    private final boolean requireStrongIdentification;
-    private final List<String> requireStrongIdentificationUsernameList;
-    private final boolean emailVerificationEnabled;
-    private final List<String> emailVerificationUsernameList;
+    private boolean requireStrongIdentification;
+    private List<String> requireStrongIdentificationUsernameList = new ArrayList<>();
+    private boolean emailVerificationEnabled;
+    private List<String> emailVerificationUsernameList = new ArrayList<>();
 
     public LoginRedirectInterruptInquirer(KayttooikeusRestClient kayttooikeusRestClient,
                                           StrongIdentificationRedirectAction strongIdentificationRedirectAction,
-                                          EmailVerificationRedirectAction emailVerificationRedirectAction,
-                                          @Value("${require-strong-identification}") boolean requireStrongIdentification,
-                                          @Value("#{'${require-strong-identification.usernamelist}'.split(',')}")
-                                                  List<String> requireStrongIdentificationUsernameList,
-                                          @Value("${email-verification-enabled}") boolean emailVerificationEnabled,
-                                          @Value("#{'${email-verification-enabled.usernamelist}'.split(',')}")
-                                                  List<String> emailVerificationUsernameList) {
+                                          EmailVerificationRedirectAction emailVerificationRedirectAction) {
         this.kayttooikeusRestClient = kayttooikeusRestClient;
         this.strongIdentificationRedirectAction = strongIdentificationRedirectAction;
         this.emailVerificationRedirectAction = emailVerificationRedirectAction;
-        this.requireStrongIdentification = requireStrongIdentification;
-        this.requireStrongIdentificationUsernameList = requireStrongIdentificationUsernameList;
-        this.emailVerificationEnabled = emailVerificationEnabled;
-        this.emailVerificationUsernameList = emailVerificationUsernameList;
+    }
+
+    @PostConstruct
+    public void log() {
+        LOGGER.info("Using configuration: requireStrongIdentification={}, requireStrongIdentificationUsernameList={} (size)," +
+                        " emailVerificationEnabled={}, emailVerificationUsernameList={} (size)",
+                requireStrongIdentification, requireStrongIdentificationUsernameList.size(),
+                emailVerificationEnabled, emailVerificationUsernameList.size());
     }
 
     @Override
@@ -85,6 +89,42 @@ public class LoginRedirectInterruptInquirer implements InterruptInquirer {
         interruptResponse.setBlock(true);
         interruptResponse.setAutoRedirect(true);
         return interruptResponse;
+    }
+
+    public boolean isRequireStrongIdentification() {
+        return requireStrongIdentification;
+    }
+
+    @Value("${require-strong-identification}")
+    public void setRequireStrongIdentification(boolean requireStrongIdentification) {
+        this.requireStrongIdentification = requireStrongIdentification;
+    }
+
+    public List<String> getRequireStrongIdentificationUsernameList() {
+        return requireStrongIdentificationUsernameList;
+    }
+
+    @Value("#{'${require-strong-identification.usernamelist}'.split(',')}")
+    public void setRequireStrongIdentificationUsernameList(List<String> requireStrongIdentificationUsernameList) {
+        this.requireStrongIdentificationUsernameList = requireStrongIdentificationUsernameList;
+    }
+
+    public boolean isEmailVerificationEnabled() {
+        return emailVerificationEnabled;
+    }
+
+    @Value("${email-verification-enabled}")
+    public void setEmailVerificationEnabled(boolean emailVerificationEnabled) {
+        this.emailVerificationEnabled = emailVerificationEnabled;
+    }
+
+    public List<String> getEmailVerificationUsernameList() {
+        return emailVerificationUsernameList;
+    }
+
+    @Value("#{'${email-verification-enabled.usernamelist}'.split(',')}")
+    public void setEmailVerificationUsernameList(List<String> emailVerificationUsernameList) {
+        this.emailVerificationUsernameList = emailVerificationUsernameList;
     }
 
 }
