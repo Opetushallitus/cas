@@ -22,6 +22,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static java.util.function.Predicate.not;
+import static java.util.stream.Collectors.toList;
+
 @Component
 @ConditionalOnProperty("login.redirect.interrupt.enabled")
 public class LoginRedirectInterruptInquirer implements InterruptInquirer {
@@ -106,7 +109,9 @@ public class LoginRedirectInterruptInquirer implements InterruptInquirer {
 
     @Value("#{'${require-strong-identification.usernamelist}'.split(',')}")
     public void setRequireStrongIdentificationUsernameList(List<String> requireStrongIdentificationUsernameList) {
-        this.requireStrongIdentificationUsernameList = requireStrongIdentificationUsernameList;
+        this.requireStrongIdentificationUsernameList = requireStrongIdentificationUsernameList.stream()
+                .filter(not(String::isEmpty))
+                .collect(toList());
     }
 
     public boolean isEmailVerificationEnabled() {
@@ -124,7 +129,9 @@ public class LoginRedirectInterruptInquirer implements InterruptInquirer {
 
     @Value("#{'${email-verification-enabled.usernamelist}'.split(',')}")
     public void setEmailVerificationUsernameList(List<String> emailVerificationUsernameList) {
-        this.emailVerificationUsernameList = emailVerificationUsernameList;
+        this.emailVerificationUsernameList = emailVerificationUsernameList.stream()
+                .filter(not(String::isEmpty))
+                .collect(toList());
     }
 
 }
