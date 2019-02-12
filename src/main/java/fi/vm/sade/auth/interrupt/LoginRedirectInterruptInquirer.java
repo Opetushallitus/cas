@@ -71,6 +71,7 @@ public class LoginRedirectInterruptInquirer implements InterruptInquirer {
                 if (emailVerificationEnabled || emailVerificationUsernameList.contains(username)) {
                     return Optional.of(emailVerificationRedirectAction.createRedirectUrl(username));
                 }
+                break;
             default:
                 throw new IllegalArgumentException("Unknown redirectCode: " + redirectCode);
         }
