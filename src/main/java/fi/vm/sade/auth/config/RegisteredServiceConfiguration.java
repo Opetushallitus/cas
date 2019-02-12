@@ -20,7 +20,9 @@ public class RegisteredServiceConfiguration {
     @Bean
     public RegisteredServiceAttributeReleasePolicy attributeReleasePolicy() {
         // we don't currently use attributes (also fi.vm.sade:scala-cas fails to parse response with attributes)
-        return new DenyAllAttributeReleasePolicy();
+        ReturnAllowedAttributeReleasePolicy attributeReleasePolicy = new ReturnAllowedAttributeReleasePolicy();
+        attributeReleasePolicy.setAuthorizedToReleaseAuthenticationAttributes(false);
+        return attributeReleasePolicy;
     }
 
     @Bean
