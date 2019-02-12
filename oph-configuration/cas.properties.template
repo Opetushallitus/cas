@@ -15,6 +15,10 @@ cas.server.tomcat.httpProxy.secure=true
 cas.server.tomcat.httpProxy.scheme=https
 cas.server.tomcat.httpProxy.protocol=HTTP/1.1
 
+cas.tgc.secure=true
+
+cas.warningCookie.secure=true
+
 cas.tgc.crypto.encryption.key={{cas_tgc_encryption_key}}
 cas.tgc.crypto.signing.key={{cas_tgc_signing_key}}
 cas.webflow.crypto.encryption.key={{cas_webflow_encryption_key}}
