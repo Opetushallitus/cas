@@ -20,7 +20,7 @@
 
 </head>
 
-<body>
+<body th:attr="data-language=${#locale.getLanguage().toLowerCase()}">
 <header th:replace="fragments/header :: header">
     <a href="fragments/header.html">Header</a> fragment will go here
 </header>
@@ -34,5 +34,6 @@
 </footer>
 
 <script th:replace="fragments/scripts"/>
+<script th:replace="fragments/customscripts"/>
 </body>
 </html>
