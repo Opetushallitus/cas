@@ -1,9 +1,6 @@
 package fi.vm.sade.auth.config;
 
 import org.apereo.cas.configuration.CasConfigurationProperties;
-import org.apereo.cas.interrupt.DefaultInterruptInquiryExecutionPlan;
-import org.apereo.cas.interrupt.InterruptInquirer;
-import org.apereo.cas.interrupt.InterruptInquiryExecutionPlan;
 import org.apereo.cas.interrupt.webflow.InterruptWebflowConfigurer;
 import org.apereo.cas.web.flow.CasWebflowConfigurer;
 import org.apereo.cas.web.flow.CasWebflowConstants;
@@ -18,11 +15,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.webflow.definition.registry.FlowDefinitionRegistry;
 import org.springframework.webflow.engine.ActionList;
 import org.springframework.webflow.engine.ActionState;
-import org.springframework.webflow.engine.TransitionSet;
 import org.springframework.webflow.engine.builder.support.FlowBuilderServices;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.StreamSupport;
 
@@ -60,17 +54,6 @@ public class InterruptConfiguration implements CasWebflowExecutionPlanConfigurer
         plan.registerWebflowConfigurer(new AbstractCasWebflowConfigurer(flowBuilderServices, loginFlowDefinitionRegistry, applicationContext, casProperties) {
             @Override
             protected void doInitialize() {
-                // fix missing skipped transition from inquireInterruptAction
-                ActionState inquireInterruptAction = getState(getLoginFlow(), "inquireInterruptAction", ActionState.class);
-                TransitionSet transitions = inquireInterruptAction.getTransitionSet();
-                clear(transitions, transitions::remove);
-                transitions.add(createTransition(CasWebflowConstants.TRANSITION_ID_INTERRUPT_SKIPPED, CasWebflowConstants.STATE_ID_CREATE_TICKET_GRANTING_TICKET));
-                transitions.add(createTransition(CasWebflowConstants.TRANSITION_ID_INTERRUPT_REQUIRED, "interruptView"));
-            }
-        });
-        plan.registerWebflowConfigurer(new AbstractCasWebflowConfigurer(flowBuilderServices, loginFlowDefinitionRegistry, applicationContext, casProperties) {
-            @Override
-            protected void doInitialize() {
                 // fix interrupt inquirers called twice after successful login
                 ActionState state = getState(getLoginFlow(), CasWebflowConstants.STATE_ID_CREATE_TICKET_GRANTING_TICKET, ActionState.class);
                 ActionList actions = state.getActionList();
@@ -94,14 +77,6 @@ public class InterruptConfiguration implements CasWebflowExecutionPlanConfigurer
                 // nop
             }
         };
-    }
-
-    // fix to remove default interruption defined inside cas
-    @Bean
-    public InterruptInquiryExecutionPlan interruptInquirer(Optional<List<InterruptInquirer>> interruptInquirers) {
-        DefaultInterruptInquiryExecutionPlan plan = new DefaultInterruptInquiryExecutionPlan();
-        new InterruptInquiryExecutionPlanConfiguration(interruptInquirers).configureInterruptInquiryExecutionPlan(plan);
-        return plan;
     }
 
 }
