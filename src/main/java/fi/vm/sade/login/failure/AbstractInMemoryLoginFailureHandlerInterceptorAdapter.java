@@ -13,6 +13,7 @@ import javax.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter extends AbstractThrottledSubmissionHandlerInterceptorAdapter implements InitializingBean {
@@ -67,8 +68,10 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
     }
 
     public int getMinutesToAllowLogin(HttpServletRequest request) {
-        final String key = createKey(request);
+        return createKey(request).map(this::getMinutesToAllowLogin).orElse(0);
+    }
 
+    private int getMinutesToAllowLogin(String key) {
         int numberOfFailedLogins = failedLogins.size(key);
 
         if(getDelayLoginAfterFailedLoginsCount() > numberOfFailedLogins) {
@@ -86,7 +89,10 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
     }
 
     public void notifySuccessfullLogin(HttpServletRequest request) {
-        final String key = createKey(request);
+        createKey(request).ifPresent(this::notifySuccessfullLogin);
+    }
+
+    private void notifySuccessfullLogin(String key) {
         LOGGER.debug("Succesfull login for {}.", key);
         boolean cleaned = failedLogins.remove(key);
         if(cleaned) {
@@ -95,7 +101,10 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
     }
 
     public void notifyFailedLoginAttempt(HttpServletRequest request) {
-        final String key = createKey(request);
+        createKey(request).ifPresent(this::notifyFailedLoginAttempt);
+    }
+
+    private void notifyFailedLoginAttempt(String key) {
         failedLogins.add(key, System.currentTimeMillis());
 
         if(LOGGER.isDebugEnabled()) {
@@ -153,7 +162,7 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
         return delay;
     }
 
-    public abstract String createKey(HttpServletRequest request);
+    public abstract Optional<String> createKey(HttpServletRequest request);
 
     public int getInitialLoginDelayInMinutes() {
         return initialLoginDelayInMinutes;
