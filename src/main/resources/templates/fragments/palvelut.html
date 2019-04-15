@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+    <title>Login Form Fragment</title>
+    <link href="../../static/css/cas.css" rel="stylesheet" th:remove="tag"/>
+</head>
+<body>
+<main role="main" class="container">
+    <div class="row">
+        <div class="col-md">
+            <ul th:fragment="linkit" class="list-inline w-100 list-inline-bullet">
+                <li class="list-inline-item">
+                    <a href="#arvo" th:text="#{palvelut.arvo.lyhytNimi}">Arvo</a>
+                </li>
+                <li class="list-inline-item">
+                    <a href="#eperusteet" th:text="#{palvelut.eperusteet.lyhytNimi}">ePerusteet</a>
+                </li>
+                <li class="list-inline-item">
+                    <a href="#koski" th:text="#{palvelut.koski.lyhytNimi}">Koski</a>
+                </li>
+                <li class="list-inline-item">
+                    <a href="#oikeustulkkirekisteri" th:text="#{palvelut.oikeustulkkirekisteri.lyhytNimi}">Oikeustulkkirekisteri</a>
+                </li>
+                <li class="list-inline-item">
+                    <a href="#oiva" th:text="#{palvelut.oiva.lyhytNimi}">Oiva</a>
+                </li>
+                <li class="list-inline-item">
+                    <a href="#opintopolku" th:text="#{palvelut.opintopolku.lyhytNimi}">Opintopolku</a>
+                </li>
+                <li class="list-inline-item">
+                    <a href="#valtionavustukset" th:text="#{palvelut.valtionavustukset.lyhytNimi}">Valtionavustukset</a>
+                </li>
+                <li class="list-inline-item">
+                    <a href="#varda" th:text="#{palvelut.varda.lyhytNimi}">Varda</a>
+                </li>
+            </ul>
+            <div th:fragment="tiedot" class="container">
+                <h3 class="mt-4" th:text="#{services.title}">Lisätietoja palveluista</h3>
+                <div class="row">
+                    <div class="col-md-6" id="arvo">
+                        <h5 th:inline="text"><span class="bullet"></span>[[#{palvelut.arvo.nimi}]]</h5>
+                        <p th:text="#{palvelut.arvo.kuvaus}">kuvaus</p>
+                    </div>
+                    <div class="col-md-6" id="eperusteet">
+                        <h5 th:inline="text"><span class="bullet"></span>[[#{palvelut.eperusteet.nimi}]]</h5>
+                        <p th:text="#{palvelut.eperusteet.kuvaus}">kuvaus</p>
+                    </div>
+                    <div class="col-md-6" id="koski">
+                        <h5 th:inline="text"><span class="bullet"></span>[[#{palvelut.koski.nimi}]]</h5>
+                        <p th:text="#{palvelut.koski.kuvaus}">kuvaus</p>
+                    </div>
+                    <div class="col-md-6" id="oikeustulkkirekisteri">
+                        <h5 th:inline="text"><span class="bullet"></span>[[#{palvelut.oikeustulkkirekisteri.nimi}]]</h5>
+                        <p th:text="#{palvelut.oikeustulkkirekisteri.kuvaus}">kuvaus</p>
+                    </div>
+                    <div class="col-md-6" id="oiva">
+                        <h5 th:inline="text"><span class="bullet"></span>[[#{palvelut.oiva.nimi}]]</h5>
+                        <p th:text="#{palvelut.oiva.kuvaus}">kuvaus</p>
+                    </div>
+                    <div class="col-md-6" id="opintopolku">
+                        <h5 th:inline="text"><span class="bullet"></span>[[#{palvelut.opintopolku.nimi}]]</h5>
+                        <p th:text="#{palvelut.opintopolku.kuvaus}">kuvaus</p>
+                    </div>
+                    <div class="col-md-6" id="valtionavustukset">
+                        <h5 th:inline="text"><span class="bullet"></span>[[#{palvelut.valtionavustukset.nimi}]]</h5>
+                        <p th:text="#{palvelut.valtionavustukset.kuvaus}">kuvaus</p>
+                    </div>
+                    <div class="col-md-6" id="varda">
+                        <h5 th:inline="text"><span class="bullet"></span>[[#{palvelut.varda.nimi}]]</h5>
+                        <p th:text="#{palvelut.varda.kuvaus}">kuvaus</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

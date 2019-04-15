@@ -3,48 +3,28 @@ package fi.vm.sade.auth.action;
 import fi.vm.sade.auth.clients.KayttooikeusRestClient;
 import fi.vm.sade.auth.clients.OppijanumerorekisteriRestClient;
 import fi.vm.sade.properties.OphProperties;
-import org.jasig.cas.authentication.Credential;
+import org.springframework.stereotype.Component;
 
-import javax.validation.constraints.NotNull;
-
-
+@Component
 public class EmailVerificationRedirectAction {
 
-    @NotNull
-    private KayttooikeusRestClient kayttooikeusRestClient;
+    private final KayttooikeusRestClient kayttooikeusRestClient;
+    private final OppijanumerorekisteriRestClient oppijanumerorekisteriRestClient;
+    private final OphProperties ophProperties;
 
-    @NotNull
-    private OppijanumerorekisteriRestClient oppijanumerorekisteriRestClient;
+    public EmailVerificationRedirectAction(KayttooikeusRestClient kayttooikeusRestClient,
+                                           OppijanumerorekisteriRestClient oppijanumerorekisteriRestClient,
+                                           OphProperties ophProperties) {
+        this.kayttooikeusRestClient = kayttooikeusRestClient;
+        this.oppijanumerorekisteriRestClient = oppijanumerorekisteriRestClient;
+        this.ophProperties = ophProperties;
+    }
 
-    @NotNull
-    private OphProperties ophProperties;
-
-    public String createRedirectUrl(Credential credential) throws Exception {
-        String oidHenkilo = this.kayttooikeusRestClient.getHenkiloOid(credential.getId());
+    public String createRedirectUrl(String username) {
+        String oidHenkilo = this.kayttooikeusRestClient.getHenkiloOid(username);
         String loginToken = this.kayttooikeusRestClient.createLoginToken(oidHenkilo);
         String asiointiKieli = this.oppijanumerorekisteriRestClient.getAsiointikieli(oidHenkilo);
         return this.ophProperties.url("henkilo-ui.email-verification", asiointiKieli, loginToken);
     }
 
-    public KayttooikeusRestClient getKayttooikeusClient() {
-        return kayttooikeusRestClient;
-    }
-
-    public void setKayttooikeusClient(KayttooikeusRestClient kayttooikeusClient) {
-        this.kayttooikeusRestClient = kayttooikeusClient;
-    }
-
-    public OphProperties getOphProperties() { return ophProperties; }
-
-    public void setOphProperties(OphProperties ophProperties) {
-        this.ophProperties = ophProperties;
-    }
-
-    public OppijanumerorekisteriRestClient getOppijanumerorekisteriClient() {
-        return oppijanumerorekisteriRestClient;
-    }
-
-    public void setOppijanumerorekisteriClient(OppijanumerorekisteriRestClient oppijanumerorekisteriClient) {
-        this.oppijanumerorekisteriRestClient = oppijanumerorekisteriClient;
-    }
 }

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+    <title layout:title-pattern="$LAYOUT_TITLE" th:text="#{app.documentTitle}">CAS &#8211; Central Authentication Service</title>
+
+    <link rel="stylesheet" th:href="@{#{webjars.fontawesomemin.css}}"/>
+
+    <!--/* Core CAS CSS */-->
+    <link rel="stylesheet" href="../static/css/cas.css" th:href="@{${#themes.code('cas.standard.css.file')}}"/>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700">
+
+    <link rel="icon" th:href="@{/favicon.ico}" type="image/x-icon"/>
+
+    <script type="text/javascript" th:src="@{#{webjars.jquerymin.js}}"></script>
+
+</head>
+
+<body th:attr="data-language=${#locale.getLanguage().toLowerCase()}">
+<header th:replace="fragments/header :: header">
+    <a href="fragments/header.html">Header</a> fragment will go here
+</header>
+
+<main layout:fragment="content" role="main" th:attr="class=${containerClass}?: 'container mt-3 mb-3'">
+    CAS content will go here
+</main>
+
+<footer th:replace="fragments/footer :: footer">
+    <a href="fragments/footer.html">Footer</a> fragment will go here
+</footer>
+
+<script th:replace="fragments/scripts"/>
+<script th:replace="fragments/customscripts"/>
+</body>
+</html>

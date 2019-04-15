@@ -1,0 +1,56 @@
+# CAS configuration
+# https://apereo.github.io/cas/6.0.x/configuration/Configuration-Properties.html
+
+server.port: 8080
+server.ssl.enabled: false
+server.useForwardHeaders: false
+
+server.tomcat.portHeader:
+server.tomcat.protocolHeader:
+server.tomcat.remoteIpHeader:
+
+cas.httpWebRequest.header.xframe: false
+cas.httpWebRequest.header.xss: false
+cas.httpWebRequest.header.xcontent: false
+cas.httpWebRequest.header.hsts: false
+
+cas.authn.accept.users:
+
+cas.authn.throttle.schedule.startDelay: 0
+cas.authn.throttle.schedule.repeatInterval: 43200000
+
+cas.tgc.secure: false
+cas.tgc.path: /cas
+
+cas.ticket.tgt.maxTimeToLiveInSeconds: 28800
+cas.ticket.tgt.timeToKillInSeconds: 28800
+
+cas.warningCookie.secure: false
+cas.warningCookie.path: /cas
+
+cas.logout.followServiceRedirects: true
+
+cas.locale.defaultValue: fi
+
+cas.custom.properties.hakaUrl: http://localhost:8080/service-provider-app/saml/login/alias/hakasp
+cas.custom.properties.suomifiUrl: http://localhost:8080/shibbolethVirkailija/virkailija
+cas.custom.properties.suomifiUrlTarget: http://localhost:8080/kayttooikeus-service/cas/tunnistus?kielisyys=
+cas.custom.properties.loginTietosuojaselosteUrl: http://localhost:8080/tietosuojaseloste/
+
+# Custom configuration
+
+whitelist.regexp: ^https?://.*
+proxy.callback.ignore-errors: false
+host.cas: localhost:8080
+host.virkailija: localhost:8080
+host.alb: localhost:8080
+serviceprovider.app.username.to.usermanagement: user1
+serviceprovider.app.password.to.usermanagement: pass1
+stuck.service.ticket.retrieval.ips.to.inspect: feature_disabled
+stuck.service.ticket.retrieval.thread.dump.interval.seconds: 15
+stuck.service.ticket.retrieval.thread.dump.times: 40
+login.redirect.interrupt.enabled: false
+require-strong-identification: false
+require-strong-identification.usernamelist: example11,example12
+email-verification-enabled: false
+email-verification-enabled.usernamelist: example21,example22

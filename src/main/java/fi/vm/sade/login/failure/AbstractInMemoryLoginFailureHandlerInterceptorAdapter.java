@@ -1,20 +1,22 @@
 package fi.vm.sade.login.failure;
 
-import fi.vm.sade.auth.exception.UsernameMissingException;
+import org.apereo.cas.throttle.DefaultThrottledRequestResponseHandler;
+import org.apereo.cas.throttle.ThrottledRequestExecutor;
+import org.apereo.cas.web.support.AbstractThrottledSubmissionHandlerInterceptorAdapter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
-
-public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter extends AbstractLoginFailureHandlerInterceptorAdapter implements InitializingBean {
+public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter extends AbstractThrottledSubmissionHandlerInterceptorAdapter implements InitializingBean {
 
     private SynchronizedFailedLogins failedLogins = new SynchronizedFailedLogins();
 
@@ -34,8 +36,16 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
     @Min(1)
     private int delayLoginAfterFailedLoginsCount = DEFAULT_DELAY_LOGIN_AFTER_FAILED_LOGINS_COUNT;
 
+    public AbstractInMemoryLoginFailureHandlerInterceptorAdapter() {
+        this("username");
+    }
+
+    private AbstractInMemoryLoginFailureHandlerInterceptorAdapter(String usernameParameter) {
+        super(-1, -1, usernameParameter, null, null, null, new DefaultThrottledRequestResponseHandler(usernameParameter), ThrottledRequestExecutor.noOp());
+    }
+
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         LOGGER.info("Setting initial login delay in minutes to {}", getInitialLoginDelayInMinutes());
         LOGGER.info("Setting clean login failures older than in minutes to {}", getCleanLoginFailuresOlderThanInMinutes());
         LOGGER.info("Setting deny login after failed logins count to {}", getDenyLoginAfterFailedLoginsCount());
@@ -43,9 +53,25 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
     }
 
     @Override
-    public int getMinutesToAllowLogin(HttpServletRequest request) {
-        final String key = createKey(request);
+    public void recordSubmissionFailure(HttpServletRequest request) {
+        notifyFailedLoginAttempt(request);
+    }
 
+    @Override
+    public boolean exceedsThreshold(HttpServletRequest request) {
+        return getMinutesToAllowLogin(request) != 0;
+    }
+
+    @Override
+    public void decrement() {
+        clean();
+    }
+
+    public int getMinutesToAllowLogin(HttpServletRequest request) {
+        return createKey(request).map(this::getMinutesToAllowLogin).orElse(0);
+    }
+
+    private int getMinutesToAllowLogin(String key) {
         int numberOfFailedLogins = failedLogins.size(key);
 
         if(getDelayLoginAfterFailedLoginsCount() > numberOfFailedLogins) {
@@ -62,9 +88,11 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
         return 0 < currentLoginDelay ? currentLoginDelay : 0;
     }
 
-    @Override
     public void notifySuccessfullLogin(HttpServletRequest request) {
-        final String key = createKey(request);
+        createKey(request).ifPresent(this::notifySuccessfullLogin);
+    }
+
+    private void notifySuccessfullLogin(String key) {
         LOGGER.debug("Succesfull login for {}.", key);
         boolean cleaned = failedLogins.remove(key);
         if(cleaned) {
@@ -72,9 +100,11 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
         }
     }
 
-    @Override
     public void notifyFailedLoginAttempt(HttpServletRequest request) {
-        final String key = createKey(request);
+        createKey(request).ifPresent(this::notifyFailedLoginAttempt);
+    }
+
+    private void notifyFailedLoginAttempt(String key) {
         failedLogins.add(key, System.currentTimeMillis());
 
         if(LOGGER.isDebugEnabled()) {
@@ -132,7 +162,7 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
         return delay;
     }
 
-    public abstract String createKey(HttpServletRequest request) throws UsernameMissingException;
+    public abstract Optional<String> createKey(HttpServletRequest request);
 
     public int getInitialLoginDelayInMinutes() {
         return initialLoginDelayInMinutes;

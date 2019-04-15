@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+    <title>Login Form Fragment</title>
+    <link href="../../static/css/cas.css" rel="stylesheet" th:remove="tag"/>
+</head>
+<body>
+<main role="main" class="container">
+    <div class="row">
+        <div class="col-md">
+            <div th:fragment="suomifi" class="card mx-auto mb-2">
+                <div class="card-body">
+                    <p class="card-text" th:utext="#{suomifiLogin.description}" />
+                    <p class="card-text">
+                        <a th:href="${cas.custom.properties['suomifiUrl']} + ${#locale.getLanguage().toUpperCase()} + '?target=' + ${cas.custom.properties['suomifiUrlTarget']} + ${#locale.getLanguage().toLowerCase()}">
+                            <img src="/cas/img/suomi.fi-logo.png"
+                                 style="maxWidth: 100%; maxHeight: 100%; height: 54px; width: auto;" />
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

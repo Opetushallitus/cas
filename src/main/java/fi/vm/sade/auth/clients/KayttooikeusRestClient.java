@@ -6,18 +6,26 @@ import fi.vm.sade.javautils.http.OphHttpClient;
 import fi.vm.sade.javautils.http.OphHttpRequest;
 import fi.vm.sade.javautils.http.auth.CasAuthenticator;
 import fi.vm.sade.properties.OphProperties;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 import static fi.vm.sade.auth.clients.HttpClientUtil.CLIENT_SUBSYSTEM_CODE;
 import static fi.vm.sade.auth.clients.HttpClientUtil.noContentOrNotFoundException;
+import static java.util.function.Predicate.not;
 
+@Component
 public class KayttooikeusRestClient {
 
     private final OphHttpClient httpClient;
     private final OphProperties ophProperties;
     private final Gson gson;
 
-    public KayttooikeusRestClient(OphProperties ophProperties) {
-        this(newHttpClient(ophProperties), ophProperties, new Gson());
+    @Autowired
+    public KayttooikeusRestClient(OphProperties ophProperties, Environment environment) {
+        this(newHttpClient(ophProperties, environment), ophProperties, new Gson());
     }
 
     public KayttooikeusRestClient(OphHttpClient httpClient, OphProperties ophProperties, Gson gson) {
@@ -26,10 +34,10 @@ public class KayttooikeusRestClient {
         this.gson = gson;
     }
 
-    private static OphHttpClient newHttpClient(OphProperties properties) {
+    private static OphHttpClient newHttpClient(OphProperties properties, Environment environment) {
         CasAuthenticator authenticator = new CasAuthenticator.Builder()
-                .username(properties.require("serviceprovider.app.username.to.usermanagement"))
-                .password(properties.require("serviceprovider.app.password.to.usermanagement"))
+                .username(environment.getRequiredProperty("serviceprovider.app.username.to.usermanagement"))
+                .password(environment.getRequiredProperty("serviceprovider.app.password.to.usermanagement"))
                 .webCasUrl(properties.url("cas.base"))
                 .casServiceUrl(properties.url("kayttooikeus-service.security_check"))
                 .build();
@@ -59,12 +67,13 @@ public class KayttooikeusRestClient {
                 .orElseThrow(() -> noContentOrNotFoundException(url));
     }
 
-    public String getRedirectCodeByUsername(String username) {
+    public Optional<String> getRedirectCodeByUsername(String username) {
         String url = this.ophProperties.url("kayttooikeus-service.cas.login.redirect.username", username);
-        return httpClient.<String>execute(OphHttpRequest.Builder.get(url).build())
+        String redirectCode = httpClient.<String>execute(OphHttpRequest.Builder.get(url).build())
                 .expectedStatus(200)
                 .mapWith(this::jsonString)
                 .orElseThrow(() -> noContentOrNotFoundException(url));
+        return Optional.ofNullable(redirectCode).map(String::trim).filter(not(String::isEmpty));
     }
 
 }

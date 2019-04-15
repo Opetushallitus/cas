@@ -2,15 +2,14 @@ package fi.vm.sade.auth.cas;
 
 import com.google.gson.Gson;
 import fi.vm.sade.javautils.httpclient.OphHttpClient;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.jasig.cas.authentication.HandlerResult;
-import org.jasig.cas.authentication.PreventedException;
-import org.jasig.cas.authentication.UsernamePasswordCredential;
-import org.jasig.cas.authentication.handler.support.AbstractUsernamePasswordAuthenticationHandler;
-import org.jasig.cas.authentication.principal.Principal;
+import org.apereo.cas.authentication.AuthenticationHandlerExecutionResult;
+import org.apereo.cas.authentication.PreventedException;
+import org.apereo.cas.authentication.credential.UsernamePasswordCredential;
+import org.apereo.cas.authentication.handler.support.AbstractUsernamePasswordAuthenticationHandler;
+import org.apereo.cas.authentication.principal.DefaultPrincipalFactory;
+import org.apereo.cas.authentication.principal.Principal;
+import org.apereo.cas.authentication.principal.PrincipalFactory;
+import org.apereo.cas.services.ServicesManager;
 
 import javax.security.auth.login.FailedLoginException;
 import java.security.GeneralSecurityException;
@@ -22,17 +21,18 @@ public class HttpAuthenticationHandler extends AbstractUsernamePasswordAuthentic
     private final OphHttpClient httpClient;
     private final Gson gson;
 
-    public HttpAuthenticationHandler(OphHttpClient httpClient) {
-        this(httpClient, new Gson());
+    public HttpAuthenticationHandler(ServicesManager servicesManager, Integer order, OphHttpClient httpClient) {
+        this(servicesManager, new DefaultPrincipalFactory(), order, httpClient, new Gson());
     }
 
-    public HttpAuthenticationHandler(OphHttpClient httpClient, Gson gson) {
+    public HttpAuthenticationHandler(ServicesManager servicesManager, PrincipalFactory principalFactory, Integer order, OphHttpClient httpClient, Gson gson) {
+        super("HttpAuthenticationHandler", servicesManager, principalFactory, order);
         this.httpClient = httpClient;
         this.gson = gson;
     }
 
     @Override
-    protected HandlerResult authenticateUsernamePasswordInternal(UsernamePasswordCredential credential) throws GeneralSecurityException, PreventedException {
+    protected AuthenticationHandlerExecutionResult authenticateUsernamePasswordInternal(UsernamePasswordCredential credential, String originalPassword) throws GeneralSecurityException, PreventedException {
         String username;
         try {
             username = validateUsernamePassword(credential.getUsername(), credential.getPassword());
@@ -60,13 +60,33 @@ public class HttpAuthenticationHandler extends AbstractUsernamePasswordAuthentic
                 });
     }
 
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    @AllArgsConstructor
     private static class LoginDto {
         private String username;
         private String password;
+
+        public LoginDto() {
+        }
+
+        public LoginDto(String username, String password) {
+            this.username = username;
+            this.password = password;
+        }
+
+        public String getUsername() {
+            return username;
+        }
+
+        public void setUsername(String username) {
+            this.username = username;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
+        }
     }
 
 }
