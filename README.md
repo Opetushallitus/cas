@@ -1,76 +1,41 @@
-CAS Overlay Template
-=======================
+# CAS-virkailija
 
-Generic CAS WAR overlay to exercise the latest versions of CAS. This overlay could be freely used as a starting template for local CAS war overlays.
+This project is based on [cas-overlay-template (branch 6.0)](https://github.com/apereo/cas-overlay-template/tree/6.0).
 
-# Versions
+## Requirements
 
-- CAS `6.0.x`
-- JDK `11`
+Java 11
 
-# Overview
+Project includes gradle wrapper so it doesn't have to be installed. Just use `./gradlew` (unix) and `gradlew.bat` (win).
 
-You may invoke build commands using the `build.sh` script to work with your chosen overlay using:
+## Build
 
-```bash
-./build.sh [command]
-```
+    gradle build
 
-To see what commands are available to the build script, run:
+## Run
 
-```bash
-./build.sh help
-```
+    java -jar build/libs/cas.war
 
-# Configuration
+## Configuration
 
-- The `etc` directory contains the configuration files and directories that need to be copied to `/etc/cas/config`.
-- The specifics of the build are controlled using the `gradle.properties` file.
+Default configuration is in [application.yml](src/main/resources/application.yml).
+To extend or override default configuration add system variables to run command:
 
-## Adding Modules
+    -Dserver.port=8081
 
-CAS modules may be specified under the `dependencies` block of the [Gradle build script](build.gradle):
+or create yml file
 
-```gradle
-dependencies {
-    compile "org.apereo.cas:cas-server-some-module:${project.casVersion}"
-    ...
-}
-```
+    server.port: 8081
 
-Study material:
+... and add following to run command:
 
-- https://docs.gradle.org/current/userguide/artifact_dependencies_tutorial.html
-- https://docs.gradle.org/current/userguide/dependency_management.html
+    -Dcas.standalone.configurationFile=<path_to_file>
 
-## Clear Gradle Cache
+To utilize other OPH services from test environment, add following to run command:
 
-If you need to, on Linux/Unix systems, you can delete all the existing artifacts (artifacts and metadata) Gradle has downloaded using:
+    -DbaseUrl=https://<domain_to_test_environment>
+    -Dserviceprovider.app.username.to.usermanagement=<username_to_test_environment>
+    -Dserviceprovider.app.password.to.usermanagement=<password_to_test_environment>
 
-```bash
-# Only do this when absolutely necessary!
-rm -rf $HOME/.gradle/caches/
-```
-
-Same strategy applies to Windows too, provided you switch `$HOME` to its equivalent in the above command.
-
-# Deployment
-
-- Create a keystore file `thekeystore` under `/etc/cas`. Use the password `changeit` for both the keystore and the key/certificate entries.
-- Ensure the keystore is loaded up with keys and certificates of the server.
-
-On a successful deployment via the following methods, CAS will be available at:
-
-* `https://cas.server.name:8443/cas`
-
-## Executable WAR
-
-Run the CAS web application as an executable WAR.
-
-```bash
-./build.sh run
-```
-
-## External
-
-Deploy the binary web application file `cas.war` after a successful build to a servlet container of choice.
+Note that `baseUrl` parameter cannot be used with yml file!
+(See [java-utils/java-properties](https://github.com/Opetushallitus/java-utils/tree/master/java-properties)).
