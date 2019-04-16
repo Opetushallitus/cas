@@ -1,6 +1,7 @@
 package fi.vm.sade.auth.config;
 
 import fi.vm.sade.auth.cas.HttpAuthenticationHandler;
+import fi.vm.sade.auth.clients.KayttooikeusRestClient;
 import fi.vm.sade.javautils.httpclient.OphHttpClient;
 import fi.vm.sade.saml.action.SAMLAuthenticationHandler;
 import org.apereo.cas.authentication.AuthenticationEventExecutionPlan;
@@ -13,16 +14,18 @@ public class AuthenticationEventExecutionPlanConfiguration implements Authentica
 
     private final ServicesManager servicesManager;
     private final OphHttpClient httpClient;
+    private final KayttooikeusRestClient kayttooikeusRestClient;
 
-    public AuthenticationEventExecutionPlanConfiguration(ServicesManager servicesManager, OphHttpClient httpClient) {
+    public AuthenticationEventExecutionPlanConfiguration(ServicesManager servicesManager, OphHttpClient httpClient, KayttooikeusRestClient kayttooikeusRestClient) {
         this.servicesManager = servicesManager;
         this.httpClient = httpClient;
+        this.kayttooikeusRestClient = kayttooikeusRestClient;
     }
 
     @Override
     public void configureAuthenticationExecutionPlan(AuthenticationEventExecutionPlan plan) {
         plan.registerAuthenticationHandler(new HttpAuthenticationHandler(servicesManager, 1, httpClient));
-        plan.registerAuthenticationHandler(new SAMLAuthenticationHandler(2, httpClient));
+        plan.registerAuthenticationHandler(new SAMLAuthenticationHandler(2, kayttooikeusRestClient));
     }
 
 }

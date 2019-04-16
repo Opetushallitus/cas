@@ -2,6 +2,7 @@ package fi.vm.sade.auth.clients;
 
 import com.google.gson.Gson;
 import fi.vm.sade.auth.dto.HenkiloDto;
+import fi.vm.sade.auth.dto.IdentifiedHenkiloType;
 import fi.vm.sade.javautils.http.OphHttpClient;
 import fi.vm.sade.javautils.http.OphHttpRequest;
 import fi.vm.sade.javautils.http.auth.CasAuthenticator;
@@ -74,6 +75,14 @@ public class KayttooikeusRestClient {
                 .mapWith(this::jsonString)
                 .orElseThrow(() -> noContentOrNotFoundException(url));
         return Optional.ofNullable(redirectCode).map(String::trim).filter(not(String::isEmpty));
+    }
+
+    public IdentifiedHenkiloType getHenkiloByAuthToken(String authToken) {
+        String url = ophProperties.url("kayttooikeus-service.cas.henkiloByAuthToken", authToken);
+        return httpClient.<IdentifiedHenkiloType>execute(OphHttpRequest.Builder.get(url).build())
+                .expectedStatus(200)
+                .mapWith(json -> gson.fromJson(json, IdentifiedHenkiloType.class))
+                .orElseThrow(() -> noContentOrNotFoundException(url));
     }
 
 }
