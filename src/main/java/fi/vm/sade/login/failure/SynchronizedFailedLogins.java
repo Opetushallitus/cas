@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class SynchronizedFailedLogins {
+public class SynchronizedFailedLogins implements LoginFailureStore {
     private Map<String, List<Long>> loginMap = new HashMap<String, List<Long>>();
 
     public int size(String key) {
@@ -36,12 +36,12 @@ public class SynchronizedFailedLogins {
         }
     }
 
-    public Map<String, Integer> clean(int timeLimitInMinutes) {
+    public Map<String, Long> clean(int timeLimitInMinutes) {
 
         long timeLimitInMillis = TimeUnit.MINUTES.toMillis(timeLimitInMinutes);
         long currentTime = System.currentTimeMillis();
 
-        Map<String, Integer> removed = new HashMap<String, Integer>();
+        Map<String, Long> removed = new HashMap<String, Long>();
 
         synchronized (loginMap) {
             Object[] keys = loginMap.keySet().toArray();
@@ -49,7 +49,7 @@ public class SynchronizedFailedLogins {
                 String key = (String) keys[i];
                 long firstLogin = loginMap.get(key).get(0);
                 if(firstLogin + timeLimitInMillis <= currentTime) {
-                    removed.put(key, loginMap.get(key).size());
+                    removed.put(key, (long) loginMap.get(key).size());
                     loginMap.remove(key);
                 }
             }

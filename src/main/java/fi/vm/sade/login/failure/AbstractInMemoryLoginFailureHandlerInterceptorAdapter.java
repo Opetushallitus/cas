@@ -18,8 +18,6 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter extends AbstractThrottledSubmissionHandlerInterceptorAdapter implements InitializingBean {
 
-    private SynchronizedFailedLogins failedLogins = new SynchronizedFailedLogins();
-
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractInMemoryLoginFailureHandlerInterceptorAdapter.class);
 
     private final int DEFAULT_INITIAL_LOGIN_DELAY_IN_MINUTES = 5;
@@ -27,6 +25,7 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
     private final int DEFAULT_DENY_LOGIN_AFTER_FAILED_LOGINS_COUNT = 10;
     private final int DEFAULT_DELAY_LOGIN_AFTER_FAILED_LOGINS_COUNT = 5;
 
+    private final LoginFailureStore failedLogins;
     @Min(1)
     private int initialLoginDelayInMinutes = DEFAULT_INITIAL_LOGIN_DELAY_IN_MINUTES;
     @Min(1)
@@ -36,12 +35,13 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
     @Min(1)
     private int delayLoginAfterFailedLoginsCount = DEFAULT_DELAY_LOGIN_AFTER_FAILED_LOGINS_COUNT;
 
-    public AbstractInMemoryLoginFailureHandlerInterceptorAdapter() {
-        this("username");
+    public AbstractInMemoryLoginFailureHandlerInterceptorAdapter(LoginFailureStore loginFailureStore) {
+        this(loginFailureStore, "username");
     }
 
-    private AbstractInMemoryLoginFailureHandlerInterceptorAdapter(String usernameParameter) {
+    private AbstractInMemoryLoginFailureHandlerInterceptorAdapter(LoginFailureStore loginFailureStore, String usernameParameter) {
         super(-1, -1, usernameParameter, null, null, null, new DefaultThrottledRequestResponseHandler(usernameParameter), ThrottledRequestExecutor.noOp());
+        this.failedLogins = loginFailureStore;
     }
 
     @Override
@@ -117,7 +117,7 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
         logRemovedLogins(failedLogins.clean(getCleanLoginFailuresOlderThanInMinutes()));
     }
 
-    private void logRemovedLogins(Map<String, Integer> removed) {
+    private void logRemovedLogins(Map<String, Long> removed) {
         if(0 == removed.size()) {
             LOGGER.info("No failed logins to clean.");
         } else {

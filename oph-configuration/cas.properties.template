@@ -33,8 +33,16 @@ cas.custom.properties.suomifiUrl=https://{{host_tunnistus}}/shibbolethVirkailija
 cas.custom.properties.suomifiUrlTarget=https://{{host_tunnistus}}/kayttooikeus-service/cas/tunnistus?kielisyys=
 cas.custom.properties.loginTietosuojaselosteUrl={{login_tietosuojaseloste_url | default("https://opintopolku.fi/wp/tietosuojaseloste/")}}
 
+cas.ticket.registry.jpa.url: jdbc:postgresql://{{ postgresql_cas_host }}:{{ postgresql_cas_port | default('5432') }}/{{ postgresql_cas_dbname | default('cas') }}
+cas.ticket.registry.jpa.user: {{ postgresql_cas_user }}
+cas.ticket.registry.jpa.password: {{ postgresql_cas_password }}
+
 # Spring Boot configuration
 # https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+
+spring.datasource.url: jdbc:postgresql://{{ postgresql_cas_host }}:{{ postgresql_cas_port | default('5432') }}/{{ postgresql_cas_dbname | default('cas') }}
+spring.datasource.username: {{ postgresql_cas_user }}
+spring.datasource.password: {{ postgresql_cas_password }}
 
 server.tomcat.accesslog.enabled=true
 server.tomcat.accesslog.directory=/root/logs

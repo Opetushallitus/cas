@@ -37,6 +37,27 @@ cas.custom.properties.suomifiUrl: http://localhost:8080/shibbolethVirkailija/vir
 cas.custom.properties.suomifiUrlTarget: http://localhost:8080/kayttooikeus-service/cas/tunnistus?kielisyys=
 cas.custom.properties.loginTietosuojaselosteUrl: http://localhost:8080/tietosuojaseloste/
 
+cas.ticket.registry.jpa.url: jdbc:postgresql://localhost:5432/cas
+cas.ticket.registry.jpa.user: cas
+cas.ticket.registry.jpa.password: cas
+cas.ticket.registry.jpa.driverClass: org.postgresql.Driver
+cas.ticket.registry.jpa.dialect: org.hibernate.dialect.PostgreSQL95Dialect
+cas.ticket.registry.jpa.ddlAuto: validate
+
+# Spring Boot configuration
+# https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+
+spring.datasource.url: jdbc:postgresql://localhost:5432/cas
+spring.datasource.username: cas
+spring.datasource.password: cas
+spring.datasource.driver-class-name: org.postgresql.Driver
+spring.datasource.platform: postgresql
+
+spring.flyway.enabled: true
+spring.flyway.out-of-order: true
+
+spring.session.store-type: jdbc
+
 # Custom configuration
 
 whitelist.regexp: ^https?://.*

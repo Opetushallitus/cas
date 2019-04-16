@@ -47,7 +47,9 @@ apply plugin: "io.freefair.jsass-java"
 dependencies {
     compile "org.apereo.cas:cas-server-webapp${project.appServer}:${casServerVersion}"
     // Other CAS dependencies/modules may be listed here...
+    compile "org.apereo.cas:cas-server-support-jpa-ticket-registry:${casServerVersion}"
     compile "org.apereo.cas:cas-server-support-rest:${casServerVersion}"
+    compile "org.apereo.cas:cas-server-support-session-jdbc:${casServerVersion}"
     compile "org.apereo.cas:cas-server-support-throttle-core:${casServerVersion}"
     compile "org.apereo.cas:cas-server-support-interrupt-api:${casServerVersion}"
     compile "org.apereo.cas:cas-server-support-interrupt-core:${casServerVersion}"
@@ -62,6 +64,8 @@ dependencies {
     compile "org.apereo.cas:cas-server-core-util-api:${casServerVersion}"
     compile "org.apereo.cas:cas-server-webapp-config:${casServerVersion}"
     compile "org.apereo.cas:cas-server-webapp-init:${casServerVersion}"
+    compile "org.flywaydb:flyway-core:5.2.4"
+    runtime "org.postgresql:postgresql:42.2.5"
     compile "org.springframework.security:spring-security-config:5.1.2.RELEASE"
     compile "fi.vm.sade.java-utils:java-http:0.1.4-SNAPSHOT"
     compile "com.google.code.gson:gson:2.8.5"
