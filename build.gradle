@@ -23,8 +23,18 @@ repositories {
     maven { url "https://build.shibboleth.net/nexus/content/repositories/releases/" }
     maven { url "https://repo.spring.io/milestone/" }
     maven { url "https://oss.jfrog.org/artifactory/oss-snapshot-local" }
-    maven { url "https://artifactory.opintopolku.fi/artifactory/oph-sade-snapshot-local" }
-    maven { url "https://artifactory.opintopolku.fi/artifactory/oph-sade-release-local" }
+    maven {
+        url "https://artifactory.opintopolku.fi/artifactory/oph-sade-snapshot-local"
+        mavenContent {
+            snapshotsOnly()
+        }
+    }
+    maven {
+        url "https://artifactory.opintopolku.fi/artifactory/oph-sade-release-local"
+        mavenContent {
+            releasesOnly()
+        }
+    }
 }
 
 def casServerVersion = project.'cas.version'
