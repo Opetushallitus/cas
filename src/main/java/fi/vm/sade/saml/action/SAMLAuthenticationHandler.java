@@ -1,8 +1,7 @@
 package fi.vm.sade.saml.action;
 
-import com.google.gson.Gson;
+import fi.vm.sade.auth.clients.KayttooikeusRestClient;
 import fi.vm.sade.auth.dto.IdentifiedHenkiloType;
-import fi.vm.sade.javautils.httpclient.OphHttpClient;
 import org.apereo.cas.authentication.*;
 import org.apereo.cas.authentication.metadata.BasicCredentialMetaData;
 import org.apereo.cas.authentication.principal.DefaultPrincipalFactory;
@@ -23,18 +22,16 @@ public class SAMLAuthenticationHandler implements AuthenticationHandler {
 
     private final PrincipalFactory principalFactory;
     private final Integer order;
-    private final OphHttpClient httpClient;
-    private final Gson gson;
+    private final KayttooikeusRestClient kayttooikeusRestClient;
 
-    public SAMLAuthenticationHandler(Integer order, OphHttpClient httpClient) {
-        this(new DefaultPrincipalFactory(), order, httpClient, new Gson());
+    public SAMLAuthenticationHandler(Integer order, KayttooikeusRestClient kayttooikeusRestClient) {
+        this(new DefaultPrincipalFactory(), order, kayttooikeusRestClient);
     }
 
-    public SAMLAuthenticationHandler(PrincipalFactory principalFactory, Integer order, OphHttpClient httpClient, Gson gson) {
+    public SAMLAuthenticationHandler(PrincipalFactory principalFactory, Integer order, KayttooikeusRestClient kayttooikeusRestClient) {
         this.principalFactory = requireNonNull(principalFactory);
         this.order = requireNonNull(order);
-        this.httpClient = requireNonNull(httpClient);
-        this.gson = requireNonNull(gson);
+        this.kayttooikeusRestClient = requireNonNull(kayttooikeusRestClient);
     }
 
     @Override
@@ -65,9 +62,7 @@ public class SAMLAuthenticationHandler implements AuthenticationHandler {
     }
 
     private AuthenticationHandlerExecutionResult doAuthentication(Credential credential) {
-        IdentifiedHenkiloType henkiloType = httpClient.get("kayttooikeus-service.cas.henkiloByAuthToken", credential.getId())
-                .expectStatus(200)
-                .execute(response -> gson.fromJson(response.asText(), IdentifiedHenkiloType.class));
+        IdentifiedHenkiloType henkiloType = kayttooikeusRestClient.getHenkiloByAuthToken(credential.getId());
         Principal principal = principalFactory.createPrincipal(henkiloType.getKayttajatiedot().getUsername());
         return new DefaultAuthenticationHandlerExecutionResult(this, new BasicCredentialMetaData(credential), principal, emptyList());
     }
