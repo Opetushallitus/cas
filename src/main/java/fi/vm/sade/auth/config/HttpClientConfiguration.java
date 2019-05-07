@@ -7,7 +7,6 @@ import org.apereo.cas.configuration.model.core.authentication.HttpClientProperti
 import org.apereo.cas.configuration.support.Beans;
 import org.apereo.cas.util.http.HttpClient;
 import org.apereo.cas.util.http.SimpleHttpClientFactoryBean;
-import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +18,7 @@ import static java.util.Collections.singletonList;
 
 @Configuration
 @EnableConfigurationProperties(CasConfigurationProperties.class)
-public class HttpClientConfiguration implements BeanPostProcessor {
+public class HttpClientConfiguration {
 
     private final CasConfigurationProperties casProperties;
     private final SSLConnectionSocketFactory trustStoreSslSocketFactory;
