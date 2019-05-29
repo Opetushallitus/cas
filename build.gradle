@@ -74,6 +74,7 @@ dependencies {
     compile "org.apereo.cas:cas-server-core-util-api:${casServerVersion}"
     compile "org.apereo.cas:cas-server-webapp-config:${casServerVersion}"
     compile "org.apereo.cas:cas-server-webapp-init:${casServerVersion}"
+    compile "com.github.kagkarlsson:db-scheduler:5.2"
     compile "org.flywaydb:flyway-core:5.2.4"
     runtime "org.postgresql:postgresql:42.2.5"
     compile "org.springframework.security:spring-security-config:5.1.2.RELEASE"

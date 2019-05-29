@@ -43,6 +43,9 @@ cas.ticket.registry.jpa.password: cas
 cas.ticket.registry.jpa.driverClass: org.postgresql.Driver
 cas.ticket.registry.jpa.dialect: org.hibernate.dialect.PostgreSQL95Dialect
 cas.ticket.registry.jpa.ddlAuto: validate
+cas.ticket.registry.jpa.autocommit: true
+
+cas.ticket.registry.cleaner.schedule.enabled: false
 
 # Spring Boot configuration
 # https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
