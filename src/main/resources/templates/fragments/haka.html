@@ -16,7 +16,8 @@
                 <div class="card-body">
                     <p class="card-text" th:utext="#{hakaLogin.description}" />
                     <p class="card-text">
-                        <a th:href="${cas.custom.properties['hakaUrl']}">
+                        <a th:with="parameters=${service != null} ? '?redirect=' + ${T(org.springframework.web.util.UriComponentsBuilder).fromHttpUrl(service.originalUrl).toUriString()} : ''"
+                           th:href="${cas.custom.properties['hakaUrl']} + ${parameters}">
                             <img src="/cas/img/haka_landscape_medium.gif" />
                         </a>
                     </p>
