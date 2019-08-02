@@ -78,7 +78,7 @@ dependencies {
     compile "org.flywaydb:flyway-core:5.2.4"
     runtime "org.postgresql:postgresql:42.2.5"
     compile "org.springframework.security:spring-security-config:5.1.2.RELEASE"
-    compile "fi.vm.sade.java-utils:java-http:0.1.4-SNAPSHOT"
+    compile "fi.vm.sade.java-utils:java-http:0.2.0-SNAPSHOT"
     compile "com.google.code.gson:gson:2.8.5"
     compile "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}"
     compileOnly "org.projectlombok:lombok:1.18.4"
