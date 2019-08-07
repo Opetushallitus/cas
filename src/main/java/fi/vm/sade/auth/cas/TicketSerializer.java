@@ -1,9 +1,11 @@
 package fi.vm.sade.auth.cas;
 
+import org.apereo.cas.ticket.Ticket;
+
 public interface TicketSerializer {
 
-    String toJson(Object object);
+    String toJson(Ticket ticket);
 
-    <T> T fromJson(String json, Class<T> type);
+    Ticket fromJson(String ticketJson, String ticketGrantingTicketJson);
 
 }

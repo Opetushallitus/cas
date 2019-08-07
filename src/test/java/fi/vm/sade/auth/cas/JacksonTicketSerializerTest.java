@@ -40,8 +40,11 @@ public class JacksonTicketSerializerTest {
 
         String ticketGrantingTicketAsJson = ticketSerializer.toJson(ticketGrantingTicket);
         System.out.println(ticketGrantingTicketAsJson);
-        Ticket ticketGrantingTicketFromJson = ticketSerializer.fromJson(ticketGrantingTicketAsJson, Ticket.class);
+        Ticket ticketGrantingTicketFromJson = ticketSerializer.fromJson(ticketGrantingTicketAsJson, null);
         assertThat(ticketGrantingTicketFromJson).isInstanceOf(TicketGrantingTicket.class).isEqualByComparingTo(ticketGrantingTicket);
+
+        ticketGrantingTicket.markTicketExpired();
+        String expiredTicketGrantingTicketAsJson = ticketSerializer.toJson(ticketGrantingTicket);
 
         // service ticket
         ServiceTicketFactory ticketFactory = new DefaultServiceTicketFactory(
@@ -51,8 +54,9 @@ public class JacksonTicketSerializerTest {
 
         String serviceTicketAsJson = ticketSerializer.toJson(serviceTicket);
         System.out.println(serviceTicketAsJson);
-        Ticket serviceTicketFromJson = ticketSerializer.fromJson(serviceTicketAsJson, Ticket.class);
-        assertThat(serviceTicketFromJson).isInstanceOf(ServiceTicket.class).isEqualByComparingTo(serviceTicket);
+        Ticket serviceTicketFromJson = ticketSerializer.fromJson(serviceTicketAsJson, expiredTicketGrantingTicketAsJson);
+        assertThat(serviceTicketFromJson).isInstanceOf(ServiceTicket.class).isEqualByComparingTo(serviceTicket)
+                .returns(true, ticket -> ticket.getTicketGrantingTicket().isExpired());
 
         // proxy granting ticket
         ProxyGrantingTicketFactory proxyGrantingTicketFactory = new DefaultProxyGrantingTicketFactory(
@@ -61,8 +65,9 @@ public class JacksonTicketSerializerTest {
 
         String proxyGrantingTicketAsJson = ticketSerializer.toJson(proxyGrantingTicket);
         System.out.println(proxyGrantingTicketAsJson);
-        Ticket proxyGrantingTicketFromJson = ticketSerializer.fromJson(proxyGrantingTicketAsJson, Ticket.class);
-        assertThat(proxyGrantingTicketFromJson).isInstanceOf(ProxyGrantingTicket.class).isEqualByComparingTo(proxyGrantingTicket);
+        Ticket proxyGrantingTicketFromJson = ticketSerializer.fromJson(proxyGrantingTicketAsJson, expiredTicketGrantingTicketAsJson);
+        assertThat(proxyGrantingTicketFromJson).isInstanceOf(ProxyGrantingTicket.class).isEqualByComparingTo(proxyGrantingTicket)
+                .returns(true, ticket -> ticket.getTicketGrantingTicket().isExpired());
 
         // proxy ticket
         ProxyTicketFactory proxyTicketFactory = new DefaultProxyTicketFactory(
@@ -71,8 +76,9 @@ public class JacksonTicketSerializerTest {
 
         String proxyTicketAsJson = ticketSerializer.toJson(proxyTicket);
         System.out.println(proxyTicketAsJson);
-        Ticket proxyTicketFromJson = ticketSerializer.fromJson(proxyTicketAsJson, Ticket.class);
-        assertThat(proxyTicketFromJson).isInstanceOf(ProxyTicket.class).isEqualByComparingTo(proxyTicket);
+        Ticket proxyTicketFromJson = ticketSerializer.fromJson(proxyTicketAsJson, expiredTicketGrantingTicketAsJson);
+        assertThat(proxyTicketFromJson).isInstanceOf(ProxyTicket.class).isEqualByComparingTo(proxyTicket)
+                .returns(true, ticket -> ticket.getTicketGrantingTicket().isExpired());
 
         // transient session ticket
         TransientSessionTicketFactory transientSessionTicketFactory = new DefaultTransientSessionTicketFactory(new NeverExpiresExpirationPolicy());
@@ -80,8 +86,9 @@ public class JacksonTicketSerializerTest {
 
         String transientSessionTicketAsJson = ticketSerializer.toJson(transientSessionTicket);
         System.out.println(transientSessionTicketAsJson);
-        Ticket transientSessionTicketFromJson = ticketSerializer.fromJson(transientSessionTicketAsJson, Ticket.class);
-        assertThat(transientSessionTicketFromJson).isInstanceOf(TransientSessionTicket.class).isEqualByComparingTo(transientSessionTicket);
+        Ticket transientSessionTicketFromJson = ticketSerializer.fromJson(transientSessionTicketAsJson, null);
+        assertThat(transientSessionTicketFromJson).isInstanceOf(TransientSessionTicket.class).isEqualByComparingTo(transientSessionTicket)
+                .returns(null, Ticket::getTicketGrantingTicket);
     }
 
 }

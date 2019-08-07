@@ -22,6 +22,7 @@ import java.util.function.Predicate;
  *   type text NOT NULL,
  *   number_of_times_used integer NOT NULL,
  *   creation_time timestamp with time zone NOT NULL,
+ *   ticket_granting_ticket_id text REFERENCES ticket (id) ON DELETE CASCADE,
  *   data jsonb NOT NULL
  * );
  *
@@ -48,9 +49,9 @@ public class JdbcTicketRegistry extends AbstractTicketRegistry {
     @Override
     public void addTicket(Ticket ticket) {
         OffsetDateTime creationTime = ticket.getCreationTime().toOffsetDateTime();
-        String json = ticketSerializer.toJson(ticket);
-        jdbcOperations.update("INSERT INTO ticket (id, type, number_of_times_used, creation_time, data) VALUES (?, ?, ?, ?, ?::jsonb)",
-                ticket.getId(), ticket.getPrefix(), ticket.getCountOfUses(), creationTime, json);
+        String ticketGrantingTicketId = Optional.ofNullable(ticket.getTicketGrantingTicket()).map(Ticket::getId).orElse(null);
+        jdbcOperations.update("INSERT INTO ticket (id, type, number_of_times_used, creation_time, ticket_granting_ticket_id, data) VALUES (?, ?, ?, ?, ?, ?::jsonb)",
+                ticket.getId(), ticket.getPrefix(), ticket.getCountOfUses(), creationTime, ticketGrantingTicketId, ticketSerializer.toJson(ticket));
     }
 
     @Override
@@ -65,8 +66,8 @@ public class JdbcTicketRegistry extends AbstractTicketRegistry {
 
     @Override
     public Collection<? extends Ticket> getTickets() {
-        return jdbcOperations.query("SELECT data FROM ticket",
-                (rs, rowNum) -> ticketSerializer.fromJson(rs.getString("data"), Ticket.class));
+        return jdbcOperations.query("SELECT t1.data AS data, t2.data AS ticket_granting_ticket_data FROM ticket t1 LEFT JOIN ticket t2 ON t2.id = t1.ticket_granting_ticket_id",
+                (rs, rowNum) -> ticketSerializer.fromJson(rs.getString("data"), rs.getString("ticket_granting_ticket_data")));
     }
 
     @Override
@@ -89,18 +90,35 @@ public class JdbcTicketRegistry extends AbstractTicketRegistry {
     }
 
     private Optional<Ticket> findById(String id) {
-        return findDataById(id).map(json -> ticketSerializer.fromJson(json, Ticket.class));
+        Row row = DataAccessUtils.singleResult(jdbcOperations.query("SELECT data, ticket_granting_ticket_id FROM ticket WHERE id = ? FOR UPDATE",
+                new Object[] { id }, (rs, rowNum) -> new Row(rs.getString("data"), rs.getString("ticket_granting_ticket_id"))));
+        return Optional.ofNullable(row).map(this::rowToTicket);
+    }
+
+    private Ticket rowToTicket(Row row) {
+        String ticketGrantingTicketData = row.ticketGrantingTicketId.flatMap(this::findDataById).orElse(null);
+        return ticketSerializer.fromJson(row.data, ticketGrantingTicketData);
     }
 
     private Optional<String> findDataById(String id) {
-        String data = DataAccessUtils.singleResult(jdbcOperations.query("SELECT data FROM ticket WHERE id = ? FOR UPDATE",
-                new Object[] { id }, SingleColumnRowMapper.newInstance(String.class)));
-        return Optional.ofNullable(data);
+        return Optional.ofNullable(DataAccessUtils.singleResult(jdbcOperations.query("SELECT data FROM ticket WHERE id = ?",
+                new Object[] { id }, SingleColumnRowMapper.newInstance(String.class))));
     }
 
     private long countByType(String type) {
         return jdbcOperations.queryForObject("SELECT count(*) FROM ticket WHERE type = ?",
                 new Object[] { type }, Long.class);
+    }
+
+    private static class Row {
+
+        public String data;
+        public Optional<String> ticketGrantingTicketId;
+
+        public Row(String data, String ticketGrantingTicketId) {
+            this.data = data;
+            this.ticketGrantingTicketId = Optional.ofNullable(ticketGrantingTicketId);
+        }
     }
 
 }
