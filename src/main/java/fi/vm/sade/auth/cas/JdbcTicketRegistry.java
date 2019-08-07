@@ -63,7 +63,7 @@ public class JdbcTicketRegistry extends AbstractTicketRegistry {
 
     @Override
     public Collection<? extends Ticket> getTickets() {
-        return jdbcOperations.query("SELECT data FROM ticket FOR UPDATE",
+        return jdbcOperations.query("SELECT data FROM ticket",
                 (rs, rowNum) -> ticketSerializer.fromJson(rs.getString("data"), Ticket.class));
     }
 
