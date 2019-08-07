@@ -4,7 +4,9 @@ import org.apereo.cas.ticket.ServiceTicket;
 import org.apereo.cas.ticket.Ticket;
 import org.apereo.cas.ticket.TicketGrantingTicket;
 import org.apereo.cas.ticket.registry.AbstractTicketRegistry;
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -91,8 +93,8 @@ public class JdbcTicketRegistry extends AbstractTicketRegistry {
     }
 
     private Optional<String> findDataById(String id) {
-        String data = jdbcOperations.queryForObject("SELECT data FROM ticket WHERE id = ? FOR UPDATE",
-                new Object[] { id }, String.class);
+        String data = DataAccessUtils.singleResult(jdbcOperations.query("SELECT data FROM ticket WHERE id = ? FOR UPDATE",
+                new Object[] { id }, SingleColumnRowMapper.newInstance(String.class)));
         return Optional.ofNullable(data);
     }
 
