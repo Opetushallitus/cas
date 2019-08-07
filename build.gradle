@@ -57,7 +57,6 @@ apply plugin: "io.freefair.jsass-java"
 dependencies {
     compile "org.apereo.cas:cas-server-webapp${project.appServer}:${casServerVersion}"
     // Other CAS dependencies/modules may be listed here...
-    compile "org.apereo.cas:cas-server-support-jpa-ticket-registry:${casServerVersion}"
     compile "org.apereo.cas:cas-server-support-rest:${casServerVersion}"
     compile "org.apereo.cas:cas-server-support-session-jdbc:${casServerVersion}"
     compile "org.apereo.cas:cas-server-support-throttle-core:${casServerVersion}"
@@ -71,6 +70,7 @@ dependencies {
     compile "org.apereo.cas:cas-server-core-web-api:${casServerVersion}"
     compile "org.apereo.cas:cas-server-core-tickets-api:${casServerVersion}"
     compile "org.apereo.cas:cas-server-core-services-api:${casServerVersion}"
+    compile "org.apereo.cas:cas-server-core-services-authentication:${casServerVersion}"
     compile "org.apereo.cas:cas-server-core-util-api:${casServerVersion}"
     compile "org.apereo.cas:cas-server-webapp-config:${casServerVersion}"
     compile "org.apereo.cas:cas-server-webapp-init:${casServerVersion}"
