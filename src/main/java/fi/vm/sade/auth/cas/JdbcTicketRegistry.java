@@ -71,8 +71,7 @@ public class JdbcTicketRegistry extends AbstractTicketRegistry {
 
     @Override
     public Collection<? extends Ticket> getTickets() {
-        return jdbcOperations.query("SELECT t1.data AS data, t2.data AS ticket_granting_ticket_data FROM ticket t1 LEFT JOIN ticket t2 ON t2.id = t1.ticket_granting_ticket_id",
-                (rs, rowNum) -> ticketSerializer.fromJson(rs.getString("data"), rs.getString("ticket_granting_ticket_data")));
+        throw new UnsupportedOperationException("Use getTicketsStream()");
     }
 
     @Override
