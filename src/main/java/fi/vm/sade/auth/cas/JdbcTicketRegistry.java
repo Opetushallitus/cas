@@ -14,6 +14,7 @@ import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  * <code>
@@ -34,10 +35,14 @@ import java.util.function.Predicate;
 public class JdbcTicketRegistry extends AbstractTicketRegistry {
 
     private final JdbcOperations jdbcOperations;
+    private final StreamOperations streamOperations;
     private final TicketSerializer ticketSerializer;
 
-    public JdbcTicketRegistry(JdbcOperations jdbcOperations, TicketSerializer ticketSerializer) {
+    public JdbcTicketRegistry(JdbcOperations jdbcOperations,
+                              StreamOperations streamOperations,
+                              TicketSerializer ticketSerializer) {
         this.jdbcOperations = jdbcOperations;
+        this.streamOperations = streamOperations;
         this.ticketSerializer = ticketSerializer;
     }
 
@@ -68,6 +73,13 @@ public class JdbcTicketRegistry extends AbstractTicketRegistry {
     public Collection<? extends Ticket> getTickets() {
         return jdbcOperations.query("SELECT t1.data AS data, t2.data AS ticket_granting_ticket_data FROM ticket t1 LEFT JOIN ticket t2 ON t2.id = t1.ticket_granting_ticket_id",
                 (rs, rowNum) -> ticketSerializer.fromJson(rs.getString("data"), rs.getString("ticket_granting_ticket_data")));
+    }
+
+    @Override
+    public Stream<? extends Ticket> getTicketsStream() {
+        return streamOperations.stream(
+                "SELECT t1.data AS data, t2.data AS ticket_granting_ticket_data FROM ticket t1 LEFT JOIN ticket t2 ON t2.id = t1.ticket_granting_ticket_id",
+                rs -> ticketSerializer.fromJson(rs.getString("data"), rs.getString("ticket_granting_ticket_data")));
     }
 
     @Override
