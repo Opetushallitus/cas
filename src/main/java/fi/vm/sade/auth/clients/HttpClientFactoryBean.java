@@ -6,10 +6,11 @@ import fi.vm.sade.properties.OphProperties;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.stereotype.Component;
 
+import static fi.vm.sade.auth.clients.HttpClientUtil.CALLER_ID;
+
 @Component("httpClient")
 public class HttpClientFactoryBean implements FactoryBean<OphHttpClient> {
 
-    private static final String CLIENT_SUBSYSTEM_CODE = "cas";
     private final OphProperties properties;
 
     public HttpClientFactoryBean(OphProperties properties) {
@@ -18,7 +19,7 @@ public class HttpClientFactoryBean implements FactoryBean<OphHttpClient> {
 
     @Override
     public OphHttpClient getObject() throws Exception {
-        return ApacheOphHttpClient.createDefaultOphClient(CLIENT_SUBSYSTEM_CODE, properties);
+        return ApacheOphHttpClient.createDefaultOphClient(CALLER_ID, properties);
     }
 
     @Override
