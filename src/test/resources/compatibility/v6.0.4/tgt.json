@@ -1,0 +1,32 @@
+{
+  "@class": "org.apereo.cas.ticket.TicketGrantingTicketImpl",
+  "@id": 1,
+  "id": "TGT-1-lCsp8tLGWaKx-WCEv6DABVeUpe8smp4-",
+  "proxiedBy": null,
+  "ticketGrantingTicket": null,
+  "authentication": {
+    "@class": "org.apereo.cas.authentication.DefaultAuthentication",
+    "authenticationDate": 1565854853.006987000,
+    "principal": {
+      "@class": "org.apereo.cas.authentication.principal.NullPrincipal",
+      "attributes": null
+    },
+    "credentials": null,
+    "attributes": {},
+    "successes": {},
+    "failures": {}
+  },
+  "expirationPolicy": {
+    "@class": "org.apereo.cas.ticket.support.NeverExpiresExpirationPolicy",
+    "name": "NeverExpiresExpirationPolicy-436387fb-b246-4016-b604-309067653937"
+  },
+  "lastTimeUsed": 1565854853.037336000,
+  "previousTimeUsed": null,
+  "creationTime": 1565854853.037303000,
+  "countOfUses": 0,
+  "expired": false,
+  "services": {},
+  "proxyGrantingTickets": {},
+  "descendantTickets": [],
+  "prefix": "TGT"
+}
