@@ -15,7 +15,7 @@ env:
     - secure: "cCiVmqJRnnmhXwH05nWpZoqFj3N53UlbGDZzvuwLjEdonLYFKf2v1p+sAg9ZzS9SUJaoHyFl9aPdfnoJRmE/kZo53b7M4KwmX+w8YYgBVhsE2pbQYbG9VtZpteuBkExo5Y6bscfs1r75UiudldPdL5jiYQKM9BHDKN2wlDYi77T1MBieHJY+iU/I0ZUt2MF2XzNqytTM1XQUci0PxrSP09G0VwCs9mrg8t/sFZ9H6w+ZtBeuqlt2rLpfG3PPjgecJRD6c2LIvfZA+T3oU4JNqqptsQXtHGVp8Rmqw4r+hvJ2BYBZ29W4NyKZ5Q4yyTMqeAbRisrYfc3OCUcEKw0FRLV5UJaEz4lfWnpIpwFgVmQ9Uc2G1zkMqQ+GVtzoJRk92WooGNWo1RxpyRtqe7OUefpdPRan5IWgIZyERbcBgAEeDyUje1wKVWBpPlkpaT4CzN6HTu27ie1yLF0cu8YyXsFcFY4+N9zu5ZvOdYl7ZxqKAQvSVBIhQdgWuQ9iRwk6W7HqbrqAR/ZeQgwmcwf5vEk1q7xPSPcFfUxZHaxioNcqIq6flNwVkI0bC5MClD5eUlmF0XzrYV+R1bX2HxcqWXoMYJYAG+XuZBUjtBHNPzpI+N4lyCxjy7BJLQjlKkQicIauJBbwYZxGG8IvBYYhiL85Nn2T67XxV/1+5VDt25I="
 
 install:
-  - git clone https://github.com/Opetushallitus/ci-tools.git
+  - git clone https://github.com/Opetushallitus/ci-tools.git --branch PP-357_458_readonly_container_nonroot_user
   - source ci-tools/common/setup-tools.sh
   - export ARTIFACT_NAME="cas"
 
@@ -25,7 +25,7 @@ script:
   - mv build/libs/cas.war $DOCKER_BUILD_DIR/artifact/$ARTIFACT_NAME.jar
   - cp -vr oph-configuration $DOCKER_BUILD_DIR/config/
 
-  - export BASE_IMAGE="baseimage-fatjar:jdk11"
+  - export BASE_IMAGE="baseimage-fatjar:ci-140"
   - ./ci-tools/common/pull-image.sh
   - ./ci-tools/build/build-fatjar.sh $ARTIFACT_NAME
 
