@@ -37,8 +37,8 @@ cas.custom.properties.loginTietosuojaselosteUrl={{login_tietosuojaseloste_url | 
 # https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 
 spring.datasource.url: jdbc:postgresql://{{ postgresql_cas_host }}:{{ postgresql_cas_port | default('5432') }}/{{ postgresql_cas_dbname | default('cas') }}
-spring.datasource.username: {{ postgresql_cas_user }}
-spring.datasource.password: {{ postgresql_cas_password }}
+spring.datasource.username: {{ postgres_app_user }}
+spring.datasource.password: {{ postgresql_cas_app_password }}
 
 server.tomcat.accesslog.enabled=true
 server.tomcat.accesslog.directory=/root/logs
