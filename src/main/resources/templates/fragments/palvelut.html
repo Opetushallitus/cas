@@ -17,6 +17,9 @@
                     <a href="#arvo" th:text="#{palvelut.arvo.lyhytNimi}">Arvo</a>
                 </li>
                 <li class="list-inline-item">
+                    <a href="#ehoks" th:text="#{palvelut.ehoks.lyhytNimi}">eHOKS</a>
+                </li>
+                <li class="list-inline-item">
                     <a href="#eperusteet" th:text="#{palvelut.eperusteet.lyhytNimi}">ePerusteet</a>
                 </li>
                 <li class="list-inline-item">
@@ -44,6 +47,10 @@
                     <div class="col-md-6" id="arvo">
                         <h5 th:inline="text"><span class="bullet"></span>[[#{palvelut.arvo.nimi}]]</h5>
                         <p th:text="#{palvelut.arvo.kuvaus}">kuvaus</p>
+                    </div>
+                    <div class="col-md-6" id="ehoks">
+                        <h5 th:inline="text"><span class="bullet"></span>[[#{palvelut.ehoks.nimi}]]</h5>
+                        <p th:text="#{palvelut.ehoks.kuvaus}">kuvaus</p>
                     </div>
                     <div class="col-md-6" id="eperusteet">
                         <h5 th:inline="text"><span class="bullet"></span>[[#{palvelut.eperusteet.nimi}]]</h5>
