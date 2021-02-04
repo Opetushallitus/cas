@@ -16,7 +16,7 @@
         </RollingFile>
     </Appenders>
     <Loggers>
-        <AsyncLogger name="org.apereo.inspektr.audit.support" level="off" includeLocation="true" />
+        <AsyncLogger name="org.apereo.inspektr.audit.support" level="info" includeLocation="true" />
         <AsyncRoot level="INFO">
             <AppenderRef ref="file"/>
         </AsyncRoot>
