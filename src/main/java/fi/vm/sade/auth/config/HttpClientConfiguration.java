@@ -14,6 +14,8 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.net.ssl.HostnameVerifier;
 
+import java.util.Arrays;
+
 import static fi.vm.sade.auth.clients.HttpClientUtil.CALLER_ID;
 import static java.util.Collections.singletonList;
 
@@ -61,7 +63,12 @@ public class HttpClientConfiguration {
         HttpClientProperties httpClient = casProperties.getHttpClient();
         c.setConnectionTimeout(Beans.newDuration(httpClient.getConnectionTimeout()).toMillis());
         c.setReadTimeout((int) Beans.newDuration(httpClient.getReadTimeout()).toMillis());
-        c.setDefaultHeaders(singletonList(new BasicHeader("Caller-Id", CALLER_ID)));
+        c.setDefaultHeaders(
+                Arrays.asList(
+                        new BasicHeader("Caller-Id", CALLER_ID),
+                        new BasicHeader("CSRF", CALLER_ID)
+                )
+        );
         c.setConnectionReuseStrategy(NoConnectionReuseStrategy.INSTANCE);
         return c;
     }
