@@ -2,6 +2,8 @@ package fi.vm.sade.auth.config;
 
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.NoConnectionReuseStrategy;
+import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.message.BasicHeader;
 import org.apereo.cas.configuration.CasConfigurationProperties;
 import org.apereo.cas.configuration.model.core.authentication.HttpClientProperties;
@@ -14,10 +16,10 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.net.ssl.HostnameVerifier;
 
+import org.apache.http.client.CookieStore;
 import java.util.Arrays;
 
 import static fi.vm.sade.auth.clients.HttpClientUtil.CALLER_ID;
-import static java.util.Collections.singletonList;
 
 @Configuration
 @EnableConfigurationProperties(CasConfigurationProperties.class)
@@ -69,6 +71,9 @@ public class HttpClientConfiguration {
                         new BasicHeader("CSRF", CALLER_ID)
                 )
         );
+        CookieStore cookieStore = new BasicCookieStore();
+        cookieStore.addCookie(new BasicClientCookie("CSRF", CALLER_ID));
+        c.setCookieStore(cookieStore);
         c.setConnectionReuseStrategy(NoConnectionReuseStrategy.INSTANCE);
         return c;
     }
