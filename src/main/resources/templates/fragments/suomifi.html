@@ -16,7 +16,7 @@
                 <div class="card-body">
                     <p class="card-text" th:utext="#{suomifiLogin.description}" />
                     <p class="card-text">
-                        <a th:href="${cas.custom.properties['suomifiUrl']} + ${#locale.getLanguage().toUpperCase()} + '?target=' + ${cas.custom.properties['suomifiUrlTarget']} + ${#locale.getLanguage().toLowerCase()}">
+                        <a th:href="${cas.custom.properties['suomifiUrl']} + '?locale=' + ${#locale.getLanguage().toLowerCase()} + '&service=' + ${cas.custom.properties['suomifiUrlTarget']} + ${#locale.getLanguage().toLowerCase()}">
                             <img src="/cas/img/suomi.fi-logo.png"
                                  style="maxWidth: 100%; maxHeight: 100%; height: 54px; width: auto;" />
                         </a>

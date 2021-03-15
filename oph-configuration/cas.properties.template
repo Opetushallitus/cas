@@ -29,8 +29,8 @@ cas.slo.asynchronous={{cas_slo_callbacks_asynchronous | default('false')}}
 cas.view.defaultRedirectUrl={{cas_view_default_redirect_url | default('https://${host.virkailija}/virkailijan-tyopoyta')}}
 
 cas.custom.properties.hakaUrl={{haka_url}}
-cas.custom.properties.suomifiUrl=https://{{host_tunnistus}}/shibbolethVirkailija/virkailija
-cas.custom.properties.suomifiUrlTarget=https://{{host_tunnistus}}/kayttooikeus-service/cas/tunnistus?kielisyys=
+cas.custom.properties.suomifiUrl=https://{{host_oppija}}/cas-oppija/login
+cas.custom.properties.suomifiUrlTarget=https://{{host_virkailija}}/kayttooikeus-service/cas/tunnistus?locale=
 cas.custom.properties.loginTietosuojaselosteUrl={{login_tietosuojaseloste_url | default("https://opintopolku.fi/wp/tietosuojaseloste/")}}
 
 # Spring Boot configuration
