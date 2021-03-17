@@ -33,8 +33,8 @@ cas.logout.followServiceRedirects: true
 cas.locale.defaultValue: fi
 
 cas.custom.properties.hakaUrl: http://localhost:8080/service-provider-app/saml/login/alias/hakasp
-cas.custom.properties.suomifiUrl: http://localhost:8080/shibbolethVirkailija/virkailija
-cas.custom.properties.suomifiUrlTarget: http://localhost:8080/kayttooikeus-service/cas/tunnistus?kielisyys=
+cas.custom.properties.suomifiUrl: http://untuvaopintopolku.fi/cas-oppija/login
+cas.custom.properties.suomifiUrlTarget: http://localhost:8080/kayttooikeus-service/cas/tunnistus?locale=
 cas.custom.properties.loginTietosuojaselosteUrl: http://localhost:8080/tietosuojaseloste/
 
 cas.ticket.registry.cleaner.schedule.enabled: false
