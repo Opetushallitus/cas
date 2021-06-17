@@ -47,7 +47,7 @@ public class HttpAuthenticationHandlerTest {
         OphProperties properties = new CasOphProperties(environmentMock);
         OphHttpClient httpClient = new OphHttpClient(httpClientProxyMock, "cas", properties);
 
-        authenticationHandler = new HttpAuthenticationHandler(servicesManagerMock, 0, httpClient);
+        authenticationHandler = new HttpAuthenticationHandler(servicesManagerMock, 0, httpClient, environmentMock);
     }
 
     @Test

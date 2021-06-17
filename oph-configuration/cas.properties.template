@@ -72,3 +72,7 @@ require-strong-identification.usernamelist={{cas_require_strong_identification_u
 email-verification-enabled={{cas_email_verification_enabled | default(false)}}
 # To specified users even if cas.email-verification-enabled is false
 email-verification-enabled.usernamelist={{cas_email_verification_enabled_usernamelist | default("") }}
+
+# kayttooikeus userDetails credentials
+kayttooikeus.user-details.username={{kayttooikeus_userdetails_username}}
+kayttooikeus.user-details.password={{kayttooikeus_userdetails_password}}
