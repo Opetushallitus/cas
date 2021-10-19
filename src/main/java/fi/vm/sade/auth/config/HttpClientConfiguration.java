@@ -1,6 +1,8 @@
 package fi.vm.sade.auth.config;
 
+import fi.vm.sade.CasOphProperties;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.cookie.ClientCookie;
 import org.apache.http.impl.NoConnectionReuseStrategy;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.cookie.BasicClientCookie;
@@ -28,13 +30,16 @@ public class HttpClientConfiguration {
     private final CasConfigurationProperties casProperties;
     private final SSLConnectionSocketFactory trustStoreSslSocketFactory;
     private final HostnameVerifier hostnameVerifier;
+    private final CasOphProperties ophProperties;
 
     public HttpClientConfiguration(CasConfigurationProperties casProperties,
                                    SSLConnectionSocketFactory trustStoreSslSocketFactory,
-                                   HostnameVerifier hostnameVerifier) {
+                                   HostnameVerifier hostnameVerifier,
+                                   CasOphProperties ophProperties) {
         this.casProperties = casProperties;
         this.trustStoreSslSocketFactory = trustStoreSslSocketFactory;
         this.hostnameVerifier = hostnameVerifier;
+        this.ophProperties = ophProperties;
     }
 
     // override cas httpclient to include caller-id header
@@ -72,10 +77,15 @@ public class HttpClientConfiguration {
                 )
         );
         CookieStore cookieStore = new BasicCookieStore();
-        cookieStore.addCookie(new BasicClientCookie("CSRF", CALLER_ID));
+        cookieStore.addCookie(getCSRFCookie());
         c.setCookieStore(cookieStore);
         c.setConnectionReuseStrategy(NoConnectionReuseStrategy.INSTANCE);
         return c;
     }
 
+    private ClientCookie getCSRFCookie() {
+        BasicClientCookie cookie = new BasicClientCookie("CSRF", CALLER_ID);
+        cookie.setDomain(ophProperties.require("host.virkailija"));
+        return cookie;
+    }
 }
