@@ -20,7 +20,7 @@ jobs:
       - name: Build
         uses: gradle/gradle-build-action@937999e9cc2425eddc7fd62d1053baf041147db7
         with:
-          arguments: clean build
+          arguments: clean build -Dbranch=${TRAVIS_BRANCH} -Drevision=${TRAVIS_COMMIT} -DbuildNumber=${TRAVIS_BUILD_NUMBER}
       - name: Upload cas-war
         uses: actions/upload-artifact@v2
         with:
