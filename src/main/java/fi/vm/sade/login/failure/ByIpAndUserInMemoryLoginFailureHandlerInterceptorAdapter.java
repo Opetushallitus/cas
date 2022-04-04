@@ -11,7 +11,7 @@ public class ByIpAndUserInMemoryLoginFailureHandlerInterceptorAdapter extends Ab
 
     @Override
     public Optional<String> createKey(HttpServletRequest request) {
-        return Optional.ofNullable(request.getParameter(getUsernameParameter()))
+        return Optional.ofNullable(request.getParameter(getUsernameParameterFromRequest(request)))
                 .map(username -> request.getRemoteAddr() + ";" + username.toLowerCase());
     }
 }

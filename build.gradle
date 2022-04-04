@@ -2,15 +2,15 @@ buildscript {
     repositories {
         mavenLocal()
         mavenCentral()
-        jcenter()
         maven { url "https://repo.spring.io/libs-milestone" }
+        maven { url "https://repo.spring.io/libs-snapshot" }
         maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
         classpath "de.undercouch:gradle-download-task:${project.gradleDownloadTaskVersion}"
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${project.springBootVersion}"
         classpath "gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:${project.jibVersion}"
-        classpath "com.boazj.gradle:gradle-log-plugin:${project.gradleLogVersion}"
+        classpath "io.freefair.gradle:maven-plugin:${project.gradleMavenPluginVersion}"
         classpath "io.freefair.gradle:jsass-plugin:3.0.0"
     }
 }
@@ -18,10 +18,10 @@ buildscript {
 repositories {
     mavenLocal()
     mavenCentral()
-    jcenter()
     maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     maven { url "https://build.shibboleth.net/nexus/content/repositories/releases/" }
     maven { url "https://repo.spring.io/milestone/" }
+    maven { url "https://repo.spring.io/snapshot/" }
     maven { url "https://oss.jfrog.org/artifactory/oss-snapshot-local" }
     maven {
         url "https://artifactory.opintopolku.fi/artifactory/oph-sade-snapshot-local"
@@ -43,7 +43,7 @@ def casWebApplicationBinaryName = "cas.war"
 project.ext."casServerVersion" = casServerVersion
 project.ext."casWebApplicationBinaryName" = casWebApplicationBinaryName
 
-apply from: rootProject.file("gradle/waroverlay.gradle")
+apply plugin: "io.freefair.war-overlay"
 apply from: rootProject.file("gradle/tasks.gradle")
 apply from: rootProject.file("gradle/buildversion.gradle")
 
@@ -53,6 +53,9 @@ apply plugin: "eclipse"
 apply plugin: "idea"
 apply plugin: "com.google.cloud.tools.jib"
 apply plugin: "io.freefair.jsass-java"
+
+apply from: rootProject.file("gradle/springboot.gradle")
+apply from: rootProject.file("gradle/dockerjib.gradle")
 
 dependencies {
     compile "org.apereo.cas:cas-server-webapp${project.appServer}:${casServerVersion}"
@@ -93,6 +96,10 @@ tasks.findByName("jibDockerBuild")
     .dependsOn(copyWebAppIntoJib, copyConfigIntoJib)
     .finalizedBy(deleteWebAppFromJib)
 
+tasks.findByName("jib")
+    .dependsOn(copyWebAppIntoJib, copyConfigIntoJib)
+    .finalizedBy(deleteWebAppFromJib)
+
 configurations.all {
     resolutionStrategy {
         cacheChangingModulesFor 0, "seconds"
@@ -127,7 +134,6 @@ idea {
 }
 
 war {
-    includeWarJars = true
     entryCompression = ZipEntryCompression.STORED
 }
 
@@ -136,23 +142,18 @@ springBoot {
 }
 
 bootWar {
-    doFirst {
-        def executable = project.hasProperty("executable") && Boolean.valueOf(project.getProperty("executable"))
-        if (executable) {
-            logger.info "Including launch script for executable WAR artifact"
-            launchScript()
-        } else {
-            logger.info "WAR artifact is not marked as an executable"
+    entryCompression = ZipEntryCompression.STORED
+    overlays {
+        // https://docs.freefair.io/gradle-plugins/current/reference/#_io_freefair_war_overlay
+        // Note: The "excludes" property is only for files in the war dependency.
+        // If a jar is excluded from the war, it could be brought back into the final war as a dependency
+        // of non-war dependencies. Those should be excluded via normal gradle dependency exclusions.
+        cas {
+            from "org.apereo.cas:cas-server-webapp${project.appServer}:${casServerVersion}@war"
+            provided = false
+            //excludes = ["WEB-INF/lib/somejar-1.0*"]
         }
-        archiveName "${casWebApplicationBinaryName}"
-        baseName "cas"
-        excludeDevtools = true
     }
-}
-
-bootRun {
-    sourceResources sourceSets.main
-    classpath = sourceSets.main.runtimeClasspath
 }
 
 wrapper {
@@ -186,7 +187,7 @@ jib {
         ports = ['80', '443', '8080', '8443']
         labels = [version:casServerVersion, name:project.name, group:project.group]
     }
-    extraDirectory {
+    extraDirectories {
         path = file('src/main/jib')
         permissions = [
             '/docker/entrypoint.sh': '755'

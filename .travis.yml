@@ -1,0 +1,56 @@
+language: java
+sudo: required
+dist: trusty
+services:
+  - docker
+branches:
+  only:
+    - master
+before_cache:
+  - rm -rf $HOME/.gradle/caches/5.*/
+  - rm -rf $HOME/.gradle/caches/4.*/
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+  - find ~/.gradle/caches/ -name "*.lock" -type f -delete
+cache:
+  bundler: false
+  cargo: false
+  directories:
+    - $HOME/.m2
+    - $HOME/.npm/
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+env:
+  global:
+    - JAVA_OPTS="-Xms512m -Xmx4048m -Xss128m -XX:ReservedCodeCacheSize=512m -XX:+UseG1GC -Xverify:none -server"
+    - GRADLE_OPTS="-Xms512m -Xmx1024m -Xss128m -XX:ReservedCodeCacheSize=512m -XX:+UseG1GC -Xverify:none -server"
+    # AWS_ACCESS_KEY_ID
+    - secure: "nLqCMWaX12xBqvUEZY0rdzmMelNL4y5FNCcHBRb8dL/fMheZHBQlxOLJv0QiiFUyw72oT3JFsgIHFH7B6zDEVMOZkHySWNGaF39gRT01AIc48Sr5NQLJ0f23j+7auXbGDX/mnLwfLva6Ce7xRREcMhAguMT855yYXD9oUqZKNys8Fqxt0OthUMnqO5m4ab+5EAfVs+OgBk0pbH61VmtCQ9zDS8h2YpscdspMr/q1wAD5hq4cROPyqT2cFqEV1wqjzC1kJ0DSL8nifxa8cfkxQkpkWpJ3QBRWwe1RWO+f6ELnmBkUKUu+k60WewfxIzkF2JZqW5S1bmpHhDnRJbrShE8jy4JmXCrVoc3NzAhTDKfdFC65TYEbuDuOZiZtK3AEpiHnUPva2rUZPNOo3qWvwpKKI5DCE2idJiqPy9GeHSmQ8mDeQZxDBdSxVg69392xEokESOL/3cYex5CWovuI01dzy52j210DkK0HsSs7ofi6nVOPzmrdMilKJY58kUV53wDvxEkPigNU3sGyvuvNvumtaHR2lWvuTnoIHnzuT3p4RSpG6rSlVd10T4t0ASGgWDrH4WSwXGxa4CjsHwt+pXRoVxZecuZ0+nHU6T5Si3xMrTFrm58dGKQEE+/RCCFTJwVfex7mRwc6H2FfZv3IAFv55TIm07OKI6mLUSPwG/8="
+    # AWS_SECRET_ACCESS_KEY
+    - secure: "SMtCj0sBgo+h7gGd042UIqwH/FsQ6JSR46T4iRzIMiSI8bqb37JgTnqu3tSEbK4sOQkUhrWZGQFs+e8dM2q0qyj+Ia9EGLGdEzxNvo897KitKvVqKwaSxLSvjQPvfmkUnin/UCkcAUsP3B4CUR3aBkxDJ4IWbcYJUQ3OsGM7WytEXqJmqIYfrrFEcjmAVftwu3ImTN/R/PpbOPAu0hkhxzP/SjTScpPjIq33Ugdnvguh3P5Z2b59nfEZoCHsJL9jc7nPY8MBzLXkl61LDg/pcZlJQFUhf1+uTOrjFLCZrnuwiCAruC5M+CP67eH6m28WlN/REeAmfdbX0zJ7Fbw7RFl4FD80IInYmmW1Dt65vqiW1OWfg38Rs8KXDP47vUtP+ESD7Ksqd0nDqkKnqW57kkboYB5wBQmdhDZqtF5JvYvIuj1VR40v3yTksF6b5RusoMzKOFEGh0MgOYB80XbMjbDMbDeI6zZtLVYm8kaT9NZnbQgPGy+/96NdQdFRA9chxWdTladgd9Zj5fyXAEHv2NxDyEhc3FoAPIVuBbYj1uPwNC1pmOVM1uLGfNO4QJMEvNnW9kIDPsZ/qw4IXhVbR0YE73zoEzYhzCzudN7hZmbIjVlovEM8t5YxSJp+0xcoKswdHMGCk+5uzqXcYu+FaVG7Y/YtfYK5resvwtq5yNg="
+jdk:
+  - openjdk11
+before_install:
+  - echo -e "Configuring Gradle wrapper...\n"
+  - mkdir -p ~/.gradle && echo "org.gradle.daemon=false" >> ~/.gradle/gradle.properties
+  - chmod -R 777 ./gradlew
+  - chmod -R 777 *.sh
+install:
+  - git clone https://github.com/Opetushallitus/ci-tools.git
+  - source ci-tools/common/setup-tools.sh
+  - export ARTIFACT_NAME="cas"
+
+script:
+  - ./gradlew clean build -Dbranch=${TRAVIS_BRANCH} -Drevision=${TRAVIS_COMMIT} -DbuildNumber=${TRAVIS_BUILD_NUMBER}
+
+  - mv build/libs/cas.war $DOCKER_BUILD_DIR/artifact/$ARTIFACT_NAME.jar
+  - cp -vr oph-configuration $DOCKER_BUILD_DIR/config/
+
+  - export BASE_IMAGE="baseimage-fatjar-openjdk11:master"
+  - ./ci-tools/common/pull-image.sh
+  - ./ci-tools/build/build-fatjar.sh $ARTIFACT_NAME
+
+deploy:
+  - provider: script
+    script: ./ci-tools/build/upload-image.sh $ARTIFACT_NAME
+    on:
+      all_branches: true
