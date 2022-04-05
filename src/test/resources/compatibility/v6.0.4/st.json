@@ -21,7 +21,7 @@
       "failures": {}
     },
     "expirationPolicy": {
-      "@class": "org.apereo.cas.ticket.support.NeverExpiresExpirationPolicy",
+      "@class": "org.apereo.cas.ticket.expiration.NeverExpiresExpirationPolicy",
       "name": "NeverExpiresExpirationPolicy-436387fb-b246-4016-b604-309067653937"
     },
     "lastTimeUsed": 1565854853.261685000,
@@ -56,7 +56,7 @@
     "format": "XML"
   },
   "expirationPolicy": {
-    "@class": "org.apereo.cas.ticket.support.NeverExpiresExpirationPolicy",
+    "@class": "org.apereo.cas.ticket.expiration.NeverExpiresExpirationPolicy",
     "name": "NeverExpiresExpirationPolicy-e7253982-b404-459c-bd26-c6baddcc6b9c"
   },
   "lastTimeUsed": 1565854853.261614000,

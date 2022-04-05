@@ -2,7 +2,7 @@
   "@class": "org.apereo.cas.ticket.TransientSessionTicketImpl",
   "@id": 1,
   "expirationPolicy": {
-    "@class": "org.apereo.cas.ticket.support.NeverExpiresExpirationPolicy",
+    "@class": "org.apereo.cas.ticket.expiration.NeverExpiresExpirationPolicy",
     "name": "NeverExpiresExpirationPolicy-25d8085b-48e7-4248-8f3e-9729f86b30f9"
   },
   "id": "TST-1-oyyd8C7sCz-kCHj-kP5ZZQCAQQbuvInv",
