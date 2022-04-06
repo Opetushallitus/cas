@@ -21,7 +21,8 @@ public class JacksonTicketSerializer implements TicketSerializer {
         this(new ObjectMapper()
                 .registerModule(new ParameterNamesModule())
                 .registerModule(new Jdk8Module())
-                .registerModule(new JavaTimeModule()));
+                .registerModule(new JavaTimeModule())
+                .addHandler(new OldTicketPackageNameDeserializationProblemHandler()));
     }
 
     protected JacksonTicketSerializer(ObjectMapper objectMapper) {
@@ -33,7 +34,7 @@ public class JacksonTicketSerializer implements TicketSerializer {
         try {
             return objectMapper.writeValueAsString(ticket);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            throw new TicketJsonpSerializingProblem(e);
         }
     }
 
@@ -49,7 +50,13 @@ public class JacksonTicketSerializer implements TicketSerializer {
             }
             return objectMapper.readValue(ticketJson, Ticket.class);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new TicketJsonpSerializingProblem(e);
+        }
+    }
+
+    private static class TicketJsonpSerializingProblem extends RuntimeException {
+        TicketJsonpSerializingProblem(Exception cause) {
+            super(cause);
         }
     }
 

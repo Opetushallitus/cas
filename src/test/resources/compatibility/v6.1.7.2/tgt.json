@@ -17,7 +17,7 @@
     "failures": {}
   },
   "expirationPolicy": {
-    "@class": "org.apereo.cas.ticket.support.NeverExpiresExpirationPolicy",
+    "@class": "org.apereo.cas.ticket.expiration.NeverExpiresExpirationPolicy",
     "name": "NeverExpiresExpirationPolicy-436387fb-b246-4016-b604-309067653937"
   },
   "lastTimeUsed": 1565854853.037336000,

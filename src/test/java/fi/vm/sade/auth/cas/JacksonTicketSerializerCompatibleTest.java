@@ -21,7 +21,7 @@ public class JacksonTicketSerializerCompatibleTest {
 
     @Parameterized.Parameters
     public static Collection<String> directories() {
-        return asList("v6.0.4");
+        return asList("v6.0.4", "v6.1.7.2");
     }
 
     private final TicketSerializer ticketSerializer;
