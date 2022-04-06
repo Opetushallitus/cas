@@ -1,0 +1,243 @@
+{
+  "id": "PGT-164-k-oCxQOHl-s0l1ITSWRn7L64F8YjL1TBgGacu-UZYte9XQX5LVYeVUZIxiQV7L513LU-ip-10-20-83-42",
+  "@id": 1,
+  "@class": "org.apereo.cas.ticket.ProxyGrantingTicketImpl",
+  "prefix": "PGT",
+  "expired": false,
+  "services": {},
+  "proxiedBy": {
+    "id": "https://virkailija.hahtuvaopintopolku.fi/haku-app/j_spring_cas_security_check",
+    "@class": "org.apereo.cas.authentication.principal.SimpleWebApplicationServiceImpl",
+    "format": "XML",
+    "source": "service",
+    "principal": "palvelutunnus",
+    "artifactId": null,
+    "originalUrl": "https://virkailija.hahtuvaopintopolku.fi/haku-app/j_spring_cas_security_check",
+    "loggedOutAlready": false
+  },
+  "countOfUses": 0,
+  "creationTime": 1649211521.427953000,
+  "lastTimeUsed": 1649211521.427953000,
+  "authentication": {
+    "@class": "org.apereo.cas.authentication.DefaultAuthentication",
+    "failures": {},
+    "principal": {
+      "id": "https://virkailija.hahtuvaopintopolku.fi/haku-app/j_spring_cas_security_proxyreceptor",
+      "@class": "org.apereo.cas.authentication.principal.SimplePrincipal",
+      "attributes": {}
+    },
+    "successes": {
+      "HttpBasedServiceCredentialsAuthenticationHandler": {
+        "@class": "org.apereo.cas.authentication.DefaultAuthenticationHandlerExecutionResult",
+        "warnings": [],
+        "principal": {
+          "id": "https://virkailija.hahtuvaopintopolku.fi/haku-app/j_spring_cas_security_proxyreceptor",
+          "@class": "org.apereo.cas.authentication.principal.SimplePrincipal",
+          "attributes": {}
+        },
+        "handlerName": "HttpBasedServiceCredentialsAuthenticationHandler",
+        "credentialMetaData": {
+          "@class": "org.apereo.cas.authentication.credential.HttpBasedServiceCredential",
+          "service": {
+            "id": 1,
+            "logo": null,
+            "name": "Login whitelist",
+            "theme": null,
+            "@class": "org.apereo.cas.services.RegexRegisteredService",
+            "contacts": [],
+            "logoutUrl": null,
+            "publicKey": null,
+            "serviceId": "^http://[a-z0-9.-]*kehittajan-oma-kone.hahtuvaopintopolku.fi(:[0-9]+)?(/.*)?$|^http://localhost(:[0-9]+)?(/.*)?$|(^https://(oiva.minedu.fi|virkailija.hahtuvaopintopolku.fi|arvo.csc.fi|oph.fi|oph.reaktor.fi|avoptest.csc.fi|avopsnap.csc.fi|amkoutetestapp.csc.fi|amkoutedevapp.csc.fi|oivadev.csc.fi|lataus.ylioppilastutkinto.fi(:[0-9]+)?|localhost(:[0-9]+)?|mydesktop(:[0-9]+)?)(/.*)?$)",
+            "logoutType": "BACK_CHANNEL",
+            "privacyUrl": null,
+            "properties": {},
+            "description": "Allows CAS login on domains in whitelist",
+            "proxyPolicy": {
+              "@class": "org.apereo.cas.services.RegexMatchingRegisteredServiceProxyPolicy",
+              "pattern": "^https?://.*"
+            },
+            "environments": [],
+            "responseType": null,
+            "accessStrategy": {
+              "order": 0,
+              "@class": "org.apereo.cas.services.DefaultRegisteredServiceAccessStrategy",
+              "enabled": true,
+              "ssoEnabled": true,
+              "caseInsensitive": false,
+              "rejectedAttributes": {},
+              "requiredAttributes": {},
+              "requireAllAttributes": true,
+              "unauthorizedRedirectUrl": null,
+              "delegatedAuthenticationPolicy": {
+                "@class": "org.apereo.cas.services.DefaultRegisteredServiceDelegatedAuthenticationPolicy",
+                "allowedProviders": []
+              }
+            },
+            "informationUrl": null,
+            "evaluationOrder": 0,
+            "expirationPolicy": {
+              "@class": "org.apereo.cas.services.DefaultRegisteredServiceExpirationPolicy",
+              "expirationDate": null,
+              "deleteWhenExpired": false,
+              "notifyWhenDeleted": false
+            },
+            "requiredHandlers": [],
+            "multifactorPolicy": {
+              "@class": "org.apereo.cas.services.DefaultRegisteredServiceMultifactorPolicy",
+              "failureMode": "UNDEFINED",
+              "bypassEnabled": false,
+              "principalAttributeNameTrigger": null,
+              "principalAttributeValueToMatch": null,
+              "multifactorAuthenticationProviders": []
+            },
+            "attributeReleasePolicy": {
+              "@class": "org.apereo.cas.services.ReturnAllowedAttributeReleasePolicy",
+              "consentPolicy": {
+                "@class": "org.apereo.cas.services.consent.DefaultRegisteredServiceConsentPolicy",
+                "enabled": true,
+                "excludedAttributes": null,
+                "includeOnlyAttributes": null
+              },
+              "attributeFilter": null,
+              "allowedAttributes": [],
+              "principalIdAttribute": null,
+              "excludeDefaultAttributes": false,
+              "principalAttributesRepository": {
+                "@class": "org.apereo.cas.authentication.principal.DefaultPrincipalAttributesRepository",
+                "timeUnit": "HOURS",
+                "expiration": 2,
+                "mergingStrategy": null
+              },
+              "authorizedToReleaseCredentialPassword": false,
+              "authorizedToReleaseProxyGrantingTicket": false,
+              "authorizedToReleaseAuthenticationAttributes": false
+            },
+            "usernameAttributeProvider": {
+              "@class": "org.apereo.cas.services.DefaultRegisteredServiceUsernameProvider",
+              "encryptUsername": false,
+              "canonicalizationMode": "NONE"
+            }
+          },
+          "callbackUrl": "https://virkailija.hahtuvaopintopolku.fi/haku-app/j_spring_cas_security_proxyreceptor"
+        }
+      }
+    },
+    "attributes": {
+      "credentialType": [
+        "HttpBasedServiceCredential"
+      ],
+      "authenticationMethod": [
+        "HttpBasedServiceCredentialsAuthenticationHandler"
+      ],
+      "successfulAuthenticationHandlers": [
+        "HttpBasedServiceCredentialsAuthenticationHandler"
+      ]
+    },
+    "credentials": [
+      {
+        "id": "https://virkailija.hahtuvaopintopolku.fi/haku-app/j_spring_cas_security_proxyreceptor",
+        "@class": "org.apereo.cas.authentication.metadata.BasicCredentialMetaData",
+        "credentialClass": "org.apereo.cas.authentication.credential.HttpBasedServiceCredential"
+      }
+    ],
+    "authenticationDate": 1649211521.425519000
+  },
+  "expirationPolicy": {
+    "name": "TicketGrantingTicketExpirationPolicy-7a282b22-9dc5-4c33-8ac7-a7a9995ef523",
+    "@class": "org.apereo.cas.ticket.support.TicketGrantingTicketExpirationPolicy",
+    "timeToIdle": 28800,
+    "timeToLive": 28800
+  },
+  "previousTimeUsed": null,
+  "descendantTickets": [],
+  "proxyGrantingTickets": {},
+  "ticketGrantingTicket": {
+    "id": "TGT-457-OTEfFzrW6g9lFg6GElWq9BC39kB8US63TaMOOekeu-DlrXLjA6Hj3NTZ0pC-EvUChd8-ip-10-20-83-42",
+    "@id": 2,
+    "@class": "org.apereo.cas.ticket.TicketGrantingTicketImpl",
+    "prefix": "TGT",
+    "expired": false,
+    "services": {
+      "ST-462-kpc8tKflJ8gq5D9X-CZvy-TSJfk-ip-10-20-83-42": {
+        "id": "https://virkailija.hahtuvaopintopolku.fi/haku-app/j_spring_cas_security_check",
+        "@class": "org.apereo.cas.authentication.principal.SimpleWebApplicationServiceImpl",
+        "format": "XML",
+        "source": "service",
+        "principal": "palvelutunnus",
+        "artifactId": null,
+        "originalUrl": "https://virkailija.hahtuvaopintopolku.fi/haku-app/j_spring_cas_security_check",
+        "loggedOutAlready": false
+      }
+    },
+    "proxiedBy": null,
+    "countOfUses": 1,
+    "creationTime": 1649211521.362578000,
+    "lastTimeUsed": 1649211521.376418000,
+    "authentication": {
+      "@class": "org.apereo.cas.authentication.DefaultAuthentication",
+      "failures": {},
+      "principal": {
+        "id": "palvelutunnus",
+        "@class": "org.apereo.cas.authentication.principal.SimplePrincipal",
+        "attributes": {}
+      },
+      "successes": {
+        "HttpAuthenticationHandler": {
+          "@class": "org.apereo.cas.authentication.DefaultAuthenticationHandlerExecutionResult",
+          "warnings": [],
+          "principal": {
+            "id": "palvelutunnus",
+            "@class": "org.apereo.cas.authentication.principal.SimplePrincipal",
+            "attributes": {}
+          },
+          "handlerName": "HttpAuthenticationHandler",
+          "credentialMetaData": {
+            "id": "palvelutunnus",
+            "@class": "org.apereo.cas.authentication.metadata.BasicCredentialMetaData",
+            "credentialClass": "org.apereo.cas.authentication.credential.UsernamePasswordCredential"
+          }
+        }
+      },
+      "attributes": {
+        "credentialType": [
+          "UsernamePasswordCredential"
+        ],
+        "authenticationMethod": [
+          "HttpAuthenticationHandler"
+        ],
+        "successfulAuthenticationHandlers": [
+          "HttpAuthenticationHandler"
+        ]
+      },
+      "credentials": [
+        {
+          "id": "palvelutunnus",
+          "@class": "org.apereo.cas.authentication.metadata.BasicCredentialMetaData",
+          "credentialClass": "org.apereo.cas.authentication.credential.UsernamePasswordCredential"
+        }
+      ],
+      "authenticationDate": 1649211521.362486000
+    },
+    "expirationPolicy": {
+      "name": "TicketGrantingTicketExpirationPolicy-7a282b22-9dc5-4c33-8ac7-a7a9995ef523",
+      "@class": "org.apereo.cas.ticket.support.TicketGrantingTicketExpirationPolicy",
+      "timeToIdle": 28800,
+      "timeToLive": 28800
+    },
+    "previousTimeUsed": 1649211521.362578000,
+    "descendantTickets": [],
+    "proxyGrantingTickets": {
+      "PGT-164-k-oCxQOHl-s0l1ITSWRn7L64F8YjL1TBgGacu-UZYte9XQX5LVYeVUZIxiQV7L513LU-ip-10-20-83-42": {
+        "id": "https://virkailija.hahtuvaopintopolku.fi/haku-app/j_spring_cas_security_check",
+        "@class": "org.apereo.cas.authentication.principal.SimpleWebApplicationServiceImpl",
+        "format": "XML",
+        "source": "service",
+        "principal": "palvelutunnus",
+        "artifactId": null,
+        "originalUrl": "https://virkailija.hahtuvaopintopolku.fi/haku-app/j_spring_cas_security_check",
+        "loggedOutAlready": false
+      }
+    },
+    "ticketGrantingTicket": null
+  }
+}

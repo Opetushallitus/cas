@@ -48,6 +48,10 @@ public class JacksonTicketSerializerCompatibleTest {
         Ticket proxyGrantingTicket = ticketSerializer.fromJson(proxyGrantingTicketAsJson, ticketGrantingTicketAsJson);
         assertThat(proxyGrantingTicket).isInstanceOf(ProxyGrantingTicket.class);
 
+        String proxyGrantingTicket2AsJson = loadAsString(resourceBase + "/pgt2.json");
+        Ticket proxyGrantingTicket2 = ticketSerializer.fromJson(proxyGrantingTicket2AsJson, null);
+        assertThat(proxyGrantingTicket2).isInstanceOf(ProxyGrantingTicket.class);
+
         String proxyTicketAsJson = loadAsString(resourceBase + "/pt.json");
         Ticket proxyTicket = ticketSerializer.fromJson(proxyTicketAsJson, proxyGrantingTicketAsJson);
         assertThat(proxyTicket).isInstanceOf(ProxyTicket.class);

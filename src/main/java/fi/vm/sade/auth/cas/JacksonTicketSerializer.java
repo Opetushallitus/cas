@@ -22,7 +22,7 @@ public class JacksonTicketSerializer implements TicketSerializer {
                 .registerModule(new ParameterNamesModule())
                 .registerModule(new Jdk8Module())
                 .registerModule(new JavaTimeModule())
-                .addHandler(new OldTicketPackageNameDeserializationProblemHandler()));
+                .addHandler(new OldTicketDeserializationProblemHandler()));
     }
 
     protected JacksonTicketSerializer(ObjectMapper objectMapper) {
