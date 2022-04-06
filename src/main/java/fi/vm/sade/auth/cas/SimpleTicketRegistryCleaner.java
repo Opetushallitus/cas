@@ -36,9 +36,8 @@ public class SimpleTicketRegistryCleaner implements TicketRegistryCleaner {
     private final TicketRegistry ticketRegistry;
     private final TransactionOperations transactionOperations;
 
-    public SimpleTicketRegistryCleaner(LogoutManager logoutManager,
-                                       TicketRegistry ticketRegistry,
-                                       @Qualifier("ticketTransactionManager") PlatformTransactionManager transactionManager) {
+    public SimpleTicketRegistryCleaner(LogoutManager logoutManager, TicketRegistry ticketRegistry, @Qualifier(
+            "ticketTransactionManager") PlatformTransactionManager transactionManager) {
         this.logoutManager = logoutManager;
         this.ticketRegistry = ticketRegistry;
         this.transactionOperations = new TransactionTemplate(transactionManager);
@@ -46,10 +45,15 @@ public class SimpleTicketRegistryCleaner implements TicketRegistryCleaner {
 
     @Override
     public int clean() {
+        int ticketsDeleted = 0;
         List<String> expiredTicketIds = transactionOperations.execute(status -> getExpiredTicketIds());
-        int ticketsDeleted = expiredTicketIds.stream()
-                .mapToInt(expiredTicketId -> transactionOperations.execute(status -> cleanExpiredTicket(expiredTicketId)))
-                .sum();
+        if (expiredTicketIds != null) {
+            ticketsDeleted =
+                    expiredTicketIds.stream()
+                            .mapToInt(expiredTicketId -> transactionOperations
+                                    .execute(status -> cleanExpiredTicket(expiredTicketId)))
+                            .sum();
+        }
         LOGGER.info("[{}] expired tickets removed.", ticketsDeleted);
         return ticketsDeleted;
     }
@@ -75,10 +79,12 @@ public class SimpleTicketRegistryCleaner implements TicketRegistryCleaner {
 
     private int cleanExpiredTicket(Ticket ticket) {
         if (ticket instanceof TicketGrantingTicket) {
-            LOGGER.debug("Cleaning up expired ticket-granting ticket [{}]", ticket.getId());
+            LOGGER.debug("Cleaning up expired ticket-granting ticket [{}], was created at {}", ticket.getId(),
+                    ticket.getCreationTime());
             logoutManager.performLogout((TicketGrantingTicket) ticket);
         }
-        LOGGER.debug("Cleaning up expired service ticket [{}]", ticket.getId());
+        LOGGER.debug("Cleaning up expired service ticket [{}] , was created at {}", ticket.getId(),
+                ticket.getCreationTime());
         return ticketRegistry.deleteTicket(ticket);
     }
 
