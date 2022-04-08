@@ -118,7 +118,7 @@ dependencies {
     runtime 'org.postgresql:postgresql:42.3.3'
     compile "org.springframework.security:spring-security-config:5.2.15.RELEASE"
     compile "fi.vm.sade.java-utils:java-http:0.5.0-SNAPSHOT"
-    compile "com.google.code.gson:gson:2.8.5"
+    compile 'com.google.code.gson:gson:2.9.0'
     compile "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}"
     compileOnly "org.projectlombok:lombok:1.18.4"
     compileOnly "org.webjars:bootstrap:4.1.3"
