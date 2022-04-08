@@ -115,7 +115,7 @@ dependencies {
     compile "org.apereo.cas:cas-server-webapp-init:${casServerVersion}"
     compile 'com.github.kagkarlsson:db-scheduler:11.0'
     compile "org.flywaydb:flyway-core:5.2.4"
-    runtime "org.postgresql:postgresql:42.2.5"
+    runtime 'org.postgresql:postgresql:42.3.3'
     compile "org.springframework.security:spring-security-config:5.2.15.RELEASE"
     compile "fi.vm.sade.java-utils:java-http:0.5.0-SNAPSHOT"
     compile "com.google.code.gson:gson:2.8.5"
