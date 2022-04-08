@@ -7,7 +7,7 @@ import org.apereo.cas.web.flow.CasWebflowExecutionPlan;
 import org.apereo.cas.web.flow.CasWebflowExecutionPlanConfigurer;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.webflow.definition.registry.FlowDefinitionRegistry;
 import org.springframework.webflow.engine.builder.support.FlowBuilderServices;
@@ -19,7 +19,7 @@ public class WebflowExecutionPlanConfiguration implements CasWebflowExecutionPla
     // configurer
     private final FlowBuilderServices flowBuilderServices;
     private final FlowDefinitionRegistry loginFlowDefinitionRegistry;
-    private final ApplicationContext applicationContext;
+    private final ConfigurableApplicationContext applicationContext;
     private final CasConfigurationProperties casProperties;
 
     // action
@@ -27,7 +27,7 @@ public class WebflowExecutionPlanConfiguration implements CasWebflowExecutionPla
 
     public WebflowExecutionPlanConfiguration(FlowBuilderServices flowBuilderServices,
                                              @Qualifier("loginFlowRegistry") FlowDefinitionRegistry loginFlowDefinitionRegistry,
-                                             ApplicationContext applicationContext,
+                                             ConfigurableApplicationContext applicationContext,
                                              CasConfigurationProperties casProperties,
                                              SAMLAction samlAction) {
         this.flowBuilderServices = flowBuilderServices;

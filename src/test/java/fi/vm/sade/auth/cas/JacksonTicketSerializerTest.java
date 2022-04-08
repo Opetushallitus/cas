@@ -17,6 +17,8 @@ import org.apereo.cas.util.crypto.CipherExecutor;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.StaticApplicationContext;
 
 import java.time.ZonedDateTime;
 
@@ -32,10 +34,9 @@ public class JacksonTicketSerializerTest {
     public void setup() {
         ticketSerializer = new JacksonTicketSerializer();
 
-        ApplicationEventPublisher fakeEventPublisher = event -> {
-        };
-        ServiceRegistry serviceRegistry = new ImmutableInMemoryServiceRegistry(emptyList(),fakeEventPublisher,emptySet());
-        servicesManager = new DefaultServicesManager(serviceRegistry,fakeEventPublisher, emptySet());
+        ConfigurableApplicationContext fakeApplicationContext = new StaticApplicationContext();
+        ServiceRegistry serviceRegistry = new ImmutableInMemoryServiceRegistry(emptyList(),fakeApplicationContext,emptySet());
+        servicesManager = new DefaultServicesManager(serviceRegistry,fakeApplicationContext, emptySet());
     }
 
     @Test
@@ -79,7 +80,7 @@ public class JacksonTicketSerializerTest {
         ProxyGrantingTicketFactory proxyGrantingTicketFactory =
                 new DefaultProxyGrantingTicketFactory(new DefaultUniqueTicketIdGenerator(),
                         getNeverExpiringProxyGrantingTicketExpirationPolicyBuilder(),
-                        CipherExecutor.noOpOfStringToString());
+                        CipherExecutor.noOpOfStringToString(), servicesManager);
         ProxyGrantingTicket proxyGrantingTicket =
                 proxyGrantingTicketFactory.create((ServiceTicket) serviceTicketFromJson,
                         new DefaultAuthentication(ZonedDateTime.now(), new NullPrincipal(), emptyMap(), emptyMap(),

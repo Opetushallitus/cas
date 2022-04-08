@@ -3,7 +3,7 @@ package fi.vm.sade.saml.action;
 import org.apereo.cas.configuration.CasConfigurationProperties;
 import org.apereo.cas.web.flow.CasWebflowConstants;
 import org.apereo.cas.web.flow.configurer.AbstractCasWebflowConfigurer;
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.webflow.definition.StateDefinition;
 import org.springframework.webflow.definition.registry.FlowDefinitionRegistry;
 import org.springframework.webflow.engine.ActionState;
@@ -20,7 +20,7 @@ public class SAMLActionConfigurer extends AbstractCasWebflowConfigurer {
 
     public SAMLActionConfigurer(FlowBuilderServices flowBuilderServices,
                                 FlowDefinitionRegistry loginFlowDefinitionRegistry,
-                                ApplicationContext applicationContext,
+                                ConfigurableApplicationContext applicationContext,
                                 CasConfigurationProperties casProperties,
                                 SAMLAction samlAction) {
         super(flowBuilderServices, loginFlowDefinitionRegistry, applicationContext, casProperties);
