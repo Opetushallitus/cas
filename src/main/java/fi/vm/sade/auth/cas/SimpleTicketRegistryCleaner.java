@@ -1,6 +1,7 @@
 package fi.vm.sade.auth.cas;
 
 import org.apereo.cas.logout.LogoutManager;
+import org.apereo.cas.logout.SingleLogoutExecutionRequest;
 import org.apereo.cas.ticket.Ticket;
 import org.apereo.cas.ticket.TicketGrantingTicket;
 import org.apereo.cas.ticket.registry.TicketRegistry;
@@ -49,10 +50,7 @@ public class SimpleTicketRegistryCleaner implements TicketRegistryCleaner {
         List<String> expiredTicketIds = transactionOperations.execute(status -> getExpiredTicketIds());
         if (expiredTicketIds != null) {
             ticketsDeleted =
-                    expiredTicketIds.stream()
-                            .mapToInt(expiredTicketId -> transactionOperations
-                                    .execute(status -> cleanExpiredTicket(expiredTicketId)))
-                            .sum();
+                    expiredTicketIds.stream().mapToInt(expiredTicketId -> transactionOperations.execute(status -> cleanExpiredTicket(expiredTicketId))).sum();
         }
         LOGGER.info("[{}] expired tickets removed.", ticketsDeleted);
         return ticketsDeleted;
@@ -81,7 +79,9 @@ public class SimpleTicketRegistryCleaner implements TicketRegistryCleaner {
         if (ticket instanceof TicketGrantingTicket) {
             LOGGER.debug("Cleaning up expired ticket-granting ticket [{}], was created at {}", ticket.getId(),
                     ticket.getCreationTime());
-            logoutManager.performLogout((TicketGrantingTicket) ticket);
+            logoutManager.performLogout(
+                    SingleLogoutExecutionRequest.builder().ticketGrantingTicket((TicketGrantingTicket) ticket).build()
+            );
         }
         LOGGER.debug("Cleaning up expired service ticket [{}] , was created at {}", ticket.getId(),
                 ticket.getCreationTime());

@@ -3,6 +3,7 @@ package fi.vm.sade.auth.cas;
 import org.apereo.cas.authentication.DefaultAuthentication;
 import org.apereo.cas.authentication.principal.NullPrincipal;
 import org.apereo.cas.authentication.principal.Service;
+import org.apereo.cas.authentication.principal.SimpleWebApplicationServiceImpl;
 import org.apereo.cas.authentication.principal.WebApplicationServiceFactory;
 import org.apereo.cas.services.*;
 import org.apereo.cas.ticket.*;
@@ -16,12 +17,15 @@ import org.apereo.cas.util.DefaultUniqueTicketIdGenerator;
 import org.apereo.cas.util.crypto.CipherExecutor;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.StaticApplicationContext;
 
 import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import static java.time.ZonedDateTime.*;
 import static java.util.Collections.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -29,14 +33,39 @@ public class JacksonTicketSerializerTest {
 
     private TicketSerializer ticketSerializer;
     private ServicesManager servicesManager;
+    private Service service = new WebApplicationServiceFactory().createService("service123");
+
+    private RegisteredService registeredService = new AbstractRegisteredService() {
+        @Override
+        public boolean matches(Service service) {
+            return true;
+        }
+        @Override
+        public boolean matches(String serviceId) {
+            return true;
+        }
+        @Override
+        public void setServiceId(String id) {
+        }
+
+        @Override
+        protected AbstractRegisteredService newInstance() {
+            return this;
+        }
+    };
 
     @Before
     public void setup() {
         ticketSerializer = new JacksonTicketSerializer();
 
         ConfigurableApplicationContext fakeApplicationContext = new StaticApplicationContext();
-        ServiceRegistry serviceRegistry = new ImmutableInMemoryServiceRegistry(emptyList(),fakeApplicationContext,emptySet());
-        servicesManager = new DefaultServicesManager(serviceRegistry,fakeApplicationContext, emptySet());
+
+        ServiceRegistry serviceRegistry = new ImmutableInMemoryServiceRegistry(List.of(registeredService), fakeApplicationContext,
+                emptySet());
+        /*serviceRegistry,fakeApplicationContext, emptySet()*/
+        ServicesManagerConfigurationContext configurationContext =
+                ServicesManagerConfigurationContext.builder().serviceRegistry(serviceRegistry).applicationContext(fakeApplicationContext).build();
+        servicesManager = new DefaultServicesManager(configurationContext);
     }
 
     @Test
@@ -45,10 +74,9 @@ public class JacksonTicketSerializerTest {
         TicketGrantingTicketFactory ticketGrantingTicketFactory = new DefaultTicketGrantingTicketFactory(
                 new DefaultUniqueTicketIdGenerator(),
                 getNeverExpiringTicketGrantingTicketExpirationPolicyBuilder(),
-                CipherExecutor.noOpOfSerializableToString());
+                CipherExecutor.noOpOfSerializableToString(),servicesManager);
         TicketGrantingTicket ticketGrantingTicket =
-                ticketGrantingTicketFactory.create(new DefaultAuthentication(ZonedDateTime.now(), new NullPrincipal()
-                        , emptyMap(), emptyMap(), emptyList()), TicketGrantingTicket.class);
+                ticketGrantingTicketFactory.create(new DefaultAuthentication(), service, TicketGrantingTicket.class);
 
         String ticketGrantingTicketAsJson = ticketSerializer.toJson(ticketGrantingTicket);
         System.out.println(ticketGrantingTicketAsJson);
@@ -66,7 +94,7 @@ public class JacksonTicketSerializerTest {
                 CipherExecutor.noOpOfStringToString(),
                 servicesManager
         );
-        Service service = new WebApplicationServiceFactory().createService("service123");
+
         ServiceTicket serviceTicket = ticketFactory.create((TicketGrantingTicket) ticketGrantingTicketFromJson,
                 service, true, ServiceTicket.class);
 
@@ -83,7 +111,7 @@ public class JacksonTicketSerializerTest {
                         CipherExecutor.noOpOfStringToString(), servicesManager);
         ProxyGrantingTicket proxyGrantingTicket =
                 proxyGrantingTicketFactory.create((ServiceTicket) serviceTicketFromJson,
-                        new DefaultAuthentication(ZonedDateTime.now(), new NullPrincipal(), emptyMap(), emptyMap(),
+                        new DefaultAuthentication(now(), new NullPrincipal(), emptyMap(), emptyMap(),
                                 emptyList()), ProxyGrantingTicket.class);
 
         String proxyGrantingTicketAsJson = ticketSerializer.toJson(proxyGrantingTicket);

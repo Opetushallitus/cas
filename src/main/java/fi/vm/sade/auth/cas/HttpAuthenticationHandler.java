@@ -37,7 +37,7 @@ public class HttpAuthenticationHandler extends AbstractUsernamePasswordAuthentic
         try {
             username = validateUsernamePassword(credential.getUsername(), credential.getPassword());
         } catch (Exception e) {
-            throw new PreventedException("Unexpected HTTP error", e);
+            throw new PreventedException(e);
         }
         if (username == null) {
             throw new FailedLoginException("Invalid credentials");
