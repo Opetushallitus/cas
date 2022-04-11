@@ -7,12 +7,13 @@ configurations {
 dependencies {
     bootRunConfig "org.apereo.cas:cas-server-webapp-init:${casServerVersion}"
     bootRunConfig "org.apereo.cas:cas-server-webapp-tomcat:${casServerVersion}"
-    bootRunConfig "org.springframework.boot:spring-boot-devtools:${project.springBootVersion}"
+    bootRunConfig "org.springframework.boot:spring-boot-devtools:2.6.6"
 }
 
 sourceSets {
     bootRunSources {
         resources {
+
             srcDirs new File("//etc/cas/templates/"),
                     new File("${project.getProjectDir()}/src/main/resources/")
         }
