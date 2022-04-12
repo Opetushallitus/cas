@@ -98,6 +98,7 @@ apply plugin: "io.freefair.lombok"
 apply from: rootProject.file("gradle/springboot.gradle")
 apply from: rootProject.file("gradle/jib.gradle")
 apply from: rootProject.file("gradle/tasks.gradle")
+apply from: rootProject.file("gradle/buildversion.gradle")
 
 dependencyManagement {
     imports {
