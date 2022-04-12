@@ -1,13 +1,28 @@
 # CAS configuration
 # https://apereo.github.io/cas/6.0.x/configuration/Configuration-Properties.html
 
-server.port: 8080
-server.ssl.enabled: false
-server.useForwardHeaders: false
+server:
+  forward-headers-strategy: NONE
+  port: 8080
+  ssl.enabled: false
+  tomcat:
+    remoteip:
+      port-header: X-Forwarded-Port
+      protocol-header: X-Forwarded-Proto
+      protocol-header-https-value: https
+      remote-ip-header: X-FORWARDED-FOR
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+      enabled: true
 
-server.tomcat.portHeader:
-server.tomcat.protocolHeader:
-server.tomcat.remoteIpHeader:
+management:
+  endpoint:
+    health:
+      status:
+        order=WARN,DOWN,OUT_OF_SERVICE,UNKNOWN,UP:
+
 
 cas.httpWebRequest.header.xframe: false
 cas.httpWebRequest.header.xss: false
