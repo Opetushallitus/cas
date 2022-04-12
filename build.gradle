@@ -1,19 +1,13 @@
-import org.apache.tools.ant.taskdefs.condition.*
-import org.gradle.internal.logging.text.*
-import org.apereo.cas.metadata.*
-import java.nio.file.*
-import static org.gradle.internal.logging.text.StyledTextOutput.Style
-
 buildscript {
     repositories {
         if (project.privateRepoUrl) {
-          maven {
-            url project.privateRepoUrl
-            credentials {
-              username = project.privateRepoUsername
-              password = System.env.PRIVATE_REPO_TOKEN
+            maven {
+                url project.privateRepoUrl
+                credentials {
+                    username = project.privateRepoUsername
+                    password = System.env.PRIVATE_REPO_TOKEN
+                }
             }
-          }
         }
         mavenLocal()
         mavenCentral()
@@ -28,27 +22,29 @@ buildscript {
         }
     }
     dependencies {
+        classpath "de.undercouch:gradle-download-task:${project.gradleDownloadTaskVersion}"
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${project.springBootVersion}"
+        classpath "gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:${project.jibVersion}"
         classpath "io.freefair.gradle:maven-plugin:${project.gradleFreeFairPluginVersion}"
         classpath "io.freefair.gradle:lombok-plugin:${project.gradleFreeFairPluginVersion}"
         classpath "io.spring.gradle:dependency-management-plugin:${project.gradleDependencyManagementPluginVersion}"
-        classpath "gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:${project.jibVersion}"
-
-        classpath "de.undercouch:gradle-download-task:${project.gradleDownloadTaskVersion}"
         classpath "org.apereo.cas:cas-server-core-api-configuration-model:${project.'cas.version'}"
         classpath "org.apereo.cas:cas-server-core-configuration-metadata-repository:${project.'cas.version'}"
+        classpath "io.freefair.gradle:maven-plugin:"
+        classpath "io.freefair.gradle:jsass-plugin:${project.gradleFreeFairPluginVersion}"
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3"
     }
 }
 
 repositories {
     if (project.privateRepoUrl) {
-      maven {
-        url project.privateRepoUrl
-        credentials {
-          username = project.privateRepoUsername
-          password = System.env.PRIVATE_REPO_TOKEN
+        maven {
+            url project.privateRepoUrl
+            credentials {
+                username = project.privateRepoUsername
+                password = System.env.PRIVATE_REPO_TOKEN
+            }
         }
-      }
     }
     mavenLocal()
     mavenCentral()
@@ -94,6 +90,9 @@ apply plugin: "io.freefair.war-overlay"
 apply plugin: "war"
 apply plugin: "org.springframework.boot"
 apply plugin: "io.freefair.lombok"
+
+apply plugin: "jacoco"
+apply plugin: "org.sonarqube"
 
 apply from: rootProject.file("gradle/springboot.gradle")
 apply from: rootProject.file("gradle/jib.gradle")
@@ -141,11 +140,17 @@ bootBuildImage {
     imageName = "${project.'containerImageOrg'}/${project.'containerImageName'}:${project.version}"
 }
 
+sonarqube {
+    properties {
+        property "sonar.projectKey", "Opetushallitus_cas"
+        property "sonar.organization", "opetushallitus"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
+}
+
 dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind'
     implementation 'com.fasterxml.jackson.module:jackson-module-parameter-names'
-
-
     /**
      * CAS dependencies and modules may be listed here.
      *
@@ -194,17 +199,13 @@ dependencies {
     if (project.hasProperty("casModules")) {
         def dependencies = project.getProperty("casModules").split(",")
         dependencies.each {
-            def projectsToAdd = rootProject.subprojects.findAll {project ->
+            def projectsToAdd = rootProject.subprojects.findAll { project ->
                 project.name == "cas-server-core-${it}" || project.name == "cas-server-support-${it}"
             }
-            projectsToAdd.each {implementation it}
+            projectsToAdd.each { implementation it }
         }
     }
 
 
-
-    
-    
     developmentOnly "org.springframework.boot:spring-boot-devtools:${project.springBootVersion}"
 }
-
