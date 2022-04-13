@@ -7,17 +7,11 @@
 
     <title layout:title-pattern="$LAYOUT_TITLE" th:text="#{app.documentTitle}">CAS &#8211; Central Authentication Service</title>
 
-    <!--/* <<link rel="stylesheet" th:href="@{#{webjars.fontawesomemin.css}}"/>
+    <link rel="stylesheet" th:href="@{#{webjars.fontawesomemin.css}}"/>
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700">
-
-    */-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700"/>
 
     <!--/* Core CAS CSS */-->
-    <link rel="stylesheet" type="text/css" href="../static/css/normalize.css" th:href="@{#{webjars.normalize.css}}" />
-    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap-grid.min.css" th:href="@{#{webjars.bootstrap-grid.css}}" />
-    <link rel="stylesheet" type="text/css" href="../static/css/material-components-web.min.css" th:href="@{#{webjars.material-components.css}}" />
-    <link rel="stylesheet" type="text/css" href="../static/css/mdi-font.css" th:href="@{#{webjars.mdi-font.css}}" />
     <link rel="stylesheet" type="text/css" href="../static/css/cas.css" th:href="@{${#themes.code('cas.standard.css.file')}}"/>
 
     <link rel="shortcut icon"

@@ -30,7 +30,6 @@ buildscript {
         classpath "io.spring.gradle:dependency-management-plugin:${project.gradleDependencyManagementPluginVersion}"
         classpath "org.apereo.cas:cas-server-core-api-configuration-model:${project.'cas.version'}"
         classpath "org.apereo.cas:cas-server-core-configuration-metadata-repository:${project.'cas.version'}"
-        classpath "io.freefair.gradle:maven-plugin:"
         classpath "io.freefair.gradle:jsass-plugin:${project.gradleFreeFairPluginVersion}"
         classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3"
     }
@@ -90,6 +89,7 @@ apply plugin: "io.freefair.war-overlay"
 apply plugin: "war"
 apply plugin: "org.springframework.boot"
 apply plugin: "io.freefair.lombok"
+apply plugin: "io.freefair.jsass-java"
 
 apply plugin: "jacoco"
 apply plugin: "org.sonarqube"
@@ -146,6 +146,11 @@ sonarqube {
         property "sonar.organization", "opetushallitus"
         property "sonar.host.url", "https://sonarcloud.io"
     }
+}
+
+compileSass {
+    sourceMapEnabled = true
+    outputStyle = COMPRESSED
 }
 
 dependencies {
