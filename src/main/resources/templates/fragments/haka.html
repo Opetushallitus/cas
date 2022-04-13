@@ -18,7 +18,7 @@
                     <p class="card-text">
                         <a th:with="parameters=${service != null} ? '?redirect=' + ${T(org.springframework.web.util.UriComponentsBuilder).fromHttpUrl(service.originalUrl).toUriString()} : ''"
                            th:href="${cas.custom.properties['hakaUrl']} + ${parameters}">
-                            <img src="/cas/img/haka_landscape_medium.gif" />
+                            <img src="/cas/images/haka_landscape_medium.gif" />
                         </a>
                     </p>
                 </div>
