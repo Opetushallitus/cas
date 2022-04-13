@@ -152,7 +152,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind'
     implementation 'com.fasterxml.jackson.module:jackson-module-parameter-names'
     /**
-     * CAS dependencies and modules may be listed here.
+     *  CAS dependencies and modules may be listed here.
      *
      * There is no need to specify the version number for each dependency
      * since versions are all resolved and controlled by the dependency management
