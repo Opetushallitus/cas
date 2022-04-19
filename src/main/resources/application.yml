@@ -1,5 +1,5 @@
 # CAS configuration
-# https://apereo.github.io/cas/6.0.x/configuration/Configuration-Properties.html
+# https://apereo.github.io/cas/6.3.x/configuration/Configuration-Properties.html
 
 server:
   forward-headers-strategy: NONE
@@ -31,7 +31,7 @@ cas.httpWebRequest.header.hsts: false
 
 cas.authn.accept.users:
 
-cas.authn.throttle.schedule.startDelay: 0
+cas.authn.throttle.schedule.startDelay: PT0S
 cas.authn.throttle.schedule.repeatInterval: 43200000
 
 cas.tgc.secure: false
