@@ -1,21 +1,20 @@
 # CAS configuration
-# https://apereo.github.io/cas/6.3.x/configuration/Configuration-Properties.html
+# https://apereo.github.io/cas/6.0.x/configuration/Configuration-Properties.html
 
 server:
-  forward-headers-strategy: NONE
   port: 8080
   ssl.enabled: false
-  tomcat:
-    remoteip:
-      port-header: X-Forwarded-Port
-      protocol-header: X-Forwarded-Proto
-      protocol-header-https-value: https
-      remote-ip-header: X-FORWARDED-FOR
   servlet:
     encoding:
       charset: UTF-8
       force: true
       enabled: true
+  forward-headers-strategy: NONE
+  tomcat:
+    remoteip:
+      port-header:
+      protocol-header:
+      remote-ip-header:
 
 management:
   endpoint:
@@ -24,28 +23,31 @@ management:
         order=WARN,DOWN,OUT_OF_SERVICE,UNKNOWN,UP:
 
 
-cas.httpWebRequest.header.xframe: false
-cas.httpWebRequest.header.xss: false
-cas.httpWebRequest.header.xcontent: false
-cas.httpWebRequest.header.hsts: false
+cas:
+  http-web-request.header:
+    xframe: false
+    xss: false
+    xcontent: false
+    hsts: false
+  ticket:
+    tgt:
+      time-to-kill-in-seconds: 28800
+      max-time-to-live-in-seconds: 28800
 
 cas.authn.accept.users:
 
-cas.authn.throttle.schedule.startDelay: PT0S
-cas.authn.throttle.schedule.repeatInterval: 43200000
+cas.authn.throttle.schedule.start-delay: PT0S
+cas.authn.throttle.schedule.repeat-interval: 43200000
 
 cas.tgc.secure: false
 cas.tgc.path: /cas
 
-cas.ticket.tgt.maxTimeToLiveInSeconds: 28800
-cas.ticket.tgt.timeToKillInSeconds: 28800
+cas.warning-cookie.secure: false
+cas.warning-cookie.path: /cas
 
-cas.warningCookie.secure: false
-cas.warningCookie.path: /cas
+cas.logout.follow-service-redirects: true
 
-cas.logout.followServiceRedirects: true
-
-cas.locale.defaultValue: fi
+cas.locale.default-value: fi
 
 cas.custom.properties.hakaUrl: http://localhost:8080/service-provider-app/saml/login/alias/hakasp
 cas.custom.properties.suomifiUrl: http://untuvaopintopolku.fi/cas-oppija/login

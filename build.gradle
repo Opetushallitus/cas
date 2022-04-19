@@ -1,3 +1,5 @@
+import sass.embedded_protocol.EmbeddedSass
+
 buildscript {
     repositories {
         if (project.privateRepoUrl) {
@@ -140,7 +142,7 @@ java {
 
 sass {
     sourceMapEnabled = true
-    outputStyle = COMPRESSED
+    outputStyle = EmbeddedSass.OutputStyle.COMPRESSED
 }
 
 bootBuildImage {
