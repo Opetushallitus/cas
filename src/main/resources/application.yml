@@ -54,6 +54,12 @@ cas.custom.properties.loginTietosuojaselosteUrl: http://localhost:8080/tietosuoj
 
 cas.ticket.registry.cleaner.schedule.enabled: false
 
+logging:
+  level:
+    org:
+      apereo:
+        cas: DEBUG
+
 # Spring Boot configuration
 # https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 
