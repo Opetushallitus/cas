@@ -11,13 +11,12 @@
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700">
 
-
-
     <!--/* Core CAS CSS */-->
     <link rel="stylesheet" type="text/css" href="../static/css/cas.css" th:href="@{${#themes.code('cas.standard.css.file')}}"/>
 
     <link rel="shortcut icon"
           th:href="@{${#strings.defaultString(#themes.code('cas.favicon.file'), '/favicon.ico')}}" />
+    <script type="text/javascript" th:src="@{#{webjars.jquery.js}}"></script>
 </head>
 
 <body th:attr="data-language=${#locale.getLanguage().toLowerCase()}">
