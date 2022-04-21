@@ -6,6 +6,8 @@ import org.apereo.cas.ticket.TicketGrantingTicket;
 import org.apereo.cas.ticket.registry.AbstractTicketRegistry;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.RowMapperResultSetExtractor;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,19 +16,18 @@ import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 /**
  * <code>
  * CREATE TABLE ticket (
- *   id text PRIMARY KEY,
- *   type text NOT NULL,
- *   number_of_times_used integer NOT NULL,
- *   creation_time timestamp with time zone NOT NULL,
- *   ticket_granting_ticket_id text REFERENCES ticket (id) ON DELETE CASCADE,
- *   data jsonb NOT NULL
+ * id text PRIMARY KEY,
+ * type text NOT NULL,
+ * number_of_times_used integer NOT NULL,
+ * creation_time timestamp with time zone NOT NULL,
+ * ticket_granting_ticket_id text REFERENCES ticket (id) ON DELETE CASCADE,
+ * data jsonb NOT NULL
  * );
- *
+ * <p>
  * CREATE INDEX ticket_type_idx ON ticket (type);
  * </code>
  */
@@ -35,14 +36,11 @@ import java.util.stream.Stream;
 public class JdbcTicketRegistry extends AbstractTicketRegistry {
 
     private final JdbcOperations jdbcOperations;
-    private final StreamOperations streamOperations;
     private final TicketSerializer ticketSerializer;
 
     public JdbcTicketRegistry(JdbcOperations jdbcOperations,
-                              StreamOperations streamOperations,
                               TicketSerializer ticketSerializer) {
         this.jdbcOperations = jdbcOperations;
-        this.streamOperations = streamOperations;
         this.ticketSerializer = ticketSerializer;
     }
 
@@ -52,11 +50,14 @@ public class JdbcTicketRegistry extends AbstractTicketRegistry {
     }
 
     @Override
-    public void addTicket(Ticket ticket) {
+    public void addTicketInternal(Ticket ticket) {
         OffsetDateTime creationTime = ticket.getCreationTime().toOffsetDateTime();
-        String ticketGrantingTicketId = Optional.ofNullable(ticket.getTicketGrantingTicket()).map(Ticket::getId).orElse(null);
-        jdbcOperations.update("INSERT INTO ticket (id, type, number_of_times_used, creation_time, ticket_granting_ticket_id, data) VALUES (?, ?, ?, ?, ?, ?::jsonb)",
-                ticket.getId(), ticket.getPrefix(), ticket.getCountOfUses(), creationTime, ticketGrantingTicketId, ticketSerializer.toJson(ticket));
+        String ticketGrantingTicketId =
+                Optional.ofNullable(ticket.getTicketGrantingTicket()).map(Ticket::getId).orElse(null);
+        jdbcOperations.update("INSERT INTO ticket (id, type, number_of_times_used, creation_time, " +
+                        "ticket_granting_ticket_id, data) VALUES (?, ?, ?, ?, ?, ?::jsonb)",
+                ticket.getId(), ticket.getPrefix(), ticket.getCountOfUses(), creationTime, ticketGrantingTicketId,
+                ticketSerializer.toJson(ticket));
     }
 
     @Override
@@ -66,25 +67,25 @@ public class JdbcTicketRegistry extends AbstractTicketRegistry {
 
     @Override
     public long deleteAll() {
+        //noinspection SqlWithoutWhere
         return jdbcOperations.update("DELETE FROM ticket");
     }
 
-    @Override
     public Collection<? extends Ticket> getTickets() {
-        throw new UnsupportedOperationException("Use getTicketsStream()");
-    }
+        RowMapper<Ticket> mapper = (rs, rowNum) -> ticketSerializer.fromJson(rs.getString("data"
+        ), rs.getString("ticket_granting_ticket_data"));
 
-    @Override
-    public Stream<? extends Ticket> getTicketsStream() {
-        return streamOperations.stream(
-                "SELECT t1.data AS data, t2.data AS ticket_granting_ticket_data FROM ticket t1 LEFT JOIN ticket t2 ON t2.id = t1.ticket_granting_ticket_id",
-                rs -> ticketSerializer.fromJson(rs.getString("data"), rs.getString("ticket_granting_ticket_data")));
+
+        return jdbcOperations.query(
+                "SELECT t1.data AS data, t2.data AS ticket_granting_ticket_data FROM ticket t1 LEFT JOIN ticket t2 ON" +
+                        " t2.id = t1.ticket_granting_ticket_id",
+                new RowMapperResultSetExtractor<>(mapper));
     }
 
     @Override
     public Ticket updateTicket(Ticket ticket) {
         jdbcOperations.update("UPDATE ticket SET number_of_times_used = ?, data = ?::jsonb WHERE id = ?",
-                new Object[] { ticket.getCountOfUses(), ticketSerializer.toJson(ticket), ticket.getId() });
+                ticket.getCountOfUses(), ticketSerializer.toJson(ticket), ticket.getId());
         return ticket;
     }
 
@@ -101,34 +102,54 @@ public class JdbcTicketRegistry extends AbstractTicketRegistry {
     }
 
     private Optional<Ticket> findById(String id) {
-        Row row = DataAccessUtils.singleResult(jdbcOperations.query("SELECT data, ticket_granting_ticket_id FROM ticket WHERE id = ? FOR UPDATE",
-                new Object[] { id }, (rs, rowNum) -> new Row(rs.getString("data"), rs.getString("ticket_granting_ticket_id"))));
+        Row row = DataAccessUtils.singleResult(jdbcOperations.query("SELECT data, ticket_granting_ticket_id FROM " +
+                        "ticket WHERE id = ? FOR UPDATE",
+                (rs, rowNum) -> new Row(rs.getString("data"), rs.getString(
+                        "ticket_granting_ticket_id")), id));
         return Optional.ofNullable(row).map(this::rowToTicket);
     }
 
     private Ticket rowToTicket(Row row) {
-        String ticketGrantingTicketData = row.ticketGrantingTicketId.flatMap(this::findDataById).orElse(null);
-        return ticketSerializer.fromJson(row.data, ticketGrantingTicketData);
+        String ticketGrantingTicketData = row.getTicketGrantingTicketId().flatMap(this::findDataById).orElse(null);
+        return ticketSerializer.fromJson(row.getData(), ticketGrantingTicketData);
     }
 
     private Optional<String> findDataById(String id) {
-        return Optional.ofNullable(DataAccessUtils.singleResult(jdbcOperations.query("SELECT data FROM ticket WHERE id = ?",
-                new Object[] { id }, SingleColumnRowMapper.newInstance(String.class))));
+        return Optional.ofNullable(DataAccessUtils.singleResult(jdbcOperations.query("SELECT data FROM ticket WHERE " +
+                        "id = ?",
+                SingleColumnRowMapper.newInstance(String.class), id)));
     }
 
     private long countByType(String type) {
+        //noinspection ConstantConditions
         return jdbcOperations.queryForObject("SELECT count(*) FROM ticket WHERE type = ?",
-                new Object[] { type }, Long.class);
+                Long.class, type);
     }
 
     private static class Row {
 
-        public String data;
-        public Optional<String> ticketGrantingTicketId;
+        private String data;
+        private Optional<String> ticketGrantingTicketId;
 
         public Row(String data, String ticketGrantingTicketId) {
+            this.setData(data);
+            this.setTicketGrantingTicketId(Optional.ofNullable(ticketGrantingTicketId));
+        }
+
+        public String getData() {
+            return data;
+        }
+
+        public void setData(String data) {
             this.data = data;
-            this.ticketGrantingTicketId = Optional.ofNullable(ticketGrantingTicketId);
+        }
+
+        public Optional<String> getTicketGrantingTicketId() {
+            return ticketGrantingTicketId;
+        }
+
+        public void setTicketGrantingTicketId(Optional<String> ticketGrantingTicketId) {
+            this.ticketGrantingTicketId = ticketGrantingTicketId;
         }
     }
 

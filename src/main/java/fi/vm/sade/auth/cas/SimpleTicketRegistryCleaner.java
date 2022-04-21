@@ -57,13 +57,14 @@ public class SimpleTicketRegistryCleaner implements TicketRegistryCleaner {
     }
 
     private List<String> getExpiredTicketIds() {
-        try (Stream<? extends Ticket> ticketsStream = ticketRegistry.getTicketsStream()) {
+        try (Stream<? extends Ticket> ticketsStream = ticketRegistry.getTickets().stream()) {
             return ticketsStream.filter(Ticket::isExpired).map(Ticket::getId).collect(toList());
         }
     }
 
     @Override
     public int cleanTicket(final Ticket ticket) {
+        //noinspection ConstantConditions
         return transactionOperations.execute(status -> cleanExpiredTicket(ticket.getId()));
     }
 
