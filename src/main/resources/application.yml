@@ -1,5 +1,5 @@
 # CAS configuration
-# https://apereo.github.io/cas/6.3.x/configuration/Configuration-Properties.html
+# https://apereo.github.io/cas/6.4.x/configuration/Configuration-Properties.html
 
 server:
   port: 8080

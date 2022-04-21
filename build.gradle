@@ -1,15 +1,21 @@
 import sass.embedded_protocol.EmbeddedSass
 
+import org.apache.tools.ant.taskdefs.condition.*
+import org.gradle.internal.logging.text.*
+import org.apereo.cas.metadata.*
+import java.nio.file.*
+import static org.gradle.internal.logging.text.StyledTextOutput.Style
+
 buildscript {
     repositories {
         if (project.privateRepoUrl) {
-            maven {
-                url project.privateRepoUrl
-                credentials {
-                    username = project.privateRepoUsername
-                    password = System.env.PRIVATE_REPO_TOKEN
-                }
+          maven {
+            url project.privateRepoUrl
+            credentials {
+              username = project.privateRepoUsername
+              password = System.env.PRIVATE_REPO_TOKEN
             }
+          }
         }
         mavenLocal()
         mavenCentral()
@@ -40,13 +46,13 @@ buildscript {
 
 repositories {
     if (project.privateRepoUrl) {
-        maven {
-            url project.privateRepoUrl
-            credentials {
-                username = project.privateRepoUsername
-                password = System.env.PRIVATE_REPO_TOKEN
-            }
+      maven {
+        url project.privateRepoUrl
+        credentials {
+          username = project.privateRepoUsername
+          password = System.env.PRIVATE_REPO_TOKEN
         }
+      }
     }
     mavenLocal()
     mavenCentral()
@@ -190,7 +196,7 @@ dependencies {
     implementation "fi.vm.sade.java-utils:java-http:0.5.0-SNAPSHOT"
     implementation "org.flywaydb:flyway-core:5.2.4"
     runtimeOnly 'org.postgresql:postgresql:42.3.3'
-    implementation "org.springframework.security:spring-security-config:5.2.15.RELEASE"
+    implementation "org.springframework.security:spring-security-config"
     implementation "fi.vm.sade.java-utils:java-http:0.5.0-SNAPSHOT"
     implementation 'com.google.code.gson:gson:2.9.0'
     implementation "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}"
@@ -208,13 +214,17 @@ dependencies {
     if (project.hasProperty("casModules")) {
         def dependencies = project.getProperty("casModules").split(",")
         dependencies.each {
-            def projectsToAdd = rootProject.subprojects.findAll { project ->
+            def projectsToAdd = rootProject.subprojects.findAll {project ->
                 project.name == "cas-server-core-${it}" || project.name == "cas-server-support-${it}"
             }
-            projectsToAdd.each { implementation it }
+            projectsToAdd.each {implementation it}
         }
     }
 
 
+
+
+
     developmentOnly "org.springframework.boot:spring-boot-devtools:${project.springBootVersion}"
 }
+
