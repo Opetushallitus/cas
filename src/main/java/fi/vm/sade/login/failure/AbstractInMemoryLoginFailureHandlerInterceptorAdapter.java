@@ -1,5 +1,6 @@
 package fi.vm.sade.login.failure;
 
+import org.apereo.cas.throttle.DefaultAuthenticationThrottlingExecutionPlan;
 import org.apereo.cas.throttle.DefaultThrottledRequestResponseHandler;
 import org.apereo.cas.throttle.ThrottledRequestExecutor;
 import org.apereo.cas.web.support.AbstractThrottledSubmissionHandlerInterceptorAdapter;
@@ -45,6 +46,7 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
                 .usernameParameter(usernameParameter)
                 .throttledRequestResponseHandler(new DefaultThrottledRequestResponseHandler(usernameParameter))
                 .throttledRequestExecutor(ThrottledRequestExecutor.noOp())
+                .authenticationThrottlingExecutionPlan(new DefaultAuthenticationThrottlingExecutionPlan())
                 .build());
         this.failedLogins = loginFailureStore;
     }
