@@ -34,6 +34,15 @@ cas:
       primary:
         time-to-kill-in-seconds: 28800
         max-time-to-live-in-seconds: 28800
+    registry:
+        jpa:
+          driver-class: ${spring.datasource.driver-class-name}
+          password: ${spring.datasource.password}
+          url: ${spring.datasource.url}
+          user: ${spring.datasource.username}
+          autocommit: true
+          ddl-auto: none
+          dialect: org.hibernate.dialect.PostgreSQL95Dialect
 
 cas.authn.accept.users:
 
