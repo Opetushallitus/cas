@@ -51,6 +51,10 @@ server.tomcat.accesslog.rename-on-rotate=true
 # server.tomcat.accesslog.max-days is custom parameter
 server.tomcat.accesslog.max-days=7
 
+server.tomcat.remoteip.port-header=
+server.tomcat.remoteip.protocol-header=
+server.tomcat.remoteip.remote-ip-header=
+
 # Custom configuration
 
 whitelist.regexp={{cas_whitelist_regexp}}
