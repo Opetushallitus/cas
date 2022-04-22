@@ -202,6 +202,7 @@ dependencies {
     implementation "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}"
     compileOnly 'org.projectlombok:lombok:1.18.22'
     compileOnly 'org.webjars:bootstrap:4.1.3'
+    annotationProcessor "org.springframework:spring-context-indexer"
     testImplementation "org.apereo.cas:cas-server-core-services-registry"
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.mockito:mockito-core:4.4.0'
