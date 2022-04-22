@@ -20,7 +20,7 @@ management:
   endpoint:
     health:
       status:
-        order=WARN,DOWN,OUT_OF_SERVICE,UNKNOWN,UP:
+        order: WARN,DOWN,OUT_OF_SERVICE,UNKNOWN,UP
 
 
 cas:
@@ -31,8 +31,9 @@ cas:
     hsts: false
   ticket:
     tgt:
-      time-to-kill-in-seconds: 28800
-      max-time-to-live-in-seconds: 28800
+      primary:
+        time-to-kill-in-seconds: 28800
+        max-time-to-live-in-seconds: 28800
 
 cas.authn.accept.users:
 
@@ -59,16 +60,20 @@ cas.ticket.registry.cleaner.schedule.enabled: false
 # Spring Boot configuration
 # https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 
-spring.datasource.url: jdbc:postgresql://localhost:5432/cas
-spring.datasource.username: cas
-spring.datasource.password: cas
-spring.datasource.driver-class-name: org.postgresql.Driver
-spring.datasource.platform: postgresql
-
-spring.flyway.enabled: true
-spring.flyway.out-of-order: true
-
-spring.session.store-type: jdbc
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/cas
+    username: cas
+    password: cas
+    driver-class-name: org.postgresql.Driver
+  session:
+    store-type: jdbc
+  sql:
+    init:
+      platform: postgresql
+  flyway:
+    enabled: true
+    out-of-order: true
 
 # Custom configuration
 
