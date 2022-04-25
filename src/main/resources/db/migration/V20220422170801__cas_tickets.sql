@@ -8,6 +8,3 @@ CREATE TABLE IF NOT EXISTS cas_tickets
     principal_id  VARCHAR(1024),
     type          VARCHAR(1024)  NOT NULL
 );
-
-ALTER TABLE cas_tickets
-    OWNER TO cas;
