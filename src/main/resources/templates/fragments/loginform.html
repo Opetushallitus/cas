@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -25,6 +25,7 @@
                                 <span th:if="${availableAuthenticationHandlerNames.size() > 1}">
                                     <label for="source" th:utext="#{screen.welcome.label.source}">Source</label>
                                     <div>
+                                        <!--suppress XmlDuplicatedId -->
                                         <select class="form-control required"
                                                 id="source"
                                                 name="source"
@@ -35,7 +36,8 @@
                                     </div>
                                 </span>
                                 <span th:if="${availableAuthenticationHandlerNames.size() == 1}">
-                                     <input type="hidden"
+                                     <!--suppress XmlDuplicatedId -->
+                                    <input type="hidden"
                                             id="source"
                                             name="source"
                                             th:value="${availableAuthenticationHandlerNames.get(0)}"/>
@@ -48,12 +50,14 @@
                                 <strong>
                                     <span th:utext="${openIdLocalId}"/>
                                 </strong>
+                                <!--suppress XmlDuplicatedId -->
                                 <input type="hidden"
                                        id="username"
                                        name="username"
                                        th:value="${openIdLocalId}"/>
                             </div>
                             <div th:unless="${openIdLocalId}">
+                                <!--suppress XmlDuplicatedId -->
                                 <input class="form-control required"
                                        th:placeholder="#{login.usernamePlaceholder}"
                                        id="username"
@@ -176,13 +180,12 @@
                     </form>
 
                     <script type="text/javascript" th:inline="javascript">
-                        /*<![CDATA[*/
-                        var i = /*[[@{#{screen.welcome.button.loginwip}}]]*/
-                            /*]]>*/
                             $(document).ready(function () {
+                                var i = [[@{#{screen.welcome.button.loginwip}}]]
                                 $("#fm1").submit(function () {
-                                    $(":submit").attr("disabled", true);
-                                    $(":submit").attr("value", i);
+                                    $(":submit")
+                                        .attr("disabled", true)
+                                        .attr("value", i);
                                     return true;
                                 });
                             });
