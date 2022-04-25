@@ -35,14 +35,18 @@ cas:
         time-to-kill-in-seconds: 28800
         max-time-to-live-in-seconds: 28800
     registry:
-        jpa:
-          driver-class: ${spring.datasource.driver-class-name}
-          password: ${spring.datasource.password}
-          url: ${spring.datasource.url}
-          user: ${spring.datasource.username}
-          autocommit: true
-          ddl-auto: none
-          dialect: org.hibernate.dialect.PostgreSQL95Dialect
+      jpa:
+        driver-class: ${spring.datasource.driver-class-name}
+        password: ${spring.datasource.password}
+        url: ${spring.datasource.url}
+        user: ${spring.datasource.username}
+        autocommit: true
+        ddl-auto: none
+        dialect: org.hibernate.dialect.PostgreSQL95Dialect
+      cleaner:
+        schedule:
+          enabled: true
+
 
 cas.authn.accept.users:
 
@@ -64,7 +68,6 @@ cas.custom.properties.suomifiUrl: http://untuvaopintopolku.fi/cas-oppija/login
 cas.custom.properties.suomifiUrlTarget: http://localhost:8080/kayttooikeus-service/cas/tunnistus?locale=
 cas.custom.properties.loginTietosuojaselosteUrl: http://localhost:8080/tietosuojaseloste/
 
-cas.ticket.registry.cleaner.schedule.enabled: false
 
 # Spring Boot configuration
 # https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
