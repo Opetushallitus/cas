@@ -14,6 +14,7 @@ import org.apereo.cas.util.lock.DefaultLockRepository;
 import org.apereo.cas.util.lock.LockRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.integration.jdbc.lock.JdbcLockRegistry;
 import org.springframework.integration.support.locks.LockRegistry;
 
 import javax.sql.DataSource;
@@ -24,7 +25,6 @@ public class TicketRegistryCleanerTaskConfiguration {
 
     @Bean
     public TicketRegistryCleaner ticketRegistryCleaner(LogoutManager logoutManager, TicketRegistry ticketRegistry, DataSource dataSource) {
-        //TODO: Why springframework LockRepository "Cannot resolve Symbol"?!
         org.springframework.integration.jdbc.lock.LockRepository repository = new org.springframework.integration.jdbc.lock.DefaultLockRepository(dataSource);
         LockRegistry lockRegistry = new JdbcLockRegistry(repository);
         LockRepository lockRepository = new DefaultLockRepository(lockRegistry);
