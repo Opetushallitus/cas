@@ -14,17 +14,21 @@ import org.apereo.cas.util.lock.DefaultLockRepository;
 import org.apereo.cas.util.lock.LockRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.integration.support.locks.DefaultLockRegistry;
+import org.springframework.integration.support.locks.LockRegistry;
 
+import javax.sql.DataSource;
 import java.time.Duration;
 
 @Configuration
 public class TicketRegistryCleanerTaskConfiguration {
 
     @Bean
-    public TicketRegistryCleaner ticketRegistryCleaner(LogoutManager logoutManager, TicketRegistry ticketRegistry) {
-        //TODO: JDBC registry needed!
-        LockRepository lockRepository = new DefaultLockRepository(new DefaultLockRegistry());
+    public TicketRegistryCleaner ticketRegistryCleaner(LogoutManager logoutManager, TicketRegistry ticketRegistry, DataSource dataSource) {
+        //TODO: Why springframework LockRepository "Cannot resolve Symbol"?!
+        org.springframework.integration.jdbc.lock.LockRepository repository = new org.springframework.integration.jdbc.lock.DefaultLockRepository(dataSource);
+        LockRegistry lockRegistry = new JdbcLockRegistry(repository);
+        LockRepository lockRepository = new DefaultLockRepository(lockRegistry);
+
         return new DefaultTicketRegistryCleaner( lockRepository,  logoutManager,  ticketRegistry);
     }
 
