@@ -1,8 +1,4 @@
-import org.apache.tools.ant.taskdefs.condition.*
-import org.gradle.internal.logging.text.*
-import org.apereo.cas.metadata.*
-import java.nio.file.*
-import static org.gradle.internal.logging.text.StyledTextOutput.Style
+import sass.embedded_protocol.EmbeddedSass
 
 buildscript {
     repositories {
@@ -37,6 +33,8 @@ buildscript {
         classpath "de.undercouch:gradle-download-task:${project.gradleDownloadTaskVersion}"
         classpath "org.apereo.cas:cas-server-core-api-configuration-model:${project.'cas.version'}"
         classpath "org.apereo.cas:cas-server-core-configuration-metadata-repository:${project.'cas.version'}"
+        classpath "io.freefair.gradle:embedded-sass-plugin:${project.gradleFreeFairPluginVersion}"
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3"
     }
 }
 
@@ -62,16 +60,48 @@ repositories {
         url "https://repo.spring.io/milestone"
         mavenContent { releasesOnly() }
     }
+    maven {
+        mavenContent { snapshotsOnly() }
+        url "https://oss.jfrog.org/artifactory/oss-snapshot-local"
+    }
+    maven {
+        url "https://artifactory.opintopolku.fi/artifactory/oph-sade-snapshot-local"
+        mavenContent {
+            snapshotsOnly()
+        }
+    }
+    maven {
+        url "https://artifactory.opintopolku.fi/artifactory/oph-sade-release-local"
+        mavenContent {
+            releasesOnly()
+        }
+    }
+    maven {
+        mavenContent { snapshotsOnly() }
+        url "https://oss.jfrog.org/artifactory/oss-snapshot-local"
+    }
 }
+def casServerVersion = project.'cas.version'
+def casWebApplicationBinaryName = "cas.war"
 
+project.ext."casServerVersion" = casServerVersion
+project.ext."casWebApplicationBinaryName" = casWebApplicationBinaryName
+
+apply plugin: "io.spring.dependency-management"
 apply plugin: "io.freefair.war-overlay"
 apply plugin: "war"
 apply plugin: "org.springframework.boot"
 apply plugin: "io.freefair.lombok"
+apply plugin: "io.freefair.sass-java"
+apply plugin: "io.freefair.sass-webjars"
+
+apply plugin: "jacoco"
+apply plugin: "org.sonarqube"
 
 apply from: rootProject.file("gradle/springboot.gradle")
 apply from: rootProject.file("gradle/jib.gradle")
 apply from: rootProject.file("gradle/tasks.gradle")
+apply from: rootProject.file("gradle/buildversion.gradle")
 
 
 configurations.all {
@@ -101,12 +131,25 @@ sourceSets {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(project.targetCompatibility)
+        languageVersion = JavaLanguageVersion.of(project.targetCompatibility as String)
     }
+}
+
+sass {
+    sourceMapEnabled = true
+    outputStyle = EmbeddedSass.OutputStyle.COMPRESSED
 }
 
 bootBuildImage {
     imageName = "${project.'containerImageOrg'}/${project.'containerImageName'}:${project.version}"
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "Opetushallitus_cas"
+        property "sonar.organization", "opetushallitus"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
 }
 
 dependencies {
@@ -123,6 +166,42 @@ dependencies {
      * since versions are all resolved and controlled by the dependency management
      * plugin via the CAS bom.
      **/
+    implementation "org.apereo.cas:cas-server-webapp${project.appServer}"
+    // Other CAS dependencies/modules may be listed here...
+    implementation "org.apereo.cas:cas-server-support-rest"
+    implementation "org.apereo.cas:cas-server-support-session-jdbc"
+    implementation "org.apereo.cas:cas-server-support-throttle-core"
+    implementation "org.apereo.cas:cas-server-support-interrupt-api"
+    implementation "org.apereo.cas:cas-server-support-interrupt-core"
+    implementation "org.apereo.cas:cas-server-support-interrupt-webflow"
+    implementation "org.apereo.cas:cas-server-core-authentication-api"
+    implementation "org.apereo.cas:cas-server-core-authentication-attributes"
+    implementation "org.apereo.cas:cas-server-core-authentication-throttle"
+    implementation "org.apereo.cas:cas-server-core-webflow-api"
+    implementation "org.apereo.cas:cas-server-core-web-api"
+    implementation "org.apereo.cas:cas-server-core-tickets-api"
+    implementation "org.apereo.cas:cas-server-core-services-api"
+    implementation "org.apereo.cas:cas-server-core-services-authentication"
+    implementation "org.apereo.cas:cas-server-core-util-api"
+    implementation "org.apereo.cas:cas-server-webapp-config"
+    implementation "org.apereo.cas:cas-server-webapp-init"
+    implementation "org.apereo.cas:cas-server-support-jpa-ticket-registry"
+    implementation 'com.github.kagkarlsson:db-scheduler:11.0'
+    implementation "fi.vm.sade.java-utils:java-http:0.5.0-SNAPSHOT"
+    implementation 'org.flywaydb:flyway-core:8.5.9'
+    runtimeOnly 'org.postgresql:postgresql:42.3.4'
+    implementation "org.springframework.security:spring-security-config"
+    implementation "fi.vm.sade.java-utils:java-http:0.5.0-SNAPSHOT"
+    implementation 'com.google.code.gson:gson:2.9.0'
+    implementation "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}"
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    compileOnly 'org.webjars:bootstrap:4.1.3'
+    annotationProcessor "org.springframework:spring-context-indexer"
+    testImplementation "org.apereo.cas:cas-server-core-services-registry"
+    testImplementation 'junit:junit'
+    testImplementation 'org.mockito:mockito-core'
+    testImplementation 'org.assertj:assertj-core'
+    testImplementation 'org.springframework:spring-test'
 
     implementation "org.apereo.cas:cas-server-core-api-configuration-model"
     implementation "org.apereo.cas:cas-server-webapp-init"
@@ -138,8 +217,6 @@ dependencies {
     }
 
 
-    implementation "org.apache.tomcat.embed:tomcat-embed-core"
-    implementation "org.apereo.cas:cas-server-webapp${project.appServer}"
 
 
 

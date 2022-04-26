@@ -11,7 +11,6 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,13 +27,9 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
     private static final int DEFAULT_DELAY_LOGIN_AFTER_FAILED_LOGINS_COUNT = 5;
 
     private final LoginFailureStore failedLogins;
-    @Min(1)
     private int initialLoginDelayInMinutes = DEFAULT_INITIAL_LOGIN_DELAY_IN_MINUTES;
-    @Min(1)
     private int cleanLoginFailuresOlderThanInMinutes = DEFAULT_CLEAN_LOGIN_FAILURES_OLDER_THAN_IN_MINUTES;
-    @Min(1)
     private int denyLoginAfterFailedLoginsCount = DEFAULT_DENY_LOGIN_AFTER_FAILED_LOGINS_COUNT;
-    @Min(1)
     private int delayLoginAfterFailedLoginsCount = DEFAULT_DELAY_LOGIN_AFTER_FAILED_LOGINS_COUNT;
 
     protected AbstractInMemoryLoginFailureHandlerInterceptorAdapter(LoginFailureStore loginFailureStore) {
@@ -46,7 +41,6 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
                 .usernameParameter(usernameParameter)
                 .throttledRequestResponseHandler(new DefaultThrottledRequestResponseHandler(usernameParameter))
                 .throttledRequestExecutor(ThrottledRequestExecutor.noOp())
-                .authenticationThrottlingExecutionPlan(new DefaultAuthenticationThrottlingExecutionPlan())
                 .build());
         this.failedLogins = loginFailureStore;
     }
@@ -177,7 +171,7 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
         return initialLoginDelayInMinutes;
     }
 
-    public void setInitialLoginDelayInMinutes(int initialLoginDelayInMinutes) {
+    public void setInitialLoginDelayInMinutes( int initialLoginDelayInMinutes) {
         this.initialLoginDelayInMinutes = initialLoginDelayInMinutes;
     }
 
