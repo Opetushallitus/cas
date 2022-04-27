@@ -1,6 +1,5 @@
 package fi.vm.sade.login.failure;
 
-import org.apereo.cas.throttle.DefaultAuthenticationThrottlingExecutionPlan;
 import org.apereo.cas.throttle.DefaultThrottledRequestResponseHandler;
 import org.apereo.cas.throttle.ThrottledRequestExecutor;
 import org.apereo.cas.web.support.AbstractThrottledSubmissionHandlerInterceptorAdapter;
@@ -19,7 +18,8 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter extends AbstractThrottledSubmissionHandlerInterceptorAdapter implements InitializingBean {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractInMemoryLoginFailureHandlerInterceptorAdapter.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(AbstractInMemoryLoginFailureHandlerInterceptorAdapter.class);
 
     private static final int DEFAULT_INITIAL_LOGIN_DELAY_IN_MINUTES = 5;
     private static final int DEFAULT_CLEAN_LOGIN_FAILURES_OLDER_THAN_IN_MINUTES = 24 * 60;
@@ -36,7 +36,8 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
         this(loginFailureStore, "username");
     }
 
-    private AbstractInMemoryLoginFailureHandlerInterceptorAdapter(LoginFailureStore loginFailureStore, String usernameParameter) {
+    private AbstractInMemoryLoginFailureHandlerInterceptorAdapter(LoginFailureStore loginFailureStore,
+                                                                  String usernameParameter) {
         super(ThrottledSubmissionHandlerConfigurationContext.builder()
                 .usernameParameter(usernameParameter)
                 .throttledRequestResponseHandler(new DefaultThrottledRequestResponseHandler(usernameParameter))
@@ -48,7 +49,8 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
     @Override
     public void afterPropertiesSet() {
         LOGGER.info("Setting initial login delay in minutes to {}", getInitialLoginDelayInMinutes());
-        LOGGER.info("Setting clean login failures older than in minutes to {}", getCleanLoginFailuresOlderThanInMinutes());
+        LOGGER.info("Setting clean login failures older than in minutes to {}",
+                getCleanLoginFailuresOlderThanInMinutes());
         LOGGER.info("Setting deny login after failed logins count to {}", getDenyLoginAfterFailedLoginsCount());
         LOGGER.info("Setting delay login after failed logins count to {}", getDelayLoginAfterFailedLoginsCount());
     }
@@ -80,7 +82,8 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
         }
 
         if (getDenyLoginAfterFailedLoginsCount() <= numberOfFailedLogins) {
-            LOGGER.warn("Maximum limit {} of failed login attempts reached for user {}", getDenyLoginAfterFailedLoginsCount(), key);
+            LOGGER.warn("Maximum limit {} of failed login attempts reached for user {}",
+                    getDenyLoginAfterFailedLoginsCount(), key);
             return -1;
         }
 
@@ -126,7 +129,7 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
             for (Map.Entry<String, Long> entry : removed.entrySet()) {
                 messages.add(entry.getKey() + "=" + entry.getValue());
             }
-            if( LOGGER.isInfoEnabled()) {
+            if (LOGGER.isInfoEnabled()) {
                 LOGGER.info("Cleaned failed logins {}", StringUtils.collectionToCommaDelimitedString(messages));
             }
         }
@@ -141,7 +144,8 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
         long nextAllowedLoginTimeMillis = lastLoginTime + TimeUnit.MINUTES.toMillis(loginDelay);
         long delayToNextLoginMillis = nextAllowedLoginTimeMillis - System.currentTimeMillis();
 
-        int currentLoginDelay = 0 >= delayToNextLoginMillis ? 0 : (int) TimeUnit.MILLISECONDS.toMinutes(delayToNextLoginMillis);
+        int currentLoginDelay = 0 >= delayToNextLoginMillis ? 0 :
+                (int) TimeUnit.MILLISECONDS.toMinutes(delayToNextLoginMillis);
 
         if (0 < currentLoginDelay) {
             LOGGER.warn("User {} has {} failed login attempts. Current login delay is {} minutes.",
@@ -171,7 +175,7 @@ public abstract class AbstractInMemoryLoginFailureHandlerInterceptorAdapter exte
         return initialLoginDelayInMinutes;
     }
 
-    public void setInitialLoginDelayInMinutes( int initialLoginDelayInMinutes) {
+    public void setInitialLoginDelayInMinutes(int initialLoginDelayInMinutes) {
         this.initialLoginDelayInMinutes = initialLoginDelayInMinutes;
     }
 
