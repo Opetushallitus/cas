@@ -1,6 +1,8 @@
+
 package fi.vm.sade.auth.cas;
 
-import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
@@ -15,14 +17,14 @@ import java.util.stream.StreamSupport;
 @Component
 public class StreamOperations {
 
-    private final JdbcOperations jdbcOperations;
+    private final JdbcTemplate jdbcTemplate;
 
-    public StreamOperations(JdbcOperations jdbcOperations) {
-        this.jdbcOperations = jdbcOperations;
+    public StreamOperations(@Qualifier("cas") JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     public <T> Stream<T> stream(String sql, Function<SqlRowSet, T> rowMapper, Object... args) {
-        SqlRowSet sqlRowSet = jdbcOperations.queryForRowSet(sql, args);
+        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, args);
         RowSetIterator<T> rowSetIterator = new RowSetIterator<>(sqlRowSet, rowMapper);
         Spliterator<T> spliterator = Spliterators.spliteratorUnknownSize(rowSetIterator, Spliterator.IMMUTABLE);
         return StreamSupport.stream(spliterator, false);
