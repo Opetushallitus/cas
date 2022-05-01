@@ -46,6 +46,8 @@ cas:
       cleaner:
         schedule:
           enabled: true
+          repeat-interval: PT2M
+          start-delay: PT15S
 
 
 cas.authn.accept.users:
