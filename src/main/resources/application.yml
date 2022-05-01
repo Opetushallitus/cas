@@ -40,8 +40,7 @@ cas:
         password: ${spring.datasource.password}
         url: ${spring.datasource.url}
         user: ${spring.datasource.username}
-        autocommit: true
-        ddl-auto: none
+        autocommit: false
         dialect: org.hibernate.dialect.PostgreSQL95Dialect
       cleaner:
         schedule:
