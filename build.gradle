@@ -186,7 +186,6 @@ dependencies {
     implementation "org.apereo.cas:cas-server-webapp-config"
     implementation "org.apereo.cas:cas-server-webapp-init"
     implementation "org.apereo.cas:cas-server-support-jpa-ticket-registry"
-    implementation 'com.github.kagkarlsson:db-scheduler:11.0'
     implementation "fi.vm.sade.java-utils:java-http:0.5.0-SNAPSHOT"
     implementation 'org.flywaydb:flyway-core:8.5.9'
     runtimeOnly 'org.postgresql:postgresql:42.3.4'

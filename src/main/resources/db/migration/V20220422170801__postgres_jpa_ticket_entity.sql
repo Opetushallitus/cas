@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS cas_tickets
+CREATE TABLE IF NOT EXISTS postgres_jpa_ticket_entity
 (
     id            VARCHAR(768)   NOT NULL
         PRIMARY KEY,
@@ -8,3 +8,5 @@ CREATE TABLE IF NOT EXISTS cas_tickets
     principal_id  VARCHAR(1024),
     type          VARCHAR(1024)  NOT NULL
 );
+
+DROP TABLE IF EXISTS ticket;

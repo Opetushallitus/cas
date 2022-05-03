@@ -1,1 +1,0 @@
-ALTER TABLE IF EXISTS "cas_tickets" RENAME TO "postgres_jpa_ticket_entity";
