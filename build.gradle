@@ -1,33 +1,69 @@
+import sass.embedded_protocol.EmbeddedSass
+
 buildscript {
     repositories {
+        if (project.privateRepoUrl) {
+          maven {
+            url project.privateRepoUrl
+            credentials {
+              username = project.privateRepoUsername
+              password = System.env.PRIVATE_REPO_TOKEN
+            }
+          }
+        }
         mavenLocal()
         mavenCentral()
-        jcenter()
-        maven { url "https://repo.spring.io/libs-milestone" }
-        maven { url "https://plugins.gradle.org/m2/" }
+        gradlePluginPortal()
+        maven {
+            url 'https://oss.sonatype.org/content/repositories/snapshots'
+            mavenContent { snapshotsOnly() }
+        }
+        maven {
+            url "https://repo.spring.io/milestone"
+            mavenContent { releasesOnly() }
+        }
     }
     dependencies {
-        classpath "de.undercouch:gradle-download-task:${project.gradleDownloadTaskVersion}"
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${project.springBootVersion}"
+        classpath "io.freefair.gradle:maven-plugin:${project.gradleFreeFairPluginVersion}"
+        classpath "io.freefair.gradle:lombok-plugin:${project.gradleFreeFairPluginVersion}"
+        classpath "io.spring.gradle:dependency-management-plugin:${project.gradleDependencyManagementPluginVersion}"
         classpath "gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:${project.jibVersion}"
-        classpath "com.boazj.gradle:gradle-log-plugin:${project.gradleLogVersion}"
-        classpath "io.freefair.gradle:jsass-plugin:3.0.0"
-    }
-}
 
-plugins {
-    id "jacoco"
-    id "org.sonarqube" version "3.3"
+        classpath "de.undercouch:gradle-download-task:${project.gradleDownloadTaskVersion}"
+        classpath "org.apereo.cas:cas-server-core-api-configuration-model:${project.'cas.version'}"
+        classpath "org.apereo.cas:cas-server-core-configuration-metadata-repository:${project.'cas.version'}"
+        classpath "io.freefair.gradle:embedded-sass-plugin:${project.gradleFreeFairPluginVersion}"
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3"
+    }
 }
 
 repositories {
+    if (project.privateRepoUrl) {
+      maven {
+        url project.privateRepoUrl
+        credentials {
+          username = project.privateRepoUsername
+          password = System.env.PRIVATE_REPO_TOKEN
+        }
+      }
+    }
     mavenLocal()
     mavenCentral()
-    jcenter()
-    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
-    maven { url "https://build.shibboleth.net/nexus/content/repositories/releases/" }
-    maven { url "https://repo.spring.io/milestone/" }
-    maven { url "https://oss.jfrog.org/artifactory/oss-snapshot-local" }
+    maven { url 'https://oss.sonatype.org/content/repositories/releases' }
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/snapshots'
+        mavenContent { snapshotsOnly() }
+    }
+    maven { url 'https://build.shibboleth.net/nexus/content/repositories/releases/' }
+    maven {
+        url "https://repo.spring.io/milestone"
+        mavenContent { releasesOnly() }
+    }
+    maven {
+        mavenContent { snapshotsOnly() }
+        url "https://oss.jfrog.org/artifactory/oss-snapshot-local"
+    }
     maven {
         url "https://artifactory.opintopolku.fi/artifactory/oph-sade-snapshot-local"
         mavenContent {
@@ -40,76 +76,72 @@ repositories {
             releasesOnly()
         }
     }
+    maven {
+        mavenContent { snapshotsOnly() }
+        url "https://oss.jfrog.org/artifactory/oss-snapshot-local"
+    }
 }
-
 def casServerVersion = project.'cas.version'
 def casWebApplicationBinaryName = "cas.war"
 
 project.ext."casServerVersion" = casServerVersion
 project.ext."casWebApplicationBinaryName" = casWebApplicationBinaryName
 
-apply from: rootProject.file("gradle/waroverlay.gradle")
+apply plugin: "io.spring.dependency-management"
+apply plugin: "io.freefair.war-overlay"
+apply plugin: "war"
+apply plugin: "org.springframework.boot"
+apply plugin: "io.freefair.lombok"
+apply plugin: "io.freefair.sass-java"
+apply plugin: "io.freefair.sass-webjars"
+
+apply plugin: "jacoco"
+apply plugin: "org.sonarqube"
+
+apply from: rootProject.file("gradle/springboot.gradle")
+apply from: rootProject.file("gradle/jib.gradle")
 apply from: rootProject.file("gradle/tasks.gradle")
 apply from: rootProject.file("gradle/buildversion.gradle")
 
-apply plugin: "war"
-apply plugin: "org.springframework.boot"
-apply plugin: "eclipse"
-apply plugin: "idea"
-apply plugin: "com.google.cloud.tools.jib"
-apply plugin: "io.freefair.jsass-java"
-
-dependencies {
-    compile "org.apereo.cas:cas-server-webapp${project.appServer}:${casServerVersion}"
-    // Other CAS dependencies/modules may be listed here...
-    compile "org.apereo.cas:cas-server-support-rest:${casServerVersion}"
-    compile "org.apereo.cas:cas-server-support-session-jdbc:${casServerVersion}"
-    compile "org.apereo.cas:cas-server-support-throttle-core:${casServerVersion}"
-    compile "org.apereo.cas:cas-server-support-interrupt-api:${casServerVersion}"
-    compile "org.apereo.cas:cas-server-support-interrupt-core:${casServerVersion}"
-    compile "org.apereo.cas:cas-server-support-interrupt-webflow:${casServerVersion}"
-    compile "org.apereo.cas:cas-server-core-authentication-api:${casServerVersion}"
-    compile "org.apereo.cas:cas-server-core-authentication-attributes:${casServerVersion}"
-    compile "org.apereo.cas:cas-server-core-authentication-throttle:${casServerVersion}"
-    compile "org.apereo.cas:cas-server-core-webflow-api:${casServerVersion}"
-    compile "org.apereo.cas:cas-server-core-web-api:${casServerVersion}"
-    compile "org.apereo.cas:cas-server-core-tickets-api:${casServerVersion}"
-    compile "org.apereo.cas:cas-server-core-services-api:${casServerVersion}"
-    compile "org.apereo.cas:cas-server-core-services-authentication:${casServerVersion}"
-    compile "org.apereo.cas:cas-server-core-util-api:${casServerVersion}"
-    compile "org.apereo.cas:cas-server-webapp-config:${casServerVersion}"
-    compile "org.apereo.cas:cas-server-webapp-init:${casServerVersion}"
-    compile "com.github.kagkarlsson:db-scheduler:5.2"
-    compile "org.flywaydb:flyway-core:5.2.4"
-    runtime "org.postgresql:postgresql:42.2.5"
-    compile "org.springframework.security:spring-security-config:5.1.2.RELEASE"
-    compile "fi.vm.sade.java-utils:java-http:0.5.0-SNAPSHOT"
-    compile "com.google.code.gson:gson:2.8.5"
-    compile "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}"
-    compileOnly "org.projectlombok:lombok:1.18.4"
-    compileOnly "org.webjars:bootstrap:4.1.3"
-    testCompile "junit:junit:4.12"
-    testCompile "org.mockito:mockito-core:2.24.0"
-    testCompile "org.assertj:assertj-core:3.9.1"
-    testCompile "org.springframework:spring-test:5.1.3.RELEASE"
-}
-
-tasks.findByName("jibDockerBuild")
-    .dependsOn(copyWebAppIntoJib, copyConfigIntoJib)
-    .finalizedBy(deleteWebAppFromJib)
 
 configurations.all {
     resolutionStrategy {
         cacheChangingModulesFor 0, "seconds"
         cacheDynamicVersionsFor 0, "seconds"
-
         preferProjectModules()
-
         def failIfConflict = project.hasProperty("failOnVersionConflict") && Boolean.valueOf(project.getProperty("failOnVersionConflict"))
         if (failIfConflict) {
             failOnVersionConflict()
         }
     }
+}
+
+war {
+    entryCompression = ZipEntryCompression.STORED
+    enabled = false
+}
+
+sourceSets {
+    bootRunSources {
+        resources {
+            srcDirs new File("//etc/cas/templates/"), new File("${project.getProjectDir()}/src/main/resources/")
+        }
+    }
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(project.targetCompatibility as String)
+    }
+}
+
+sass {
+    sourceMapEnabled = true
+    outputStyle = EmbeddedSass.OutputStyle.COMPRESSED
+}
+
+bootBuildImage {
+    imageName = "${project.'containerImageOrg'}/${project.'containerImageName'}:${project.version}"
 }
 
 sonarqube {
@@ -120,100 +152,74 @@ sonarqube {
     }
 }
 
-test {
-    finalizedBy jacocoTestReport
-}
+dependencies {
+    /**
+    * Do NOT modify the lines below or else you will risk breaking dependency management.
+    */
+    implementation enforcedPlatform("org.apereo.cas:cas-server-support-bom:${project.'cas.version'}")
+    implementation platform(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
 
-jacocoTestReport {
-    dependsOn test
-    reports {
-        xml.enabled true
-    }
-}
+    /**
+     * CAS dependencies and modules may be listed here.
+     *
+     * There is no need to specify the version number for each dependency
+     * since versions are all resolved and controlled by the dependency management
+     * plugin via the CAS bom.
+     **/
+    implementation "org.apereo.cas:cas-server-webapp${project.appServer}"
+    // Other CAS dependencies/modules may be listed here...
+    implementation "org.apereo.cas:cas-server-support-rest"
+    implementation "org.apereo.cas:cas-server-support-session-jdbc"
+    implementation "org.apereo.cas:cas-server-support-throttle-core"
+    implementation "org.apereo.cas:cas-server-support-interrupt-api"
+    implementation "org.apereo.cas:cas-server-support-interrupt-core"
+    implementation "org.apereo.cas:cas-server-support-interrupt-webflow"
+    implementation "org.apereo.cas:cas-server-core-authentication-api"
+    implementation "org.apereo.cas:cas-server-core-authentication-attributes"
+    implementation "org.apereo.cas:cas-server-core-authentication-throttle"
+    implementation "org.apereo.cas:cas-server-core-webflow-api"
+    implementation "org.apereo.cas:cas-server-core-web-api"
+    implementation "org.apereo.cas:cas-server-core-tickets-api"
+    implementation "org.apereo.cas:cas-server-core-services-api"
+    implementation "org.apereo.cas:cas-server-core-services-authentication"
+    implementation "org.apereo.cas:cas-server-core-util-api"
+    implementation "org.apereo.cas:cas-server-webapp-config"
+    implementation "org.apereo.cas:cas-server-webapp-init"
+    implementation "org.apereo.cas:cas-server-support-jpa-ticket-registry"
+    implementation "fi.vm.sade.java-utils:java-http:0.5.0-SNAPSHOT"
+    implementation 'org.flywaydb:flyway-core:8.5.9'
+    runtimeOnly 'org.postgresql:postgresql:42.3.4'
+    implementation "org.springframework.security:spring-security-config"
+    implementation 'org.springframework.integration:spring-integration-jdbc'
+    implementation "fi.vm.sade.java-utils:java-http:0.5.0-SNAPSHOT"
+    implementation 'com.google.code.gson:gson:2.9.0'
+    implementation "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}"
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    compileOnly 'org.webjars:bootstrap:4.1.3'
+    annotationProcessor "org.springframework:spring-context-indexer"
+    testImplementation "org.apereo.cas:cas-server-core-services-registry"
+    testImplementation 'junit:junit'
+    testImplementation 'org.mockito:mockito-core'
+    testImplementation 'org.assertj:assertj-core'
+    testImplementation 'org.springframework:spring-test'
 
-compileSass {
-    sourceMapEnabled = true
-    outputStyle = COMPRESSED
-}
+    implementation "org.apereo.cas:cas-server-core-api-configuration-model"
+    implementation "org.apereo.cas:cas-server-webapp-init"
 
-eclipse {
-    classpath {
-       downloadSources = true
-       downloadJavadoc = true
-    }
-}
-
-idea {
-    module {
-        downloadJavadoc = true
-        downloadSources = true
-    }
-}
-
-war {
-    includeWarJars = true
-    entryCompression = ZipEntryCompression.STORED
-}
-
-springBoot {
-    mainClassName = "org.apereo.cas.web.CasWebApplication"
-}
-
-bootWar {
-    doFirst {
-        def executable = project.hasProperty("executable") && Boolean.valueOf(project.getProperty("executable"))
-        if (executable) {
-            logger.info "Including launch script for executable WAR artifact"
-            launchScript()
-        } else {
-            logger.info "WAR artifact is not marked as an executable"
+    if (project.hasProperty("casModules")) {
+        def dependencies = project.getProperty("casModules").split(",")
+        dependencies.each {
+            def projectsToAdd = rootProject.subprojects.findAll {project ->
+                project.name == "cas-server-core-${it}" || project.name == "cas-server-support-${it}"
+            }
+            projectsToAdd.each {implementation it}
         }
-        archiveName "${casWebApplicationBinaryName}"
-        baseName "cas"
-        excludeDevtools = true
     }
+
+
+
+
+
+    developmentOnly "org.springframework.boot:spring-boot-devtools:${project.springBootVersion}"
 }
 
-bootRun {
-    sourceResources sourceSets.main
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-wrapper {
-    distributionType = Wrapper.DistributionType.BIN
-    gradleVersion = "${project.gradleVersion}"
-}
-
-jib {
-    from {
-        image = project.baseDockerImage
-    }
-    to {
-        image = "${project.group}/${project.name}"
-        /**
-         ecr-login: Amazon Elastic Container Registry (ECR)
-         gcr: Google Container Registry (GCR)
-         osxkeychain: Docker Hub
-         */
-        credHelper = "osxkeychain"
-        /**
-        auth {
-            username = "*******"
-            password = "*******"
-        }
-        tags = [casServerVersion]
-        */
-    }
-    container {
-        useCurrentTimestamp = true
-        entrypoint = ['docker/entrypoint.sh']
-        ports = ['80', '443', '8080', '8443']
-        labels = [version:casServerVersion, name:project.name, group:project.group]
-    }
-    extraDirectory {
-        path = file('src/main/jib')
-        permissions = [
-            '/docker/entrypoint.sh': '755'
-        ]
-    }
-}

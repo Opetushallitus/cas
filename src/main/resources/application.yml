@@ -1,57 +1,92 @@
 # CAS configuration
-# https://apereo.github.io/cas/6.0.x/configuration/Configuration-Properties.html
+# https://apereo.github.io/cas/6.4.x/configuration/Configuration-Properties.html
 
-server.port: 8080
-server.ssl.enabled: false
-server.useForwardHeaders: false
+server:
+  port: 8080
+  ssl.enabled: false
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+      enabled: true
+  forward-headers-strategy: NONE
+  tomcat:
+    remoteip:
+      port-header:
+      protocol-header:
+      remote-ip-header:
 
-server.tomcat.portHeader:
-server.tomcat.protocolHeader:
-server.tomcat.remoteIpHeader:
+management:
+  endpoint:
+    health:
+      status:
+        order: WARN,DOWN,OUT_OF_SERVICE,UNKNOWN,UP
 
-cas.httpWebRequest.header.xframe: false
-cas.httpWebRequest.header.xss: false
-cas.httpWebRequest.header.xcontent: false
-cas.httpWebRequest.header.hsts: false
+
+cas:
+  http-web-request.header:
+    xframe: false
+    xss: false
+    xcontent: false
+    hsts: false
+  ticket:
+    tgt:
+      primary:
+        time-to-kill-in-seconds: 28800
+        max-time-to-live-in-seconds: 28800
+    registry:
+      core:
+        enable-locking: false
+      jpa:
+        driver-class: ${spring.datasource.driver-class-name}
+        password: ${spring.datasource.password}
+        url: ${spring.datasource.url}
+        user: ${spring.datasource.username}
+        dialect: org.hibernate.dialect.PostgreSQL95Dialect
+        enabled: true
+      cleaner:
+        schedule:
+          enabled: true
+
 
 cas.authn.accept.users:
 
-cas.authn.throttle.schedule.startDelay: 0
-cas.authn.throttle.schedule.repeatInterval: 43200000
+cas.authn.throttle.schedule.start-delay: PT0S
+cas.authn.throttle.schedule.repeat-interval: 43200000
 
 cas.tgc.secure: false
 cas.tgc.path: /cas
 
-cas.ticket.tgt.maxTimeToLiveInSeconds: 28800
-cas.ticket.tgt.timeToKillInSeconds: 28800
+cas.warning-cookie.secure: false
+cas.warning-cookie.path: /cas
 
-cas.warningCookie.secure: false
-cas.warningCookie.path: /cas
+cas.logout.follow-service-redirects: true
 
-cas.logout.followServiceRedirects: true
-
-cas.locale.defaultValue: fi
+cas.locale.default-value: fi
 
 cas.custom.properties.hakaUrl: http://localhost:8080/service-provider-app/saml/login/alias/hakasp
 cas.custom.properties.suomifiUrl: http://untuvaopintopolku.fi/cas-oppija/login
 cas.custom.properties.suomifiUrlTarget: http://localhost:8080/kayttooikeus-service/cas/tunnistus?locale=
 cas.custom.properties.loginTietosuojaselosteUrl: http://localhost:8080/tietosuojaseloste/
 
-cas.ticket.registry.cleaner.schedule.enabled: false
 
 # Spring Boot configuration
 # https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 
-spring.datasource.url: jdbc:postgresql://localhost:5432/cas
-spring.datasource.username: cas
-spring.datasource.password: cas
-spring.datasource.driver-class-name: org.postgresql.Driver
-spring.datasource.platform: postgresql
-
-spring.flyway.enabled: true
-spring.flyway.out-of-order: true
-
-spring.session.store-type: jdbc
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/cas
+    username: cas
+    password: cas
+    driver-class-name: org.postgresql.Driver
+  session:
+    store-type: jdbc
+  sql:
+    init:
+      platform: postgresql
+  flyway:
+    enabled: true
+    out-of-order: true
 
 # Custom configuration
 

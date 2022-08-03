@@ -1,0 +1,122 @@
+{
+  "@class": "org.apereo.cas.ticket.ProxyTicketImpl",
+  "@id": 1,
+  "id": "PT-1-Kpb0uvF6rMMrico8g3BVMu-ydr9t-Wnm",
+  "ticketGrantingTicket": {
+    "@class": "org.apereo.cas.ticket.ProxyGrantingTicketImpl",
+    "@id": 2,
+    "id": "PGT-1-6R7cbUvSDuVn3ZHRFQCDBDSnNC6-yXAC",
+    "proxiedBy": {
+      "@class": "org.apereo.cas.authentication.principal.SimpleWebApplicationServiceImpl",
+      "id": "service123",
+      "originalUrl": "service123",
+      "artifactId": null,
+      "principal": "nobody",
+      "source": null,
+      "loggedOutAlready": false,
+      "format": "XML"
+    },
+    "ticketGrantingTicket": {
+      "@class": "org.apereo.cas.ticket.TicketGrantingTicketImpl",
+      "@id": 3,
+      "id": "TGT-1-lCsp8tLGWaKx-WCEv6DABVeUpe8smp4-",
+      "proxiedBy": null,
+      "ticketGrantingTicket": null,
+      "authentication": {
+        "@class": "org.apereo.cas.authentication.DefaultAuthentication",
+        "authenticationDate": 1565854853.006987000,
+        "principal": {
+          "@class": "org.apereo.cas.authentication.principal.NullPrincipal",
+          "attributes": null
+        },
+        "credentials": null,
+        "attributes": {},
+        "successes": {},
+        "failures": {}
+      },
+      "expirationPolicy": {
+        "@class": "org.apereo.cas.ticket.expiration.NeverExpiresExpirationPolicy",
+        "name": "NeverExpiresExpirationPolicy-436387fb-b246-4016-b604-309067653937"
+      },
+      "lastTimeUsed": 1565854853.037336000,
+      "previousTimeUsed": null,
+      "creationTime": 1565854853.037303000,
+      "countOfUses": 0,
+      "expired": true,
+      "services": {},
+      "proxyGrantingTickets": {},
+      "descendantTickets": [],
+      "prefix": "TGT"
+    },
+    "authentication": {
+      "@class": "org.apereo.cas.authentication.DefaultAuthentication",
+      "authenticationDate": 1565854853.300054000,
+      "principal": {
+        "@class": "org.apereo.cas.authentication.principal.NullPrincipal",
+        "attributes": null
+      },
+      "credentials": null,
+      "attributes": {},
+      "successes": {},
+      "failures": {}
+    },
+    "expirationPolicy": {
+      "@class": "org.apereo.cas.ticket.expiration.NeverExpiresExpirationPolicy",
+      "name": "NeverExpiresExpirationPolicy-c5af7962-bf68-4cf0-9ce9-f12834b4ed2b"
+    },
+    "lastTimeUsed": 1565854853.310931000,
+    "previousTimeUsed": 1565854853.300608000,
+    "creationTime": 1565854853.300592000,
+    "countOfUses": 1,
+    "expired": false,
+    "services": {
+      "PT-1-Kpb0uvF6rMMrico8g3BVMu-ydr9t-Wnm": {
+        "@class": "org.apereo.cas.authentication.principal.SimpleWebApplicationServiceImpl",
+        "id": "service123",
+        "originalUrl": "service123",
+        "artifactId": null,
+        "principal": "nobody",
+        "source": null,
+        "loggedOutAlready": false,
+        "format": "XML"
+      }
+    },
+    "proxyGrantingTickets": {},
+    "descendantTickets": [],
+    "prefix": "PGT"
+  },
+  "service": {
+    "@class": "org.apereo.cas.authentication.principal.SimpleWebApplicationServiceImpl",
+    "id": "service123",
+    "originalUrl": "service123",
+    "artifactId": null,
+    "principal": "nobody",
+    "source": null,
+    "loggedOutAlready": false,
+    "format": "XML"
+  },
+  "expirationPolicy": {
+    "@class": "org.apereo.cas.ticket.expiration.NeverExpiresExpirationPolicy",
+    "name": "NeverExpiresExpirationPolicy-9396b7c2-8864-4c63-8c49-d232f4248262"
+  },
+  "lastTimeUsed": 1565854853.310917000,
+  "previousTimeUsed": null,
+  "creationTime": 1565854853.310889000,
+  "countOfUses": 0,
+  "expired": false,
+  "fromNewLogin": true,
+  "grantedTicketAlready": false,
+  "prefix": "PT",
+  "authentication": {
+    "@class": "org.apereo.cas.authentication.DefaultAuthentication",
+    "authenticationDate": 1565854853.300054000,
+    "principal": {
+      "@class": "org.apereo.cas.authentication.principal.NullPrincipal",
+      "attributes": null
+    },
+    "credentials": null,
+    "attributes": {},
+    "successes": {},
+    "failures": {}
+  }
+}

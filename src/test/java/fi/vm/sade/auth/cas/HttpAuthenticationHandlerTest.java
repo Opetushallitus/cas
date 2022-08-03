@@ -27,18 +27,17 @@ public class HttpAuthenticationHandlerTest {
 
     private AuthenticationHandler authenticationHandler;
 
-    private ServicesManager servicesManagerMock;
-    private OphHttpClientProxy httpClientProxyMock;
     private OphHttpResponse httpResponseMock;
 
     @Before
+    @SuppressWarnings("unchecked")
     public void setup() throws IOException {
-        servicesManagerMock = mock(ServicesManager.class);
+        ServicesManager servicesManagerMock = mock(ServicesManager.class);
         OphHttpClientProxyRequest httpClientProxyRequestMock = mock(OphHttpClientProxyRequest.class);
         when(httpClientProxyRequestMock.execute(any())).thenAnswer(invocation
                 -> ((OphHttpResponseHandler<Object>) invocation.getArguments()[0]).handleResponse(httpResponseMock));
         when(httpClientProxyRequestMock.handleManually()).thenReturn(httpResponseMock);
-        httpClientProxyMock = mock(OphHttpClientProxy.class);
+        OphHttpClientProxy httpClientProxyMock = mock(OphHttpClientProxy.class);
         when(httpClientProxyMock.createRequest(any())).thenReturn(httpClientProxyRequestMock);
         httpResponseMock = mock(OphHttpResponse.class);
         when(httpResponseMock.getStatusCode()).thenReturn(200);

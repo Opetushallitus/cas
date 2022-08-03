@@ -1,6 +1,7 @@
 package fi.vm.sade.auth.cas;
 
 import org.apereo.cas.logout.LogoutManager;
+import org.apereo.cas.logout.SingleLogoutExecutionRequest;
 import org.apereo.cas.ticket.Ticket;
 import org.apereo.cas.ticket.TicketGrantingTicket;
 import org.apereo.cas.ticket.registry.TicketRegistry;
@@ -17,13 +18,14 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
 /**
  * Modified from {@link org.apereo.cas.ticket.registry.DefaultTicketRegistryCleaner}, changes:
- * 1) removed {@link org.apereo.cas.ticket.registry.support.LockingStrategy} (locking is handled with db-scheduler).
+ * 1) removed locking and is handled with db-scheduler).
  * 2) tickets are removed in their own transactions to fix error "Batch update returned unexpected row count".
  */
 @Component("ticketRegistryCleaner")
@@ -36,9 +38,8 @@ public class SimpleTicketRegistryCleaner implements TicketRegistryCleaner {
     private final TicketRegistry ticketRegistry;
     private final TransactionOperations transactionOperations;
 
-    public SimpleTicketRegistryCleaner(LogoutManager logoutManager,
-                                       TicketRegistry ticketRegistry,
-                                       @Qualifier("ticketTransactionManager") PlatformTransactionManager transactionManager) {
+    public SimpleTicketRegistryCleaner(LogoutManager logoutManager, TicketRegistry ticketRegistry, @Qualifier(
+            "ticketTransactionManager") PlatformTransactionManager transactionManager) {
         this.logoutManager = logoutManager;
         this.ticketRegistry = ticketRegistry;
         this.transactionOperations = new TransactionTemplate(transactionManager);
@@ -46,22 +47,25 @@ public class SimpleTicketRegistryCleaner implements TicketRegistryCleaner {
 
     @Override
     public int clean() {
+        int ticketsDeleted = 0;
         List<String> expiredTicketIds = transactionOperations.execute(status -> getExpiredTicketIds());
-        int ticketsDeleted = expiredTicketIds.stream()
-                .mapToInt(expiredTicketId -> transactionOperations.execute(status -> cleanExpiredTicket(expiredTicketId)))
-                .sum();
+        if (expiredTicketIds != null) {
+            ticketsDeleted =
+                    expiredTicketIds.stream().mapToInt(expiredTicketId -> transactionOperations.execute(status -> cleanExpiredTicket(expiredTicketId))).sum();
+        }
         LOGGER.info("[{}] expired tickets removed.", ticketsDeleted);
         return ticketsDeleted;
     }
 
     private List<String> getExpiredTicketIds() {
-        try (Stream<? extends Ticket> ticketsStream = ticketRegistry.getTicketsStream()) {
+        try (Stream<? extends Ticket> ticketsStream = ticketRegistry.getTickets().stream()) {
             return ticketsStream.filter(Ticket::isExpired).map(Ticket::getId).collect(toList());
         }
     }
 
     @Override
     public int cleanTicket(final Ticket ticket) {
+        //noinspection ConstantConditions
         return transactionOperations.execute(status -> cleanExpiredTicket(ticket.getId()));
     }
 
@@ -74,12 +78,21 @@ public class SimpleTicketRegistryCleaner implements TicketRegistryCleaner {
     }
 
     private int cleanExpiredTicket(Ticket ticket) {
-        if (ticket instanceof TicketGrantingTicket) {
-            LOGGER.debug("Cleaning up expired ticket-granting ticket [{}]", ticket.getId());
-            logoutManager.performLogout((TicketGrantingTicket) ticket);
+        try {
+            if (ticket instanceof TicketGrantingTicket) {
+                LOGGER.debug("Cleaning up expired ticket-granting ticket [{}], was created at {}", ticket.getId(),
+                        ticket.getCreationTime());
+                logoutManager.performLogout(
+                        SingleLogoutExecutionRequest.builder().ticketGrantingTicket((TicketGrantingTicket) ticket).build()
+                );
+            }
+            LOGGER.debug("Cleaning up expired service ticket [{}] , was created at {}", ticket.getId(),
+                    ticket.getCreationTime());
+            return ticketRegistry.deleteTicket(ticket);
+        } catch (Exception e) {
+            LOGGER.error("Error happened while SimpleTicketRegistryCleaner was cleaning ticket [{}]", ticket.getId());
+            return 0;
         }
-        LOGGER.debug("Cleaning up expired service ticket [{}]", ticket.getId());
-        return ticketRegistry.deleteTicket(ticket);
     }
 
 }

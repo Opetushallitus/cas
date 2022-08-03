@@ -1,0 +1,28 @@
+{
+  "@class": "org.apereo.cas.ticket.TransientSessionTicketImpl",
+  "@id": 1,
+  "expirationPolicy": {
+    "@class": "org.apereo.cas.ticket.expiration.NeverExpiresExpirationPolicy",
+    "name": "NeverExpiresExpirationPolicy-25d8085b-48e7-4248-8f3e-9729f86b30f9"
+  },
+  "id": "TST-1-oyyd8C7sCz-kCHj-kP5ZZQCAQQbuvInv",
+  "lastTimeUsed": 1565854853.319639000,
+  "previousTimeUsed": null,
+  "creationTime": 1565854853.319622000,
+  "countOfUses": 0,
+  "expired": false,
+  "service": {
+    "@class": "org.apereo.cas.authentication.principal.SimpleWebApplicationServiceImpl",
+    "id": "service123",
+    "originalUrl": "service123",
+    "artifactId": null,
+    "principal": "nobody",
+    "source": null,
+    "loggedOutAlready": false,
+    "format": "XML"
+  },
+  "properties": {},
+  "prefix": "TST",
+  "ticketGrantingTicket": null,
+  "authentication": null
+}

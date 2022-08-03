@@ -1,0 +1,83 @@
+{
+  "@class": "org.apereo.cas.ticket.ProxyGrantingTicketImpl",
+  "@id": 1,
+  "id": "PGT-1-6R7cbUvSDuVn3ZHRFQCDBDSnNC6-yXAC",
+  "proxiedBy": {
+    "@class": "org.apereo.cas.authentication.principal.SimpleWebApplicationServiceImpl",
+    "id": "service123",
+    "originalUrl": "service123",
+    "artifactId": null,
+    "principal": "nobody",
+    "source": null,
+    "loggedOutAlready": false,
+    "format": "XML"
+  },
+  "ticketGrantingTicket": {
+    "@class": "org.apereo.cas.ticket.TicketGrantingTicketImpl",
+    "@id": 2,
+    "id": "TGT-1-lCsp8tLGWaKx-WCEv6DABVeUpe8smp4-",
+    "proxiedBy": null,
+    "ticketGrantingTicket": null,
+    "authentication": {
+      "@class": "org.apereo.cas.authentication.DefaultAuthentication",
+      "authenticationDate": 1565854853.006987000,
+      "principal": {
+        "@class": "org.apereo.cas.authentication.principal.NullPrincipal",
+        "attributes": null
+      },
+      "credentials": null,
+      "attributes": {},
+      "successes": {},
+      "failures": {}
+    },
+    "expirationPolicy": {
+      "@class": "org.apereo.cas.ticket.expiration.NeverExpiresExpirationPolicy",
+      "name": "NeverExpiresExpirationPolicy-436387fb-b246-4016-b604-309067653937"
+    },
+    "lastTimeUsed": 1565854853.037336000,
+    "previousTimeUsed": null,
+    "creationTime": 1565854853.037303000,
+    "countOfUses": 0,
+    "expired": true,
+    "services": {},
+    "proxyGrantingTickets": {
+      "PGT-1-6R7cbUvSDuVn3ZHRFQCDBDSnNC6-yXAC": {
+        "@class": "org.apereo.cas.authentication.principal.SimpleWebApplicationServiceImpl",
+        "id": "service123",
+        "originalUrl": "service123",
+        "artifactId": null,
+        "principal": "nobody",
+        "source": null,
+        "loggedOutAlready": false,
+        "format": "XML"
+      }
+    },
+    "descendantTickets": [],
+    "prefix": "TGT"
+  },
+  "authentication": {
+    "@class": "org.apereo.cas.authentication.DefaultAuthentication",
+    "authenticationDate": 1565854853.300054000,
+    "principal": {
+      "@class": "org.apereo.cas.authentication.principal.NullPrincipal",
+      "attributes": null
+    },
+    "credentials": null,
+    "attributes": {},
+    "successes": {},
+    "failures": {}
+  },
+  "expirationPolicy": {
+    "@class": "org.apereo.cas.ticket.expiration.NeverExpiresExpirationPolicy",
+    "name": "NeverExpiresExpirationPolicy-c5af7962-bf68-4cf0-9ce9-f12834b4ed2b"
+  },
+  "lastTimeUsed": 1565854853.300608000,
+  "previousTimeUsed": null,
+  "creationTime": 1565854853.300592000,
+  "countOfUses": 0,
+  "expired": false,
+  "services": {},
+  "proxyGrantingTickets": {},
+  "descendantTickets": [],
+  "prefix": "PGT"
+}

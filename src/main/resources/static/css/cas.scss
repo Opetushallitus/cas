@@ -3,7 +3,7 @@ $theme-colors: (
 );
 $body-bg: #F6F4F0;
 $font-family-sans-serif: 'Open Sans', sans-serif;
-@import "bootstrap/scss/bootstrap";
+@import "4.1.3/scss/bootstrap";
 
 $palvelut: (
     arvo:                   #7BBE31,
@@ -31,7 +31,7 @@ header a {
 }
 
 .taustakuva {
-    background-image: url('/cas/img/taustakuva.jpg');
+    background-image: url('/cas/images/taustakuva.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     color: #ffffff;

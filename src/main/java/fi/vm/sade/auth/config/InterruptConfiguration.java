@@ -9,7 +9,7 @@ import org.apereo.cas.web.flow.CasWebflowExecutionPlanConfigurer;
 import org.apereo.cas.web.flow.configurer.AbstractCasWebflowConfigurer;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.webflow.definition.registry.FlowDefinitionRegistry;
@@ -33,12 +33,12 @@ public class InterruptConfiguration implements CasWebflowExecutionPlanConfigurer
 
     private final FlowBuilderServices flowBuilderServices;
     private final FlowDefinitionRegistry loginFlowDefinitionRegistry;
-    private final ApplicationContext applicationContext;
+    private final ConfigurableApplicationContext applicationContext;
     private final CasConfigurationProperties casProperties;
 
     public InterruptConfiguration(FlowBuilderServices flowBuilderServices,
                                   @Qualifier("loginFlowRegistry") FlowDefinitionRegistry loginFlowDefinitionRegistry,
-                                  ApplicationContext applicationContext,
+                                  ConfigurableApplicationContext applicationContext,
                                   CasConfigurationProperties casProperties) {
         this.flowBuilderServices = flowBuilderServices;
         this.loginFlowDefinitionRegistry = loginFlowDefinitionRegistry;
@@ -65,7 +65,7 @@ public class InterruptConfiguration implements CasWebflowExecutionPlanConfigurer
     }
 
     private static <E, T extends Iterable<E>> void clear(T iterable, Consumer<E> remover) {
-        StreamSupport.stream(iterable.spliterator(), false).collect(toList()).forEach(remover::accept);
+        StreamSupport.stream(iterable.spliterator(), false).collect(toList()).forEach(remover);
     }
 
     // override default interruptWebflowConfigurer to be able to override its flow definitions (see above)

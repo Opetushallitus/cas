@@ -1,12 +1,28 @@
-target
-node_modules
-src/main/webapp/app
-out
 
-*.iml
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
 .idea
+*.iws
+*.iml
+*.ipr
 
-# from cas-overlay-template
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
 .classpath
 !/.project
 .project
@@ -28,3 +44,5 @@ bin/
 tmp/
 ./apache-tomcat
 apache-tomcat.zip
+/out/**
+config-metadata.properties

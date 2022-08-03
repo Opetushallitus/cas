@@ -1,5 +1,6 @@
 package fi.vm.sade.auth.cas;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.apereo.cas.authentication.AuthenticationEventExecutionPlanConfigurer;
 import org.apereo.cas.authentication.handler.support.HttpBasedServiceCredentialsAuthenticationHandler;
 import org.apereo.cas.authentication.principal.PrincipalFactory;
@@ -8,11 +9,11 @@ import org.apereo.cas.services.ServicesManager;
 import org.apereo.cas.ticket.UniqueTicketIdGenerator;
 import org.apereo.cas.ticket.proxy.support.Cas20ProxyHandler;
 import org.apereo.cas.util.http.HttpClient;
+import org.apereo.cas.util.http.HttpClientFactory;
 import org.apereo.cas.util.http.HttpMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -31,30 +32,40 @@ public class CasProxyCallbackConfiguration {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CasProxyCallbackConfiguration.class);
 
-    @Autowired
-    @Qualifier("supportsTrustStoreSslSocketFactoryHttpClient")
-    private ObjectProvider<HttpClient> supportsTrustStoreSslSocketFactoryHttpClient;
+    private final ObjectProvider<HttpClient> supportsTrustStoreSslSocketFactoryHttpClient;
 
-    @Autowired
-    @Qualifier("servicesManager")
-    private ObjectProvider<ServicesManager> servicesManager;
+    private final ObjectProvider<ServicesManager> servicesManager;
 
-    @Autowired
-    private PrincipalFactory proxyPrincipalFactory;
+    private final PrincipalFactory proxyPrincipalFactory;
 
-    @Autowired
-    @Qualifier("proxy20TicketUniqueIdGenerator")
-    private UniqueTicketIdGenerator uniqueTicketIdGenerator;
+    private final UniqueTicketIdGenerator uniqueTicketIdGenerator;
+
+    public CasProxyCallbackConfiguration(
+            @Qualifier("supportsTrustStoreSslSocketFactoryHttpClient")
+                    ObjectProvider<HttpClient> supportsTrustStoreSslSocketFactoryHttpClient,
+            @Qualifier("servicesManager")
+                    ObjectProvider<ServicesManager> servicesManager, PrincipalFactory proxyPrincipalFactory,
+            @Qualifier("proxy20TicketUniqueIdGenerator")
+                    UniqueTicketIdGenerator uniqueTicketIdGenerator) {
+        this.supportsTrustStoreSslSocketFactoryHttpClient = supportsTrustStoreSslSocketFactoryHttpClient;
+        this.servicesManager = servicesManager;
+        this.proxyPrincipalFactory = proxyPrincipalFactory;
+        this.uniqueTicketIdGenerator = uniqueTicketIdGenerator;
+    }
 
     @ConditionalOnProperty(prefix = "proxy.callback", name = "ignore-errors", havingValue = "true")
     @Bean
     @Primary
     public AuthenticationEventExecutionPlanConfigurer proxyAuthenticationEventExecutionPlanConfigurer(PrincipalResolver proxyPrincipalResolver) {
         LOGGER.warn("CAS proxy callback is error-tolerant. This should NOT happen in production environment! (1)");
-        OnErrorReturnTrueHttpClient onErrorReturnTrueHttpClient = new OnErrorReturnTrueHttpClient(supportsTrustStoreSslSocketFactoryHttpClient.getIfAvailable());
-        HttpBasedServiceCredentialsAuthenticationHandler proxyAuthenticationHandler = new HttpBasedServiceCredentialsAuthenticationHandler(
-                null, servicesManager.getIfAvailable(), proxyPrincipalFactory, Integer.MIN_VALUE, onErrorReturnTrueHttpClient);
-        return plan -> plan.registerAuthenticationHandlerWithPrincipalResolver(proxyAuthenticationHandler, proxyPrincipalResolver);
+        OnErrorReturnTrueHttpClient onErrorReturnTrueHttpClient =
+                new OnErrorReturnTrueHttpClient(supportsTrustStoreSslSocketFactoryHttpClient.getIfAvailable());
+        HttpBasedServiceCredentialsAuthenticationHandler proxyAuthenticationHandler =
+                new HttpBasedServiceCredentialsAuthenticationHandler(
+                null, servicesManager.getIfAvailable(), proxyPrincipalFactory, Integer.MIN_VALUE,
+                        onErrorReturnTrueHttpClient);
+        return plan -> plan.registerAuthenticationHandlerWithPrincipalResolver(proxyAuthenticationHandler,
+                proxyPrincipalResolver);
     }
 
     @ConditionalOnProperty(prefix = "proxy.callback", name = "ignore-errors", havingValue = "true")
@@ -62,7 +73,8 @@ public class CasProxyCallbackConfiguration {
     @Primary
     public Cas20ProxyHandler cas20ProxyHandler() {
         LOGGER.warn("CAS proxy callback is error-tolerant. This should NOT happen in production environment! (2)");
-        OnErrorReturnTrueHttpClient onErrorReturnTrueHttpClient = new OnErrorReturnTrueHttpClient(supportsTrustStoreSslSocketFactoryHttpClient.getIfAvailable());
+        OnErrorReturnTrueHttpClient onErrorReturnTrueHttpClient =
+                new OnErrorReturnTrueHttpClient(supportsTrustStoreSslSocketFactoryHttpClient.getIfAvailable());
         return new Cas20ProxyHandler(onErrorReturnTrueHttpClient, uniqueTicketIdGenerator);
     }
 
@@ -114,6 +126,11 @@ public class CasProxyCallbackConfiguration {
         @Override
         public org.apache.http.client.HttpClient getWrappedHttpClient() {
             return httpClient.getWrappedHttpClient();
+        }
+
+        @Override
+        public HttpClientFactory getHttpClientFactory() {
+            throw new NotImplementedException("No factory available for now");
         }
 
     }

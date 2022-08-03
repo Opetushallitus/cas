@@ -1,7 +1,8 @@
 package fi.vm.sade.auth.config;
 
 import fi.vm.sade.CasOphProperties;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.client.CookieStore;
+import org.apache.http.conn.socket.LayeredConnectionSocketFactory;
 import org.apache.http.cookie.ClientCookie;
 import org.apache.http.impl.NoConnectionReuseStrategy;
 import org.apache.http.impl.client.BasicCookieStore;
@@ -17,8 +18,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.net.ssl.HostnameVerifier;
-
-import org.apache.http.client.CookieStore;
 import java.util.Arrays;
 
 import static fi.vm.sade.auth.clients.HttpClientUtil.CALLER_ID;
@@ -28,12 +27,12 @@ import static fi.vm.sade.auth.clients.HttpClientUtil.CALLER_ID;
 public class HttpClientConfiguration {
 
     private final CasConfigurationProperties casProperties;
-    private final SSLConnectionSocketFactory trustStoreSslSocketFactory;
+    private final LayeredConnectionSocketFactory trustStoreSslSocketFactory;
     private final HostnameVerifier hostnameVerifier;
     private final CasOphProperties ophProperties;
 
     public HttpClientConfiguration(CasConfigurationProperties casProperties,
-                                   SSLConnectionSocketFactory trustStoreSslSocketFactory,
+                                   LayeredConnectionSocketFactory trustStoreSslSocketFactory,
                                    HostnameVerifier hostnameVerifier,
                                    CasOphProperties ophProperties) {
         this.casProperties = casProperties;
