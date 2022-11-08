@@ -1,6 +1,6 @@
 package fi.vm.sade.auth.config;
 
-import fi.vm.sade.javautils.http.RemoteAddressFilter;
+import fi.vm.sade.RemoteAddressFilter;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
