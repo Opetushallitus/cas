@@ -37,7 +37,7 @@ public class HttpAuthenticationHandler extends AbstractUsernamePasswordAuthentic
     protected AuthenticationHandlerExecutionResult authenticateUsernamePasswordInternal(UsernamePasswordCredential credential, String originalPassword) throws GeneralSecurityException, PreventedException {
         String username;
         try {
-            username = validateUsernamePassword(credential.getUsername(), credential.getPassword());
+            username = validateUsernamePassword(credential.getUsername(), String.valueOf(credential.getPassword()));
         } catch (Exception e) {
             throw new PreventedException(e);
         }
