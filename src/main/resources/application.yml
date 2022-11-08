@@ -72,7 +72,7 @@ cas.logout.follow-service-redirects: true
 cas.locale.default-value: fi
 
 cas.view.default-redirect-url: http://localhost:8080
-cas.sso.allow-missing-service-parameter: false
+cas.sso.services.allow-missing-service-parameter: false
 
 cas.custom.properties.hakaUrl: http://localhost:8080/service-provider-app/saml/login/alias/hakasp
 cas.custom.properties.mpassidUrl: http://localhost:8080/service-provider-app/saml/login/alias/mpassidtestsp?idp=https://mpass-proxy-test.csc.fi/idp/shibboleth

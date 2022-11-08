@@ -3,7 +3,6 @@ package fi.vm.sade.saml.action;
 import fi.vm.sade.auth.clients.KayttooikeusRestClient;
 import fi.vm.sade.auth.dto.IdentifiedHenkiloType;
 import org.apereo.cas.authentication.*;
-import org.apereo.cas.authentication.metadata.BasicCredentialMetaData;
 import org.apereo.cas.authentication.principal.DefaultPrincipalFactory;
 import org.apereo.cas.authentication.principal.Principal;
 import org.apereo.cas.authentication.principal.PrincipalFactory;
@@ -71,8 +70,13 @@ public class SAMLAuthenticationHandler implements AuthenticationHandler {
                 "idpEntityId", List.of(henkiloType.getIdpEntityId()),
                 "kayttajaTyyppi", List.of(Optional.ofNullable(henkiloType.getHenkiloTyyppi()).orElse("VIRKAILIJA"))
         );
-        Principal principal = principalFactory.createPrincipal(henkiloType.getKayttajatiedot().getUsername(), attributes);
-        return new DefaultAuthenticationHandlerExecutionResult(this, new BasicCredentialMetaData(credential), principal, emptyList());
+        Principal principal;
+        try {
+            principal = principalFactory.createPrincipal(henkiloType.getKayttajatiedot().getUsername(), attributes);
+        } catch (Throwable t) {
+            throw new RuntimeException(t);
+        }
+        return new DefaultAuthenticationHandlerExecutionResult(this, credential, principal, emptyList());
     }
 
     @Override

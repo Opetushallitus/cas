@@ -1,7 +1,9 @@
 package fi.vm.sade.servlet;
 
 import com.google.common.collect.Sets;
-import fi.vm.sade.javautils.http.HttpServletRequestUtils;
+import fi.vm.sade.RemoteAddressFilter;
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,8 +12,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
-import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Set;
 
@@ -30,9 +30,8 @@ public class StuckServiceTicketRetrievalDebuggingFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        if (request instanceof HttpServletRequest) {
-            HttpServletRequest httpRequest = (HttpServletRequest) request;
-            String remoteAddress = HttpServletRequestUtils.getRemoteAddress(httpRequest);
+        if (request instanceof HttpServletRequest httpRequest) {
+            String remoteAddress = RemoteAddressFilter.getRemoteAddress(httpRequest);
             if (ipsToInspect.contains(remoteAddress) && StringUtils.contains(httpRequest.getRequestURL(), ST_RETRIEVAL_URL_MATCHER)) {
                 log.info("Got request '" + httpRequest.getRequestURL() + "' from IP address " + remoteAddress + " marked for inspection.");
                 dumper.triggerRunsToBackground();
