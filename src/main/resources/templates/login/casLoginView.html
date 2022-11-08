@@ -30,7 +30,7 @@
                     </div>
                     <div class="row">
                         <div class="kirjautumistapa kirjautumistapa-haka col-md-4">
-                            <a th:with="parameters=${service != null} ? '?redirect=' + ${T(org.springframework.web.util.UriComponentsBuilder).fromHttpUrl(service.originalUrl).toUriString()} : ''"
+                            <a th:with="parameters=${service != null} ? '?redirect=' + ${T(fi.vm.sade.Encode).uri(service.originalUrl)} : ''"
                                th:href="${cas.custom.properties['hakaUrl']} + ${parameters}">
                                 <img src="/cas/images/haka_landscape_medium.gif" />
                             </a>
@@ -42,7 +42,7 @@
                                 prefixed with & instead of ? unlike in Haka login URL :)
                                 -->
                                 <a id="mpassid-button"
-                                   th:with="parameters=${service != null} ? '&redirect=' + ${T(org.springframework.web.util.UriComponentsBuilder).fromHttpUrl(service.originalUrl).toUriString()} : ''"
+                                   th:with="parameters=${service != null} ? '&redirect=' + ${T(fi.vm.sade.Encode).uri(service.originalUrl)} : ''"
                                    th:href="${cas.custom.properties['mpassidUrl']} + ${parameters}">
                                     <img height="20px" src="/cas/images/mpassid-teksti.svg" />
                                 </a>

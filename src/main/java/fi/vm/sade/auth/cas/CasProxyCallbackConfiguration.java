@@ -124,12 +124,12 @@ public class CasProxyCallbackConfiguration {
         }
 
         @Override
-        public org.apache.http.client.HttpClient getWrappedHttpClient() {
-            return httpClient.getWrappedHttpClient();
+        public org.apache.hc.client5.http.classic.HttpClient wrappedHttpClient() {
+            return httpClient.wrappedHttpClient();
         }
 
         @Override
-        public HttpClientFactory getHttpClientFactory() {
+        public HttpClientFactory httpClientFactory() {
             throw new NotImplementedException("No factory available for now");
         }
 

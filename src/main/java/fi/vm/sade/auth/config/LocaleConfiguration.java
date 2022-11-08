@@ -9,7 +9,7 @@ import org.springframework.context.i18n.SimpleTimeZoneAwareLocaleContext;
 import org.springframework.web.servlet.LocaleContextResolver;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Locale;
 import java.util.Set;
 import java.util.TimeZone;
