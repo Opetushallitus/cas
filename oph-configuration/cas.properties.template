@@ -36,10 +36,6 @@ cas.custom.properties.loginTietosuojaselosteUrl={{login_tietosuojaseloste_url | 
 # Spring Boot configuration
 # https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 
-spring.datasource.url: jdbc:postgresql://{{ postgresql_cas_host }}:{{ postgresql_cas_port | default('5432') }}/{{ postgresql_cas_dbname | default('cas') }}
-spring.datasource.username: {{ postgres_app_user }}
-spring.datasource.password: {{ postgresql_cas_app_password }}
-
 server.tomcat.accesslog.enabled=true
 server.tomcat.accesslog.directory=/root/logs
 server.tomcat.accesslog.prefix=localhost_access_log
@@ -56,6 +52,18 @@ server.tomcat.remoteip.protocol-header=
 server.tomcat.remoteip.remote-ip-header=
 
 # Custom configuration
+
+# redis
+cas.ticket.registry.redis.enabled=true
+cas.ticket.registry.redis.host={{ cas_redis_url }}
+cas.ticket.registry.redis.port=6379
+cas.ticket.registry.redis.crypto.enabled=true
+cas.ticket.registry.redis.crypto.signing.key={{ cas_redis_signing_key }}
+cas.ticket.registry.redis.crypto.encryption.key={{ cas_redis_encryption_key }}
+
+management.endpoint.health.enabled=true
+management.endpoint.auditevents.enabled={{ cas_permit_auditevents_endpoint | default('false') }}
+management.endpoint.springWebflow.enabled={{ cas_permit_webflow_json_endpoint | default('false') }}
 
 whitelist.regexp={{cas_whitelist_regexp}}
 proxy.callback.ignore-errors={{cas_proxy_callback_ignore_errors | default('false')}}
