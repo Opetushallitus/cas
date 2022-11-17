@@ -36,23 +36,29 @@ cas:
         max-time-to-live-in-seconds: 28800
     registry:
       core:
-        enable-locking: false
-      jpa:
-        driver-class: ${spring.datasource.driver-class-name}
-        password: ${spring.datasource.password}
-        url: ${spring.datasource.url}
-        user: ${spring.datasource.username}
-        dialect: org.hibernate.dialect.PostgreSQL95Dialect
-        enabled: true
+        enable-locking: true
       cleaner:
         schedule:
           enabled: true
 
 
+# redis
+cas.ticket.registry.redis.enabled: true
+cas.ticket.registry.redis.host: localhost
+cas.ticket.registry.redis.port: 6379
+cas.ticket.registry.redis.crypto.enabled: true
+cas.ticket.registry.redis.crypto.signing.key: k2FVJ-NZBay5GkDOboCN-AAb6jsBSoLBDiJtsqpULTdErMpwb96RqxMQlTCi-X8sO91dCvgNRFfGfhhVQJt56Q
+cas.ticket.registry.redis.crypto.encryption.key: NMDhQWuv-CQMZMHJcWse3w
+
 cas.authn.accept.users:
 
-cas.authn.throttle.schedule.start-delay: PT0S
-cas.authn.throttle.schedule.repeat-interval: 43200000
+management.endpoints.web.exposure.include: health,springWebflow,auditevents
+management.endpoint.health.enabled: true
+cas.monitor.endpoints.endpoint.health.access: PERMIT
+management.endpoint.springWebflow.enabled: true
+cas.monitor.endpoints.endpoint.springWebflow.access: PERMIT
+management.endpoint.auditevents.enabled: true
+cas.monitor.endpoints.endpoint.auditevents.access: PERMIT
 
 cas.tgc.secure: false
 cas.tgc.path: /cas
@@ -74,19 +80,10 @@ cas.custom.properties.loginTietosuojaselosteUrl: http://localhost:8080/tietosuoj
 # https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 
 spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/cas
-    username: cas
-    password: cas
-    driver-class-name: org.postgresql.Driver
   session:
-    store-type: jdbc
-  sql:
-    init:
-      platform: postgresql
-  flyway:
-    enabled: true
-    out-of-order: true
+    store-type: redis
+    redis:
+      namespace: spring:session
 
 # Custom configuration
 
