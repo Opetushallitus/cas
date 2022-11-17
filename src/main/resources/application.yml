@@ -41,6 +41,7 @@ cas:
         schedule:
           enabled: true
 
+cas.service-registry.json.location: classpath:/service-1.json
 
 # redis
 cas.ticket.registry.redis.enabled: true
