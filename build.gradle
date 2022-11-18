@@ -168,6 +168,7 @@ dependencies {
      **/
     implementation "org.apereo.cas:cas-server-webapp${project.appServer}"
     // Other CAS dependencies/modules may be listed here...
+    implementation "org.apereo.cas:cas-server-support-json-service-registry"
     implementation "org.apereo.cas:cas-server-support-rest"
     implementation "org.apereo.cas:cas-server-support-session-redis"
     implementation "org.apereo.cas:cas-server-support-redis-core"

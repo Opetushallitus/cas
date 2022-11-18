@@ -53,6 +53,8 @@ server.tomcat.remoteip.remote-ip-header=
 
 # Custom configuration
 
+cas.service-registry.json.location=file:///root/oph-configuration/cas
+
 # redis
 cas.ticket.registry.redis.enabled=true
 cas.ticket.registry.redis.host={{ cas_redis_url }}
