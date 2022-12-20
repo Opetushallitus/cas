@@ -67,7 +67,6 @@ management.endpoint.health.enabled=true
 management.endpoint.auditevents.enabled={{ cas_permit_auditevents_endpoint | default('false') }}
 management.endpoint.springWebflow.enabled={{ cas_permit_webflow_json_endpoint | default('false') }}
 
-whitelist.regexp={{cas_whitelist_regexp}}
 proxy.callback.ignore-errors={{cas_proxy_callback_ignore_errors | default('false')}}
 host.cas={{host_cas}}
 host.virkailija={{host_virkailija}}
