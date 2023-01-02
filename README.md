@@ -14,7 +14,7 @@ Project includes gradle wrapper so it doesn't have to be installed. Just use `./
 
 ## Database
 
-    docker run --name cas-db -p 5432:5432 -e POSTGRES_USER=cas -e POSTGRES_PASSWORD=cas -e POSTGRES_DB=cas -d postgres:10.6
+    docker-compose --file docker-compose.dependencies.yml up
 
 ## Run
 
