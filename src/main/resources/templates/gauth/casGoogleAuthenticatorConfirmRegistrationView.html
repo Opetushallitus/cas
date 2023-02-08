@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+    <title th:text="#{cas.mfa.googleauth.pagetitle}">Virhe sisäänkirjautuessa</title>
+    <link href="../../static/css/cas.css" rel="stylesheet" th:remove="tag"/>
+</head>
+
+<body class="login" id="cas">
+    <main id="cas-login-main" layout:fragment="content" role="main" class="container-fluid">
+        <div class="row text-center taustakuva">
+            <h1 class="w-100 mt-4" th:text="#{app.title}">Kirjaudu sisään</h1>
+            <h2 class="w-100" th:text="#{app.subtitle}">Yhdellä tunnuksella kirjaudut kaikkiin opetushallinnon palveluihin</h2>
+            <ul th:replace="fragments/palvelut :: linkit" />
+            <div class="w-100">
+                <div th:replace="fragments/loginerror :: loginerror">
+                    <a href="../fragments/loginerror.html">Login Error goes here</a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div th:replace="fragments/palvelut :: tiedot" />
+        </div>
+    </main>
+</body>
+
+</html>
