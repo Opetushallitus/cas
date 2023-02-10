@@ -30,9 +30,9 @@ cas.sso.allow-missing-service-parameter=false
 cas.view.default-redirect-url={{cas_view_default_redirect_url | default('https://${host.virkailija}/virkailijan-tyopoyta')}}
 
 cas.authn.mfa.triggers.rest.url=https://{{host_virkailija}}/kayttooikeus-service/mfa/trigger
-cas.authn.mfa.triggers.rest.method=POST
-#cas.authn.mfa.triggers.rest.basic-auth-username={{cas_mfa_username}}
-#cas.authn.mfa.triggers.rest.basic-auth-password={{cas_mfa_password}}
+cas.authn.mfa.triggers.rest.method=GET
+cas.authn.mfa.triggers.rest.basic-auth-username={{cas_mfa_username}}
+cas.authn.mfa.triggers.rest.basic-auth-password={{cas_mfa_password}}
 cas.authn.mfa.gauth.cleaner.schedule.enabled=false
 cas.authn.mfa.gauth.core.issuer=Opetushallitus
 cas.authn.mfa.gauth.core.label=Opintopolku
