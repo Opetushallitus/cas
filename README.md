@@ -1,5 +1,7 @@
 # CAS-virkailija
 
+[Quick tutorial](cas-integration.md)
+
 This project is based on [cas-overlay-template (branch 6.4)](https://github.com/apereo/cas-overlay-template/tree/6.3).
 
 ## Requirements
