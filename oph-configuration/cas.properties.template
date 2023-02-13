@@ -29,7 +29,7 @@ cas.slo.asynchronous={{cas_slo_callbacks_asynchronous | default('false')}}
 cas.sso.allow-missing-service-parameter=false
 cas.view.default-redirect-url={{cas_view_default_redirect_url | default('https://${host.virkailija}/virkailijan-tyopoyta')}}
 
-cas.authn.mfa.triggers.rest.url=https://{{host_virkailija}}/kayttooikeus-service/mfa/trigger
+cas.authn.mfa.triggers.rest.url=http://{{host_alb}}/kayttooikeus-service/mfa/trigger
 cas.authn.mfa.triggers.rest.method=POST
 cas.authn.mfa.triggers.rest.basic-auth-username={{cas_mfa_username}}
 cas.authn.mfa.triggers.rest.basic-auth-password={{cas_mfa_password}}
@@ -38,8 +38,8 @@ cas.authn.mfa.gauth.core.issuer=Opetushallitus
 cas.authn.mfa.gauth.core.label=Opintopolku
 cas.authn.mfa.gauth.crypto.encryption.key={{cas_gauth_encryption_key}}
 cas.authn.mfa.gauth.crypto.signing.key={{cas_gauth_signing_key}}
-cas.authn.mfa.gauth.rest.token-url=https://{{host_virkailija}}/kayttooikeus-service/mfa/token
-cas.authn.mfa.gauth.rest.url=https://{{host_virkailija}}/kayttooikeus-service/mfa/token
+cas.authn.mfa.gauth.rest.token-url=http://{{host_alb}}/kayttooikeus-service/mfa/token
+cas.authn.mfa.gauth.rest.url=http://{{host_alb}}/kayttooikeus-service/mfa/token
 cas.authn.mfa.gauth.rest.basic-auth-username={{cas_mfa_username}}
 cas.authn.mfa.gauth.rest.basic-auth-password={{cas_mfa_password}}
 
