@@ -31,7 +31,7 @@ cas.view.default-redirect-url={{cas_view_default_redirect_url | default('https:/
 cas.custom.properties.hakaUrl={{haka_url}}
 cas.custom.properties.suomifiUrl=https://{{host_oppija}}/cas-oppija/login
 cas.custom.properties.suomifiUrlTarget=https://{{host_virkailija}}/kayttooikeus-service/cas/tunnistus?locale=
-cas.custom.properties.loginTietosuojaselosteUrl={{login_tietosuojaseloste_url | default("https://opintopolku.fi/wp/tietosuojaseloste/")}}
+cas.custom.properties.loginTietosuojaselosteUrl={{ login_tietosuojaseloste_url | default("https://opintopolku.fi/konfo/fi/sivu/tietosuojaselosteet-ja-evasteet") }}
 
 # Spring Boot configuration
 # https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
