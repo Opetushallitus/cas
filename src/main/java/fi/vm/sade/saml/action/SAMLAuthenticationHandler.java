@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.security.auth.login.FailedLoginException;
 import java.security.GeneralSecurityException;
+import java.util.List;
+import java.util.Map;
 
 import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
@@ -63,7 +65,8 @@ public class SAMLAuthenticationHandler implements AuthenticationHandler {
 
     private AuthenticationHandlerExecutionResult doAuthentication(Credential credential) {
         IdentifiedHenkiloType henkiloType = kayttooikeusRestClient.getHenkiloByAuthToken(credential.getId());
-        Principal principal = principalFactory.createPrincipal(henkiloType.getKayttajatiedot().getUsername());
+        Map<String, List<Object>> attributes = Map.of("idpEntityId", List.of(henkiloType.getIdpEntityId()));
+        Principal principal = principalFactory.createPrincipal(henkiloType.getKayttajatiedot().getUsername(), attributes);
         return new DefaultAuthenticationHandlerExecutionResult(this, new BasicCredentialMetaData(credential), principal, emptyList());
     }
 
