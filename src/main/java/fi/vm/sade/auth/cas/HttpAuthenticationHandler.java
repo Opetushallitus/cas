@@ -13,6 +13,8 @@ import org.apereo.cas.services.ServicesManager;
 
 import javax.security.auth.login.FailedLoginException;
 import java.security.GeneralSecurityException;
+import java.util.List;
+import java.util.Map;
 
 import static java.util.Collections.emptyList;
 
@@ -42,7 +44,8 @@ public class HttpAuthenticationHandler extends AbstractUsernamePasswordAuthentic
         if (username == null) {
             throw new FailedLoginException("Invalid credentials");
         }
-        Principal principal = principalFactory.createPrincipal(username);
+        Map<String, List<Object>> attributes = Map.of("idpEntityId", List.of("usernamePassword"));
+        Principal principal = principalFactory.createPrincipal(username, attributes);
         return createHandlerResult(credential, principal, emptyList());
     }
 
