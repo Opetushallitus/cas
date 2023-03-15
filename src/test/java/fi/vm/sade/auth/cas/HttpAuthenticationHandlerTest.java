@@ -74,8 +74,7 @@ public class HttpAuthenticationHandlerTest {
 
         assertThat(authenticate.getPrincipal().getId()).isEqualTo("USER1");
         List<Object> idpEntityIdList = authenticate.getPrincipal().getAttributes().get("idpEntityId");
-        assertThat(idpEntityIdList.get(0)).isEqualTo("usernamePassword");
-        assertThat(idpEntityIdList.size()).isEqualTo(1);
+        assertThat(idpEntityIdList).containsOnly("usernamePassword");
     }
 
     @Test
