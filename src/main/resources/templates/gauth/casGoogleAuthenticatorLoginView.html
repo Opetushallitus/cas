@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+    <title th:text="#{cas.mfa.googleauth.pagetitle}">Google Authentication View</title>
+    <link href="../../static/css/cas.css" rel="stylesheet" th:remove="tag"/>
+</head>
+
+<body>
+<main id="cas-login-main" layout:fragment="content" role="main" class="container-fluid">
+    <div class="row text-center taustakuva">
+        <h1 class="w-100 mt-4" th:text="#{app.title}">Kirjaudu sisään</h1>
+        <h2 class="w-100" th:text="#{app.subtitle}">Yhdellä tunnuksella kirjaudut kaikkiin opetushallinnon palveluihin</h2>
+        <ul th:replace="fragments/palvelut :: linkit" />
+        <div class="w-100">
+            <div class="card mx-auto mb-2">
+                <div class="card-body">
+                    <form method="post" id="fm1" th:object="${credential}" th:action="@{/login}">
+                        <div id="info" class="gauth-info">
+                            <div>
+                                <svg width="41" height="41" viewBox="0 0 41 41" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <mask id="mask0_17_278" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="41" height="42">
+                                        <rect x="0.0800781" y="0.84082" width="40.16" height="40.16" fill="#D9D9D9"/>
+                                    </mask>
+                                    <g mask="url(#mask0_17_278)">
+                                        <path d="M26.602 27.614C26.2115 27.614 25.8768 27.4746 25.598 27.1957C25.3191 26.9168 25.1796 26.5822 25.1796 26.1917V20.6697C25.1796 20.2793 25.3191 19.9446 25.598 19.6657C25.8768 19.3868 26.2115 19.2474 26.602 19.2474H26.853V17.574C26.853 16.6537 27.1804 15.8656 27.8352 15.2096C28.4911 14.5548 29.2793 14.2274 30.1996 14.2274C31.12 14.2274 31.9081 14.5548 32.564 15.2096C33.2189 15.8656 33.5463 16.6537 33.5463 17.574V19.2474H33.7973C34.1877 19.2474 34.5224 19.3868 34.8013 19.6657C35.0802 19.9446 35.2196 20.2793 35.2196 20.6697V26.1917C35.2196 26.5822 35.0802 26.9168 34.8013 27.1957C34.5224 27.4746 34.1877 27.614 33.7973 27.614H26.602ZM28.5263 19.2474H31.873V17.574C31.873 17.0999 31.7123 16.7022 31.391 16.381C31.0709 16.0608 30.6737 15.9007 30.1996 15.9007C29.7255 15.9007 29.3284 16.0608 29.0082 16.381C28.6869 16.7022 28.5263 17.0999 28.5263 17.574V19.2474ZM11.793 39.3274C10.8726 39.3274 10.085 39 9.43021 38.3451C8.77426 37.6892 8.44629 36.901 8.44629 35.9807V5.86071C8.44629 4.94037 8.77426 4.15223 9.43021 3.49628C10.085 2.84145 10.8726 2.51404 11.793 2.51404H28.5263C29.4466 2.51404 30.2348 2.84145 30.8907 3.49628C31.5455 4.15223 31.873 4.94037 31.873 5.86071V12.554H28.5263V10.8807H11.793V30.9607H28.5263V29.2874H31.873V35.9807C31.873 36.901 31.5455 37.6892 30.8907 38.3451C30.2348 39 29.4466 39.3274 28.5263 39.3274H11.793ZM11.793 34.3074V35.9807H28.5263V34.3074H11.793ZM11.793 7.53404H28.5263V5.86071H11.793V7.53404Z" fill="#1C1B1F"/>
+                                    </g>
+                                </svg>
+                            </div>
+                            <div class="gauth-text">
+                                <span class="gauth-title" th:text="#{gauth.login.title}">Kaksivaiheinen tunnistautuminen</span>
+                                <span class="gauth-description" th:text="#{gauth.login.description}">Syötä sovelluksen vahvistuskoodi</span>
+                            </div>
+                        </div>
+                            
+                        <input type="hidden" name="_eventId_submit" value="Login"/>
+                        <input type="hidden" name="execution" th:value="${flowExecutionKey}"/>
+                        <input type="hidden" name="geolocation"/>
+                        <input type="hidden" id="accountId" name="accountId" size="25" autocomplete="off" th:field="*{accountId}" />
+                        <input type="hidden" id="sendtoken" name="token" />
+                        <div class="token-outer-container">
+                            <div class="token-inner-container">
+                                <input class="gauth-token-input" name="usertoken" id="token" size="6" maxlength="6" autocomplete="off" required />
+                            </div>
+                        </div>
+                        
+                        <script type="text/javascript" th:inline="javascript">
+                            /*<![CDATA[*/
+                            let accountId = /*[[${registeredDevice.id}]]*/;
+                            document.getElementById("accountId").value = accountId;
+                                            /*]]>*/
+                        </script>
+                        <script type="text/javascript" th:inline="javascript">
+                            let input = document.getElementById("token");
+
+                            // stop focus moving after the last char
+                            input.addEventListener('keydown', stopCarret); 
+                            input.addEventListener('keyup', stopCarret); 
+
+                            function stopCarret() {
+                                if (input.value.length > 5){
+                                    setCaretPosition(input, 5);
+                                }
+                            }
+
+                            function setCaretPosition(elem, caretPos) {
+                                if(elem != null) {
+                                    if(elem.createTextRange) {
+                                        var range = elem.createTextRange();
+                                        range.move('character', caretPos);
+                                        range.select();
+                                    }
+                                    else {
+                                        if(elem.selectionStart) {
+                                            elem.focus();
+                                            elem.setSelectionRange(caretPos, caretPos);
+                                        }
+                                        else
+                                            elem.focus();
+                                    }
+                                }
+                            }
+
+                            // post form on the sixth number
+                            input.addEventListener('keyup', function() {
+                                let error = document.getElementById("msg");
+                                if (error) {
+                                    error.setAttribute("class", "hidden");
+                                }
+                                if (input.value.length >= 6) {
+                                    input.setAttribute("disabled", true);
+                                    document.getElementById("info").setAttribute("class", "gauth-info-disabled");
+                                    document.getElementById("sendinfo").setAttribute("class", "send-info-visible");
+                                    document.getElementById("sendtoken").value = input.value;
+                                    document.getElementById("fm1").submit();
+                                }
+                            })
+
+                            input.focus();
+                        </script>
+                        <div id="sendinfo" class="hidden" th:text="#{gauth.login.sending}"></div>
+                        <div id="msg" class="token-error" th:if="${#fields.hasErrors('*')}">
+                            <span th:text="#{gauth.error.invalidToken}"/>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <a class="back-to-login" th:href="'/cas/login?service=' + ${service.id}">
+                <span class="link-text" th:utext="#{backtologin.title}" />
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div th:replace="fragments/palvelut :: tiedot" />
+    </div>
+</main>
+</body>
+</html>

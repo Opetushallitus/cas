@@ -178,6 +178,8 @@ dependencies {
     implementation "org.apereo.cas:cas-server-support-reports" //to enable springwebflow actuator endpoint
     implementation "org.apereo.cas:cas-server-core-authentication-api"
     implementation "org.apereo.cas:cas-server-core-authentication-attributes"
+    implementation "org.apereo.cas:cas-server-core-authentication-mfa"
+    implementation "org.apereo.cas:cas-server-core-authentication-mfa-api"
     implementation "org.apereo.cas:cas-server-core-webflow-api"
     implementation "org.apereo.cas:cas-server-core-web-api"
     implementation "org.apereo.cas:cas-server-core-tickets-api"
@@ -187,6 +189,7 @@ dependencies {
     implementation "org.apereo.cas:cas-server-webapp-config"
     implementation "org.apereo.cas:cas-server-webapp-init"
     implementation "org.apereo.cas:cas-server-support-redis-ticket-registry"
+    implementation "org.apereo.cas:cas-server-support-gauth"
     implementation "fi.vm.sade.java-utils:java-http:0.5.0-SNAPSHOT"
     implementation 'org.springframework.session:spring-session-data-redis'
     implementation "org.springframework.security:spring-security-config"

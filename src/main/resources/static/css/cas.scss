@@ -1,6 +1,8 @@
 $theme-colors: (
   "primary": #159ECB
 );
+$error: #DB2828;
+$error-yellow: #B3A24E;
 $body-bg: #F6F4F0;
 $font-family-sans-serif: 'Open Sans', sans-serif;
 @import "4.1.3/scss/bootstrap";
@@ -35,6 +37,8 @@ header a {
     background-size: cover;
     background-repeat: no-repeat;
     color: #ffffff;
+    min-height: 722px;
+    align-content: flex-start;
 }
 .taustakuva a {
     color: #ffffff;
@@ -70,5 +74,101 @@ ul.list-inline-bullet li+li a {
 @each $palvelu, $vari in $palvelut {
     ##{$palvelu} .bullet {
         background-color: $vari;
+    }
+}
+
+#cas-login-main {
+    max-width: 100% !important;
+    margin: 0 !important;
+}
+
+.back-to-login {
+    margin-top: 1rem;
+    font-size: 14px;
+}
+
+.gauth-info {
+    display: flex;
+    margin-bottom: 24px;
+
+    &-disabled {
+        display: flex;
+        margin-bottom: 24px;
+        opacity: 0.5;
+    }
+}
+
+.gauth-text {
+    text-align: left;
+}
+
+.gauth-title {
+    font-weight: 700;
+}
+
+.gauth-description {
+    font-size: 14px;
+}
+
+.gauth-token-input {
+    padding-left: 20px;
+    letter-spacing: 39px;
+    width: 360px;
+    min-width: 360px;
+    font-size: 24px;
+    line-height: 38px;
+    border: 0;
+    background-image: url('/cas/images/fake-box-input.png');
+    background-repeat: repeat-x;
+    background-size: contain;
+    outline: none;
+}
+
+.token-outer-container {
+    width: 318px;
+    overflow: hidden;
+}
+
+.token-inner-container {
+    left: 0;
+    position: sticky;
+}
+
+.token-error {
+    color: $error;
+    font-size: 14px;
+    margin-top: 0.5rem;
+}
+
+.hidden {
+    display: none;
+}
+
+.send-info-visible {
+    display: block;
+    color: $primary;
+    font-size: 14px;
+    margin-top: 0.5rem;
+}
+
+.loginerror {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 0;
+    color: $error-yellow;
+    font-size: 30px;
+    font-weight: 700;
+    background-color: rgba(255, 255, 255, 0.8);
+
+    svg {
+        margin-bottom: 20px;
+    }
+
+    a {
+        margin-top: 18px;
+        font-size: 16px;
+        font-weight: 600;
+        color: $error-yellow;
     }
 }
