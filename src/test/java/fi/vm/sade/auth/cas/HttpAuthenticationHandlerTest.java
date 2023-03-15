@@ -16,6 +16,7 @@ import org.springframework.core.env.Environment;
 import javax.security.auth.login.FailedLoginException;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -72,6 +73,9 @@ public class HttpAuthenticationHandlerTest {
         AuthenticationHandlerExecutionResult authenticate = authenticationHandler.authenticate(new UsernamePasswordCredential("user1", "pass1"));
 
         assertThat(authenticate.getPrincipal().getId()).isEqualTo("USER1");
+        List<Object> idpEntityIdList = authenticate.getPrincipal().getAttributes().get("idpEntityId");
+        assertThat(idpEntityIdList.get(0)).isEqualTo("usernamePassword");
+        assertThat(idpEntityIdList.size()).isEqualTo(1);
     }
 
     @Test
