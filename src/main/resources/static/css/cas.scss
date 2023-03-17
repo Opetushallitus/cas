@@ -103,7 +103,7 @@ ul.list-inline-bullet li+li a {
 }
 
 .gauth-title {
-    font-weight: 700;
+    font-weight: 600;
 }
 
 .gauth-description {
@@ -111,12 +111,12 @@ ul.list-inline-bullet li+li a {
 }
 
 .gauth-token-input {
-    padding-left: 20px;
-    letter-spacing: 39px;
-    width: 360px;
+    padding-left: 21px;
+    letter-spacing: 41px;
+    width: 410px;
     min-width: 360px;
-    font-size: 24px;
-    line-height: 38px;
+    font-size: 26px;
+    line-height: 41px;
     border: 0;
     background-image: url('/cas/images/fake-box-input.png');
     background-repeat: repeat-x;
@@ -125,7 +125,8 @@ ul.list-inline-bullet li+li a {
 }
 
 .token-outer-container {
-    width: 318px;
+    margin: 0.5rem 0;
+    width: 335px;
     overflow: hidden;
 }
 
@@ -137,6 +138,7 @@ ul.list-inline-bullet li+li a {
 .token-error {
     color: $error;
     font-size: 14px;
+    font-weight: 600;
     margin-top: 0.5rem;
 }
 
@@ -146,7 +148,7 @@ ul.list-inline-bullet li+li a {
 
 .send-info-visible {
     display: block;
-    color: $primary;
+    color: #4DA54B;
     font-size: 14px;
     margin-top: 0.5rem;
 }

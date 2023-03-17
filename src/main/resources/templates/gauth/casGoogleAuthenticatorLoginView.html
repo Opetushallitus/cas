@@ -31,8 +31,8 @@
                                 </svg>
                             </div>
                             <div class="gauth-text">
-                                <span class="gauth-title" th:text="#{gauth.login.title}">Kaksivaiheinen tunnistautuminen</span>
-                                <span class="gauth-description" th:text="#{gauth.login.description}">Syötä sovelluksen vahvistuskoodi</span>
+                                <div class="gauth-title" th:text="#{gauth.login.title}">Kaksivaiheinen tunnistautuminen</div>
+                                <div class="gauth-description" th:text="#{gauth.login.description}">Syötä sovelluksen vahvistuskoodi</div>
                             </div>
                         </div>
                             
@@ -108,9 +108,11 @@
                     </form>
                 </div>
             </div>
-            <a class="back-to-login" th:href="'/cas/login?service=' + ${service.id}">
-                <span class="link-text" th:utext="#{backtologin.title}" />
-            </a>
+            <div class="back-to-login">
+                <a th:href="'/cas/login?service=' + ${service.id}">
+                    <span class="link-text" th:utext="#{backtologin.title}" />
+                </a>
+            </div>
         </div>
     </div>
     <div class="row">
