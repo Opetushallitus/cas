@@ -172,3 +172,14 @@ ul.list-inline-bullet li+li a {
         color: $error-yellow;
     }
 }
+
+#mpassid-button {
+    background: #0c3e9d;
+    color: white;
+    border-radius: 50px;
+    padding: 8px 40px;
+
+    img {
+        height: 20px;
+    }
+}

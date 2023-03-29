@@ -44,9 +44,11 @@ cas.authn.mfa.gauth.rest.basic-auth-username={{cas_mfa_username}}
 cas.authn.mfa.gauth.rest.basic-auth-password={{cas_mfa_password}}
 
 cas.custom.properties.hakaUrl={{haka_url}}
+cas.custom.properties.mpassidUrl={{ mpassid_url | default('https://${host.virkailija}/service-provider-app/saml/login/alias/mpassidsp') }}
 cas.custom.properties.suomifiUrl=https://{{host_oppija}}/cas-oppija/login
 cas.custom.properties.suomifiUrlTarget=https://{{host_virkailija}}/kayttooikeus-service/cas/tunnistus?locale=
 cas.custom.properties.loginTietosuojaselosteUrl={{ login_tietosuojaseloste_url | default("https://opintopolku.fi/konfo/fi/sivu/tietosuojaselosteet-ja-evasteet") }}
+cas.custom.properties.mpassidLoginEnabled={{ cas_mpassid_login_enabled | default('false') }}
 
 # Spring Boot configuration
 # https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html

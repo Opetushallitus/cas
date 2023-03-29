@@ -25,6 +25,9 @@
             <div class="w-100">
                 <div th:replace="fragments/haka :: haka" />
             </div>
+            <div class="w-100" th:if="${cas.custom.properties['mpassidLoginEnabled']}">
+                <div th:replace="fragments/mpassid :: mpassid" />
+            </div>
             <div class="w-100">
                 <div th:replace="fragments/suomifi :: suomifi" />
             </div>
