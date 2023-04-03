@@ -83,6 +83,8 @@ cas.authn.mfa.triggers.rest.url: http://localhost:8080/kayttooikeus-service/mfa/
 cas.authn.mfa.triggers.rest.method: POST
 cas.authn.mfa.triggers.rest.basic-auth-username: cas
 cas.authn.mfa.triggers.rest.basic-auth-password: mfa
+cas.authn.mfa.gauth.bypass.principal-attribute-name: idpEntityId
+cas.authn.mfa.gauth.bypass.principal-attribute-value: vetuma
 cas.authn.mfa.gauth.cleaner.schedule.enabled: false
 cas.authn.mfa.gauth.core.issuer: Opetushallitus
 cas.authn.mfa.gauth.core.label: Opintopolku
