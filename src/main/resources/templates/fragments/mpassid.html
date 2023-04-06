@@ -16,8 +16,12 @@
                 <div class="card-body">
                     <p class="card-text" th:utext="#{mpassidLogin.description}" />
                     <p class="card-text">
+                        <!--
+                        Note that mpassidUrl has idp query parameter in it so the redirect param has to be
+                        prefixed with & instead of ? unlike in Haka login URL :)
+                        -->
                         <a id="mpassid-button"
-                           th:with="parameters=${service != null} ? '?redirect=' + ${T(org.springframework.web.util.UriComponentsBuilder).fromHttpUrl(service.originalUrl).toUriString()} : ''"
+                           th:with="parameters=${service != null} ? '&redirect=' + ${T(org.springframework.web.util.UriComponentsBuilder).fromHttpUrl(service.originalUrl).toUriString()} : ''"
                            th:href="${cas.custom.properties['mpassidUrl']} + ${parameters}">
                             <span>
                                 <img height="20px" src="/cas/images/mpassid-login.svg" /> MPASSid

@@ -75,7 +75,7 @@ cas.view.default-redirect-url: http://localhost:8080
 cas.sso.allow-missing-service-parameter: false
 
 cas.custom.properties.hakaUrl: http://localhost:8080/service-provider-app/saml/login/alias/hakasp
-cas.custom.properties.mpassidUrl: http://localhost:8080/service-provider-app/saml/login/alias/mpassidtestsp
+cas.custom.properties.mpassidUrl: http://localhost:8080/service-provider-app/saml/login/alias/mpassidtestsp?idp=https://mpass-proxy-test.csc.fi/idp/shibboleth
 cas.custom.properties.suomifiUrl: http://untuvaopintopolku.fi/cas-oppija/login
 cas.custom.properties.suomifiUrlTarget: http://localhost:8080/kayttooikeus-service/cas/tunnistus?locale=
 cas.custom.properties.loginTietosuojaselosteUrl: http://localhost:8080/tietosuojaseloste/
