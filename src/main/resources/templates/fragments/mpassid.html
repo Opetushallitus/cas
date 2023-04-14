@@ -23,9 +23,7 @@
                         <a id="mpassid-button"
                            th:with="parameters=${service != null} ? '&redirect=' + ${T(org.springframework.web.util.UriComponentsBuilder).fromHttpUrl(service.originalUrl).toUriString()} : ''"
                            th:href="${cas.custom.properties['mpassidUrl']} + ${parameters}">
-                            <span>
-                                <img height="20px" src="/cas/images/mpassid-login.svg" /> MPASSid
-                            </span>
+                            <img width="108px" height="20px" src="/cas/images/mpassid-teksti.svg" />
                         </a>
                     </p>
                 </div>

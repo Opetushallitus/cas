@@ -13,20 +13,23 @@
     <div class="row">
         <div class="col-md">
             <!-- Login form template begins here -->
-            <div th:fragment="loginform" class="card mx-auto mb-2">
-                <div class="card-body">
+            <div th:fragment="loginform" class="">
                     <form method="post" id="fm1" th:object="${credential}" action="login">
+                        <section class="form-group">
+                            <label th:text="#{login.formtitle}">Kirjaudu sisään Opintopolku-tunnuksilla</label>
+                        </section>
+
                         <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
                             <span th:each="err : ${#fields.errors('*')}" th:utext="${err + ' '}">Example error</span>
                         </div>
 
-                        <section class="form-group">
-                            <span th:if="${availableAuthenticationHandlerNames != null}">
+                        <section th:if="${availableAuthenticationHandlerNames != null}" class="form-group">
+                            <span>
                                 <span th:if="${availableAuthenticationHandlerNames.size() > 1}">
                                     <label for="source" th:utext="#{screen.welcome.label.source}">Source</label>
                                     <div>
                                         <!--suppress XmlDuplicatedId -->
-                                        <select class="form-control required"
+                                        <select class="form-control form-control-lg required"
                                                 id="source"
                                                 name="source"
                                                 tabindex="0"
@@ -58,7 +61,7 @@
                             </div>
                             <div th:unless="${openIdLocalId}">
                                 <!--suppress XmlDuplicatedId -->
-                                <input class="form-control required"
+                                <input class="form-control form-control required"
                                        th:placeholder="#{login.usernamePlaceholder}"
                                        id="username"
                                        size="25"
@@ -73,7 +76,7 @@
 
                         <section class="form-group">
                             <div>
-                                <input class="form-control required"
+                                <input class="form-control form-control required"
                                        th:placeholder="#{login.passwordPlaceholder}"
                                        type="password"
                                        id="password"
@@ -118,7 +121,7 @@
                         <input type="hidden" name="_eventId" value="submit"/>
                         <input type="hidden" name="geolocation"/>
 
-                        <input class="btn btn-block btn-submit btn-primary"
+                        <input class="btn btn btn-block btn-submit btn-primary"
                                th:if="${recaptchaSiteKey == null}"
                                name="submit"
                                accesskey="l"
@@ -190,7 +193,6 @@
                                 });
                             });
                     </script>
-                </div>
             </div>
         </div>
     </div>

@@ -1,11 +1,22 @@
 $theme-colors: (
   "primary": #159ECB
 );
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
+$figma-bold: 500;
+$figma-semibold: 400;
+
 $error: #DB2828;
 $error-yellow: #B3A24E;
 $body-bg: #F6F4F0;
+$title-color: #8F8F8F;
+$title-color-light: rgba(143, 143, 143, 0.7);
 $font-family-sans-serif: 'Open Sans', sans-serif;
 @import "4.1.3/scss/bootstrap";
+
+html { height: 100%; }
+body { min-height: 100%; display: flex; flex-direction: column; }
+main { flex-grow: 1; }
 
 $palvelut: (
     arvo:                   #7BBE31,
@@ -22,9 +33,22 @@ $palvelut: (
 header {
     background-color: #ffffff;
     color: #adadad;
+    img { max-width: 50%; }
 }
 header a {
     color: #4a4a4a;
+}
+
+main {
+    font-family: "Roboto", "Open Sans", sans-serif;
+}
+
+.page-header {
+    font-size: 29px;
+    font-weight: $figma-bold;
+}
+#palvelunimet {
+    font-size: 15px;
 }
 
 .ilmoitus {
@@ -39,25 +63,33 @@ header a {
     color: #ffffff;
     min-height: 722px;
     align-content: flex-start;
-}
-.taustakuva a {
-    color: #ffffff;
-}
-.taustakuva .card {
-    width: 380px;
-    background-color: #f6f4f0;
-    box-shadow: 0 0 10px #888888;
-    color: #000000;
-}
-.taustakuva .card a {
-    color: $primary;
+    a { color: #ffffff; }
+    .login-kortti { box-shadow: 0 0 10px #888888; }
+    .card {
+        background-color: $body-bg;
+        color: #8F8F8F;
+        border-radius: 5px;
+    }
 }
 
-ul.list-inline-bullet li+li:before {
-    content: "\25CF";
+.taustakuva .login-kortti {
+    > .card-body {
+        display: grid;
+        grid-template-areas:
+          "loginform palveluinfot"
+          "muut-kirjautumistavat muut-kirjautumistavat";
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 20px;
+        padding: 40px;
+    }
+    width: 720px;
+
+    input[type=tex†] { margin-top: 15px; }
+    input[type=submit] { margin-top: 30px; }
 }
-ul.list-inline-bullet li+li a {
-    margin-left: .5rem;
+
+.taustakuva .card a {
+    color: $primary;
 }
 
 .bullet {
@@ -76,6 +108,8 @@ ul.list-inline-bullet li+li a {
         background-color: $vari;
     }
 }
+
+#loginform { grid-area: loginform; }
 
 #cas-login-main {
     max-width: 100% !important;
@@ -98,16 +132,126 @@ ul.list-inline-bullet li+li a {
     }
 }
 
+#palveluinfot {
+    grid-area: palveluinfot;
+    font-size: 14px;
+    .card {
+        border-radius: 10px;
+        background: #FBFAF8;
+    }
+    .card-body {
+        min-height: 200px;
+        border-radius: 10px;
+     }
+
+    ul {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+
+        padding: 0;
+        margin: 20px auto 0 auto;
+
+        list-style-type: none;
+        li {
+            height: 12px;
+            input { display: none; }
+            input + label {
+                display: inline-block;
+                background: #C0C0C0;
+                overflow: hidden;
+                text-indent: -999px;
+                border-radius: 100%;
+                width: 12px;
+                height: 12px;
+                margin-right: 5px;
+            }
+            &:last-child input + label { margin-right: 0; }
+            input:checked + label { background: $primary; }
+        }
+    }
+}
+
+#muut-kirjautumistavat {
+    grid-area: muut-kirjautumistavat;
+    color: $title-color;
+    font-size: 15px;
+    margin: 0;
+    padding: 0;
+
+    > .row { margin-top: 20px; }
+
+    .title-backline {
+        position: relative;
+        width: 100%;
+        z-index: 1;
+
+        &:before {
+            // Line itself
+            content:"";
+            border-top: 1px solid $title-color-light;
+            margin: 0 auto;
+            // ...in the middle of the element
+            position: absolute;
+            top: 50%; left: 0; right: 0; bottom: 0;
+            // ...and forced behind the text
+            z-index: -1;
+        }
+
+        span {
+            /* to hide the lines from behind the text, you have to set the background color the same as the container */
+            background: $body-bg;
+            padding: 0 15px;
+        }
+    }
+}
+
+.kirjautumistapa img { max-width: 80%; }
+
+@include media-breakpoint-down(sm) {
+    .page-header {
+        font-size: 22px;
+        font-weight: 700;
+        margin: auto 8px;
+    }
+
+    .taustakuva .login-kortti {
+        margin: 20px !important;
+        > .card-body {
+            grid-template-areas:
+              "loginform"
+              "muut-kirjautumistavat"
+              "palveluinfot";
+            grid-template-columns: 1fr;
+            padding: 32px;
+        }
+    }
+
+    .kirjautumistapa { margin-bottom: 16px; }
+    .kirjautumistapa img { max-width: 140px; }
+
+    #palveluinfot .card {
+        margin-top: 10px;
+    }
+    footer { display: none; }
+}
+
 .gauth-text {
     text-align: left;
 }
 
 .gauth-title {
-    font-weight: 600;
+    font-weight: $figma-bold;
 }
 
 .gauth-description {
     font-size: 14px;
+}
+
+#mfa-view .card {
+    width: 380px;
+    background-color: #f6f4f0;
+    color: #000000;
 }
 
 .gauth-token-input {
@@ -180,8 +324,4 @@ ul.list-inline-bullet li+li a {
     color: white;
     border-radius: 50px;
     padding: 8px 40px;
-
-    img {
-        height: 20px;
-    }
 }
