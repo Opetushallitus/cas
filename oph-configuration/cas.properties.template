@@ -71,6 +71,7 @@ server.tomcat.remoteip.remote-ip-header=
 # Custom configuration
 
 cas.service-registry.json.location=file:///root/oph-configuration/cas
+cas.interrupt.cookie.pin-to-session: false
 
 # redis
 cas.ticket.registry.redis.enabled=true

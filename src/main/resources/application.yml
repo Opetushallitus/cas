@@ -42,6 +42,7 @@ cas:
           enabled: true
 
 cas.service-registry.json.location: classpath:/service-1.json
+cas.interrupt.cookie.pin-to-session: false
 
 # redis
 cas.ticket.registry.redis.enabled: true
