@@ -17,11 +17,11 @@
             </span>
             <span class="navbar-text">
                 <span>
-                    <a href="?locale=fi">suomeksi</a>
+                    <a th:href="'?locale=fi&service=' + ${service.id}">suomeksi</a>
                 </span>
                 <span>|</span>
                 <span>
-                    <a href="?locale=sv">på svenska</a>
+                    <a th:href="'?locale=sv&service=' + ${service.id}">på svenska</a>
                 </span>
             </span>
         </nav>
