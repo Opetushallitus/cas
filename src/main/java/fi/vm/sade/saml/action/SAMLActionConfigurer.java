@@ -15,6 +15,7 @@ public class SAMLActionConfigurer extends AbstractCasWebflowConfigurer {
 
     private static final String STATE_ID_SAML_DECISION = "samlDecision";
     private static final String STATE_ID_SAML_ACTION = "samlAction";
+    public static final String MFA_GAUTH_EVENT_ID = "mfa-gauth";
 
     private final SAMLAction samlAction;
 
@@ -40,6 +41,8 @@ public class SAMLActionConfigurer extends AbstractCasWebflowConfigurer {
         ActionState actionState = super.createActionState(loginFlow, STATE_ID_SAML_ACTION, this.samlAction);
         super.createTransitionForState(actionState, CasWebflowConstants.TRANSITION_ID_SUCCESS,
                 CasWebflowConstants.STATE_ID_CREATE_TICKET_GRANTING_TICKET);
+        super.createTransitionForState(actionState, MFA_GAUTH_EVENT_ID, MFA_GAUTH_EVENT_ID);
+
         super.createStateDefaultTransition(actionState, originalStartState);
         actionState.getExitActionList().add(super.createEvaluateAction(
                 CasWebflowConstants.ACTION_ID_CLEAR_WEBFLOW_CREDENTIALS));
