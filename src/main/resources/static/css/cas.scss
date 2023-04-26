@@ -18,18 +18,6 @@ html { height: 100%; }
 body { min-height: 100%; display: flex; flex-direction: column; }
 main { flex-grow: 1; }
 
-$palvelut: (
-    arvo:                   #7BBE31,
-    ehoks:                  #FF0000,
-    eperusteet:             #FECD0A,
-    koski:                  #149940,
-    oikeustulkkirekisteri:  #898989,
-    oiva:                   #7E007E,
-    opintopolku:            #3B7ADB,
-    valtionavustukset:      #211B81,
-    varda:                  #98975b
-);
-
 header {
     background-color: #ffffff;
     color: #adadad;
@@ -102,11 +90,6 @@ main {
     transform: rotate(45deg);
     transform-origin: center;
     border-radius: 3px;
-}
-@each $palvelu, $vari in $palvelut {
-    ##{$palvelu} .bullet {
-        background-color: $vari;
-    }
 }
 
 #loginform { grid-area: loginform; }
