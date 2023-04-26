@@ -80,8 +80,9 @@
                         <p th:text="#{palvelut.varda.kuvaus}"></p>
                     </div>
                 </div>
-                <nav>
+                <nav id="carousel-nav">
                     <ul>
+                        <li class="arrow arrow-left"></li>
                         <li>
                             <input id="carousel-button-opintopolku" type="radio" name="carousel"/>
                             <label for="carousel-button-opintopolku"></label>
@@ -118,17 +119,34 @@
                             <input id="carousel-button-varda" type="radio" name="carousel" />
                             <label for="carousel-button-varda"></label>
                         </li>
+                        <li class="arrow arrow-right"></li>
                     </ul>
                 </nav>
                 <script type="text/javascript">
-                    document.querySelectorAll("#carousel-button-opintopolku").forEach(_ => _.checked = true)
+                    function selectCard(cardId) {
+                        document.querySelectorAll("#palveluinfot .card-body").forEach(card => {
+                            card.style.display = card.id === cardId ? "block" : "none"
+                        })
+                    }
+
+                    document.querySelector("#carousel-nav .arrow-left").addEventListener("click", event => {
+                        const checked = document.querySelector("#carousel-nav input:checked")
+                        const last = Array.from(document.querySelectorAll("#carousel-nav input")).at(-1)
+                        const prev = checked.parentElement.previousElementSibling.querySelector("input")
+                        if (prev) prev.click()
+                        else last.click()
+                    })
+                    document.querySelector("#carousel-nav .arrow-right").addEventListener("click", event => {
+                        const checked = document.querySelector("#carousel-nav input:checked")
+                        const first = Array.from(document.querySelectorAll("#carousel-nav input")).at(0)
+                        const next = checked.parentElement.nextElementSibling.querySelector("input")
+                        if (next) next.click()
+                        else first.click()
+                    })
+                    document.querySelector("#carousel-button-opintopolku").checked = true
                     document.querySelectorAll("#palveluinfot input").forEach(input => {
                         const cardId = input.id.replace("-button", "")
-                        input.addEventListener("click", event => {
-                            document.querySelectorAll("#palveluinfot .card-body").forEach(card => {
-                                card.style.display = card.id === cardId ? "block" : "none"
-                            })
-                        })
+                        input.addEventListener("click", () => selectCard(cardId))
                     })
                 </script>
             </div>

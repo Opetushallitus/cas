@@ -115,6 +115,28 @@ main {
     }
 }
 
+.arrow {
+    --border-color: #C0C0C0;
+    --size: 10px;
+    --border-size: 3px;
+    width: var(--size) !important;
+    height: var(--size) !important;
+    cursor: pointer;
+
+    &.arrow-left {
+        border-top: var(--border-size) solid var(--border-color);
+        border-left: var(--border-size) solid var(--border-color);
+        transform: rotate(-45deg);
+        margin-right: 6px;
+    }
+    &.arrow-right {
+        border-top: var(--border-size) solid var(--border-color);
+        border-right: var(--border-size) solid var(--border-color);
+        transform: rotate(45deg);
+        margin-left: 6px;
+    }
+}
+
 #palveluinfot {
     grid-area: palveluinfot;
     font-size: 14px;
@@ -131,6 +153,8 @@ main {
         display: flex;
         flex-direction: row;
         justify-content: center;
+        align-items: center;
+        gap: 5px;
 
         padding: 0;
         margin: 20px auto 0 auto;
@@ -140,6 +164,7 @@ main {
             height: 12px;
             input { display: none; }
             input + label {
+                cursor: pointer;
                 display: inline-block;
                 background: #C0C0C0;
                 overflow: hidden;
@@ -147,9 +172,7 @@ main {
                 border-radius: 100%;
                 width: 12px;
                 height: 12px;
-                margin-right: 5px;
             }
-            &:last-child input + label { margin-right: 0; }
             input:checked + label { background: $primary; }
         }
     }
