@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
-      layout:decorate="~{layout}" th:with="containerClass='container-fluid'" lang="">
+      layout:decorate="~{layout}" th:with="containerClass='container-fluid taustakuva'" lang="">
 
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -13,32 +13,55 @@
 
 <body class="login">
     <main layout:fragment="content" role="main" class="container-fluid">
-        <div class="row text-center taustakuva">
-            <h1 class="w-100 mt-4" th:text="#{app.title}">Kirjaudu sisään</h1>
-            <h2 class="w-100" th:text="#{app.subtitle}">Yhdellä tunnuksella kirjaudut kaikkiin opetushallinnon palveluihin</h2>
+        <div class="row text-center">
+            <h2 class="page-header w-100 mt-4" th:text="#{app.subtitle}">Yhdellä tunnuksella kirjaudut kaikkiin opetushallinnon palveluihin</h2>
             <ul th:replace="fragments/palvelut :: linkit" />
-            <div class="w-100" th:if="${delegatedAuthenticationProviderDominant == null}">
-                <div th:replace="fragments/loginform :: loginform">
-                    <a href="../fragments/loginform.html">Login Form goes here</a>
+            <div class="card mx-auto login-kortti">
+                <div class="card-body">
+                <div id="loginform">
+                    <div th:replace="fragments/loginform :: loginform">
+                        <a href="../fragments/loginform.html">Login Form goes here</a>
+                    </div>
                 </div>
-            </div>
-            <div class="w-100">
-                <div th:replace="fragments/haka :: haka" />
-            </div>
-            <div class="w-100" th:if="${cas.custom.properties['mpassidLoginEnabled']}">
-                <div th:replace="fragments/mpassid :: mpassid" />
-            </div>
-            <div class="w-100">
-                <div th:replace="fragments/suomifi :: suomifi" />
-            </div>
-            <div id="providers" class="w-100">
-                <div th:replace="fragments/loginProviders :: loginProviders">
-                    <a href="fragments/loginProviders.html">loginProviders</a>
+                <div th:replace="fragments/palvelut :: palveluinfot" />
+                <div id="muut-kirjautumistavat" class="container w-100 mx-0 p-0">
+                    <div class="row">
+                        <span class="title-backline"><span th:text="#{login.muutKirjautumistavat}"></span></span>
+                    </div>
+                    <div class="row">
+                        <div class="kirjautumistapa kirjautumistapa-haka col-md-4">
+                            <a th:with="parameters=${service != null} ? '?redirect=' + ${T(org.springframework.web.util.UriComponentsBuilder).fromHttpUrl(service.originalUrl).toUriString()} : ''"
+                               th:href="${cas.custom.properties['hakaUrl']} + ${parameters}">
+                                <img src="/cas/images/haka_landscape_medium.gif" />
+                            </a>
+                        </div>
+                        <div class="kirjautumistapa kirjautumistapa-mpassid col-md-4" th:if="${cas.custom.properties['mpassidLoginEnabled']}">
+                            <div style="margin-top: 8px">
+                                <!--
+                                Note that mpassidUrl has idp query parameter in it so the redirect param has to be
+                                prefixed with & instead of ? unlike in Haka login URL :)
+                                -->
+                                <a id="mpassid-button"
+                                   th:with="parameters=${service != null} ? '&redirect=' + ${T(org.springframework.web.util.UriComponentsBuilder).fromHttpUrl(service.originalUrl).toUriString()} : ''"
+                                   th:href="${cas.custom.properties['mpassidUrl']} + ${parameters}">
+                                    <img height="20px" src="/cas/images/mpassid-teksti.svg" />
+                                </a>
+                            </div>
+                        </div>
+                        <div class="kirjautumistapa kirjautumistapa-suomifi col-md-4">
+                            <a th:href="${cas.custom.properties['suomifiUrl']} + '?locale=' + ${#locale.getLanguage().toLowerCase()} + '&service=' + ${cas.custom.properties['suomifiUrlTarget']} + ${#locale.getLanguage().toLowerCase()}">
+                                <img src="/cas/images/suomi.fi-logo.png" />
+                            </a>
+                        </div>
+                    </div>
+                </div>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div th:replace="fragments/palvelut :: tiedot" />
+        <div id="providers" class="w-100">
+            <div th:replace="fragments/loginProviders :: loginProviders">
+                <a href="fragments/loginProviders.html">loginProviders</a>
+            </div>
         </div>
     </main>
     <script type="text/javascript" src="/cas/js/notifications.js"></script>

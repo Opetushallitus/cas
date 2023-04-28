@@ -12,75 +12,143 @@
 <main role="main" class="container">
     <div class="row">
         <div class="col-md">
-            <ul th:fragment="linkit" class="list-inline w-100 list-inline-bullet">
+            <ul th:fragment="linkit" id="palvelunimet" class="list-inline w-100 list-inline-bullet d-none d-md-block">
                 <li class="list-inline-item">
-                    <a href="#arvo" th:text="#{palvelut.arvo.lyhytNimi}">Arvo</a>
+                    <span th:text="#{palvelut.arvo.lyhytNimi}">Arvo</span>
                 </li>
                 <li class="list-inline-item">
-                    <a href="#ehoks" th:text="#{palvelut.ehoks.lyhytNimi}">eHOKS</a>
+                    <span th:text="#{palvelut.ehoks.lyhytNimi}">eHOKS</span>
                 </li>
                 <li class="list-inline-item">
-                    <a href="#eperusteet" th:text="#{palvelut.eperusteet.lyhytNimi}">ePerusteet</a>
+                    <span th:text="#{palvelut.eperusteet.lyhytNimi}">ePerusteet</span>
                 </li>
                 <li class="list-inline-item">
-                    <a href="#koski" th:text="#{palvelut.koski.lyhytNimi}">Koski</a>
+                    <span th:text="#{palvelut.koski.lyhytNimi}">Koski</span>
                 </li>
                 <li class="list-inline-item">
-                    <a href="#oikeustulkkirekisteri" th:text="#{palvelut.oikeustulkkirekisteri.lyhytNimi}">Oikeustulkkirekisteri</a>
+                    <span th:text="#{palvelut.oikeustulkkirekisteri.lyhytNimi}">Oikeustulkkirekisteri</span>
                 </li>
                 <li class="list-inline-item">
-                    <a href="#oiva" th:text="#{palvelut.oiva.lyhytNimi}">Oiva</a>
+                    <span th:text="#{palvelut.oiva.lyhytNimi}">Oiva</span>
                 </li>
                 <li class="list-inline-item">
-                    <a href="#opintopolku" th:text="#{palvelut.opintopolku.lyhytNimi}">Opintopolku</a>
+                    <span th:text="#{palvelut.opintopolku.lyhytNimi}">Opintopolku</span>
                 </li>
                 <li class="list-inline-item">
-                    <a href="#valtionavustukset" th:text="#{palvelut.valtionavustukset.lyhytNimi}">Valtionavustukset</a>
+                    <span th:text="#{palvelut.valtionavustukset.lyhytNimi}">Valtionavustukset</span>
                 </li>
                 <li class="list-inline-item">
-                    <a href="#varda" th:text="#{palvelut.varda.lyhytNimi}">Varda</a>
+                    <span th:text="#{palvelut.varda.lyhytNimi}">Varda</span>
                 </li>
             </ul>
-            <div th:fragment="tiedot" class="container">
-                <h3 class="mt-4" th:text="#{services.title}">Lisätietoja palveluista</h3>
-                <div class="row">
-                    <div class="col-md-6" id="arvo">
-                        <h5 th:inline="text"><span class="bullet"></span>[[#{palvelut.arvo.nimi}]]</h5>
-                        <p th:text="#{palvelut.arvo.kuvaus}">kuvaus</p>
+            <div th:fragment="palveluinfot" id="palveluinfot">
+                <div class="card">
+                    <div id="carousel-opintopolku" class="card-body">
+                        <p th:text="#{palvelut.opintopolku.nimi}"></p>
+                        <p th:text="#{palvelut.opintopolku.kuvaus}"></p>
                     </div>
-                    <div class="col-md-6" id="ehoks">
-                        <h5 th:inline="text"><span class="bullet"></span>[[#{palvelut.ehoks.nimi}]]</h5>
-                        <p th:text="#{palvelut.ehoks.kuvaus}">kuvaus</p>
+                    <div id="carousel-arvo" class="card-body" style="display: none;">
+                        <p th:text="#{palvelut.arvo.nimi}"></p>
+                        <p th:text="#{palvelut.arvo.kuvaus}"></p>
                     </div>
-                    <div class="col-md-6" id="eperusteet">
-                        <h5 th:inline="text"><span class="bullet"></span>[[#{palvelut.eperusteet.nimi}]]</h5>
-                        <p th:text="#{palvelut.eperusteet.kuvaus}">kuvaus</p>
+                    <div id="carousel-ehoks" class="card-body" style="display: none;">
+                        <p th:text="#{palvelut.ehoks.nimi}"></p>
+                        <p th:text="#{palvelut.ehoks.kuvaus}"></p>
                     </div>
-                    <div class="col-md-6" id="koski">
-                        <h5 th:inline="text"><span class="bullet"></span>[[#{palvelut.koski.nimi}]]</h5>
-                        <p th:text="#{palvelut.koski.kuvaus}">kuvaus</p>
+                    <div id="carousel-eperusteet" class="card-body" style="display: none;">
+                        <p th:text="#{palvelut.eperusteet.nimi}"></p>
+                        <p th:text="#{palvelut.eperusteet.kuvaus}"></p>
                     </div>
-                    <div class="col-md-6" id="oikeustulkkirekisteri">
-                        <h5 th:inline="text"><span class="bullet"></span>[[#{palvelut.oikeustulkkirekisteri.nimi}]]</h5>
-                        <p th:text="#{palvelut.oikeustulkkirekisteri.kuvaus}">kuvaus</p>
+                    <div id="carousel-koski" class="card-body" style="display: none;">
+                        <p th:text="#{palvelut.koski.nimi}"></p>
+                        <p th:text="#{palvelut.koski.kuvaus}"></p>
                     </div>
-                    <div class="col-md-6" id="oiva">
-                        <h5 th:inline="text"><span class="bullet"></span>[[#{palvelut.oiva.nimi}]]</h5>
-                        <p th:text="#{palvelut.oiva.kuvaus}">kuvaus</p>
+                    <div id="carousel-oikeustulkkirekisteri" class="card-body" style="display: none;">
+                        <p th:text="#{palvelut.oikeustulkkirekisteri.nimi}"></p>
+                        <p th:text="#{palvelut.oikeustulkkirekisteri.kuvaus}"></p>
                     </div>
-                    <div class="col-md-6" id="opintopolku">
-                        <h5 th:inline="text"><span class="bullet"></span>[[#{palvelut.opintopolku.nimi}]]</h5>
-                        <p th:text="#{palvelut.opintopolku.kuvaus}">kuvaus</p>
+                    <div id="carousel-oiva" class="card-body" style="display: none;">
+                        <p th:text="#{palvelut.oiva.nimi}"></p>
+                        <p th:text="#{palvelut.oiva.kuvaus}"></p>
                     </div>
-                    <div class="col-md-6" id="valtionavustukset">
-                        <h5 th:inline="text"><span class="bullet"></span>[[#{palvelut.valtionavustukset.nimi}]]</h5>
-                        <p th:text="#{palvelut.valtionavustukset.kuvaus}">kuvaus</p>
+                    <div id="carousel-valtionavustukset" class="card-body" style="display: none;">
+                        <p th:text="#{palvelut.valtionavustukset.nimi}"></p>
+                        <p th:text="#{palvelut.valtionavustukset.kuvaus}"></p>
                     </div>
-                    <div class="col-md-6" id="varda">
-                        <h5 th:inline="text"><span class="bullet"></span>[[#{palvelut.varda.nimi}]]</h5>
-                        <p th:text="#{palvelut.varda.kuvaus}">kuvaus</p>
+                    <div id="carousel-varda" class="card-body" style="display: none;">
+                        <p th:text="#{palvelut.varda.nimi}"></p>
+                        <p th:text="#{palvelut.varda.kuvaus}"></p>
                     </div>
                 </div>
+                <nav id="carousel-nav">
+                    <ul>
+                        <li class="arrow arrow-left"></li>
+                        <li>
+                            <input id="carousel-button-opintopolku" type="radio" name="carousel"/>
+                            <label for="carousel-button-opintopolku"></label>
+                        </li>
+                        <li>
+                            <input id="carousel-button-arvo" type="radio" name="carousel" />
+                            <label for="carousel-button-arvo"></label>
+                        </li>
+                        <li>
+                            <input id="carousel-button-ehoks" type="radio" name="carousel" />
+                            <label for="carousel-button-ehoks"></label>
+                        </li>
+                        <li>
+                            <input id="carousel-button-eperusteet" type="radio" name="carousel" />
+                            <label for="carousel-button-eperusteet"></label>
+                        </li>
+                        <li>
+                            <input id="carousel-button-koski" type="radio" name="carousel" />
+                            <label for="carousel-button-koski"></label>
+                        </li>
+                        <li>
+                            <input id="carousel-button-oikeustulkkirekisteri" type="radio" name="carousel" />
+                            <label for="carousel-button-oikeustulkkirekisteri"></label>
+                        </li>
+                        <li>
+                            <input id="carousel-button-oiva" type="radio" name="carousel" />
+                            <label for="carousel-button-oiva"></label>
+                        </li>
+                        <li>
+                            <input id="carousel-button-valtionavustukset" type="radio" name="carousel" />
+                            <label for="carousel-button-valtionavustukset"></label>
+                        </li>
+                        <li>
+                            <input id="carousel-button-varda" type="radio" name="carousel" />
+                            <label for="carousel-button-varda"></label>
+                        </li>
+                        <li class="arrow arrow-right"></li>
+                    </ul>
+                </nav>
+                <script type="text/javascript">
+                    function selectCard(cardId) {
+                        document.querySelectorAll("#palveluinfot .card-body").forEach(card => {
+                            card.style.display = card.id === cardId ? "block" : "none"
+                        })
+                    }
+
+                    document.querySelector("#carousel-nav .arrow-left").addEventListener("click", event => {
+                        const checked = document.querySelector("#carousel-nav input:checked")
+                        const last = Array.from(document.querySelectorAll("#carousel-nav input")).at(-1)
+                        const prev = checked.parentElement.previousElementSibling.querySelector("input")
+                        if (prev) prev.click()
+                        else last.click()
+                    })
+                    document.querySelector("#carousel-nav .arrow-right").addEventListener("click", event => {
+                        const checked = document.querySelector("#carousel-nav input:checked")
+                        const first = Array.from(document.querySelectorAll("#carousel-nav input")).at(0)
+                        const next = checked.parentElement.nextElementSibling.querySelector("input")
+                        if (next) next.click()
+                        else first.click()
+                    })
+                    document.querySelector("#carousel-button-opintopolku").checked = true
+                    document.querySelectorAll("#palveluinfot input").forEach(input => {
+                        const cardId = input.id.replace("-button", "")
+                        input.addEventListener("click", () => selectCard(cardId))
+                    })
+                </script>
             </div>
         </div>
     </div>
