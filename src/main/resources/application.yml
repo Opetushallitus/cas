@@ -82,6 +82,7 @@ cas.custom.properties.loginTietosuojaselosteUrl: http://localhost:8080/tietosuoj
 cas.custom.properties.mpassidLoginEnabled: true
 
 cas.authn.mfa.triggers.rest.url: http://localhost:8080/kayttooikeus-service/mfa/trigger
+cas.authn.mfa.triggers.rest.headers: {'Caller-Id': '1.2.246.562.10.00000000001.cas', 'CSRF': '1.2.246.562.10.00000000001.cas'}
 cas.authn.mfa.triggers.rest.method: POST
 cas.authn.mfa.triggers.rest.basic-auth-username: cas
 cas.authn.mfa.triggers.rest.basic-auth-password: mfa
@@ -94,6 +95,7 @@ cas.authn.mfa.gauth.crypto.encryption.key: LNLuxm3B5mQiIwggT9vPewkGM7JeDebZWCBjd
 cas.authn.mfa.gauth.crypto.signing.key: zMpvJwj7bEMW41YMJbAJzXHaSSH3A1JjzLfwXMSWth9yTFM3Ny3eHXmm9r5AEzU83rYNwGT__SicfrA-7ygRdA
 cas.authn.mfa.gauth.rest.token-url: http://localhost:8080/kayttooikeus-service/mfa/token
 cas.authn.mfa.gauth.rest.url: http://localhost:8080/kayttooikeus-service/mfa/token
+cas.authn.mfa.gauth.rest.headers: {'Caller-Id': '1.2.246.562.10.00000000001.cas', 'CSRF': '1.2.246.562.10.00000000001.cas'}
 cas.authn.mfa.gauth.rest.basic-auth-username: cas
 cas.authn.mfa.gauth.rest.basic-auth-password: mfa
 

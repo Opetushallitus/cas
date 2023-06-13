@@ -32,6 +32,7 @@ cas.audit.engine.alternate-client-addr-header-name=X-Real-IP
 cas.view.default-redirect-url={{cas_view_default_redirect_url | default('https://${host.virkailija}/virkailijan-tyopoyta')}}
 
 cas.authn.mfa.triggers.rest.url={{host_alb}}/kayttooikeus-service/mfa/trigger
+cas.authn.mfa.triggers.rest.headers: {'Caller-Id': '1.2.246.562.10.00000000001.cas', 'CSRF': '1.2.246.562.10.00000000001.cas'}
 cas.authn.mfa.triggers.rest.method=POST
 cas.authn.mfa.triggers.rest.basic-auth-username={{cas_mfa_username}}
 cas.authn.mfa.triggers.rest.basic-auth-password={{cas_mfa_password}}
@@ -42,6 +43,7 @@ cas.authn.mfa.gauth.crypto.encryption.key={{cas_gauth_encryption_key}}
 cas.authn.mfa.gauth.crypto.signing.key={{cas_gauth_signing_key}}
 cas.authn.mfa.gauth.rest.token-url={{host_alb}}/kayttooikeus-service/mfa/token
 cas.authn.mfa.gauth.rest.url={{host_alb}}/kayttooikeus-service/mfa/token
+cas.authn.mfa.gauth.rest.headers: {'Caller-Id': '1.2.246.562.10.00000000001.cas', 'CSRF': '1.2.246.562.10.00000000001.cas'}
 cas.authn.mfa.gauth.rest.basic-auth-username={{cas_mfa_username}}
 cas.authn.mfa.gauth.rest.basic-auth-password={{cas_mfa_password}}
 
