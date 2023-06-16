@@ -19,7 +19,6 @@ cas.tgc.secure=true
 
 cas.warning-cookie.secure=true
 
-cas.tgc.pin-to-session=true
 cas.tgc.crypto.encryption.key={{cas_tgc_encryption_key}}
 cas.tgc.crypto.signing.key={{cas_tgc_signing_key}}
 cas.webflow.crypto.encryption.key={{cas_webflow_encryption_key}}
