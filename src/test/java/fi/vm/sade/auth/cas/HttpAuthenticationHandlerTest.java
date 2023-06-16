@@ -4,18 +4,14 @@ import fi.vm.sade.CasOphProperties;
 import fi.vm.sade.javautils.httpclient.*;
 import fi.vm.sade.properties.OphProperties;
 import fi.vm.sade.saml.action.SAMLCredentials;
-import org.apereo.cas.CasProtocolConstants;
 import org.apereo.cas.authentication.AuthenticationHandler;
 import org.apereo.cas.authentication.AuthenticationHandlerExecutionResult;
 import org.apereo.cas.authentication.PreventedException;
 import org.apereo.cas.authentication.credential.UsernamePasswordCredential;
-import org.apereo.cas.authentication.principal.AbstractWebApplicationService;
-import org.apereo.cas.authentication.principal.WebApplicationServiceFactory;
 import org.apereo.cas.services.ServicesManager;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.core.env.Environment;
-import org.springframework.mock.web.MockHttpServletRequest;
 
 import javax.security.auth.login.FailedLoginException;
 import java.io.IOException;
@@ -28,8 +24,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-
 public class HttpAuthenticationHandlerTest {
+
     private AuthenticationHandler authenticationHandler;
 
     private OphHttpResponse httpResponseMock;
@@ -74,7 +70,7 @@ public class HttpAuthenticationHandlerTest {
         when(httpResponseMock.getStatusCode()).thenReturn(200);
         when(httpResponseMock.asText()).thenReturn("{\"username\":\"USER1\"}");
 
-        AuthenticationHandlerExecutionResult authenticate = authenticationHandler.authenticate(new UsernamePasswordCredential("user1", "pass1"), getService());
+        AuthenticationHandlerExecutionResult authenticate = authenticationHandler.authenticate(new UsernamePasswordCredential("user1", "pass1"));
 
         assertThat(authenticate.getPrincipal().getId()).isEqualTo("USER1");
         List<Object> idpEntityIdList = authenticate.getPrincipal().getAttributes().get("idpEntityId");
@@ -85,7 +81,7 @@ public class HttpAuthenticationHandlerTest {
     public void authenticateShouldThrowFailedLoginException() {
         when(httpResponseMock.getStatusCode()).thenReturn(401);
 
-        Throwable throwable = catchThrowable(() -> authenticationHandler.authenticate(new UsernamePasswordCredential("user1", "pass1"), getService()));
+        Throwable throwable = catchThrowable(() -> authenticationHandler.authenticate(new UsernamePasswordCredential("user1", "pass1")));
 
         assertThat(throwable).isInstanceOf(FailedLoginException.class);
     }
@@ -94,15 +90,9 @@ public class HttpAuthenticationHandlerTest {
     public void authenticateShouldThrowPreventedException() {
         when(httpResponseMock.getStatusCode()).thenReturn(500);
 
-        Throwable throwable = catchThrowable(() -> authenticationHandler.authenticate(new UsernamePasswordCredential("user1", "pass1"), getService()));
+        Throwable throwable = catchThrowable(() -> authenticationHandler.authenticate(new UsernamePasswordCredential("user1", "pass1")));
 
         assertThat(throwable).isInstanceOf(PreventedException.class);
     }
 
-    private static AbstractWebApplicationService getService() {
-        String serviceName = "http://example.com";
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        request.addParameter(CasProtocolConstants.PARAMETER_SERVICE, serviceName);
-        return (AbstractWebApplicationService) new WebApplicationServiceFactory().createService(request);
-    }
 }
