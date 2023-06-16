@@ -39,7 +39,7 @@ cas:
         enable-locking: true
       cleaner:
         schedule:
-          enabled: false
+          enabled: true
 
 cas.service-registry.json.location: classpath:/service-1.json
 
