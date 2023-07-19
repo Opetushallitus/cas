@@ -65,8 +65,7 @@ server.tomcat.accesslog.pattern={\"timestamp\": \"%{yyyy-MM-dd'T'HH:mm:ss.SSSZ}t
 server.tomcat.accesslog.request-attributes-enabled=true
 server.tomcat.accesslog.rotate=true
 server.tomcat.accesslog.rename-on-rotate=true
-# server.tomcat.accesslog.max-days is custom parameter
-server.tomcat.accesslog.max-days=7
+server.tomcat.accesslog.max-days={{ cas_tomcat_access_log_max_days | default('7') }}
 
 server.tomcat.remoteip.port-header=
 server.tomcat.remoteip.protocol-header=
