@@ -4,7 +4,7 @@
     <Appenders>
         <RollingFile name="file" fileName="/root/logs/oph-cas.log" append="true"
                      filePattern="oph-cas-%d{yyyy-MM-dd-HH}.log.%i">
-            <ThresholdFilter level="{{ env_loglevel }}" />
+            <ThresholdFilter level="debug" />
 {# raw-endraw -välillä template engine ei tee mitään! #}
 {% raw %}
             <PatternLayout pattern="%d{yyyy-MM-dd'T'HH:mm:ss.SSSX} %-5p {%X{user}} [%t] %-5p %c: %m%n"/>
@@ -16,8 +16,8 @@
         </RollingFile>
     </Appenders>
     <Loggers>
-        <AsyncLogger name="org.apereo.inspektr.audit.support" level="info" includeLocation="true" />
-        <AsyncRoot level="info">
+        <AsyncLogger name="org.apereo.inspektr.audit.support" level="debug" includeLocation="true" />
+        <AsyncRoot level="debug">
             <AppenderRef ref="file"/>
         </AsyncRoot>
     </Loggers>
