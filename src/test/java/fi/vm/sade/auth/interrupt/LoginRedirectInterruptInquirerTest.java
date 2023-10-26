@@ -1,8 +1,7 @@
 package fi.vm.sade.auth.interrupt;
 
 import fi.vm.sade.CasOphProperties;
-import fi.vm.sade.auth.action.EmailVerificationRedirectAction;
-import fi.vm.sade.auth.action.StrongIdentificationRedirectAction;
+import fi.vm.sade.auth.action.LoginRedirectAction;
 import fi.vm.sade.auth.clients.KayttooikeusRestClient;
 import fi.vm.sade.auth.clients.OppijanumerorekisteriRestClient;
 import org.apereo.cas.authentication.Authentication;
@@ -45,13 +44,8 @@ public class LoginRedirectInterruptInquirerTest {
         when(environmentMock.getRequiredProperty("host.virkailija")).thenReturn("localhost:8082");
         when(environmentMock.getRequiredProperty("host.alb")).thenReturn("localhost:8083");
         CasOphProperties properties = new CasOphProperties(environmentMock);
-        StrongIdentificationRedirectAction strongIdentificationRedirectAction =
-                new StrongIdentificationRedirectAction(kayttooikeusRestClientMock,
-                oppijanumerorekisteriRestClientMock, properties);
-        EmailVerificationRedirectAction emailVerificationRedirectAction =
-                new EmailVerificationRedirectAction(kayttooikeusRestClientMock, oppijanumerorekisteriRestClientMock,
-                        properties);
-        inquirer = new LoginRedirectInterruptInquirer(kayttooikeusRestClientMock, strongIdentificationRedirectAction, emailVerificationRedirectAction);
+        LoginRedirectAction loginRedirectAction = new LoginRedirectAction(kayttooikeusRestClientMock, oppijanumerorekisteriRestClientMock, properties);
+        inquirer = new LoginRedirectInterruptInquirer(kayttooikeusRestClientMock, loginRedirectAction);
     }
 
     @Test

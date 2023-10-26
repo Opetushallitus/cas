@@ -1,7 +1,6 @@
 package fi.vm.sade.auth.interrupt;
 
-import fi.vm.sade.auth.action.EmailVerificationRedirectAction;
-import fi.vm.sade.auth.action.StrongIdentificationRedirectAction;
+import fi.vm.sade.auth.action.LoginRedirectAction;
 import fi.vm.sade.auth.clients.KayttooikeusRestClient;
 import org.apereo.cas.authentication.Authentication;
 import org.apereo.cas.authentication.Credential;
@@ -32,19 +31,15 @@ public class LoginRedirectInterruptInquirer implements InterruptInquirer {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginRedirectInterruptInquirer.class);
 
     private final KayttooikeusRestClient kayttooikeusRestClient;
-    private final StrongIdentificationRedirectAction strongIdentificationRedirectAction;
-    private final EmailVerificationRedirectAction emailVerificationRedirectAction;
+    private final LoginRedirectAction loginRedirectAction;
     private boolean requireStrongIdentification;
     private List<String> requireStrongIdentificationUsernameList = new ArrayList<>();
     private boolean emailVerificationEnabled;
     private List<String> emailVerificationUsernameList = new ArrayList<>();
 
-    public LoginRedirectInterruptInquirer(KayttooikeusRestClient kayttooikeusRestClient,
-                                          StrongIdentificationRedirectAction strongIdentificationRedirectAction,
-                                          EmailVerificationRedirectAction emailVerificationRedirectAction) {
+    public LoginRedirectInterruptInquirer(KayttooikeusRestClient kayttooikeusRestClient, LoginRedirectAction loginRedirectAction) {
         this.kayttooikeusRestClient = kayttooikeusRestClient;
-        this.strongIdentificationRedirectAction = strongIdentificationRedirectAction;
-        this.emailVerificationRedirectAction = emailVerificationRedirectAction;
+        this.loginRedirectAction = loginRedirectAction;
     }
 
     @PostConstruct
@@ -71,14 +66,16 @@ public class LoginRedirectInterruptInquirer implements InterruptInquirer {
         switch (redirectCode) {
             case "STRONG_IDENTIFICATION":
                 if (requireStrongIdentification || requireStrongIdentificationUsernameList.contains(username)) {
-                    return Optional.of(strongIdentificationRedirectAction.createRedirectUrl(username));
+                    return Optional.of(loginRedirectAction.createRedirectUrl(username, "henkilo-ui.strong-identification"));
                 }
                 break;
             case "EMAIL_VERIFICATION":
                 if (emailVerificationEnabled || emailVerificationUsernameList.contains(username)) {
-                    return Optional.of(emailVerificationRedirectAction.createRedirectUrl(username));
+                    return Optional.of(loginRedirectAction.createRedirectUrl(username, "henkilo-ui.email-verification"));
                 }
                 break;
+            case "PASSWORD_CHANGE":
+                return Optional.of(loginRedirectAction.createRedirectUrl(username, "henkilo-ui.password-change"));
             default:
                 throw new IllegalArgumentException("Unknown redirectCode: " + redirectCode);
         }
