@@ -53,16 +53,26 @@ public class LoginRedirectInterruptInquirer implements InterruptInquirer {
     @Override
     public InterruptResponse inquire(Authentication authentication, RegisteredService registeredService, Service service, Credential credential, RequestContext requestContext) {
         String username = authentication.getPrincipal().getId();
+        Optional<String> idpEntityId = getIdpEntityId(authentication);
         return kayttooikeusRestClient.getRedirectCodeByUsername(username)
-                .flatMap(redirectCode -> getInterruptResponseByCode(redirectCode, username))
+                .flatMap(redirectCode -> getInterruptResponseByCode(redirectCode, username, idpEntityId))
                 .orElseGet(InterruptResponse::none);
     }
 
-    private Optional<InterruptResponse> getInterruptResponseByCode(String redirectCode, String username) {
-        return getRedirectUrl(redirectCode, username).map(this::getInterruptResponseByUrl);
+    private Optional<String> getIdpEntityId(Authentication authentication) {
+        List<Object> idpEntityIdAttr = authentication.getPrincipal().getAttributes().get("idpEntityId");
+        if (idpEntityIdAttr != null && idpEntityIdAttr.size() > 0) {
+            return Optional.of((String) idpEntityIdAttr.get(0));
+        } else {
+            return Optional.empty();
+        }
     }
 
-    private Optional<String> getRedirectUrl(String redirectCode, String username) {
+    private Optional<InterruptResponse> getInterruptResponseByCode(String redirectCode, String username, Optional<String> idpEntityId) {
+        return getRedirectUrl(redirectCode, username, idpEntityId).map(this::getInterruptResponseByUrl);
+    }
+
+    private Optional<String> getRedirectUrl(String redirectCode, String username, Optional<String> idpEntityId) {
         switch (redirectCode) {
             case "STRONG_IDENTIFICATION":
                 if (requireStrongIdentification || requireStrongIdentificationUsernameList.contains(username)) {
@@ -75,7 +85,9 @@ public class LoginRedirectInterruptInquirer implements InterruptInquirer {
                 }
                 break;
             case "PASSWORD_CHANGE":
-                return Optional.of(loginRedirectAction.createRedirectUrl(username, "henkilo-ui.password-change"));
+                if (!idpEntityId.orElse("").equals("vetuma")) {
+                    return Optional.of(loginRedirectAction.createRedirectUrl(username, "henkilo-ui.password-change"));
+                }
             default:
                 throw new IllegalArgumentException("Unknown redirectCode: " + redirectCode);
         }
