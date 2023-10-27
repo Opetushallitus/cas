@@ -16,6 +16,8 @@ import org.junit.Test;
 import org.springframework.core.env.Environment;
 
 import java.time.ZonedDateTime;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static java.util.Arrays.asList;
@@ -146,6 +148,32 @@ public class LoginRedirectInterruptInquirerTest {
         Authentication authentication = new DefaultAuthentication(ZonedDateTime.now(), principalFactory.createPrincipal("user1"), emptyList(), emptyList(),emptyMap(),emptyMap(),emptyMap());
         Credential credential = new UsernamePasswordCredential("user1", "pass1");
 
+        InterruptResponse response = inquirer.inquire(authentication, null, null, credential, null);
+
+        assertThat(response).returns(false, InterruptResponse::isInterrupt);
+        verify(kayttooikeusRestClientMock).getRedirectCodeByUsername("user1");
+        verifyNoMoreInteractions(kayttooikeusRestClientMock);
+    }
+
+    @Test
+    public void onPasswordChangeInterrupt() {
+        when(kayttooikeusRestClientMock.getRedirectCodeByUsername(any())).thenReturn(Optional.of("PASSWORD_CHANGE"));
+        Authentication authentication = new DefaultAuthentication(ZonedDateTime.now(), principalFactory.createPrincipal("user1"), emptyList(), emptyList(), emptyMap(), emptyMap(), emptyMap());
+        Credential credential = new UsernamePasswordCredential("user1", "pass1");
+        InterruptResponse response = inquirer.inquire(authentication, null, null, credential, null);
+
+        assertThat(response)
+                .returns(true, InterruptResponse::isInterrupt)
+                .returns("https://localhost:8082/henkilo-ui/salasananvaihto/fi/loginToken1", t -> String.join(",", t.getLinks().values()));
+        verify(kayttooikeusRestClientMock).getRedirectCodeByUsername("user1");
+    }
+
+    @Test
+    public void onPasswordChangeInterruptWithSuomiFi() {
+        Map<String, List<Object>> suomiFiIdpAttributes = Map.of("idpEntityId", List.of("vetuma"));
+        when(kayttooikeusRestClientMock.getRedirectCodeByUsername(any())).thenReturn(Optional.of("PASSWORD_CHANGE"));
+        Authentication authentication = new DefaultAuthentication(ZonedDateTime.now(), principalFactory.createPrincipal("user1", suomiFiIdpAttributes), emptyList(), emptyList(), emptyMap(), emptyMap(), emptyMap());
+        Credential credential = new UsernamePasswordCredential("user1", "pass1");
         InterruptResponse response = inquirer.inquire(authentication, null, null, credential, null);
 
         assertThat(response).returns(false, InterruptResponse::isInterrupt);

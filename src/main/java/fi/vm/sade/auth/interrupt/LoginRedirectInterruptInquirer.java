@@ -88,6 +88,7 @@ public class LoginRedirectInterruptInquirer implements InterruptInquirer {
                 if (!idpEntityId.orElse("").equals("vetuma")) {
                     return Optional.of(loginRedirectAction.createRedirectUrl(username, "henkilo-ui.password-change"));
                 }
+                break;
             default:
                 throw new IllegalArgumentException("Unknown redirectCode: " + redirectCode);
         }
