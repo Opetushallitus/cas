@@ -60,6 +60,9 @@ public class LoginRedirectInterruptInquirer implements InterruptInquirer {
     }
 
     private Optional<String> getIdpEntityId(Authentication authentication) {
+        if (authentication.getPrincipal().getAttributes() == null) {
+            return Optional.empty();
+        }
         List<Object> idpEntityIdAttr = authentication.getPrincipal().getAttributes().get("idpEntityId");
         if (idpEntityIdAttr != null && idpEntityIdAttr.size() > 0) {
             return Optional.of((String) idpEntityIdAttr.get(0));
@@ -75,17 +78,21 @@ public class LoginRedirectInterruptInquirer implements InterruptInquirer {
     private Optional<String> getRedirectUrl(String redirectCode, String username, Optional<String> idpEntityId) {
         switch (redirectCode) {
             case "STRONG_IDENTIFICATION":
+                LOGGER.info("Strong identification interrupt received for {}", username);
                 if (requireStrongIdentification || requireStrongIdentificationUsernameList.contains(username)) {
                     return Optional.of(loginRedirectAction.createRedirectUrl(username, "henkilo-ui.strong-identification"));
                 }
                 break;
             case "EMAIL_VERIFICATION":
+                LOGGER.info("Email verification interrupt received for {}", username);
                 if (emailVerificationEnabled || emailVerificationUsernameList.contains(username)) {
                     return Optional.of(loginRedirectAction.createRedirectUrl(username, "henkilo-ui.email-verification"));
                 }
                 break;
             case "PASSWORD_CHANGE":
+                LOGGER.info("Password change interrupt received for {}", username);
                 if (!idpEntityId.orElse("").equals("vetuma")) {
+                    LOGGER.info("Bypassing password change for {} due to Suomi.fi", username);
                     return Optional.of(loginRedirectAction.createRedirectUrl(username, "henkilo-ui.password-change"));
                 }
                 break;
