@@ -92,8 +92,9 @@ public class LoginRedirectInterruptInquirer implements InterruptInquirer {
             case "PASSWORD_CHANGE":
                 LOGGER.info("Password change interrupt received for {}", username);
                 if (!idpEntityId.orElse("").equals("vetuma")) {
-                    LOGGER.info("Bypassing password change for {} due to Suomi.fi", username);
                     return Optional.of(loginRedirectAction.createRedirectUrl(username, "henkilo-ui.password-change"));
+                } else {
+                    LOGGER.info("Bypassing password change for {} due to Suomi.fi", username);
                 }
                 break;
             default:
