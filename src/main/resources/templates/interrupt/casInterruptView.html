@@ -23,10 +23,10 @@
 </head>
 
 <body>
-<main role="main" layout:fragment="content" class="container-fluid taustakuva">
+<main role="main" class="container-fluid taustakuva">
     <div class="row text-center">
         <h2 class="page-header w-100 mt-4 mb-4" th:text="#{screen.interrupt.title}">Kirjautuminen keskeytetty</h1>
-        <div class="card mx-auto login-kortti" th:if="${interrupt.message}">
+        <div class="card mx-auto login-kortti">
             <div class="m-5">
                 <p th:utext="#{screen.interrupt.message}">Käyttäjätietosi ovat puutteellisia. Kirjautuminen on keskeytynyt ja sinut ohjataan uudelleen täyttämään tarvittavat tiedot.</p>
                 <div id="interruptLinks" class="mt-5" th:if="${interrupt.links}">
