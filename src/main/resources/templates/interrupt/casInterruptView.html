@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}"  th:with="containerClass='container-fluid taustakuva'">
 
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-    <title th:text="#{cas.login.pagetitle}">CAS Interrupt View</title>
+    <title th:text="#{screen.interrupt.title}">Kirjautuminen keskeytetty</title>
     <link href="../../static/css/cas.css" rel="stylesheet" th:remove="tag"/>
     <script th:inline="javascript" th:if="${interrupt.autoRedirect}">
         /*<![CDATA[*/
@@ -23,7 +24,7 @@
 </head>
 
 <body>
-<main role="main" class="container-fluid taustakuva">
+<main role="main" layout:fragment="content" class="container-fluid taustakuva">
     <div class="row text-center">
         <h2 class="page-header w-100 mt-4 mb-4" th:text="#{screen.interrupt.title}">Kirjautuminen keskeytetty</h1>
         <div class="card mx-auto login-kortti">
