@@ -76,7 +76,7 @@ public class LoginRedirectInterruptInquirerTest {
 
         assertThat(response)
                 .returns(true, InterruptResponse::isInterrupt)
-                .returns("https://localhost:8082/henkilo-ui/vahvatunnistusinfo/fi/loginToken1", t -> String.join(",",
+                .returns("https://localhost:8082/henkilo-ui/kayttaja/vahvatunnistusinfo/fi/loginToken1", t -> String.join(",",
                         t.getLinks().values()));
         verify(kayttooikeusRestClientMock).getRedirectCodeByUsername("user1");
     }
@@ -92,7 +92,7 @@ public class LoginRedirectInterruptInquirerTest {
 
         assertThat(response)
                 .returns(true, InterruptResponse::isInterrupt)
-                .returns("https://localhost:8082/henkilo-ui/vahvatunnistusinfo/fi/loginToken1", t -> String.join(",",
+                .returns("https://localhost:8082/henkilo-ui/kayttaja/vahvatunnistusinfo/fi/loginToken1", t -> String.join(",",
                         t.getLinks().values()));
         verify(kayttooikeusRestClientMock).getRedirectCodeByUsername("user1");
     }
@@ -108,7 +108,7 @@ public class LoginRedirectInterruptInquirerTest {
 
         assertThat(response)
                 .returns(true, InterruptResponse::isInterrupt)
-                .returns("https://localhost:8082/henkilo-ui/sahkopostivarmistus/fi/loginToken1", t -> String.join(","
+                .returns("https://localhost:8082/henkilo-ui/kayttaja/sahkopostivarmistus/fi/loginToken1", t -> String.join(","
                         , t.getLinks().values()));
         verify(kayttooikeusRestClientMock).getRedirectCodeByUsername("user1");
     }
@@ -124,7 +124,7 @@ public class LoginRedirectInterruptInquirerTest {
 
         assertThat(response)
                 .returns(true, InterruptResponse::isInterrupt)
-                .returns("https://localhost:8082/henkilo-ui/sahkopostivarmistus/fi/loginToken1", t -> String.join(","
+                .returns("https://localhost:8082/henkilo-ui/kayttaja/sahkopostivarmistus/fi/loginToken1", t -> String.join(","
                         , t.getLinks().values()));
         verify(kayttooikeusRestClientMock).getRedirectCodeByUsername("user1");
     }
@@ -164,7 +164,7 @@ public class LoginRedirectInterruptInquirerTest {
 
         assertThat(response)
                 .returns(true, InterruptResponse::isInterrupt)
-                .returns("https://localhost:8082/henkilo-ui/salasananvaihto/fi/loginToken1", t -> String.join(",", t.getLinks().values()));
+                .returns("https://localhost:8082/henkilo-ui/kayttaja/salasananvaihto/fi/loginToken1", t -> String.join(",", t.getLinks().values()));
         verify(kayttooikeusRestClientMock).getRedirectCodeByUsername("user1");
     }
 
