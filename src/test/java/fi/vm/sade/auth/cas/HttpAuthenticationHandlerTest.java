@@ -72,7 +72,7 @@ public class HttpAuthenticationHandlerTest {
     @Test
     public void authenticate() throws GeneralSecurityException, PreventedException {
         when(httpResponseMock.getStatusCode()).thenReturn(200);
-        when(httpResponseMock.asText()).thenReturn("{\"username\":\"USER1\"}");
+        when(httpResponseMock.asText()).thenReturn("{\"username\":\"USER1\",\"kayttajaTyyppi\":\"VIRKAILIJA\"}");
 
         AuthenticationHandlerExecutionResult authenticate = authenticationHandler.authenticate(new UsernamePasswordCredential("user1", "pass1"), getService());
 
