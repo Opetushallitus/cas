@@ -2,6 +2,7 @@ package fi.vm.sade.auth.cas;
 
 import com.google.gson.Gson;
 import fi.vm.sade.javautils.httpclient.OphHttpClient;
+import lombok.Data;
 import org.apereo.cas.authentication.AuthenticationHandlerExecutionResult;
 import org.apereo.cas.authentication.PreventedException;
 import org.apereo.cas.authentication.credential.UsernamePasswordCredential;
@@ -36,13 +37,13 @@ public class HttpAuthenticationHandler extends AbstractUsernamePasswordAuthentic
 
     @Override
     protected AuthenticationHandlerExecutionResult authenticateUsernamePasswordInternal(UsernamePasswordCredential credential, String originalPassword) throws GeneralSecurityException, PreventedException {
-        Optional<LoginDto> opt;
+        Optional<KayttajatiedotReadDto> opt;
         try {
             opt = validateUsernamePassword(credential.getUsername(), String.valueOf(credential.getPassword()));
         } catch (Exception e) {
             throw new PreventedException(e);
         }
-        LoginDto dto = opt.orElseThrow(() -> new FailedLoginException("Invalid credentials"));
+        KayttajatiedotReadDto dto = opt.orElseThrow(() -> new FailedLoginException("Invalid credentials"));
         Map<String, List<Object>> attributes = Map.of(
                 "idpEntityId", List.of("usernamePassword"),
                 "kayttajaTyyppi", List.of(dto.getKayttajaTyyppi())
@@ -51,7 +52,7 @@ public class HttpAuthenticationHandler extends AbstractUsernamePasswordAuthentic
         return createHandlerResult(credential, principal, emptyList());
     }
 
-    private Optional<LoginDto> validateUsernamePassword(String username, String password) {
+    private Optional<KayttajatiedotReadDto> validateUsernamePassword(String username, String password) {
         return httpClient.post("kayttooikeus-service.user-details")
                 .retryOnError(3)
                 .dataWriter("application/json", "UTF-8", out
@@ -61,14 +62,13 @@ public class HttpAuthenticationHandler extends AbstractUsernamePasswordAuthentic
                     if (handler.getStatusCode() == 401) {
                         return Optional.empty();
                     }
-                    return Optional.of(gson.fromJson(handler.asText(), LoginDto.class));
+                    return Optional.of(gson.fromJson(handler.asText(), KayttajatiedotReadDto.class));
                 });
     }
 
     private static class LoginDto {
         private String username;
         private String password;
-        private String kayttajaTyyppi;
 
         public LoginDto() {
         }
@@ -93,14 +93,12 @@ public class HttpAuthenticationHandler extends AbstractUsernamePasswordAuthentic
         public void setPassword(String password) {
             this.password = password;
         }
-
-        public String getKayttajaTyyppi() {
-            return kayttajaTyyppi;
-        }
-
-        public void setKayttajaTyyppi(String kayttajaTyyppi) {
-            this.kayttajaTyyppi = kayttajaTyyppi;
-        }
     }
 
+    @Data
+    private static class KayttajatiedotReadDto {
+        private final String username;
+        private final String mfaProvider;
+        private final String kayttajaTyyppi;
+    }
 }
