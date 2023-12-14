@@ -15,6 +15,7 @@ import javax.security.auth.login.FailedLoginException;
 import java.security.GeneralSecurityException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static java.util.Collections.emptyList;
 
@@ -35,21 +36,22 @@ public class HttpAuthenticationHandler extends AbstractUsernamePasswordAuthentic
 
     @Override
     protected AuthenticationHandlerExecutionResult authenticateUsernamePasswordInternal(UsernamePasswordCredential credential, String originalPassword) throws GeneralSecurityException, PreventedException {
-        String username;
+        Optional<LoginDto> opt;
         try {
-            username = validateUsernamePassword(credential.getUsername(), String.valueOf(credential.getPassword()));
+            opt = validateUsernamePassword(credential.getUsername(), String.valueOf(credential.getPassword()));
         } catch (Exception e) {
             throw new PreventedException(e);
         }
-        if (username == null) {
-            throw new FailedLoginException("Invalid credentials");
-        }
-        Map<String, List<Object>> attributes = Map.of("idpEntityId", List.of("usernamePassword"));
-        Principal principal = principalFactory.createPrincipal(username, attributes);
+        LoginDto dto = opt.orElseThrow(() -> new FailedLoginException("Invalid credentials"));
+        Map<String, List<Object>> attributes = Map.of(
+                "idpEntityId", List.of("usernamePassword"),
+                "kayttajaTyyppi", List.of(dto.getKayttajaTyyppi())
+        );
+        Principal principal = principalFactory.createPrincipal(dto.getUsername(), attributes);
         return createHandlerResult(credential, principal, emptyList());
     }
 
-    private String validateUsernamePassword(String username, String password) {
+    private Optional<LoginDto> validateUsernamePassword(String username, String password) {
         return httpClient.post("kayttooikeus-service.user-details")
                 .retryOnError(3)
                 .dataWriter("application/json", "UTF-8", out
@@ -57,15 +59,16 @@ public class HttpAuthenticationHandler extends AbstractUsernamePasswordAuthentic
                 .expectStatus(200, 401)
                 .execute(handler -> {
                     if (handler.getStatusCode() == 401) {
-                        return null;
+                        return Optional.empty();
                     }
-                    return gson.fromJson(handler.asText(), LoginDto.class).getUsername();
+                    return Optional.of(gson.fromJson(handler.asText(), LoginDto.class));
                 });
     }
 
     private static class LoginDto {
         private String username;
         private String password;
+        private String kayttajaTyyppi;
 
         public LoginDto() {
         }
@@ -89,6 +92,14 @@ public class HttpAuthenticationHandler extends AbstractUsernamePasswordAuthentic
 
         public void setPassword(String password) {
             this.password = password;
+        }
+
+        public String getKayttajaTyyppi() {
+            return kayttajaTyyppi;
+        }
+
+        public void setKayttajaTyyppi(String kayttajaTyyppi) {
+            this.kayttajaTyyppi = kayttajaTyyppi;
         }
     }
 
