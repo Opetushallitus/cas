@@ -4,6 +4,7 @@ public class IdentifiedHenkiloType {
 
     private KayttajatiedotType kayttajatiedot;
     private String idpEntityId;
+    private String henkiloTyyppi;
 
     public KayttajatiedotType getKayttajatiedot() {
         return kayttajatiedot;
@@ -19,6 +20,14 @@ public class IdentifiedHenkiloType {
 
     public void setIdpEntityId(String idpEntityId) {
         this.idpEntityId = idpEntityId;
+    }
+
+    public String getHenkiloTyyppi() {
+        return henkiloTyyppi;
+    }
+
+    public void setHenkiloTyyppi(String henkiloTyyppi) {
+        this.henkiloTyyppi = henkiloTyyppi;
     }
 
 }
