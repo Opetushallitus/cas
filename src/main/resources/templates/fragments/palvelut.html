@@ -46,6 +46,9 @@
                 <li class="list-inline-item">
                     <span th:text="#{palvelut.valssi.lyhytNimi}">Valssi</span>
                 </li>
+                <li class="list-inline-item">
+                    <span th:text="#{palvelut.mpassid.lyhytNimi}">MPASSid</span>
+                </li>
             </ul>
             <div th:fragment="palveluinfot" id="palveluinfot">
                 <div class="card">
@@ -94,6 +97,10 @@
                         <p th:text="#{palvelut.valssi.nimi}"></p>
                         <p th:utext="#{palvelut.valssi.kuvaus}"></p>
                     </div>
+                    <div id="carousel-mpassid" class="card-body" style="display: none;">
+                        <p th:text="#{palvelut.mpassid.nimi}"></p>
+                        <p th:utext="#{palvelut.mpassid.kuvaus}"></p>
+                    </div>
                 </div>
                 <nav id="carousel-nav">
                     <ul>
@@ -141,6 +148,10 @@
                         <li>
                             <input id="carousel-button-valssi" type="radio" name="carousel" />
                             <label for="carousel-button-valssi"></label>
+                        </li>
+                        <li>
+                            <input id="carousel-button-mpassid" type="radio" name="carousel" />
+                            <label for="carousel-button-mpassid"></label>
                         </li>
                         <li class="arrow arrow-right"></li>
                     </ul>
