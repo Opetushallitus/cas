@@ -69,7 +69,7 @@ public class SAMLAuthenticationHandler implements AuthenticationHandler {
         IdentifiedHenkiloType henkiloType = kayttooikeusRestClient.getHenkiloByAuthToken(credential.getId());
         Map<String, List<Object>> attributes = Map.of(
                 "idpEntityId", List.of(henkiloType.getIdpEntityId()),
-                "kayttajaTyyppi", List.of(Optional.ofNullable(henkiloType.getHenkiloTyyppi()).orElse(""))
+                "kayttajaTyyppi", List.of(Optional.ofNullable(henkiloType.getHenkiloTyyppi()).orElse("VIRKAILIJA"))
         );
         Principal principal = principalFactory.createPrincipal(henkiloType.getKayttajatiedot().getUsername(), attributes);
         return new DefaultAuthenticationHandlerExecutionResult(this, new BasicCredentialMetaData(credential), principal, emptyList());
