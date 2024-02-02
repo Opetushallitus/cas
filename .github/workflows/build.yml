@@ -27,7 +27,6 @@ jobs:
           name: cas-war
           path: build/libs/cas.war
   sonarcloud:
-    needs: [build]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
