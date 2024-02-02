@@ -46,7 +46,7 @@ public class HttpAuthenticationHandler extends AbstractUsernamePasswordAuthentic
         KayttajatiedotReadDto dto = opt.orElseThrow(() -> new FailedLoginException("Invalid credentials"));
         Map<String, List<Object>> attributes = Map.of(
                 "idpEntityId", List.of("usernamePassword"),
-                "kayttajaTyyppi", List.of(dto.getKayttajaTyyppi())
+                "kayttajaTyyppi", List.of(Optional.ofNullable(dto.getKayttajaTyyppi()).orElse("VIRKAILIJA"))
         );
         Principal principal = principalFactory.createPrincipal(dto.getUsername(), attributes);
         return createHandlerResult(credential, principal, emptyList());
