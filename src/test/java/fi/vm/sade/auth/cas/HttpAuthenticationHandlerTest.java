@@ -82,6 +82,19 @@ public class HttpAuthenticationHandlerTest {
     }
 
     @Test
+    public void defaultKayttajaTyyppiToVirkailijaIfMissing() throws GeneralSecurityException, PreventedException {
+        when(httpResponseMock.getStatusCode()).thenReturn(200);
+        when(httpResponseMock.asText()).thenReturn("{\"username\":\"USER1\"}");
+
+        AuthenticationHandlerExecutionResult authenticate = authenticationHandler.authenticate(new UsernamePasswordCredential("user1", "pass1"), getService());
+
+        assertThat(authenticate.getPrincipal().getId()).isEqualTo("USER1");
+        List<Object> idpEntityIdList = authenticate.getPrincipal().getAttributes().get("idpEntityId");
+        assertThat(authenticate.getPrincipal().getAttributes().get("kayttajaTyyppi").get(0)).isEqualTo("VIRKAILIJA");
+        assertThat(idpEntityIdList).containsOnly("usernamePassword");
+    }
+
+    @Test
     public void authenticateShouldThrowFailedLoginException() {
         when(httpResponseMock.getStatusCode()).thenReturn(401);
 
