@@ -77,11 +77,11 @@ cas.sso.services.allow-missing-service-parameter: false
 cas.custom.properties.hakaUrl: http://localhost:8080/service-provider-app/saml/login/alias/hakasp
 cas.custom.properties.mpassidUrl: http://localhost:8080/service-provider-app/saml/login/alias/mpassidtestsp?idp=https://mpass-proxy-test.csc.fi/idp/shibboleth
 cas.custom.properties.suomifiUrl: http://untuvaopintopolku.fi/cas-oppija/login
-cas.custom.properties.suomifiUrlTarget: http://localhost:8080/kayttooikeus-service/cas/tunnistus?locale=
+cas.custom.properties.suomifiUrlTarget: http://localhost:8101/kayttooikeus-service/cas/tunnistus?locale=
 cas.custom.properties.loginTietosuojaselosteUrl: http://localhost:8080/tietosuojaseloste/
 cas.custom.properties.mpassidLoginEnabled: true
 
-cas.authn.mfa.triggers.rest.url: http://localhost:8080/kayttooikeus-service/mfa/trigger
+cas.authn.mfa.triggers.rest.url: http://localhost:8101/kayttooikeus-service/mfa/trigger
 cas.authn.mfa.triggers.rest.headers: {'Caller-Id': '1.2.246.562.10.00000000001.cas', 'CSRF': '1.2.246.562.10.00000000001.cas'}
 cas.authn.mfa.triggers.rest.method: POST
 cas.authn.mfa.triggers.rest.basic-auth-username: cas
@@ -93,8 +93,8 @@ cas.authn.mfa.gauth.core.issuer: Opetushallitus
 cas.authn.mfa.gauth.core.label: Opintopolku
 cas.authn.mfa.gauth.crypto.encryption.key: LNLuxm3B5mQiIwggT9vPewkGM7JeDebZWCBjdXxCWQY
 cas.authn.mfa.gauth.crypto.signing.key: zMpvJwj7bEMW41YMJbAJzXHaSSH3A1JjzLfwXMSWth9yTFM3Ny3eHXmm9r5AEzU83rYNwGT__SicfrA-7ygRdA
-cas.authn.mfa.gauth.rest.token-url: http://localhost:8080/kayttooikeus-service/mfa/token
-cas.authn.mfa.gauth.rest.url: http://localhost:8080/kayttooikeus-service/mfa/token
+cas.authn.mfa.gauth.rest.token-url: http://localhost:8101/kayttooikeus-service/mfa/token
+cas.authn.mfa.gauth.rest.url: http://localhost:8101/kayttooikeus-service/mfa/token
 cas.authn.mfa.gauth.rest.headers: {'Caller-Id': '1.2.246.562.10.00000000001.cas', 'CSRF': '1.2.246.562.10.00000000001.cas'}
 cas.authn.mfa.gauth.rest.basic-auth-username: cas
 cas.authn.mfa.gauth.rest.basic-auth-password: mfa
@@ -113,7 +113,8 @@ spring:
 proxy.callback.ignore-errors: false
 host.cas: localhost:8080
 host.virkailija: localhost:8080
-host.alb: localhost:8080
+# Käyttöoikeuspalvelun userDetails rajapintaa kutsutaan ALB:n hostnamella (host.alb) IP-rajauksen tms takia. Lokaalisti ajettaessa kutsutaan suoraan palvelua.
+host.alb: localhost:8101
 serviceprovider.app.username.to.usermanagement: user1
 serviceprovider.app.password.to.usermanagement: pass1
 stuck.service.ticket.retrieval.ips.to.inspect: feature_disabled
