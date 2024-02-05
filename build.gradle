@@ -102,7 +102,6 @@ apply plugin: "com.google.cloud.tools.jib"
 apply plugin: "com.bmuschko.docker-remote-api"
 apply from: rootProject.file("gradle/tasks.gradle")
 // <custom>
-apply from: rootProject.file("gradle/buildversion.gradle")
 apply plugin: "jacoco"
 apply plugin: "org.sonarqube"
 // </custom>
