@@ -170,8 +170,6 @@ dependencies {
     // Other CAS dependencies/modules may be listed here...
     implementation "org.apereo.cas:cas-server-support-json-service-registry"
     implementation "org.apereo.cas:cas-server-support-rest"
-    implementation "org.apereo.cas:cas-server-support-session-redis"
-    implementation "org.apereo.cas:cas-server-support-redis-core"
     implementation "org.apereo.cas:cas-server-support-interrupt-api"
     implementation "org.apereo.cas:cas-server-support-interrupt-core"
     implementation "org.apereo.cas:cas-server-support-interrupt-webflow"
@@ -188,12 +186,9 @@ dependencies {
     implementation "org.apereo.cas:cas-server-core-util-api"
     implementation "org.apereo.cas:cas-server-webapp-config"
     implementation "org.apereo.cas:cas-server-webapp-init"
-    implementation "org.apereo.cas:cas-server-support-redis-ticket-registry"
     implementation "org.apereo.cas:cas-server-support-gauth"
     implementation "fi.vm.sade.java-utils:java-http:0.5.0-SNAPSHOT"
-    implementation 'org.springframework.session:spring-session-data-redis'
     implementation "org.springframework.security:spring-security-config"
-    implementation 'org.springframework.integration:spring-integration-redis'
     implementation "fi.vm.sade.java-utils:java-http:0.5.0-SNAPSHOT"
     implementation 'com.google.code.gson:gson:2.9.0'
     implementation "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}"
@@ -205,6 +200,12 @@ dependencies {
     testImplementation 'org.mockito:mockito-core'
     testImplementation 'org.assertj:assertj-core'
     testImplementation 'org.springframework:spring-test'
+
+    // Postgres
+    implementation "org.apereo.cas:cas-server-support-jpa-ticket-registry"
+    implementation "org.apereo.cas:cas-server-support-session-jdbc"
+    implementation "org.flywaydb:flyway-core:8.5.9"
+    runtimeOnly "org.postgresql:postgresql"
 
     implementation "org.apereo.cas:cas-server-core-api-configuration-model"
     implementation "org.apereo.cas:cas-server-webapp-init"
