@@ -1,13 +1,22 @@
 package fi.vm.sade.saml.action;
 
+import lombok.*;
 import org.apereo.cas.authentication.credential.AbstractCredential;
 
-public class SAMLCredentials extends AbstractCredential {
-    private final String token;
+import java.io.Serial;
 
-    public SAMLCredentials(String token) {
-        this.token = token;
-    }
+/** Practically identical to {@link org.apereo.cas.authentication.credential.OneTimeTokenCredential} */
+@ToString
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+public class SAMLCredentials extends AbstractCredential {
+    @Serial
+    private static final long serialVersionUID = -7570600701132111037L;
+
+    private String token;
 
     @Override
     public String getId() {

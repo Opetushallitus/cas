@@ -35,21 +35,29 @@ cas:
         time-to-kill-in-seconds: 28800
         max-time-to-live-in-seconds: 28800
     registry:
-      core:
-        enable-locking: true
       cleaner:
         schedule:
           enabled: false
 
 cas.service-registry.json.location: classpath:/service-1.json
 
-# redis
-cas.ticket.registry.redis.enabled: true
-cas.ticket.registry.redis.host: localhost
-cas.ticket.registry.redis.port: 6379
-cas.ticket.registry.redis.crypto.enabled: true
-cas.ticket.registry.redis.crypto.signing.key: k2FVJ-NZBay5GkDOboCN-AAb6jsBSoLBDiJtsqpULTdErMpwb96RqxMQlTCi-X8sO91dCvgNRFfGfhhVQJt56Q
-cas.ticket.registry.redis.crypto.encryption.key: NMDhQWuv-CQMZMHJcWse3w
+# postgres
+spring.datasource.url: jdbc:postgresql://localhost:5080/cas
+spring.datasource.driver-class-name: org.postgresql.Driver
+spring.datasource.username: cas
+spring.datasource.password: cas
+spring.flyway.enabled: true
+cas.ticket.registry.jpa.ddl-auto: validate
+spring.jpa.properties.hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+# https://alexpask.com/spring-boot-createclob-error/
+spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation: true
+spring.jpa.properties.hibernate.temp.use_jdbc_metadata_defaults: false
+cas.ticket.registry.core.enable-locking: false
+cas.ticket.registry.jpa.enabled: true
+cas.ticket.registry.jpa.driver-class: ${spring.datasource.driver-class-name}
+cas.ticket.registry.jpa.password: ${spring.datasource.password}
+cas.ticket.registry.jpa.url: ${spring.datasource.url}
+cas.ticket.registry.jpa.user: ${spring.datasource.username}
 
 cas.authn.accept.users:
 
@@ -102,11 +110,6 @@ cas.authn.mfa.gauth.rest.basic-auth-password: mfa
 # Spring Boot configuration
 # https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 
-spring:
-  session:
-    store-type: redis
-    redis:
-      namespace: spring:session
 
 # Custom configuration
 

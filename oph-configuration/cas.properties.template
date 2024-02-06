@@ -75,13 +75,18 @@ server.tomcat.remoteip.remote-ip-header=
 
 cas.service-registry.json.location=file:///root/oph-configuration/cas
 
-# redis
-cas.ticket.registry.redis.enabled=true
-cas.ticket.registry.redis.host={{ cas_redis_url }}
-cas.ticket.registry.redis.port=6379
-cas.ticket.registry.redis.crypto.enabled=true
-cas.ticket.registry.redis.crypto.signing.key={{ cas_redis_signing_key }}
-cas.ticket.registry.redis.crypto.encryption.key={{ cas_redis_encryption_key }}
+# postgres
+spring.datasource.url: jdbc:postgresql://{{ cas_postgres_host }}:{{ cas_postgres_port }}/{{ cas_postgres_db }}
+spring.datasource.driver-class-name: org.postgresql.Driver
+spring.datasource.username: {{ cas_postgres_username }}
+spring.datasource.password: {{ cas_postgres_password }}
+spring.flyway.enabled: true
+cas.ticket.registry.core.enable-locking: false
+cas.ticket.registry.jpa.enabled: true
+cas.ticket.registry.jpa.driver-class: ${spring.datasource.driver-class-name}
+cas.ticket.registry.jpa.password: ${spring.datasource.password}
+cas.ticket.registry.jpa.url: ${spring.datasource.url}
+cas.ticket.registry.jpa.user: ${spring.datasource.username}
 
 management.endpoint.health.enabled=true
 management.endpoint.auditevents.enabled={{ cas_permit_auditevents_endpoint | default('false') }}
