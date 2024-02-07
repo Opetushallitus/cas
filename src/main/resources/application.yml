@@ -34,10 +34,8 @@ cas:
       primary:
         time-to-kill-in-seconds: 28800
         max-time-to-live-in-seconds: 28800
-    registry:
-      cleaner:
-        schedule:
-          enabled: false
+
+cas.ticket.registry.cleaner.schedule.enabled: true
 
 cas.service-registry.json.location: classpath:/service-1.json
 
