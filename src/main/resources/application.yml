@@ -110,6 +110,7 @@ cas.authn.mfa.gauth.rest.basic-auth-password: mfa
 # Spring Boot configuration
 # https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 
+spring.main.lazy-initialization: false
 
 # Custom configuration
 
