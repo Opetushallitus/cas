@@ -23,6 +23,7 @@ import java.util.Optional;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
+import static java.util.stream.Collectors.joining;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -50,7 +51,7 @@ public class LoginRedirectInterruptInquirerTest {
     }
 
     @Test
-    public void onRedirectCodeNullShouldNotRedirect() throws Throwable {
+    public void onRedirectCodeNullShouldNotRedirect() {
         when(kayttooikeusRestClientMock.getRedirectCodeByUsername(any())).thenReturn(Optional.empty());
         Authentication authentication = new DefaultAuthentication(ZonedDateTime.now(), principalFactory.createPrincipal("user1"), emptyList(), emptyList(),emptyMap(),emptyMap(),emptyMap());
         Credential credential = new UsernamePasswordCredential("user1", "pass1");
@@ -65,7 +66,7 @@ public class LoginRedirectInterruptInquirerTest {
     }
 
     @Test
-    public void onRequireStrongIdentificationAndStrongIdentificationRedirectCodeShouldRedirectToStrongIdentification() throws Throwable {
+    public void onRequireStrongIdentificationAndStrongIdentificationRedirectCodeShouldRedirectToStrongIdentification() {
         when(kayttooikeusRestClientMock.getRedirectCodeByUsername(any())).thenReturn(Optional.of("STRONG_IDENTIFICATION"));
         Authentication authentication = new DefaultAuthentication(ZonedDateTime.now(), principalFactory.createPrincipal("user1"), emptyList(), emptyList(),emptyMap(),emptyMap(),emptyMap());
         Credential credential = new UsernamePasswordCredential("user1", "pass1");
@@ -81,7 +82,7 @@ public class LoginRedirectInterruptInquirerTest {
     }
 
     @Test
-    public void onUsernameInCasRequireStrongidentificationListShouldRedirectToStrongAuthentication() throws Throwable {
+    public void onUsernameInCasRequireStrongidentificationListShouldRedirectToStrongAuthentication() {
         when(kayttooikeusRestClientMock.getRedirectCodeByUsername(any())).thenReturn(Optional.of("STRONG_IDENTIFICATION"));
         Authentication authentication = new DefaultAuthentication(ZonedDateTime.now(), principalFactory.createPrincipal("user1"), emptyList(), emptyList(),emptyMap(),emptyMap(),emptyMap());
         Credential credential = new UsernamePasswordCredential("user1", "pass1");
@@ -97,7 +98,7 @@ public class LoginRedirectInterruptInquirerTest {
     }
 
     @Test
-    public void onEmailVerificationEnabledAndEmailVerificationRedirectCodeShouldRedirectToEmailVerification() throws Throwable {
+    public void onEmailVerificationEnabledAndEmailVerificationRedirectCodeShouldRedirectToEmailVerification() {
         when(kayttooikeusRestClientMock.getRedirectCodeByUsername(any())).thenReturn(Optional.of("EMAIL_VERIFICATION"));
         Authentication authentication = new DefaultAuthentication(ZonedDateTime.now(), principalFactory.createPrincipal("user1"), emptyList(), emptyList(),emptyMap(),emptyMap(),emptyMap());
         Credential credential = new UsernamePasswordCredential("user1", "pass1");
@@ -113,7 +114,7 @@ public class LoginRedirectInterruptInquirerTest {
     }
 
     @Test
-    public void onEmailVerificationDisabledAndUsernameInEmailVerificationListShouldRedirectToEmailVerification() throws Throwable {
+    public void onEmailVerificationDisabledAndUsernameInEmailVerificationListShouldRedirectToEmailVerification() {
         when(kayttooikeusRestClientMock.getRedirectCodeByUsername(any())).thenReturn(Optional.of("EMAIL_VERIFICATION"));
         Authentication authentication = new DefaultAuthentication(ZonedDateTime.now(), principalFactory.createPrincipal("user1"), emptyList(), emptyList(),emptyMap(),emptyMap(),emptyMap());
         Credential credential = new UsernamePasswordCredential("user1", "pass1");
@@ -129,7 +130,7 @@ public class LoginRedirectInterruptInquirerTest {
     }
 
     @Test
-    public void onStrongIdentificationAndEmailVerificationDisabledShouldNotRedirectWithStrongIdentification() throws Throwable {
+    public void onStrongIdentificationAndEmailVerificationDisabledShouldNotRedirectWithStrongIdentification() {
         when(kayttooikeusRestClientMock.getRedirectCodeByUsername(any())).thenReturn(Optional.of("STRONG_IDENTIFICATION"));
         Authentication authentication = new DefaultAuthentication(ZonedDateTime.now(), principalFactory.createPrincipal("user1"), emptyList(), emptyList(),emptyMap(),emptyMap(),emptyMap());
         Credential credential = new UsernamePasswordCredential("user1", "pass1");
@@ -142,7 +143,7 @@ public class LoginRedirectInterruptInquirerTest {
     }
 
     @Test
-    public void onStrongIdentificationAndEmailVerificationDisabledShouldNotRedirectWithEmailVerification() throws Throwable {
+    public void onStrongIdentificationAndEmailVerificationDisabledShouldNotRedirectWithEmailVerification() {
         when(kayttooikeusRestClientMock.getRedirectCodeByUsername(any())).thenReturn(Optional.of("EMAIL_VERIFICATION"));
         Authentication authentication = new DefaultAuthentication(ZonedDateTime.now(), principalFactory.createPrincipal("user1"), emptyList(), emptyList(),emptyMap(),emptyMap(),emptyMap());
         Credential credential = new UsernamePasswordCredential("user1", "pass1");
@@ -155,7 +156,7 @@ public class LoginRedirectInterruptInquirerTest {
     }
 
     @Test
-    public void onPasswordChangeInterrupt() throws Throwable {
+    public void onPasswordChangeInterrupt() {
         when(kayttooikeusRestClientMock.getRedirectCodeByUsername(any())).thenReturn(Optional.of("PASSWORD_CHANGE"));
         Authentication authentication = new DefaultAuthentication(ZonedDateTime.now(), principalFactory.createPrincipal("user1"), emptyList(), emptyList(), emptyMap(), emptyMap(), emptyMap());
         Credential credential = new UsernamePasswordCredential("user1", "pass1");
@@ -168,7 +169,7 @@ public class LoginRedirectInterruptInquirerTest {
     }
 
     @Test
-    public void onPasswordChangeInterruptWithSuomiFi() throws Throwable {
+    public void onPasswordChangeInterruptWithSuomiFi() {
         Map<String, List<Object>> suomiFiIdpAttributes = Map.of("idpEntityId", List.of("vetuma"));
         when(kayttooikeusRestClientMock.getRedirectCodeByUsername(any())).thenReturn(Optional.of("PASSWORD_CHANGE"));
         Authentication authentication = new DefaultAuthentication(ZonedDateTime.now(), principalFactory.createPrincipal("user1", suomiFiIdpAttributes), emptyList(), emptyList(), emptyMap(), emptyMap(), emptyMap());

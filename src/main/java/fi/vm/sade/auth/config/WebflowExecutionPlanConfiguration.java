@@ -15,6 +15,7 @@ import org.springframework.webflow.engine.builder.support.FlowBuilderServices;
 @Configuration
 @EnableConfigurationProperties(CasConfigurationProperties.class)
 public class WebflowExecutionPlanConfiguration implements CasWebflowExecutionPlanConfigurer {
+
     // configurer
     private final FlowBuilderServices flowBuilderServices;
     private final FlowDefinitionRegistry loginFlowDefinitionRegistry;

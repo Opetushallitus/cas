@@ -48,14 +48,8 @@ public class HttpAuthenticationHandler extends AbstractUsernamePasswordAuthentic
                 "idpEntityId", List.of("usernamePassword"),
                 "kayttajaTyyppi", List.of(Optional.ofNullable(dto.getKayttajaTyyppi()).orElse("VIRKAILIJA"))
         );
-        Principal principal;
-        try {
-            principal = principalFactory.createPrincipal(dto.getUsername(), attributes);
-        } catch (Throwable t) {
-            throw new RuntimeException(t);
-        }
+        Principal principal = principalFactory.createPrincipal(dto.getUsername(), attributes);
         return createHandlerResult(credential, principal, emptyList());
-
     }
 
     private Optional<KayttajatiedotReadDto> validateUsernamePassword(String username, String password) {

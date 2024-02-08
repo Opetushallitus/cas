@@ -21,7 +21,7 @@
                         prefixed with & instead of ? unlike in Haka login URL :)
                         -->
                         <a id="mpassid-button"
-                           th:with="parameters=${service != null} ? '&redirect=' + ${T(fi.vm.sade.Encode).uri(service.originalUrl)} : ''"
+                           th:with="parameters=${service != null} ? '&redirect=' + ${T(org.springframework.web.util.UriComponentsBuilder).fromHttpUrl(service.originalUrl).toUriString()} : ''"
                            th:href="${cas.custom.properties['mpassidUrl']} + ${parameters}">
                             <img width="108px" height="20px" src="/cas/images/mpassid-teksti.svg" />
                         </a>

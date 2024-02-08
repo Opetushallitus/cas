@@ -1,6 +1,5 @@
 package fi.vm.sade.saml.action;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.apereo.cas.authentication.Credential;
 import org.apereo.cas.authentication.adaptive.AdaptiveAuthenticationPolicy;
 import org.apereo.cas.web.flow.actions.AbstractNonInteractiveCredentialsAction;
@@ -10,6 +9,7 @@ import org.apereo.cas.web.support.WebUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.webflow.execution.RequestContext;
 
+import javax.servlet.http.HttpServletRequest;
 
 @Component
 public class SAMLAction extends AbstractNonInteractiveCredentialsAction {

@@ -19,6 +19,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 
 import javax.security.auth.login.FailedLoginException;
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -69,7 +70,7 @@ public class HttpAuthenticationHandlerTest {
     }
 
     @Test
-    public void authenticate() throws Throwable {
+    public void authenticate() throws GeneralSecurityException, PreventedException {
         when(httpResponseMock.getStatusCode()).thenReturn(200);
         when(httpResponseMock.asText()).thenReturn("{\"username\":\"USER1\",\"kayttajaTyyppi\":\"VIRKAILIJA\"}");
 
@@ -81,7 +82,7 @@ public class HttpAuthenticationHandlerTest {
     }
 
     @Test
-    public void defaultKayttajaTyyppiToVirkailijaIfMissing() throws Throwable {
+    public void defaultKayttajaTyyppiToVirkailijaIfMissing() throws GeneralSecurityException, PreventedException {
         when(httpResponseMock.getStatusCode()).thenReturn(200);
         when(httpResponseMock.asText()).thenReturn("{\"username\":\"USER1\"}");
 
