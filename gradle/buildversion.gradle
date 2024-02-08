@@ -1,0 +1,18 @@
+import java.time.OffsetDateTime
+
+task buildversionTxt(group: "build", description: "write buildversion.txt") {
+    doFirst {
+        mkdir "$buildDir/resources/main/static"
+    }
+    doLast {
+        file("$buildDir/resources/main/static/buildversion.txt").text = """artifactId=${project.property('name')}
+version=${project.property('version')}
+buildNumber=${System.getProperty("buildNumber")}
+branchName=${System.getProperty("branch")}
+vcsRevision=${System.getProperty("revision")}
+buildTtime=${OffsetDateTime.now().toString()}
+"""
+    }
+}
+
+processResources.finalizedBy(buildversionTxt)
