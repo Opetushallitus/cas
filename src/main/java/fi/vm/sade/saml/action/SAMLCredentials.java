@@ -1,8 +1,9 @@
 package fi.vm.sade.saml.action;
 
-import org.apereo.cas.authentication.credential.AbstractCredential;
+import org.apereo.cas.authentication.Credential;
 
-public class SAMLCredentials extends AbstractCredential {
+public class SAMLCredentials implements Credential {
+
     private final String token;
 
     public SAMLCredentials(String token) {
@@ -13,4 +14,5 @@ public class SAMLCredentials extends AbstractCredential {
     public String getId() {
         return token;
     }
+
 }

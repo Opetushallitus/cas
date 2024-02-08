@@ -27,7 +27,7 @@ cas.webflow.crypto.signing.key={{cas_webflow_signing_key}}
 
 cas.slo.asynchronous={{cas_slo_callbacks_asynchronous | default('false')}}
 
-cas.sso.services.allow-missing-service-parameter=false
+cas.sso.allow-missing-service-parameter=false
 cas.audit.engine.alternate-client-addr-header-name=X-Real-IP
 cas.view.default-redirect-url={{cas_view_default_redirect_url | default('https://${host.virkailija}/virkailijan-tyopoyta')}}
 

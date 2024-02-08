@@ -6,7 +6,6 @@ metadata:
     {{- include "cas-server.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.cas.service.type }}
-  publishNotReadyAddresses: {{ .Values.cas.service.publishNotReadyAddresses }}
   ports:
     - port: {{ .Values.cas.service.port }}
       targetPort: https
