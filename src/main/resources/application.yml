@@ -46,10 +46,7 @@ spring.datasource.username: cas
 spring.datasource.password: cas
 spring.flyway.enabled: true
 cas.ticket.registry.jpa.ddl-auto: validate
-spring.jpa.properties.hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
-# https://alexpask.com/spring-boot-createclob-error/
-spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation: true
-spring.jpa.properties.hibernate.temp.use_jdbc_metadata_defaults: false
+cas.ticket.registry.jpa.dialect: org.hibernate.dialect.PostgreSQLDialect
 cas.ticket.registry.core.enable-locking: false
 cas.ticket.registry.jpa.enabled: true
 cas.ticket.registry.jpa.driver-class: ${spring.datasource.driver-class-name}
