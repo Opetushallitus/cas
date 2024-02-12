@@ -17,15 +17,11 @@ public class SAMLActionConfigurer extends AbstractCasWebflowConfigurer {
     private static final String STATE_ID_SAML_ACTION = "samlAction";
     public static final String MFA_GAUTH_EVENT_ID = "mfa-gauth";
 
-    private final SAMLAction samlAction;
-
     public SAMLActionConfigurer(FlowBuilderServices flowBuilderServices,
                                 FlowDefinitionRegistry loginFlowDefinitionRegistry,
                                 ConfigurableApplicationContext applicationContext,
-                                CasConfigurationProperties casProperties,
-                                SAMLAction samlAction) {
+                                CasConfigurationProperties casProperties) {
         super(flowBuilderServices, loginFlowDefinitionRegistry, applicationContext, casProperties);
-        this.samlAction = samlAction;
     }
 
     @Override
@@ -38,7 +34,7 @@ public class SAMLActionConfigurer extends AbstractCasWebflowConfigurer {
                 STATE_ID_SAML_ACTION, originalStartState.getId());
         loginFlow.setStartState(decisionState);
 
-        ActionState actionState = super.createActionState(loginFlow, STATE_ID_SAML_ACTION, this.samlAction);
+        ActionState actionState = super.createActionState(loginFlow, STATE_ID_SAML_ACTION, SAMLAction.BEAN_NAME);
         super.createTransitionForState(actionState, CasWebflowConstants.TRANSITION_ID_SUCCESS,
                 CasWebflowConstants.STATE_ID_CREATE_TICKET_GRANTING_TICKET);
         super.createTransitionForState(actionState, MFA_GAUTH_EVENT_ID, MFA_GAUTH_EVENT_ID);
