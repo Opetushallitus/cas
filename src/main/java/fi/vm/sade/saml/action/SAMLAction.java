@@ -11,8 +11,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.webflow.execution.RequestContext;
 
 
-@Component
+@Component(SAMLAction.BEAN_NAME)
 public class SAMLAction extends AbstractNonInteractiveCredentialsAction {
+    public static final String BEAN_NAME = "samlAction";
 
     public SAMLAction(CasDelegatingWebflowEventResolver initialAuthenticationAttemptWebflowEventResolver,
                       CasWebflowEventResolver serviceTicketRequestWebflowEventResolver,
