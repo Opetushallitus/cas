@@ -14,7 +14,7 @@ function main {
 
   tmux splitw -v
   tmux select-pane -t 1
-  tmux send-keys "while sleep 0.5; do $repo/scripts/run-cas-java-21.sh; done" C-m
+  tmux send-keys "while sleep 0.5; do $repo/scripts/run-cas.sh; done" C-m
 
   tmux splitw -v
   tmux select-pane -t 2
