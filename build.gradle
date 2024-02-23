@@ -333,7 +333,6 @@ dependencies {
     implementation "org.apereo.cas:cas-server-support-session-jdbc"
     implementation "org.flywaydb:flyway-core:8.5.9"
     runtimeOnly "org.postgresql:postgresql"
-    implementation "com.github.kagkarlsson:db-scheduler-spring-boot-starter:13.0.0"
     // </custom>
 }
 

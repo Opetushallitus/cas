@@ -35,10 +35,7 @@ cas:
         time-to-kill-in-seconds: 28800
         max-time-to-live-in-seconds: 28800
 
-# db-scheduler runs this manually
-cas.ticket.registry.cleaner.schedule.enabled: false
-db-scheduler.enabled: true
-db-scheduler.threads: 1
+cas.ticket.registry.cleaner.schedule.enabled: true
 
 cas.service-registry.json.location: classpath:/service-1.json
 
