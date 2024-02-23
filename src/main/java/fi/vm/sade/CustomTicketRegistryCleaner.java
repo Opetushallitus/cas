@@ -46,7 +46,9 @@ public class CustomTicketRegistryCleaner implements TicketRegistryCleaner {
     public int clean() {
         LOGGER.info("Cleaning up expired tickets...");
         List<String> expiredTicketIds = Objects.requireNonNull(transactionOperations.execute(status -> getExpiredTicketIdsToDelete()));
-        return expiredTicketIds.stream().mapToInt(expiredTicketId -> transactionOperations.execute(status -> cleanExpiredTicket(expiredTicketId))).sum();
+        var ticketsDeleted = expiredTicketIds.stream().mapToInt(expiredTicketId -> transactionOperations.execute(status -> cleanExpiredTicket(expiredTicketId))).sum();
+        LOGGER.info("[{}] expired tickets removed.", ticketsDeleted);
+        return ticketsDeleted;
     }
 
     @Override
