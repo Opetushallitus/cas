@@ -4,9 +4,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apereo.cas.logout.LogoutManager;
-import org.apereo.cas.logout.slo.SingleLogoutExecutionRequest;
 import org.apereo.cas.ticket.Ticket;
-import org.apereo.cas.ticket.TicketGrantingTicket;
 import org.apereo.cas.ticket.registry.TicketRegistry;
 import org.apereo.cas.ticket.registry.TicketRegistryCleaner;
 import org.apereo.cas.util.lock.LockRepository;
@@ -31,7 +29,6 @@ import java.util.Optional;
 @Transactional(transactionManager = "ticketTransactionManager")
 public class CustomTicketRegistryCleaner implements TicketRegistryCleaner {
     private final LockRepository lockRepository;
-    private final LogoutManager logoutManager;
     private final TicketRegistry ticketRegistry;
     @Qualifier("ticketTransactionManager")
     private final PlatformTransactionManager transactionManager;
@@ -45,7 +42,7 @@ public class CustomTicketRegistryCleaner implements TicketRegistryCleaner {
     @Override
     public int clean() {
         LOGGER.info("Cleaning up expired tickets...");
-        List<String> expiredTicketIds = transactionOperations.execute(status -> getExpiredTicketIdsToDelete());
+        List<String> expiredTicketIds = Objects.requireNonNull(transactionOperations.execute(status -> getExpiredTicketIdsToDelete()));
         return expiredTicketIds.stream().mapToInt(expiredTicketId -> transactionOperations.execute(status -> cleanExpiredTicket(expiredTicketId))).sum();
     }
 
@@ -59,11 +56,6 @@ public class CustomTicketRegistryCleaner implements TicketRegistryCleaner {
     }
 
     private int cleanExpiredTicket(Ticket ticket) throws Exception {
-        if (ticket instanceof final TicketGrantingTicket tgt) {
-            LOGGER.info("Cleaning up expired ticket-granting ticket [{}]", ticket.getId());
-            //LOGGER.info("Performing Single Logout for ticket [{}]", ticket.getId());
-            //logoutManager.performLogout(SingleLogoutExecutionRequest.builder().ticketGrantingTicket(tgt).build());
-        }
         LOGGER.info("Cleaning up expired ticket [{}]", ticket.getId());
         return ticketRegistry.deleteTicket(ticket);
     }
