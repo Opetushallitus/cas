@@ -4,7 +4,9 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apereo.cas.logout.LogoutManager;
+import org.apereo.cas.logout.slo.SingleLogoutExecutionRequest;
 import org.apereo.cas.ticket.Ticket;
+import org.apereo.cas.ticket.TicketGrantingTicket;
 import org.apereo.cas.ticket.registry.TicketRegistry;
 import org.apereo.cas.ticket.registry.TicketRegistryCleaner;
 import org.apereo.cas.util.lock.LockRepository;
@@ -21,14 +23,15 @@ import java.util.Objects;
 import java.util.Optional;
 
 // Based on org.apereo.cas.ticket.registry.DefaultTicketRegistryCleaner
-// Handles each ticket in their own transaction to avoid the following error:
-//   "Batch update returned unexpected row count from update [0]; actual row count: 0; expected: 1"
+// Main difference being that this implementation deletes tickets in smaller batches, so it survives the scenario
+// where there are too many tickets to delete at once.
 @Slf4j
 @RequiredArgsConstructor
 @Component("ticketRegistryCleaner")
 @Transactional(transactionManager = "ticketTransactionManager")
 public class CustomTicketRegistryCleaner implements TicketRegistryCleaner {
     private final LockRepository lockRepository;
+    private final LogoutManager logoutManager;
     private final TicketRegistry ticketRegistry;
     @Qualifier("ticketTransactionManager")
     private final PlatformTransactionManager transactionManager;
@@ -56,6 +59,10 @@ public class CustomTicketRegistryCleaner implements TicketRegistryCleaner {
     }
 
     private int cleanExpiredTicket(Ticket ticket) throws Exception {
+        if (ticket instanceof final TicketGrantingTicket tgt) {
+            LOGGER.info("Cleaning up expired ticket-granting ticket [{}]", ticket.getId());
+            logoutManager.performLogout(SingleLogoutExecutionRequest.builder().ticketGrantingTicket(tgt).build());
+        }
         LOGGER.info("Cleaning up expired ticket [{}]", ticket.getId());
         return ticketRegistry.deleteTicket(ticket);
     }
