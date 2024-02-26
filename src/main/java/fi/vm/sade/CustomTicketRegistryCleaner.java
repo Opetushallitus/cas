@@ -12,6 +12,7 @@ import org.apereo.cas.ticket.registry.TicketRegistryCleaner;
 import org.apereo.cas.util.lock.LockRepository;
 import org.jooq.lambda.Unchecked;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,11 +31,14 @@ import java.util.Optional;
 @Component("ticketRegistryCleaner")
 @Transactional(transactionManager = "ticketTransactionManager")
 public class CustomTicketRegistryCleaner implements TicketRegistryCleaner {
+    private static final long LOCK_ID = 702779869L;
+
     private final LockRepository lockRepository;
     private final LogoutManager logoutManager;
     private final TicketRegistry ticketRegistry;
     @Qualifier("ticketTransactionManager")
     private final PlatformTransactionManager transactionManager;
+    private final JdbcTemplate jdbcTemplate;
     private TransactionOperations transactionOperations;
 
     @PostConstruct
@@ -44,11 +48,24 @@ public class CustomTicketRegistryCleaner implements TicketRegistryCleaner {
 
     @Override
     public int clean() {
-        LOGGER.info("Cleaning up expired tickets...");
-        List<String> expiredTicketIds = Objects.requireNonNull(transactionOperations.execute(status -> getExpiredTicketIdsToDelete()));
-        var ticketsDeleted = expiredTicketIds.stream().mapToInt(expiredTicketId -> transactionOperations.execute(status -> cleanExpiredTicket(expiredTicketId))).sum();
+        var ticketsDeleted = Objects.requireNonNull(transactionOperations.execute(status -> {
+            if (!tryAcquireTaskLock()) {
+                LOGGER.info("Failed to acquire lock for ticket registry cleaner; it is already running");
+                return 0;
+            }
+
+            LOGGER.info("Cleaning up expired tickets...");
+            List<String> expiredTicketIds = Objects.requireNonNull(getExpiredTicketIdsToDelete());
+            return expiredTicketIds.stream().mapToInt(this::cleanExpiredTicket).sum();
+        }));
         LOGGER.info("[{}] expired tickets removed.", ticketsDeleted);
         return ticketsDeleted;
+    }
+
+    private boolean tryAcquireTaskLock() {
+        var sql = "SELECT pg_try_advisory_xact_lock(?)";
+        var result = jdbcTemplate.queryForObject(sql, Boolean.class, LOCK_ID);
+        return Boolean.TRUE.equals(result);
     }
 
     @Override
@@ -74,8 +91,9 @@ public class CustomTicketRegistryCleaner implements TicketRegistryCleaner {
     }
 
     private List<String> getExpiredTicketIdsToDelete() {
-        var expiredTickets = ticketRegistry.stream().filter(Ticket::isExpired);
-        var batchToDelete = expiredTickets.limit(1000);
-        return batchToDelete.map(Ticket::getId).toList();
+        try (var expiredTickets = ticketRegistry.stream().filter(Ticket::isExpired)) {
+            var batchToDelete = expiredTickets.limit(1000);
+            return batchToDelete.map(Ticket::getId).toList();
+        }
     }
 }
