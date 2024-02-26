@@ -2,20 +2,19 @@ package fi.vm.sade.auth.interrupt;
 
 import fi.vm.sade.auth.action.LoginRedirectAction;
 import fi.vm.sade.auth.clients.KayttooikeusRestClient;
+import lombok.extern.slf4j.Slf4j;
+
 import org.apereo.cas.authentication.Authentication;
 import org.apereo.cas.authentication.Credential;
 import org.apereo.cas.authentication.principal.Service;
 import org.apereo.cas.interrupt.InterruptInquirer;
 import org.apereo.cas.interrupt.InterruptResponse;
 import org.apereo.cas.services.RegisteredService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.webflow.execution.RequestContext;
 
-import jakarta.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,12 +23,10 @@ import java.util.Optional;
 import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.toList;
 
+@Slf4j
 @Component
-@ConditionalOnProperty("login.redirect.interrupt.enabled")
+@Qualifier("loginRedirectInterruptInquirer")
 public class LoginRedirectInterruptInquirer implements InterruptInquirer {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(LoginRedirectInterruptInquirer.class);
-
     private final KayttooikeusRestClient kayttooikeusRestClient;
     private final LoginRedirectAction loginRedirectAction;
     private boolean requireStrongIdentification;
@@ -40,14 +37,6 @@ public class LoginRedirectInterruptInquirer implements InterruptInquirer {
     public LoginRedirectInterruptInquirer(KayttooikeusRestClient kayttooikeusRestClient, LoginRedirectAction loginRedirectAction) {
         this.kayttooikeusRestClient = kayttooikeusRestClient;
         this.loginRedirectAction = loginRedirectAction;
-    }
-
-    @PostConstruct
-    public void log() {
-        LOGGER.info("Using configuration: requireStrongIdentification={}, requireStrongIdentificationUsernameList={} (size)," +
-                        " emailVerificationEnabled={}, emailVerificationUsernameList={} (size)",
-                requireStrongIdentification, requireStrongIdentificationUsernameList.size(),
-                emailVerificationEnabled, emailVerificationUsernameList.size());
     }
 
     @Override
