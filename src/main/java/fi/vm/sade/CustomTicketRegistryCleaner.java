@@ -1,6 +1,5 @@
 package fi.vm.sade;
 
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apereo.cas.logout.LogoutManager;
@@ -11,13 +10,9 @@ import org.apereo.cas.ticket.registry.TicketRegistry;
 import org.apereo.cas.ticket.registry.TicketRegistryCleaner;
 import org.apereo.cas.util.lock.LockRepository;
 import org.jooq.lambda.Unchecked;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionOperations;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.List;
 import java.util.Objects;
@@ -36,28 +31,18 @@ public class CustomTicketRegistryCleaner implements TicketRegistryCleaner {
     private final LockRepository lockRepository;
     private final LogoutManager logoutManager;
     private final TicketRegistry ticketRegistry;
-    @Qualifier("ticketTransactionManager")
-    private final PlatformTransactionManager transactionManager;
     private final JdbcTemplate jdbcTemplate;
-    private TransactionOperations transactionOperations;
-
-    @PostConstruct
-    public void postConstruct() {
-        transactionOperations = new TransactionTemplate(transactionManager);
-    }
 
     @Override
     public int clean() {
-        var ticketsDeleted = Objects.requireNonNull(transactionOperations.execute(status -> {
-            if (!tryAcquireTaskLock()) {
-                LOGGER.info("Failed to acquire lock for ticket registry cleaner; it is already running");
-                return 0;
-            }
+        if (!tryAcquireTaskLock()) {
+            LOGGER.info("Failed to acquire lock for ticket registry cleaner; it is already running");
+            return 0;
+        }
 
-            LOGGER.info("Cleaning up expired tickets...");
-            List<String> expiredTicketIds = Objects.requireNonNull(getExpiredTicketIdsToDelete());
-            return expiredTicketIds.stream().mapToInt(this::cleanExpiredTicket).sum();
-        }));
+        LOGGER.info("Cleaning up expired tickets...");
+        List<String> expiredTicketIds = Objects.requireNonNull(getExpiredTicketIdsToDelete());
+        var ticketsDeleted =  expiredTicketIds.stream().mapToInt(this::cleanExpiredTicket).sum();
         LOGGER.info("[{}] expired tickets removed.", ticketsDeleted);
         return ticketsDeleted;
     }
