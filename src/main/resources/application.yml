@@ -102,6 +102,8 @@ cas.authn.mfa.gauth.rest.headers: {'Caller-Id': '1.2.246.562.10.00000000001.cas'
 cas.authn.mfa.gauth.rest.basic-auth-username: cas
 cas.authn.mfa.gauth.rest.basic-auth-password: mfa
 
+cas.interrupt.core.trigger-mode: AFTER_SSO
+
 # Spring Boot configuration
 # https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 
@@ -110,7 +112,7 @@ cas.authn.mfa.gauth.rest.basic-auth-password: mfa
 
 proxy.callback.ignore-errors: false
 host.cas: localhost:8080
-host.virkailija: localhost:8080
+host.virkailija: localhost:8101
 # Käyttöoikeuspalvelun userDetails rajapintaa kutsutaan ALB:n hostnamella (host.alb) IP-rajauksen tms takia. Lokaalisti ajettaessa kutsutaan suoraan palvelua.
 host.alb: localhost:8101
 serviceprovider.app.username.to.usermanagement: user1
