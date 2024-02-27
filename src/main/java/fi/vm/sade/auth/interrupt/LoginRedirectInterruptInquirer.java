@@ -9,6 +9,7 @@ import org.apereo.cas.authentication.Credential;
 import org.apereo.cas.authentication.principal.Service;
 import org.apereo.cas.interrupt.InterruptInquirer;
 import org.apereo.cas.interrupt.InterruptResponse;
+import org.apereo.cas.interrupt.InterruptTrackingEngine;
 import org.apereo.cas.services.RegisteredService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,11 +42,19 @@ public class LoginRedirectInterruptInquirer implements InterruptInquirer {
 
     @Override
     public InterruptResponse inquire(Authentication authentication, RegisteredService registeredService, Service service, Credential credential, RequestContext requestContext) {
+        if (isInterruptAlreadyFinalizedForSession(authentication)) {
+            return InterruptResponse.none();
+        }
+
         String username = authentication.getPrincipal().getId();
         Optional<String> idpEntityId = getIdpEntityId(authentication);
         return kayttooikeusRestClient.getRedirectCodeByUsername(username)
                 .flatMap(redirectCode -> getInterruptResponseByCode(redirectCode, username, idpEntityId))
                 .orElseGet(InterruptResponse::none);
+    }
+
+    private boolean isInterruptAlreadyFinalizedForSession(Authentication authentication) {
+        return authentication.containsAttribute(InterruptTrackingEngine.AUTHENTICATION_ATTRIBUTE_FINALIZED_INTERRUPT);
     }
 
     private Optional<String> getIdpEntityId(Authentication authentication) {
