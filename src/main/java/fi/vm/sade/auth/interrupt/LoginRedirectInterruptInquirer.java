@@ -11,6 +11,8 @@ import org.apereo.cas.interrupt.InterruptInquirer;
 import org.apereo.cas.interrupt.InterruptResponse;
 import org.apereo.cas.interrupt.InterruptTrackingEngine;
 import org.apereo.cas.services.RegisteredService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -28,6 +30,8 @@ import static java.util.stream.Collectors.toList;
 @Component
 @Qualifier("loginRedirectInterruptInquirer")
 public class LoginRedirectInterruptInquirer implements InterruptInquirer {
+    private static final Logger log = LoggerFactory.getLogger(LoginRedirectInterruptInquirer.class);
+
     private final KayttooikeusRestClient kayttooikeusRestClient;
     private final LoginRedirectAction loginRedirectAction;
     private boolean requireStrongIdentification;
@@ -54,6 +58,7 @@ public class LoginRedirectInterruptInquirer implements InterruptInquirer {
     }
 
     private boolean isInterruptAlreadyFinalizedForSession(Authentication authentication) {
+        log.warn("isInterruptedAlready for " + authentication.getPrincipal().getId() + ":" + authentication.containsAttribute(InterruptTrackingEngine.AUTHENTICATION_ATTRIBUTE_FINALIZED_INTERRUPT));
         return authentication.containsAttribute(InterruptTrackingEngine.AUTHENTICATION_ATTRIBUTE_FINALIZED_INTERRUPT);
     }
 
