@@ -58,7 +58,7 @@ public class LoginRedirectInterruptInquirer implements InterruptInquirer {
     }
 
     private boolean isInterruptAlreadyFinalizedForSession(Authentication authentication) {
-        log.warn("isInterruptedAlready for " + authentication.getPrincipal().getId() + ":" + authentication.containsAttribute(InterruptTrackingEngine.AUTHENTICATION_ATTRIBUTE_FINALIZED_INTERRUPT));
+        log.warn("INTERRUPT_LOG isInterruptedAlready for " + authentication.getPrincipal().getId() + ":" + authentication.containsAttribute(InterruptTrackingEngine.AUTHENTICATION_ATTRIBUTE_FINALIZED_INTERRUPT));
         return authentication.containsAttribute(InterruptTrackingEngine.AUTHENTICATION_ATTRIBUTE_FINALIZED_INTERRUPT);
     }
 

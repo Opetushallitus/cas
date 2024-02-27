@@ -38,9 +38,9 @@ public class CustomInterruptTrackingEngine implements InterruptTrackingEngine {
         val httpResponse = WebUtils.getHttpServletResponseFromExternalWebflowContext(requestContext);
         val authentication = WebUtils.getAuthentication(requestContext);
         authentication.addAttribute(AUTHENTICATION_ATTRIBUTE_FINALIZED_INTERRUPT, Boolean.TRUE);
-        log.warn("authentication attribute saved for " + authentication.getPrincipal().getId());
+        log.warn("INTERRUPT_LOG authentication attribute saved for " + authentication.getPrincipal().getId());
         val cookieValue = EncodingUtils.encodeBase64(MAPPER.writeValueAsString(response));
-        log.warn("cookie value saved for " + authentication.getPrincipal().getId() + ":" + cookieValue);
+        log.warn("INTERRUPT_LOG cookie value saved for " + authentication.getPrincipal().getId() + ":" + cookieValue);
         casCookieBuilder.addCookie(httpRequest, httpResponse, cookieValue);
     }
 
@@ -50,7 +50,7 @@ public class CustomInterruptTrackingEngine implements InterruptTrackingEngine {
             val httpRequest = WebUtils.getHttpServletRequestFromExternalWebflowContext(requestContext);
             val cookieValue = casCookieBuilder.retrieveCookieValue(httpRequest);
             val authentication = WebUtils.getAuthentication(requestContext);
-            log.warn("cookie value " + authentication.getPrincipal().getId() + ":" + cookieValue);
+            log.warn("INTERRUPT_LOG cookie value " + authentication.getPrincipal().getId() + ":" + cookieValue);
             return StringUtils.isNotBlank(cookieValue)
                 ? Optional.ofNullable(MAPPER.readValue(EncodingUtils.decodeBase64ToString(cookieValue), InterruptResponse.class))
                 : Optional.<InterruptResponse>empty();
@@ -63,7 +63,7 @@ public class CustomInterruptTrackingEngine implements InterruptTrackingEngine {
                 __ -> {
                     val interruptResponse = forCurrentRequest(requestContext);
                     val authentication = WebUtils.getAuthentication(requestContext);
-                    log.warn("check if is interrupted for " + authentication.getPrincipal().getId() + ":" + (authentication != null && authentication.containsAttribute(AUTHENTICATION_ATTRIBUTE_FINALIZED_INTERRUPT)));
+                    log.warn("INTERRUPT_LOG check if is interrupted for " + authentication.getPrincipal().getId() + ":" + (authentication != null && authentication.containsAttribute(AUTHENTICATION_ATTRIBUTE_FINALIZED_INTERRUPT)));
                     return interruptResponse.stream().anyMatch(InterruptResponse::isInterrupt)
                         || (authentication != null && authentication.containsAttribute(AUTHENTICATION_ATTRIBUTE_FINALIZED_INTERRUPT));
                 }, e -> false)
