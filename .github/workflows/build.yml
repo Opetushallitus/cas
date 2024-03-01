@@ -62,7 +62,8 @@ jobs:
       application: cas
       base-image: baseimage-fatjar-openjdk21:master
       configfolder: oph-configuration
-      jarfile: cas-war
+      jarfile: cas.war
+      jarfolder: .
       download-artifact: true
       download-artifact-name: cas-war
     secrets:
