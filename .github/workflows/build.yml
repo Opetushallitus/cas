@@ -22,8 +22,6 @@ jobs:
           distribution: 'corretto'
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@v2
-      - name: Setup build
-        uses: gradle/actions/setup-gradle@v3
       - name: Build
         run: ./gradlew clean build -Dbranch=$GITHUB_REF_NAME -Drevision=$GITHUB_SHA -DbuildNumber=$GITHUB_RUN_NUMBER/$GITHUB_RUN_ATTEMPT
       - name: Upload cas-war
