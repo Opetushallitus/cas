@@ -78,4 +78,4 @@ jobs:
     with:
       application: cas
       environment: hahtuva
-      image-tag: "ga-${{ github.run_number }}"
+      image-tag: ga-${{ github.run_number }}
