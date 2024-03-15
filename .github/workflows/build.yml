@@ -71,3 +71,11 @@ jobs:
       download-artifact-name: cas-war
     secrets:
       AWS_UTILITY_ROLE_ARN: ${{ secrets.AWS_OPH_UTILITY_ROLE_ARN }}
+
+  deploy-to-hahtuva:
+    needs: [deploy-container]
+    uses: Opetushallitus/.github/.github/workflows/deploy-from-ecr-to-ecs.yml@main
+    with:
+      application: cas
+      environment: hahtuva
+      image-tag: "ga-${{ github.run_number }}"
