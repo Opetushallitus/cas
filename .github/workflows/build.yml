@@ -80,3 +80,4 @@ jobs:
       environment: hahtuva
       image-tag: ga-${{ github.run_number }}
     secrets: inherit
+
