@@ -1,6 +1,32 @@
 name: CAS-virkailija
 on:
   workflow_dispatch:
+    inputs:
+      application:
+        description: 'Name of the application (example: cas)'
+        required: false
+        type: string
+        default: cas
+      build:
+        description: 'Build before deploy'
+        required: true
+        type: choice
+        options:
+          - true
+          - false
+      image-tag:
+        description: 'Image tag (example: ga-956).'
+        required: true
+        type: string
+      environment:
+        description: 'Environment'
+        required: true
+        type: choice
+        options:
+          - hahtuva
+          - untuva
+          - pallero
+          - sade
   push:
     branches: [ master ]
   pull_request:
@@ -11,6 +37,7 @@ permissions:
 
 jobs:
   build:
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.build != false }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
@@ -30,6 +57,7 @@ jobs:
           name: cas-war
           path: build/libs/cas.war
   sonarcloud:
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.build != false }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
@@ -59,6 +87,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: ./gradlew build sonarqube
   deploy-container:
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.build != false }}
     needs: [build]
     uses: Opetushallitus/.github/.github/workflows/push-scan-java-ecr.yml@main
     with:
@@ -71,3 +100,12 @@ jobs:
       download-artifact-name: cas-war
     secrets:
       AWS_UTILITY_ROLE_ARN: ${{ secrets.AWS_OPH_UTILITY_ROLE_ARN }}
+
+  deploy:
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    uses: Opetushallitus/.github/.github/workflows/deploy-from-ecr-to-ecs.yml@main
+    with:
+      application: ${{ inputs.application }}
+      environment: ${{ inputs.environment }}
+      image-tag: ${{ inputs.image-tag }}
+    secrets: inherit
