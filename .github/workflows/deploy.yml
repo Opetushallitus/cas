@@ -1,5 +1,6 @@
 name: CAS-virkailija deploy
 on:
+  pull_request:
   workflow_dispatch:
     inputs:
       application:
