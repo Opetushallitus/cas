@@ -111,6 +111,7 @@ jobs:
     secrets: inherit
 
   deploy-built-image:
+    needs: [deploy-container]
     if: ${{ github.event_name == 'workflow_dispatch' && inputs.build == true }}
     uses: Opetushallitus/.github/.github/workflows/deploy-from-ecr-to-ecs.yml@main
     with:
