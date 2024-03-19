@@ -102,7 +102,7 @@ jobs:
       AWS_UTILITY_ROLE_ARN: ${{ secrets.AWS_OPH_UTILITY_ROLE_ARN }}
 
   deploy-existing-image:
-    if: ${{ github.event_name == 'workflow_dispatch' && inputs.build == false }}
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.build == 'false' }}
     uses: Opetushallitus/.github/.github/workflows/deploy-from-ecr-to-ecs.yml@main
     with:
       application: ${{ inputs.application }}
@@ -112,7 +112,7 @@ jobs:
 
   deploy-built-image:
     needs: [deploy-container]
-    if: ${{ github.event_name == 'workflow_dispatch' && inputs.build == true }}
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.build == 'true' }}
     uses: Opetushallitus/.github/.github/workflows/deploy-from-ecr-to-ecs.yml@main
     with:
       application: ${{ inputs.application }}
