@@ -16,7 +16,7 @@ on:
           - false
       image-tag:
         description: 'Image tag (example: ga-956).'
-        required: true
+        required: false
         type: string
       environment:
         description: 'Environment'
@@ -101,11 +101,20 @@ jobs:
     secrets:
       AWS_UTILITY_ROLE_ARN: ${{ secrets.AWS_OPH_UTILITY_ROLE_ARN }}
 
-  deploy:
-    if: ${{ github.event_name == 'workflow_dispatch' }}
+  deploy-existing-image:
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.build == false }}
     uses: Opetushallitus/.github/.github/workflows/deploy-from-ecr-to-ecs.yml@main
     with:
       application: ${{ inputs.application }}
       environment: ${{ inputs.environment }}
       image-tag: ${{ inputs.image-tag }}
+    secrets: inherit
+
+  deploy-built-image:
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.build == true }}
+    uses: Opetushallitus/.github/.github/workflows/deploy-from-ecr-to-ecs.yml@main
+    with:
+      application: ${{ inputs.application }}
+      environment: ${{ inputs.environment }}
+      image-tag: "ga-${{ github.run_number }}"
     secrets: inherit
