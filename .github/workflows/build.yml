@@ -117,5 +117,5 @@ jobs:
     with:
       application: ${{ inputs.application }}
       environment: ${{ inputs.environment }}
-      image-tag: "ga-${{ github.run_number }}"
+      image-tag: ga-${{ github.run_number }}
     secrets: inherit
