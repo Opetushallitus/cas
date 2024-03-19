@@ -37,7 +37,7 @@ permissions:
 
 jobs:
   build:
-    if: ${{ github.event_name != 'workflow_dispatch' || inputs.build != 'false' }}
+    if: ${{ github.event_name != 'workflow_dispatch' || (github.event_name == 'workflow_dispatch' && inputs.build == 'true') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
@@ -57,7 +57,7 @@ jobs:
           name: cas-war
           path: build/libs/cas.war
   sonarcloud:
-    if: ${{ github.event_name != 'workflow_dispatch' || inputs.build != 'false' }}
+    if: ${{ github.event_name != 'workflow_dispatch' || (github.event_name == 'workflow_dispatch' && inputs.build == 'true') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
@@ -87,7 +87,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: ./gradlew build sonarqube
   deploy-container:
-    if: ${{ github.event_name != 'workflow_dispatch' || inputs.build != 'false' }}
+    if: ${{ github.event_name != 'workflow_dispatch' || (github.event_name == 'workflow_dispatch' && inputs.build == 'true') }}
     needs: [build]
     uses: Opetushallitus/.github/.github/workflows/push-scan-java-ecr.yml@main
     with:
