@@ -1,51 +1,82 @@
 name: CAS-virkailija
 on:
   workflow_dispatch:
+    inputs:
+      application:
+        description: 'Name of the application (example: cas)'
+        required: false
+        type: string
+        default: cas
+      build:
+        description: 'Build before deploy'
+        required: true
+        type: choice
+        options:
+          - true
+          - false
+      image-tag:
+        description: 'Image tag (example: ga-956).'
+        required: false
+        type: string
+      environment:
+        description: 'Environment'
+        required: true
+        type: choice
+        options:
+          - hahtuva
+          - untuva
+          - pallero
+          - sade
   push:
     branches: [ master ]
   pull_request:
+  
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   build:
+    if: ${{ github.event_name != 'workflow_dispatch' || (github.event_name == 'workflow_dispatch' && inputs.build == 'true') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Set up JDK
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'corretto'
       - name: Validate Gradle wrapper
-        uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
+        uses: gradle/wrapper-validation-action@v2
       - name: Build
-        uses: gradle/gradle-build-action@937999e9cc2425eddc7fd62d1053baf041147db7
-        with:
-          arguments: clean build -Dbranch=$GITHUB_REF_NAME -Drevision=$GITHUB_SHA -DbuildNumber=$GITHUB_RUN_NUMBER/$GITHUB_RUN_ATTEMPT
+        run: ./gradlew clean build -Dbranch=$GITHUB_REF_NAME -Drevision=$GITHUB_SHA -DbuildNumber=$GITHUB_RUN_NUMBER/$GITHUB_RUN_ATTEMPT
       - name: Upload cas-war
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: cas-war
           path: build/libs/cas.war
   sonarcloud:
+    if: ${{ github.event_name != 'workflow_dispatch' || (github.event_name == 'workflow_dispatch' && inputs.build == 'true') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Set up JDK
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'corretto'
       - name: Cache SonarCloud packages
-        uses: actions/cache@v1
+        uses: actions/cache@v4
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
       - name: Cache Gradle packages
-        uses: actions/cache@v1
+        uses: actions/cache@v4
         with:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
@@ -56,29 +87,35 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: ./gradlew build sonarqube
   deploy-container:
+    if: ${{ github.event_name != 'workflow_dispatch' || (github.event_name == 'workflow_dispatch' && inputs.build == 'true') }}
     needs: [build]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout source
-        uses: actions/checkout@v3
-      - name: Download cas-war
-        uses: actions/download-artifact@v2
-        with:
-          name: cas-war
-      - name: Build Docker Container
-        shell: bash
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: |
-          git clone https://github.com/Opetushallitus/ci-tools.git
-          source ci-tools/common/setup-tools.sh
-          export BASE_IMAGE="baseimage-fatjar-openjdk21:master"
-          export ARTIFACT_NAME="cas"
+    uses: Opetushallitus/.github/.github/workflows/push-scan-java-ecr.yml@main
+    with:
+      application: cas
+      base-image: baseimage-fatjar-openjdk21:master
+      configfolder: oph-configuration
+      jarfile: cas.war
+      jarfolder: .
+      download-artifact: true
+      download-artifact-name: cas-war
+    secrets:
+      AWS_UTILITY_ROLE_ARN: ${{ secrets.AWS_OPH_UTILITY_ROLE_ARN }}
 
-          mv cas.war $DOCKER_BUILD_DIR/artifact/$ARTIFACT_NAME.jar
-          cp -vr oph-configuration $DOCKER_BUILD_DIR/config/
-          export BASE_IMAGE="baseimage-fatjar-openjdk21:master"
-          ./ci-tools/common/pull-image.sh
-          ./ci-tools/github-build/build-fatjar.sh $ARTIFACT_NAME
-          ./ci-tools/github-build/upload-image.sh $ARTIFACT_NAME
+  deploy-existing-image:
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.build == 'false' }}
+    uses: Opetushallitus/.github/.github/workflows/deploy-from-ecr-to-ecs.yml@main
+    with:
+      application: ${{ inputs.application }}
+      environment: ${{ inputs.environment }}
+      image-tag: ${{ inputs.image-tag }}
+    secrets: inherit
+
+  deploy-built-image:
+    needs: [deploy-container]
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.build == 'true' }}
+    uses: Opetushallitus/.github/.github/workflows/deploy-from-ecr-to-ecs.yml@main
+    with:
+      application: ${{ inputs.application }}
+      environment: ${{ inputs.environment }}
+      image-tag: ga-${{ github.run_number }}
+    secrets: inherit
