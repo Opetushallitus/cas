@@ -1,6 +1,12 @@
 package fi.vm.sade.auth.clients;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.google.gson.Gson;
+import fi.vm.sade.auth.Json;
+import fi.vm.sade.auth.cas.CasUserAttributes;
 import fi.vm.sade.auth.dto.HenkiloDto;
 import fi.vm.sade.auth.dto.IdentifiedHenkiloType;
 import fi.vm.sade.javautils.http.OphHttpClient;
@@ -19,7 +25,6 @@ import static java.util.function.Predicate.not;
 
 @Component
 public class KayttooikeusRestClient {
-
     private final OphHttpClient httpClient;
     private final OphProperties ophProperties;
     private final Gson gson;
@@ -77,12 +82,11 @@ public class KayttooikeusRestClient {
         return Optional.ofNullable(redirectCode).map(String::trim).filter(not(String::isEmpty));
     }
 
-    public IdentifiedHenkiloType getHenkiloByAuthToken(String authToken) {
+    public CasUserAttributes getHenkiloByAuthToken(String authToken) {
         String url = ophProperties.url("kayttooikeus-service.cas.henkiloByAuthToken", authToken);
-        return httpClient.<IdentifiedHenkiloType>execute(OphHttpRequest.Builder.get(url).build())
+        return httpClient.<CasUserAttributes>execute(OphHttpRequest.Builder.get(url).build())
                 .expectedStatus(200)
-                .mapWith(json -> gson.fromJson(json, IdentifiedHenkiloType.class))
+                .mapWith(json -> Json.parse(json, CasUserAttributes.class))
                 .orElseThrow(() -> noContentOrNotFoundException(url));
     }
-
 }

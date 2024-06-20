@@ -71,7 +71,15 @@ public class HttpAuthenticationHandlerTest {
     @Test
     public void authenticate() throws Throwable {
         when(httpResponseMock.getStatusCode()).thenReturn(200);
-        when(httpResponseMock.asText()).thenReturn("{\"username\":\"USER1\",\"kayttajaTyyppi\":\"VIRKAILIJA\"}");
+        when(httpResponseMock.asText()).thenReturn("""
+                {
+                    "username":"USER1",
+                    "oidHenkilo": "1.2.246.562.24.74168788054",
+                    "kayttajaTyyppi": "VIRKAILIJA",
+                    "roles": [],
+                    "kayttajatiedot": { "username":"USER1" }
+                }
+                """);
 
         AuthenticationHandlerExecutionResult authenticate = authenticationHandler.authenticate(new UsernamePasswordCredential("user1", "pass1"), getService());
 
@@ -83,7 +91,14 @@ public class HttpAuthenticationHandlerTest {
     @Test
     public void defaultKayttajaTyyppiToVirkailijaIfMissing() throws Throwable {
         when(httpResponseMock.getStatusCode()).thenReturn(200);
-        when(httpResponseMock.asText()).thenReturn("{\"username\":\"USER1\"}");
+        when(httpResponseMock.asText()).thenReturn("""
+                {
+                    "username":"USER1",
+                    "oidHenkilo": "1.2.246.562.24.74168788054",
+                    "roles": [],
+                    "kayttajatiedot": { "username":"USER1" }
+                }
+                """);
 
         AuthenticationHandlerExecutionResult authenticate = authenticationHandler.authenticate(new UsernamePasswordCredential("user1", "pass1"), getService());
 
