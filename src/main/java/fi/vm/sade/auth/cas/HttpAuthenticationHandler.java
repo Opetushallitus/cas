@@ -1,6 +1,11 @@
 package fi.vm.sade.auth.cas;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.google.gson.Gson;
+import fi.vm.sade.auth.Json;
 import fi.vm.sade.javautils.httpclient.OphHttpClient;
 import lombok.Data;
 import org.apereo.cas.authentication.AuthenticationHandlerExecutionResult;
@@ -14,14 +19,11 @@ import org.apereo.cas.services.ServicesManager;
 
 import javax.security.auth.login.FailedLoginException;
 import java.security.GeneralSecurityException;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import static java.util.Collections.emptyList;
 
 public class HttpAuthenticationHandler extends AbstractUsernamePasswordAuthenticationHandler {
-
     private final OphHttpClient httpClient;
     private final Gson gson;
 
@@ -37,28 +39,19 @@ public class HttpAuthenticationHandler extends AbstractUsernamePasswordAuthentic
 
     @Override
     protected AuthenticationHandlerExecutionResult authenticateUsernamePasswordInternal(UsernamePasswordCredential credential, String originalPassword) throws GeneralSecurityException, PreventedException {
-        Optional<KayttajatiedotReadDto> opt;
+        Optional<CasUserAttributes> opt;
         try {
             opt = validateUsernamePassword(credential.getUsername(), String.valueOf(credential.getPassword()));
         } catch (Exception e) {
             throw new PreventedException(e);
         }
-        KayttajatiedotReadDto dto = opt.orElseThrow(() -> new FailedLoginException("Invalid credentials"));
-        Map<String, List<Object>> attributes = Map.of(
-                "idpEntityId", List.of("usernamePassword"),
-                "kayttajaTyyppi", List.of(Optional.ofNullable(dto.getKayttajaTyyppi()).orElse("VIRKAILIJA"))
-        );
-        Principal principal;
-        try {
-            principal = principalFactory.createPrincipal(dto.getUsername(), attributes);
-        } catch (Throwable t) {
-            throw new RuntimeException(t);
-        }
+        var userAttributes = opt.orElseThrow(() -> new FailedLoginException("Invalid credentials"));
+        var principal = CasPrincipal.of(principalFactory, userAttributes);
         return createHandlerResult(credential, principal, emptyList());
 
     }
 
-    private Optional<KayttajatiedotReadDto> validateUsernamePassword(String username, String password) {
+    private Optional<CasUserAttributes> validateUsernamePassword(String username, String password) {
         return httpClient.post("kayttooikeus-service.user-details")
                 .retryOnError(3)
                 .dataWriter("application/json", "UTF-8", out
@@ -68,7 +61,7 @@ public class HttpAuthenticationHandler extends AbstractUsernamePasswordAuthentic
                     if (handler.getStatusCode() == 401) {
                         return Optional.empty();
                     }
-                    return Optional.of(gson.fromJson(handler.asText(), KayttajatiedotReadDto.class));
+                    return Optional.of(Json.parse(handler.asText(), CasUserAttributes.class));
                 });
     }
 

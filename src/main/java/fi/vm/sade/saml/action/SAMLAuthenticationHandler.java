@@ -1,5 +1,7 @@
 package fi.vm.sade.saml.action;
 
+import fi.vm.sade.auth.cas.CasPrincipal;
+import fi.vm.sade.auth.cas.CasUserAttributes;
 import fi.vm.sade.auth.clients.KayttooikeusRestClient;
 import fi.vm.sade.auth.dto.IdentifiedHenkiloType;
 import org.apereo.cas.authentication.*;
@@ -65,17 +67,8 @@ public class SAMLAuthenticationHandler implements AuthenticationHandler {
     }
 
     private AuthenticationHandlerExecutionResult doAuthentication(Credential credential) {
-        IdentifiedHenkiloType henkiloType = kayttooikeusRestClient.getHenkiloByAuthToken(credential.getId());
-        Map<String, List<Object>> attributes = Map.of(
-                "idpEntityId", List.of(henkiloType.getIdpEntityId()),
-                "kayttajaTyyppi", List.of(Optional.ofNullable(henkiloType.getHenkiloTyyppi()).orElse("VIRKAILIJA"))
-        );
-        Principal principal;
-        try {
-            principal = principalFactory.createPrincipal(henkiloType.getKayttajatiedot().getUsername(), attributes);
-        } catch (Throwable t) {
-            throw new RuntimeException(t);
-        }
+        var userAttributes = kayttooikeusRestClient.getHenkiloByAuthToken(credential.getId());
+        var principal = CasPrincipal.of(principalFactory, userAttributes);
         return new DefaultAuthenticationHandlerExecutionResult(this, credential, principal, emptyList());
     }
 
