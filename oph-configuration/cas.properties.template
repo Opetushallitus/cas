@@ -96,6 +96,7 @@ proxy.callback.ignore-errors={{cas_proxy_callback_ignore_errors | default('false
 host.cas={{host_cas}}
 host.virkailija={{host_virkailija}}
 host.alb={{host_alb_virkailija}}
+kayttooikeus.baseurl={{ cas_kayttooikeus_baseurl | default("http://" + host_alb_virkailija) }}
 serviceprovider.app.username.to.usermanagement={{serviceprovider_app_username_to_usermanagement}}
 serviceprovider.app.password.to.usermanagement={{serviceprovider_app_password_to_usermanagement}}
 stuck.service.ticket.retrieval.ips.to.inspect={{cas_stuck_service_ticket_retrieval_ips_to_inspect | default("86.50.26.23")}}
