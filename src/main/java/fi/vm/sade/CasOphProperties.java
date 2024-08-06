@@ -12,6 +12,7 @@ public class CasOphProperties extends OphProperties {
         addDefault("host.cas", environment.getRequiredProperty("host.cas"));
         addDefault("host.virkailija", environment.getRequiredProperty("host.virkailija"));
         addDefault("host.alb", environment.getRequiredProperty("host.alb"));
+        addDefault("kayttooikeus.baseurl", environment.getRequiredProperty("kayttooikeus.baseurl"));
     }
 
 }

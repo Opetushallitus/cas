@@ -44,6 +44,7 @@ public class LoginRedirectInterruptInquirerTest {
         when(environmentMock.getRequiredProperty("host.cas")).thenReturn("localhost:8081");
         when(environmentMock.getRequiredProperty("host.virkailija")).thenReturn("localhost:8082");
         when(environmentMock.getRequiredProperty("host.alb")).thenReturn("localhost:8083");
+        when(environmentMock.getRequiredProperty("kayttooikeus.baseurl")).thenReturn("localhost:8101");
         CasOphProperties properties = new CasOphProperties(environmentMock);
         LoginRedirectAction loginRedirectAction = new LoginRedirectAction(kayttooikeusRestClientMock, oppijanumerorekisteriRestClientMock, properties);
         inquirer = new LoginRedirectInterruptInquirer(kayttooikeusRestClientMock, loginRedirectAction);
