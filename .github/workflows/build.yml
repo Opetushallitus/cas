@@ -89,7 +89,7 @@ jobs:
   deploy-container:
     if: ${{ github.event_name != 'workflow_dispatch' || (github.event_name == 'workflow_dispatch' && inputs.build == 'true') }}
     needs: [build]
-    uses: Opetushallitus/.github/.github/workflows/push-scan-java-ecr.yml@fa66f9f5740c9758087d4782252ca4a691e0dab6
+    uses: Opetushallitus/.github/.github/workflows/push-scan-java-ecr.yml@3f24f1ed28b3f7096f62189a4dfeb03288887e9e
     with:
       application: cas
       base-image: baseimage-fatjar-openjdk21:master
