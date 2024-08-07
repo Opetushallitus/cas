@@ -297,7 +297,7 @@ dependencies {
 
     // <custom>
     annotationProcessor "org.springframework:spring-context-indexer:6.1.3"
-    compileOnly 'org.projectlombok:lombok:1.18.30'
+    compileOnly 'org.projectlombok:lombok:1.18.34'
     compileOnly 'org.webjars:bootstrap:4.1.3'
     implementation "com.google.code.gson:gson:2.9.0"
     implementation "fi.vm.sade.java-utils:java-http:0.5.0-SNAPSHOT"
