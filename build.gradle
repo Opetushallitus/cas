@@ -331,7 +331,7 @@ dependencies {
     // Postgres
     implementation "org.apereo.cas:cas-server-support-jpa-ticket-registry"
     implementation "org.apereo.cas:cas-server-support-session-jdbc"
-    implementation "org.flywaydb:flyway-core:8.5.9"
+    implementation "org.flywaydb:flyway-core:10.17.0"
     runtimeOnly "org.postgresql:postgresql"
     // </custom>
 }
