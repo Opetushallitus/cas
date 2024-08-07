@@ -40,7 +40,7 @@ buildscript {
         classpath "org.apereo.cas:cas-server-core-api-configuration-model:${project.'cas.version'}"
         classpath "org.apereo.cas:cas-server-core-configuration-metadata-repository:${project.'cas.version'}"
         // <custom>
-        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:4.4.1.3373"
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:5.1.0.4882"
         // </custom>
     }
 }
