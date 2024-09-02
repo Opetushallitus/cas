@@ -12,9 +12,9 @@ cas.tgc.crypto.signing.key: ${cas_tgc_signing_key}
 cas.webflow.crypto.encryption.key: ${cas_webflow_encryption_key}
 cas.webflow.crypto.signing.key: ${cas_webflow_signing_key}
 
-cas.view.default-redirect-url: https://virkailija.untuvaopintopolku.fi/virkailijan-tyopoyta
+cas.view.default-redirect-url: https://virkailija.testiopintopolku.fi/virkailijan-tyopoyta
 
-cas.authn.mfa.triggers.rest.url: https://virkailija.untuvaopintopolku.fi/kayttooikeus-service/mfa/trigger
+cas.authn.mfa.triggers.rest.url: https://virkailija.testiopintopolku.fi/kayttooikeus-service/mfa/trigger
 cas.authn.mfa.triggers.rest.headers.Caller-Id: '1.2.246.562.10.00000000001.cas'
 cas.authn.mfa.triggers.rest.headers.CSRF: '1.2.246.562.10.00000000001.cas'
 cas.authn.mfa.triggers.rest.method: POST
@@ -25,23 +25,23 @@ cas.authn.mfa.gauth.core.issuer: Opetushallitus
 cas.authn.mfa.gauth.core.label: Opintopolku
 cas.authn.mfa.gauth.crypto.encryption.key: ${cas_gauth_encryption_key}
 cas.authn.mfa.gauth.crypto.signing.key: ${cas_gauth_signing_key}
-cas.authn.mfa.gauth.rest.token-url: https://virkailija.untuvaopintopolku.fi/kayttooikeus-service/mfa/token
-cas.authn.mfa.gauth.rest.url: https://virkailija.untuvaopintopolku.fi/kayttooikeus-service/mfa/token
+cas.authn.mfa.gauth.rest.token-url: https://virkailija.testiopintopolku.fi/kayttooikeus-service/mfa/token
+cas.authn.mfa.gauth.rest.url: https://virkailija.testiopintopolku.fi/kayttooikeus-service/mfa/token
 cas.authn.mfa.gauth.rest.headers.Caller-Id: '1.2.246.562.10.00000000001.cas'
 cas.authn.mfa.gauth.rest.headers.CSRF: '1.2.246.562.10.00000000001.cas'
 cas.authn.mfa.gauth.rest.basic-auth-username: ${cas_mfa_username}
 cas.authn.mfa.gauth.rest.basic-auth-password: ${cas_mfa_password}
 
-cas.custom.properties.hakaUrl: https://virkailija.untuvaopintopolku.fi/service-provider-app/saml/login/alias/hakasp
-cas.custom.properties.mpassidUrl: https://virkailija.untuvaopintopolku.fi/service-provider-app/saml/login/alias/mpassidsp?idp=https://mpass-proxy.csc.fi/idp/shibboleth
-cas.custom.properties.suomifiUrl: https://untuvaopintopolku.fi/cas-oppija/login
-cas.custom.properties.suomifiUrlTarget: https://virkailija.untuvaopintopolku.fi/kayttooikeus-service/cas/tunnistus?locale=
+cas.custom.properties.hakaUrl: https://virkailija.testiopintopolku.fi/service-provider-app/saml/login/alias/hakasp
+cas.custom.properties.mpassidUrl: https://virkailija.testiopintopolku.fi/service-provider-app/saml/login/alias/mpassidsp?idp=https://mpass-proxy.csc.fi/idp/shibboleth
+cas.custom.properties.suomifiUrl: https://testiopintopolku.fi/cas-oppija/login
+cas.custom.properties.suomifiUrlTarget: https://virkailija.testiopintopolku.fi/kayttooikeus-service/cas/tunnistus?locale=
 cas.custom.properties.loginTietosuojaselosteUrl: https://opintopolku.fi/konfo/fi/sivu/tietosuojaselosteet-ja-evasteet
 
 cas.service-registry.json.location: file:///root/oph-configuration/cas
 
 # postgres
-spring.datasource.url: jdbc:postgresql://${cas_postgres_host}:5432/cas
+spring.datasource.url: jdbc:postgresql://${cas_postgres_host}:${cas_postgres_port}/${cas_postgres_db}
 spring.datasource.driver-class-name: org.postgresql.Driver
 spring.datasource.username: ${cas_postgres_username}
 spring.datasource.password: ${cas_postgres_password}
@@ -55,9 +55,9 @@ cas.ticket.registry.jpa.user: ${spring.datasource.username}
 management.endpoint.auditevents.enabled: false
 management.endpoint.springWebflow.enabled: false
 
-host.cas: virkailija.untuvaopintopolku.fi
-host.virkailija: virkailija.untuvaopintopolku.fi
-host.alb: virkailija.untuvaopintopolku.fi
+host.cas: virkailija.testiopintopolku.fi
+host.virkailija: virkailija.testiopintopolku.fi
+host.alb: virkailija.testiopintopolku.fi
 serviceprovider.app.username.to.usermanagement: ${serviceprovider_app_username_to_usermanagement}
 serviceprovider.app.password.to.usermanagement: ${serviceprovider_app_password_to_usermanagement}
 # To all users
