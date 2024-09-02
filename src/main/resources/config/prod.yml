@@ -1,3 +1,5 @@
+logging.config: file:/root/oph-configuration/cas-log4j.xml
+
 cas.server.tomcat.http-proxy.enabled: true
 cas.server.tomcat.http-proxy.secure: true
 cas.server.tomcat.http-proxy.scheme: https
