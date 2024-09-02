@@ -11,7 +11,6 @@ import org.apereo.cas.services.RegisteredService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.webflow.execution.RequestContext;
 
@@ -25,7 +24,6 @@ import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.toList;
 
 @Component
-@ConditionalOnProperty("login.redirect.interrupt.enabled")
 public class LoginRedirectInterruptInquirer implements InterruptInquirer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginRedirectInterruptInquirer.class);

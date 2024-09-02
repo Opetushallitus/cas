@@ -15,6 +15,15 @@ server:
       port-header:
       protocol-header:
       remote-ip-header:
+server.tomcat.accesslog.enabled: true
+server.tomcat.accesslog.directory: /root/logs
+server.tomcat.accesslog.prefix: localhost_access_log
+server.tomcat.accesslog.suffix: .txt
+server.tomcat.accesslog.pattern: "{\"timestamp\": \"%{yyyy-MM-dd'T'HH:mm:ss.SSSZ}t\", \"responseCode\": \"%s\", \"request\": \"%r\", \"responseTime\": \"%D\", \"requestMethod\": \"%m\", \"service\": \"cas\", \"environment\": \"${env.name}\", \"customer\": \"OPH\", \"user-agent\": \"%{User-Agent}i\", \"caller-id\": \"%{Caller-Id}i\", \"clientSubSystemCode\": \"%{clientSubSystemCode}i\", \"x-forwarded-for\": \"%{X-Forwarded-For}i\", \"x-real-ip\": \"%{X-Real-IP}i\", \"remote-ip\": \"%a\", \"session\": \"%{JSESSIONID}c\", \"response-size\": \"%B\", \"referer\": \"%{Referer}i\", \"opintopolku-api-key\": \"%{Opintopolku-Api-Key}i\"}"
+server.tomcat.accesslog.request-attributes-enabled: true
+server.tomcat.accesslog.rotate: true
+server.tomcat.accesslog.rename-on-rotate: true
+server.tomcat.accesslog.max-days: 7
 
 management:
   endpoint:
@@ -54,6 +63,9 @@ cas.ticket.registry.jpa.password: ${spring.datasource.password}
 cas.ticket.registry.jpa.url: ${spring.datasource.url}
 cas.ticket.registry.jpa.user: ${spring.datasource.username}
 
+cas.slo.asynchronous: false
+cas.audit.engine.alternate-client-addr-header-name: X-Real-IP
+
 cas.authn.accept.users:
 
 management.endpoints.web.exposure.include: health,springWebflow,auditevents
@@ -82,7 +94,6 @@ cas.custom.properties.mpassidUrl: http://localhost:8080/service-provider-app/sam
 cas.custom.properties.suomifiUrl: http://untuvaopintopolku.fi/cas-oppija/login
 cas.custom.properties.suomifiUrlTarget: http://localhost:8101/kayttooikeus-service/cas/tunnistus?locale=
 cas.custom.properties.loginTietosuojaselosteUrl: http://localhost:8080/tietosuojaseloste/
-cas.custom.properties.mpassidLoginEnabled: true
 
 cas.authn.mfa.triggers.rest.url: http://localhost:8101/kayttooikeus-service/mfa/trigger
 cas.authn.mfa.triggers.rest.headers: {'Caller-Id': '1.2.246.562.10.00000000001.cas', 'CSRF': '1.2.246.562.10.00000000001.cas'}
@@ -116,10 +127,9 @@ host.alb: localhost:8101
 kayttooikeus.baseurl: http://localhost:8101
 serviceprovider.app.username.to.usermanagement: user1
 serviceprovider.app.password.to.usermanagement: pass1
-stuck.service.ticket.retrieval.ips.to.inspect: feature_disabled
+stuck.service.ticket.retrieval.ips.to.inspect: none
 stuck.service.ticket.retrieval.thread.dump.interval.seconds: 15
 stuck.service.ticket.retrieval.thread.dump.times: 40
-login.redirect.interrupt.enabled: false
 require-strong-identification: false
 require-strong-identification.usernamelist: example11,example12
 email-verification-enabled: false
