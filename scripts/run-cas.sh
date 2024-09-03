@@ -7,7 +7,9 @@ function main {
 
   use_correct_jvm_version
   wait_for_database
-  ./gradlew clean run
+
+  docker build -t cas-virkailija .
+  docker-compose --file docker-compose.yml up --force-recreate --renew-anon-volumes
 }
 
 function wait_for_database {

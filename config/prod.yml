@@ -1,5 +1,3 @@
-logging.config: file:/root/oph-configuration/cas-log4j.xml
-
 cas.server.tomcat.http-proxy.enabled: true
 cas.server.tomcat.http-proxy.secure: true
 cas.server.tomcat.http-proxy.scheme: https
@@ -40,7 +38,7 @@ cas.custom.properties.loginTietosuojaselosteUrl: https://opintopolku.fi/konfo/fi
 
 cas.service-registry.json.location: file:///root/oph-configuration/cas
 
-spring.datasource.url: jdbc:postgresql://${cas_postgres_host}:5432/cas
+spring.datasource.url: jdbc:postgresql://${cas_postgres_host}:${cas_postgres_port}/${cas_postgres_database}
 spring.datasource.driver-class-name: org.postgresql.Driver
 spring.datasource.username: ${cas_postgres_username}
 spring.datasource.password: ${cas_postgres_password}
