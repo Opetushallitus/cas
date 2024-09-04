@@ -1,0 +1,16 @@
+{
+  "@class": "org.apereo.cas.services.CasRegisteredService",
+  "serviceId": "^https://(opintopolku|virkailija\\.opintopolku|ludos\\.opintopolku|backend\\.varda-db\\.csc|.*\\.prod\\.varda\\.opintopolku|arvo\\.csc|raportit\\.odw\\.opintopolku|lataus\\.ylioppilastutkinto|oiva\\.(okm|minedu)|valssi(vastaus)?\\.karvi)\\.fi(/.*)?$",
+  "name": "Login whitelist",
+  "description": "Allows CAS login on domains in whitelist",
+  "id": 1,
+  "evaluationOrder": 0,
+  "attributeReleasePolicy": {
+    "@class": "org.apereo.cas.services.ReturnAllAttributeReleasePolicy",
+    "authorizedToReleaseAuthenticationAttributes": false
+  },
+  "proxyPolicy": {
+    "@class": "org.apereo.cas.services.RegexMatchingRegisteredServiceProxyPolicy",
+    "pattern": "^https?://.*"
+  }
+}

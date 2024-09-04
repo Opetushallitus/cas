@@ -15,6 +15,7 @@ RUN ./gradlew clean build -x test
 FROM amazoncorretto:21
 
 WORKDIR /app
+COPY services ./services
 COPY config ./config
 COPY --from=build /app/build/libs/cas.war .
 

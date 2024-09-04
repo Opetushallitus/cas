@@ -36,7 +36,7 @@ cas.custom.properties.suomifiUrl: https://hahtuvaopintopolku.fi/cas-oppija/login
 cas.custom.properties.suomifiUrlTarget: https://virkailija.hahtuvaopintopolku.fi/kayttooikeus-service/cas/tunnistus?locale=
 cas.custom.properties.loginTietosuojaselosteUrl: https://opintopolku.fi/konfo/fi/sivu/tietosuojaselosteet-ja-evasteet
 
-cas.service-registry.json.location: file:///root/oph-configuration/cas
+cas.service-registry.json.location: file:///app/services/hahtuva
 
 # postgres
 spring.datasource.url: jdbc:postgresql://${cas_postgres_host}:${cas_postgres_port}/${cas_postgres_database}

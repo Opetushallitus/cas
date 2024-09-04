@@ -1,2 +1,4 @@
 spring.datasource.url: jdbc:postgresql://host.docker.internal:5080/cas
 cas.ticket.registry.jpa.url: ${spring.datasource.url}
+
+cas.service-registry.json.location: file:///app/services/local

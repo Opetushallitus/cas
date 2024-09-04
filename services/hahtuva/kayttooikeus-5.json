@@ -1,0 +1,16 @@
+{
+  "@class": "org.apereo.cas.services.CasRegisteredService",
+  "serviceId": "^https://kayttooikeus\\.hahtuva\\.yleiskayttoiset\\.opintopolku\\.fi(/.*)?$",
+  "name": "kayttooikeus",
+  "description": "Käyttöoikeuspalvelu",
+  "id": 5,
+  "evaluationOrder": 0,
+  "attributeReleasePolicy": {
+    "@class": "org.apereo.cas.services.ReturnAllAttributeReleasePolicy",
+    "authorizedToReleaseAuthenticationAttributes": false
+  },
+  "proxyPolicy" : {
+    "@class" : "org.apereo.cas.services.RegexMatchingRegisteredServiceProxyPolicy",
+    "pattern" : "^https?://.*"
+  }
+}

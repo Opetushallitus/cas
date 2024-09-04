@@ -1,0 +1,16 @@
+{
+  "@class": "org.apereo.cas.services.CasRegisteredService",
+  "serviceId": "^http://[a-z0-9\\.\\-]*kehittajan-oma-kone.testiopintopolku.fi(:[0-9]+)?(/.*)?$|^http://localhost(:[0-9]+)?(/.*)?$|(^https://(testiopintopolku\\.fi|(virkailija|ludos)\\.testiopintopolku\\.fi|testarvo\\.csc\\.fi|snaparvo\\.csc\\.fi|avoptest\\.csc\\.fi|avopsnap\\.csc\\.fi|amkoutetestapp\\.csc\\.fi|amkoutedevapp\\.csc\\.fi|oivadev\\.csc\\.fi|oivaqa\\.csc\\.fi|oivaqa2\\.csc\\.fi|(.+(testing|qa).*\\.varda-db.csc.fi)|kujadev\\.csc\\.fi|kujaqa\\.csc\\.fi|testiraportit\\.odw\\.testiopintopolku\\.fi|lataus\\.ylioppilastutkinto\\.fi(:[0-9]+)?|app\\.valos-oph\\.netum\\.fi|([a-z0-9-_]+\\.)+qa\\.valos\\.oph\\.fi|arvo-dev\\.csc\\.fi|localhost(:[0-9]+)?|mydesktop(:[0-9]+)?|.*\\.varda\\.opintopolku\\.fi)(/.*)?$)",
+  "name": "Login whitelist",
+  "description": "Allows CAS login on domains in whitelist",
+  "id": 1,
+  "evaluationOrder": 0,
+  "attributeReleasePolicy": {
+    "@class": "org.apereo.cas.services.ReturnAllAttributeReleasePolicy",
+    "authorizedToReleaseAuthenticationAttributes": false
+  },
+  "proxyPolicy": {
+    "@class": "org.apereo.cas.services.RegexMatchingRegisteredServiceProxyPolicy",
+    "pattern": "^https?://.*"
+  }
+}

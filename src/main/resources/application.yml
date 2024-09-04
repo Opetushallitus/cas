@@ -46,8 +46,6 @@ cas:
 
 cas.ticket.registry.cleaner.schedule.enabled: true
 
-cas.service-registry.json.location: classpath:/service-1.json
-
 # postgres
 spring.datasource.url: jdbc:postgresql://localhost:5080/cas
 spring.datasource.driver-class-name: org.postgresql.Driver

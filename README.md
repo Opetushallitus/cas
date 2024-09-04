@@ -16,7 +16,7 @@ Project includes gradle wrapper so it doesn't have to be installed. Just use `./
 
 ## Database
 
-    docker-compose --file docker-compose.dependencies.yml up
+    docker compose --file docker-compose.dependencies.yml up
 
 ## Run
 
